@@ -98,9 +98,9 @@
   pointer-events: none;
 }
 
-/* Cabin: 32×80 native, scaled 3x = 96×240. Centered, sitting on the ground line. */
+/* Cabin: 48×80 native, scaled 3x = 144×240. Centered, sitting on the ground line. */
 .sprite--cabin {
-  width: calc(32px * 3);
+  width: calc(48px * 3);
   height: calc(80px * 3);
   left: 50%;
   bottom: 6%;
@@ -141,8 +141,7 @@
 
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
-  .sprite--cabin       { width: calc(32px * 2); height: calc(80px * 2); bottom: 8%; }
+  .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
   .sprite--tree        { width: calc(28px * 2); height: calc(33px * 2); }
   .sprite--tree-small  { width: calc(15px * 2); height: calc(33px * 2); }
-  .sprite--bush        { width: calc(32px * 2); height: calc(28px * 2); }
 }

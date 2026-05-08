@@ -1,0 +1,111 @@
+/* diary.css — agent-mutable.
+ * Layout for the diary archive page (diary/index.html).
+ * Shares theme.css tokens. The agent extends this when adding chronological
+ * features, daily-meta sections, search, etc. */
+
+#diary-page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--gutter) var(--sp-6);
+}
+
+#diary-page header h1 {
+  font-family: var(--font-pixel);
+  font-size: 32px;
+  margin: 0 0 var(--sp-3);
+  color: var(--c-wood-dark);
+  letter-spacing: 0.04em;
+}
+
+.diary-blurb {
+  color: var(--fg-muted);
+  margin: 0 0 var(--sp-5);
+  font-style: italic;
+}
+
+.diary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.diary-list__entry {
+  background: var(--c-cream-soft);
+  border: 2px solid var(--c-wood);
+  border-radius: 4px;
+  padding: var(--sp-3) var(--sp-4);
+  box-shadow: var(--shadow-soft);
+}
+
+.diary-list__entry a {
+  color: var(--c-wood-dark);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.diary-list__entry a:hover,
+.diary-list__entry a:focus-visible {
+  color: var(--c-rose);
+}
+
+.diary-list__date {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  color: var(--c-plum);
+}
+
+.diary-list__title {
+  font-size: var(--fs-body);
+  line-height: 1.3;
+}
+
+.diary-list__loading,
+.diary-list__empty {
+  color: var(--fg-muted);
+  font-style: italic;
+  padding: var(--sp-3) 0;
+}
+
+#cabin-nav {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  gap: var(--sp-5);
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+}
+
+#cabin-nav a {
+  color: var(--c-wood-dark);
+  display: inline-flex;
+  align-items: center;
+}
+
+#cabin-nav a[aria-current="page"] {
+  color: var(--c-plum);
+  border-bottom: 2px solid var(--c-rose);
+}
+
+#day-marker {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: var(--sp-4) auto var(--sp-6);
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#build-sha-label {
+  opacity: 0.55;
+  font-size: var(--fs-tiny);
+  font-family: var(--font-mono);
+}

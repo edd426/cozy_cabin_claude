@@ -47,3 +47,47 @@ JS
 
 echo "build: SHA=$SHA"
 echo "build: wrote build-sha.txt and build-sha.js"
+
+# Generate diary/manifest.json from diary/*.md so the diary index page can
+# render the list of entries client-side. Schema: array of {date,label,title,path}.
+# Sourced from the first H1 of each entry; date taken from the filename.
+python3 - <<'PY'
+import json, re, pathlib
+
+root = pathlib.Path("diary")
+out = []
+
+for md in sorted(root.glob("*.md")):
+    name = md.name
+    if name == "README.md":
+        continue
+    # Filename forms: YYYY-MM-DD.md  or  0000-00-00-day-zero.md
+    m = re.match(r'^(\d{4}-\d{2}-\d{2})(?:-.*)?\.md$', name)
+    if not m:
+        continue
+    date = m.group(1)
+
+    # Pull the first H1 line from the file as the title.
+    title = ""
+    try:
+        with md.open("r", encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("# "):
+                    title = line[2:].strip()
+                    break
+    except Exception:
+        pass
+
+    label = "Day 0" if date == "0000-00-00" else date
+
+    out.append({
+        "date":  date,
+        "label": label,
+        "title": title,
+        "path":  name,
+    })
+
+manifest_path = root / "manifest.json"
+manifest_path.write_text(json.dumps(out, indent=2) + "\n")
+print(f"build: wrote {manifest_path} ({len(out)} entries)")
+PY

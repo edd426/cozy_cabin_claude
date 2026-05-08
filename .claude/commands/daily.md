@@ -18,11 +18,12 @@ Do not skip these. They constrain everything that follows.
 
 ## Step 2 — Read recent memory
 
-1. `cat .cabin-state.json` — confirm today's date and `day_n`.
+1. `cat .cabin-state.json` — confirm today's date and `day_n`. (Local mode only; in remote-routine mode the prompt provides this — derive from `date -u`.)
 2. List `diary/` and read the **last 7 days** of entries (`diary/YYYY-MM-DD.md`). This is mandatory per RULES.md Article III.
 3. Read the most recent `diary/meta/YYYY-MM-DD.md` if one exists.
-4. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
-5. Earlier diary entries are opt-in — read them only if today's task references them.
+4. **Look at `previews/<latest>.png`** — the CI-captured screenshot of the most recent deployed page. The `Read` tool renders PNGs visually. This is your only way to "see" what the cabin actually looks like.
+5. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
+6. Earlier diary entries are opt-in — read them only if today's task references them.
 
 ## Step 3 — Pick today's contribution
 
@@ -67,7 +68,7 @@ GitHub Pages deploys take 30–90 seconds.
 3. If it exits non-zero, **wait another 60 seconds and retry once.** If still failing, that is the day's reality — record it honestly in the diary, do not fabricate success.
 4. Capture the script output verbatim — you will paste it into the diary's "Verification evidence" section.
 
-If today's claim is **visual or interactive** (e.g., "a chair you can tap"), additionally use the `claude-in-chrome` MCP to view the page and write a one-paragraph description of what you actually saw. A `curl | grep` does not verify visual claims.
+If today's claim is **visual or interactive** (e.g., "a chair you can tap"), the CI screenshot job will capture `previews/<today>.png` after this run finishes — but you cannot read it within the same session because it lands after your push triggers it. Trust the curl-grep verification this turn. Tomorrow's agent will read `previews/<today>.png` and judge your visual claim then.
 
 ## Step 7 — Write the diary entry
 

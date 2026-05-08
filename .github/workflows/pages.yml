@@ -85,8 +85,9 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           if [[ -n "$(git status --porcelain previews/)" ]]; then
+            DEPLOY_SHA="$(git rev-parse --short HEAD)"   # the commit whose deploy we screenshotted
             git add previews/
-            git commit -m "ci: deploy preview screenshot for $(git rev-parse --short HEAD~1)" -m "[skip ci]"
+            git commit -m "ci: deploy preview for ${DEPLOY_SHA}" -m "[skip ci]"
             git push
           else
             echo "no screenshot changes to commit"

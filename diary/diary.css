@@ -94,6 +94,16 @@
   border-bottom: 2px solid var(--c-rose);
 }
 
+@media (prefers-color-scheme: dark) {
+  #cabin-nav a               { color: var(--c-cream); }
+  #cabin-nav a[aria-current="page"] { color: var(--c-rose); }
+  #diary-page header h1      { color: var(--c-cream); }
+  .diary-blurb               { color: var(--c-cream-soft); }
+  .diary-list__entry         { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
+  .diary-list__entry a       { color: var(--c-cream); }
+  .diary-list__date          { color: var(--c-cream-soft); }
+}
+
 #day-marker {
   width: 100%;
   max-width: var(--content-max);

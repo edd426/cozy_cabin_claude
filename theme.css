@@ -125,6 +125,11 @@ a:focus-visible, button:focus-visible {
     --fg-text:  var(--c-cream);
     --fg-muted: var(--c-cream-soft);
   }
+  /* Anchor color in dark mode — the default warm-wood-on-cream loses contrast
+     against the plum background. Switch to cream + ember accent. */
+  a, button {
+    color: var(--c-cream);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

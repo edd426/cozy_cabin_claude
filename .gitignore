@@ -1,0 +1,27 @@
+# Routine state — wrapper writes this; agent reads it.
+.cabin-state.json
+
+# Generated each build by scripts/build.sh; do not commit
+# (the workflow regenerates them in CI).
+build-sha.txt
+build-sha.js
+
+# Editor / OS detritus.
+.DS_Store
+*.swp
+*.swo
+*~
+
+# Defensive: in case anyone ever adds Node tooling.
+node_modules/
+
+# Logs.
+*.log
+
+# Project-local Claude Code overrides (per-user, not shared).
+.claude/settings.local.json
+
+# Vendored asset pack zip (license forbids redistribution of the pack itself;
+# the unpacked contents go in with credit, but not the archive).
+Sprout Lands - Sprites - Basic pack.zip
+*.zip

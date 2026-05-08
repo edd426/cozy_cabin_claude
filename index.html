@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="A cozy cabin built one day at a time by an AI agent.">
+  <meta name="theme-color" content="#3a2a1f">
+
+  <!-- Build SHA injected by scripts/build.sh; do not hand-edit. -->
+  <meta name="build-sha" content="">
+  <script src="build-sha.js" defer></script>
+
+  <title>The Cabin</title>
+
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="scene.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <main id="cabin-scene" aria-label="the cabin">
+    <!-- The agent edits scene.html, not this file. The fragment is loaded inline below. -->
+    <div id="scene-mount"></div>
+  </main>
+
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="./" aria-current="page">home</a>
+    <a href="./diary/">diary</a>
+  </nav>
+
+  <footer id="day-marker">
+    <span id="day-label">Day 0</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+
+  <script>
+    // Inline scene loader. Fetches scene.html (an HTML fragment the agent maintains)
+    // and inlines it into #scene-mount. Kept tiny and dependency-free so the locked
+    // shell never needs to change.
+    (async () => {
+      const mount = document.getElementById('scene-mount');
+      try {
+        const r = await fetch('scene.html', { cache: 'no-cache' });
+        if (r.ok) mount.innerHTML = await r.text();
+        else mount.textContent = '(the cabin is asleep)';
+      } catch (_) {
+        mount.textContent = '(the cabin is asleep)';
+      }
+    })();
+  </script>
+</body>
+</html>

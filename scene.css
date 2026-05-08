@@ -1,0 +1,134 @@
+/* scene.css — agent-mutable.
+ *
+ * Layout + component styles for the cabin scene. The agent evolves these.
+ * Day 0 styling renders a tiny exterior cabin in pure CSS — no sprites yet,
+ * so the deploy pipeline can be verified before any asset work begins. */
+
+#cabin-scene {
+  display: block;
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-4) var(--gutter);
+}
+
+#cabin-nav {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  gap: var(--sp-5);
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+}
+
+#cabin-nav a {
+  display: inline-flex;
+  align-items: center;
+}
+
+#day-marker {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: var(--sp-4) auto var(--sp-6);
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#build-sha-label {
+  opacity: 0.6;
+  font-size: var(--fs-small);
+}
+
+/* The scene viewport — a square-ish frame the cabin lives inside. */
+.scene {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(
+    to bottom,
+    var(--c-cabin-sky-dawn) 0%,
+    var(--c-cabin-cream-soft) 70%,
+    var(--c-cabin-leaf) 70%,
+    var(--c-cabin-leaf) 100%
+  );
+  border: 4px solid var(--c-cabin-wood);
+  border-radius: 6px;
+  box-shadow: var(--shadow-frame);
+  overflow: hidden;
+}
+
+.scene__sky {
+  position: absolute;
+  inset: 0 0 30% 0;
+  pointer-events: none;
+}
+
+.scene__ground {
+  position: absolute;
+  inset: 70% 0 0 0;
+  background: var(--c-cabin-leaf);
+  border-top: 2px solid var(--c-cabin-leaf-light);
+  pointer-events: none;
+}
+
+/* The Day-0 cabin. CSS-art only; sprites replace this on Day 2+. */
+.cabin {
+  position: absolute;
+  left: 50%;
+  bottom: 28%;
+  transform: translateX(-50%);
+  width: 56%;
+  max-width: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cabin__roof {
+  width: 110%;
+  aspect-ratio: 4 / 1;
+  background: var(--c-cabin-wood-dark);
+  clip-path: polygon(0% 100%, 50% 0%, 100% 100%);
+  margin-bottom: -2px;
+}
+
+.cabin__wall {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  background: var(--c-cabin-wood);
+  border: 2px solid var(--c-cabin-wood-dark);
+  box-shadow: var(--shadow-soft);
+}
+
+.cabin__window {
+  position: absolute;
+  top: 18%;
+  left: 18%;
+  width: 24%;
+  aspect-ratio: 1 / 1;
+  background: var(--c-cabin-ember);
+  border: 2px solid var(--c-cabin-wood-dark);
+  box-shadow: inset 0 0 0 2px var(--c-cabin-cream);
+}
+
+.cabin__door {
+  position: absolute;
+  bottom: 0;
+  right: 18%;
+  width: 22%;
+  height: 56%;
+  background: var(--c-cabin-wood-dark);
+  border: 2px solid var(--c-cabin-ink);
+  border-bottom: none;
+}
+
+/* Mobile-first: at very narrow widths, give the scene a touch more breathing room. */
+@media (max-width: 360px) {
+  #cabin-scene { padding: var(--sp-3) var(--sp-3); }
+  .cabin { width: 60%; }
+}

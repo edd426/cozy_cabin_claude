@@ -1,0 +1,10 @@
+{
+  "//": "Documents the shape of .cabin-state.json. The real file is gitignored and wrapper-written. The agent reads it but cannot edit it (locked).",
+  "today_iso":            "2026-05-09",
+  "day_n":                1,
+  "day_one_date":         "2026-05-09",
+  "pages_url":            "https://edd426.github.io/cozy_cabin_claude/",
+  "last_run_started_at":  "2026-05-09T07:00:00Z",
+  "last_run_finished_at": "2026-05-09T07:08:42Z",
+  "last_run_status":      "ok"
+}

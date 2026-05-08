@@ -1,0 +1,16 @@
+Cup Nooble — Sprout Lands Basic Asset Pack
+Source: https://cupnooble.itch.io/sprout-lands-asset-pack
+License terms: see read_me.txt in this directory (the file shipped with the pack).
+
+Summary (binding terms in read_me.txt):
+- You may modify the assets.
+- Non-commercial projects only. NFT / AI-training uses are not allowed.
+- The asset pack itself may not be redistributed or resold, even if modified.
+  Open-source projects that include the assets must include a credit note
+  ("Some assets by Cup Nooble") together with these licensing terms — that
+  is what this LICENSE.txt + the parent project's README.md provide.
+- Credit required: Cup Nooble. (See README.md "License" section.)
+
+Pulled: 2026-05-08
+Pack version: Basic pack (free), 299 kB, 60 files across Characters/Objects/
+              Tilesets/Sprout Lands color pallet

@@ -1,23 +1,34 @@
 <!--
   scene.html — agent-mutable.
-  This is the cabin scene. Day 0 is hand-placed by Evan: an exterior view
-  with one window, one door, no interactivity. The agent evolves it from
-  here. Loaded inline into #scene-mount by index.html. Do not include
-  <html>, <head>, or <body>.
--->
-<div class="scene scene--exterior" role="img" aria-label="A small wooden cabin at dawn, with a window glowing softly and a closed door.">
-  <!-- Sky / background. -->
-  <div class="scene__sky"></div>
+  Day 0 cabin scene. Hand-placed by Evan: a single wooden cabin with chimney
+  on a grass meadow, one tree to the side, sprite-based at integer scale.
+  Loaded inline into #scene-mount by index.html. Do not include <html>,
+  <head>, or <body>.
 
-  <!-- Ground line. -->
+  All sprites are from Cup Nooble's Sprout Lands Basic pack, either used raw
+  from assets/vendor/ or composed in assets/composed/.
+-->
+<div class="scene scene--exterior">
+  <div class="scene__sky"></div>
   <div class="scene__ground"></div>
 
-  <!-- The cabin itself. Pure CSS for Day 0; sprites land Day 1+. -->
-  <div class="cabin">
-    <div class="cabin__roof"></div>
-    <div class="cabin__wall">
-      <div class="cabin__window" aria-hidden="true"></div>
-      <div class="cabin__door"   aria-hidden="true"></div>
-    </div>
-  </div>
+  <img class="sprite sprite--cabin"
+       src="assets/composed/cabin-day-0.png"
+       width="48" height="80"
+       alt="A small wooden cabin with a shingled roof, chimney, and a brick fireplace visible through the doorway.">
+
+  <img class="sprite sprite--tree sprite--tree-left"
+       src="assets/composed/tree-01.png"
+       width="28" height="33"
+       alt="">
+
+  <img class="sprite sprite--tree-small sprite--tree-right"
+       src="assets/composed/tree-small.png"
+       width="15" height="33"
+       alt="">
+
+  <img class="sprite sprite--bush"
+       src="assets/composed/bush.png"
+       width="32" height="28"
+       alt="">
 </div>

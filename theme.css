@@ -2,42 +2,48 @@
  *
  * Design tokens only: palette, typography, spacing, pixel-rendering rules,
  * tap-target sizes, mobile breakpoints. No layout. No component styles.
- * Layout and component styling live in scene.css and per-page stylesheets,
- * which the agent edits.
  *
- * Aesthetic target: Stardew Valley cozy-cabin warmth. Earthy, soft, a little
- * dim. Mobile-first; the page must read well at 375px wide on a phone in
+ * Palette is sampled from Cup Nooble's Sprout Lands default palette
+ * (assets/vendor/sprout-lands/Sprout Lands color pallet/) — soft pastel
+ * earth tones, warm wood browns, sage and pistachio greens. Stardew
+ * Valley register: cozy, mid-saturation, slightly washed.
+ *
+ * Mobile-first; the page must read well at 375px wide on a phone in
  * morning light. */
 
 :root {
-  /* Palette — warm wood, cozy creams, soft greens, dusk sky. */
-  --c-cabin-wood-dark:    #3a2a1f;
-  --c-cabin-wood:         #5a3e29;
-  --c-cabin-wood-light:   #8a6442;
-  --c-cabin-cream:        #f3e9d2;
-  --c-cabin-cream-soft:   #e8dcc0;
-  --c-cabin-leaf:         #5b7c4a;
-  --c-cabin-leaf-light:   #8baa6a;
-  --c-cabin-sky-dawn:     #d8c69c;
-  --c-cabin-sky-dusk:     #4f5a73;
-  --c-cabin-ember:        #c97a3f;
-  --c-cabin-ink:          #1f1612;
+  /* Sprout Lands palette — sky / ground / wood / accents. */
+  --c-sky-light:        #f4e3c4;   /* warm cream sky, top of gradient */
+  --c-sky-mid:          #ecd0a6;   /* late-dawn warm peach */
+  --c-grass-light:      #b9d685;   /* pistachio meadow */
+  --c-grass:            #8db26a;   /* sprout-lands signature grass green */
+  --c-grass-shadow:     #5d8c4b;   /* shadow under foliage */
+  --c-wood-dark:        #6e4a3a;   /* cabin trim, shadow line */
+  --c-wood:             #a87253;   /* cabin walls (warm brown) */
+  --c-wood-light:       #d4a373;   /* cabin walls highlight */
+  --c-cream:            #f9efd2;   /* page background, cozy paper */
+  --c-cream-soft:       #ede0bd;
+  --c-rose:             #d77a76;   /* accent — flowers, ember */
+  --c-plum:             #6e4565;   /* accent — dusk shadow, ink */
+  --c-ink:              #3a2a3a;   /* body text */
+  --c-purple-soft:      #a98aaf;   /* outline text on warm bg */
 
   /* Background and surface defaults. */
-  --bg-page:    var(--c-cabin-sky-dawn);
-  --bg-scene:   var(--c-cabin-cream-soft);
-  --fg-text:    var(--c-cabin-ink);
-  --fg-muted:   var(--c-cabin-wood);
+  --bg-page:    var(--c-cream);
+  --bg-scene:   var(--c-sky-light);
+  --fg-text:    var(--c-ink);
+  --fg-muted:   var(--c-plum);
 
-  /* Typography. Cozy + readable on phone. Pixel-flavored for the day marker. */
-  --font-body: ui-serif, Georgia, "Iowan Old Style", "Apple Garamond", "Palatino Linotype", serif;
-  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
+  /* Typography. Pixel font for markers; warm serif for body. */
+  --font-body:  ui-serif, Georgia, "Iowan Old Style", "Apple Garamond", "Palatino Linotype", serif;
+  --font-mono:  ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Monaco, Consolas, monospace;
   --font-pixel: "VT323", "Press Start 2P", var(--font-mono);
 
-  --fs-body:   16px;
-  --fs-small:  14px;
-  --fs-marker: 18px;
-  --lh-body:   1.55;
+  --fs-body:    16px;
+  --fs-small:   14px;
+  --fs-marker:  18px;
+  --fs-tiny:    12px;
+  --lh-body:    1.55;
 
   /* Spacing scale. */
   --sp-1:  4px;
@@ -49,16 +55,19 @@
   --sp-7:  48px;
 
   /* Mobile-first sizing (RULES.md Article VIII). */
-  --tap-min: 44px;
-  --content-max: 420px;       /* portrait phone target */
-  --gutter:   16px;
+  --tap-min:        44px;
+  --content-max:    420px;
+  --gutter:         16px;
+
+  /* Sprite scale — multiply native 16-px tile dimensions. */
+  --pixel-scale:    4;
+  --tile:           calc(16px * var(--pixel-scale));   /* 64px */
 
   /* Pixel art rendering — never override. */
-  --pixel-render: pixelated;
+  --pixel-render:   pixelated;
 
-  /* Subtle shadow for depth without breaking the cozy register. */
-  --shadow-soft:  0 2px 0 rgba(31, 22, 18, 0.12);
-  --shadow-frame: 0 4px 0 rgba(31, 22, 18, 0.2);
+  --shadow-soft:    0 2px 0 rgba(58, 42, 58, 0.10);
+  --shadow-frame:   0 4px 0 rgba(58, 42, 58, 0.18);
 }
 
 /* Reset just enough to make mobile layout predictable. */
@@ -74,38 +83,34 @@ html, body {
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
   text-size-adjust: 100%;
-  overflow-x: hidden;        /* RULES.md Article VIII: no horizontal scroll, ever. */
+  overflow-x: hidden;
 }
 
-/* All raster images render at integer scale. Override is forbidden by Article VIII. */
 img, picture, canvas {
   image-rendering: var(--pixel-render);
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
 }
 
-/* Tap target floor for any anchor or button. */
 a, button {
   min-height: var(--tap-min);
   min-width:  var(--tap-min);
-  color: var(--c-cabin-wood);
+  color: var(--c-wood-dark);
   text-decoration-thickness: 1.5px;
   text-underline-offset: 3px;
 }
 
 a:focus-visible, button:focus-visible {
-  outline: 2px solid var(--c-cabin-ember);
+  outline: 2px solid var(--c-rose);
   outline-offset: 2px;
 }
 
-/* The day-marker footer uses the pixel font; other components inherit body font. */
 #day-marker {
   font-family: var(--font-pixel);
   font-size: var(--fs-marker);
   color: var(--fg-muted);
 }
 
-/* Phone-first breakpoints. */
 @media (min-width: 600px) {
   :root { --content-max: 560px; }
 }
@@ -115,10 +120,10 @@ a:focus-visible, button:focus-visible {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg-page:  var(--c-cabin-sky-dusk);
-    --bg-scene: var(--c-cabin-wood-dark);
-    --fg-text:  var(--c-cabin-cream);
-    --fg-muted: var(--c-cabin-cream-soft);
+    --bg-page:  var(--c-plum);
+    --bg-scene: var(--c-wood-dark);
+    --fg-text:  var(--c-cream);
+    --fg-muted: var(--c-cream-soft);
   }
 }
 

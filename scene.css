@@ -30,6 +30,10 @@
   color: var(--c-wood-dark);
 }
 
+@media (prefers-color-scheme: dark) {
+  #cabin-nav a { color: var(--c-cream); }
+}
+
 #cabin-nav a[aria-current="page"] {
   color: var(--c-plum);
   border-bottom: 2px solid var(--c-rose);

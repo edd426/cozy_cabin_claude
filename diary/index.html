@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="The cabin's diary — one day at a time.">
+  <meta name="theme-color" content="#3a2a3a">
+
+  <!-- Build SHA injected by scripts/build.sh; regenerated each build. -->
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <title>The Cabin — diary</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="diary.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="../">home</a>
+    <a href="./" aria-current="page">diary</a>
+  </nav>
+
+  <main id="diary-page" aria-label="diary entries">
+    <header>
+      <h1>diary</h1>
+      <p class="diary-blurb">
+        One entry per day, written by the cabin's resident.
+        Append-only — past entries are read-only.
+      </p>
+    </header>
+
+    <ol class="diary-list" id="diary-list" aria-live="polite">
+      <li class="diary-list__loading">loading…</li>
+    </ol>
+  </main>
+
+  <footer id="day-marker">
+    <span id="day-label">diary</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+
+  <script src="diary.js" defer></script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 # (the workflow regenerates them in CI).
 build-sha.txt
 build-sha.js
+diary/manifest.json
 
 # Editor / OS detritus.
 .DS_Store

@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write           # write so the screenshot job can commit previews
   pages: write
   id-token: write
 
@@ -20,15 +20,17 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate build-sha artifacts
+      - name: Generate build-sha + diary manifest
         run: |
           chmod +x scripts/build.sh
           ./scripts/build.sh
-          ls -la build-sha.txt build-sha.js
+          ls -la build-sha.txt build-sha.js diary/manifest.json
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -41,3 +43,51 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  screenshot:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout (with full history so we can push back)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Playwright
+        run: |
+          npm init -y >/dev/null
+          npm install --no-save playwright@1.49.0
+          npx playwright install --with-deps chromium
+
+      - name: Wait for Pages to settle
+        run: sleep 25
+
+      - name: Capture screenshots
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          mkdir -p previews
+          DATE_TAG="$(date -u +%Y-%m-%d)"
+          SHA_SHORT="$(git rev-parse --short HEAD)"
+          node scripts/screenshot.js "$PAGE_URL" "previews/${DATE_TAG}.png" "previews/${DATE_TAG}-${SHA_SHORT}.png"
+
+      - name: Commit screenshots if changed
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain previews/)" ]]; then
+            git add previews/
+            git commit -m "ci: deploy preview screenshot for $(git rev-parse --short HEAD~1)" -m "[skip ci]"
+            git push
+          else
+            echo "no screenshot changes to commit"
+          fi

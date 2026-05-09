@@ -38,26 +38,41 @@ Practical consequences:
 
 Before deciding what to do today, read:
 
-- The **last 7 days** of `diary/YYYY-MM-DD.md` entries. **Mandatory.**
-- The most recent `diary/meta/YYYY-MM-DD.md` entry, if one exists. **Mandatory.**
+- All `diary/YYYY-MM-DD.md` entries. **Mandatory.** You have a 1M-token context window — the whole diary fits, even at Day 60. Reading the full arc lets you notice patterns, callbacks, and tonal shifts that the last-7-day window would miss. Read them in chronological order if you want to feel the project's evolution; reverse-chronological if you only want recent context.
+- All `diary/meta/YYYY-MM-DD.md` entries (the weekly meta-reflections). **Mandatory.**
 - The latest screenshot in `previews/*.png` — find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is how you see what the cabin actually looks like without a browser. **Mandatory.**
 - `RULES.md` (this file). **Mandatory.**
 - `CLAUDE.md`. **Mandatory.**
 - `MILESTONES.md`. **Mandatory.**
 
-Earlier diary entries are opt-in — read them if today's task references them; do not re-read all history every day.
-
 ## Article IV — Verification required
 
-Before writing today's diary entry, you must verify the deployed site reflects today's commit:
+Verification has two halves: visual + interactive in your own session, and post-deploy via curl.
 
-1. Make your changes (in mutable files only).
-2. `git add` + `git commit` + `git push`.
-3. Wait at least 30 seconds for GitHub Pages to deploy.
-4. Run `scripts/verify-deploy.sh <PAGE_URL> "<a string from your change>"`. If it exits non-zero, wait another 60 seconds and retry exactly once. If it still fails, the deploy is the problem — record the failure verbatim in the diary's verification section. Do not push more commits trying to "fix" what may not be broken.
-5. On success, paste the script output verbatim into the diary entry's "Verification evidence" section.
+### Half one: in-session visual + interaction check (always)
 
-The curl-based check confirms that the deployed `build-sha` matches your local `HEAD` and that your claim string appears in the served HTML. It cannot confirm visual correctness. Tomorrow's CI screenshot at `previews/<today>-<sha>.png` is the visual record. Today, you trust the curl check; tomorrow's agent (or Evan) will catch any silent visual breakage.
+Once per session, regardless of what today's contribution is, run:
+
+```
+./scripts/local-snapshot.sh
+```
+
+The script installs Playwright if needed, starts a local HTTP server, renders the working-tree state in headless Chromium at phone-viewport size (375×800), and writes `/tmp/cabin-snap.png`. Read that file with the `Read` tool to see what the page actually looks like. First run per session takes ~30–90 seconds (Chromium download); subsequent runs in the same session are ~5 seconds.
+
+If today's contribution is visual or interactive (a new sprite, a tappable object, a sub-page link, a state toggle), iterate: edit, snapshot, read, iterate. Do this in the working tree only — do not commit anything until the visual matches your intent.
+
+For interaction tests (clicks, navigations, localStorage state, animation triggers), write a Playwright test script at `/tmp/<test-name>.js` and run it via `./scripts/local-snapshot.sh /tmp/<test-name>.js`. The wrapper sets `COZY_CABIN_URL` and `COZY_CABIN_OUTDIR` env vars for the script. Test scripts live in `/tmp/` and are never committed. The test script either exits 0 (pass) or non-zero (fail with a message). If a test fails, fix the working tree and re-run. Do not push code that fails its own test.
+
+### Half two: post-deploy verification (after push)
+
+When you do push:
+
+1. `git add` + `git commit` + `git push`.
+2. Wait at least 30 seconds for GitHub Pages to deploy.
+3. Run `scripts/verify-deploy.sh <PAGE_URL> "<a string from your change>"`. If it exits non-zero, wait another 60 seconds and retry exactly once. If it still fails, the deploy is the problem — record the failure verbatim in the diary's verification section. Do not push more commits trying to "fix" what may not be broken.
+4. On success, paste the script output verbatim into the diary entry's "Verification evidence" section.
+
+The curl-based check confirms that the deployed `build-sha` matches your local `HEAD` and that your claim string appears in the served HTML. Combined with the in-session local snapshot, this gives you both visual confidence (before push) and deployment confidence (after push).
 
 ## Article V — One contribution per day
 

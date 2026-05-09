@@ -20,6 +20,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     outputs:
       page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
@@ -47,6 +48,8 @@ jobs:
   screenshot:
     needs: deploy
     runs-on: ubuntu-latest
+    timeout-minutes: 5   # if Playwright/Chromium install hangs, fail fast
+                         # to avoid blocking the concurrency: pages group
     permissions:
       contents: write
     steps:

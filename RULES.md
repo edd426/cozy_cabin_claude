@@ -13,16 +13,17 @@ You may not edit, delete, move, or rename any of these:
 - `RULES.md` (this file)
 - `MILESTONES.md`
 - `theme.css`
-- `index.html`
 - Anything under `.claude/`
 - Anything under `scripts/`
 - Anything under `.github/`
 
-These are the constitution, the roadmap, the locked aesthetic tokens, the locked shell, the agent's own configuration, the build/verify pipeline, and the CI workflows. Editing any of them risks drift you cannot see across days, or breaking the deploy pipeline that lets you "see" your work.
+These are the constitution, the roadmap, the locked aesthetic tokens, the agent's own configuration, the build/verify pipeline, and the CI workflows. Editing any of them risks drift you cannot see across days, or breaking the deploy pipeline that lets you "see" your work.
+
+`index.html` (and any other page shell — `diary/index.html`, future sub-pages) is **mutable but contract-bound**. You may add nav links, change the title, restructure the layout, etc. But each shell must continue to include the build-sha meta tag, the `build-sha.js` script, and the `#day-label` / `#build-sha-label` / `#scene-mount` elements (or a functional equivalent of the mount). The contract is documented in an HTML comment at the top of `index.html`. Read it before editing.
 
 Enforcement is convention-only. There is no harness hook or pre-commit guard. You are trusted to read this file and follow it. If you believe a locked path genuinely needs to change, write a diary entry naming the file and the proposed change. Evan will read it and revise the file himself.
 
-You may freely edit: `scene.html`, `scene.css`, `assets/composed/`, `diary/<today>.md` (your own day's entry, append-only — see Article II), `CLAUDE.md`, `ASSETS.md` (append-only).
+You may freely edit: `index.html` (within the contract above), `scene.html`, `scene.css`, `assets/composed/`, `diary/<today>.md` (your own day's entry, append-only — see Article II), other diary infrastructure (`diary/diary.css`, `diary/diary.js`, `diary/index.html` within the same shell contract), `CLAUDE.md`, `ASSETS.md` (append-only).
 
 ## Article II — Diary is canonical
 

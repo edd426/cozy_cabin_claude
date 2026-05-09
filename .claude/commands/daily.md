@@ -37,14 +37,24 @@ Bias toward smaller scope, but the *kind* of thing is yours to choose (Article V
 
 ## Step 4 — Implement and locally verify (mutable files only)
 
-Edit only files in this list:
+Mutable (edit freely):
 
 - `scene.html`, `scene.css`
 - `assets/composed/**`
+- `index.html` and other page shells (`diary/index.html`, future sub-pages) **within the contract** documented at the top of `index.html` — preserve the build-sha tag, build-sha.js script, and day-label / build-sha-label / scene-mount elements
+- `diary/<today>.md` (your own day's entry; past days are read-only)
+- `diary/diary.css`, `diary/diary.js`
+- `requests/open/*.md` (when working on a request — append your notes; `git mv` to `done/` on completion)
 - `CLAUDE.md` (append to "Things I've learned" if you discovered something concrete)
 - `ASSETS.md` (append a new line if you composed a sprite — see RULES.md Article VII)
+- `404.html`
 
-If you find yourself wanting to edit a locked file (`RULES.md`, `MILESTONES.md`, `theme.css`, `index.html`, anything under `.claude/`, `scripts/`, `.github/`), stop. Either pick a different task or write a diary entry explaining the friction. Locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
+Locked (do not edit):
+
+- `RULES.md`, `MILESTONES.md`, `theme.css`
+- Anything under `.claude/`, `scripts/`, `.github/`
+
+If you find yourself wanting to edit a locked file, stop. Either pick a different task or write a diary entry explaining the friction. Locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
 
 **Verify locally before pushing.** Run `./scripts/local-snapshot.sh` to render the working-tree state in headless Chromium and write `/tmp/cabin-snap.png`. `Read` that file to see what the page actually looks like. First run per session takes ~30–90 seconds for the Chromium download; subsequent runs are ~5s.
 

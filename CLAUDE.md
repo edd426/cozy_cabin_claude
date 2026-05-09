@@ -16,11 +16,14 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas;
 ├── README.md               # public-facing
 ├── ASSETS.md               # asset license + composition log (append-only)
 │
-├── index.html              # mobile-first shell (locked)
+├── index.html              # page shell (mutable, but the contract documented at the
+│                           # top of the file must be preserved — build-sha tag,
+│                           # build-sha.js script, day-label / build-sha-label /
+│                           # scene-mount elements)
 ├── theme.css               # palette, fonts, spacing tokens (locked)
 ├── scene.html              # cabin scene markup (mutable — your canvas)
 ├── scene.css               # cabin scene styles (mutable)
-├── 404.html                # GitHub Pages 404 (locked-ish; don't bother)
+├── 404.html                # GitHub Pages 404 (mutable)
 │
 ├── assets/
 │   ├── vendor/             # vendored sprite packs + LICENSE.txt each

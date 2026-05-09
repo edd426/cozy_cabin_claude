@@ -26,3 +26,6 @@ node_modules/
 # the unpacked contents go in with credit, but not the archive).
 Sprout Lands - Sprites - Basic pack.zip
 *.zip
+
+# Local-only Claude Code scheduling state
+.claude/scheduled_tasks.lock

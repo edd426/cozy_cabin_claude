@@ -34,7 +34,7 @@ Decide one of:
 
 Bias toward smaller. A single sprite added is fine. Adding a tappable element is plenty. Resist scope creep.
 
-## Step 4 — Implement (mutable files only)
+## Step 4 — Implement and locally verify (mutable files only)
 
 Edit only files in this list:
 
@@ -43,7 +43,13 @@ Edit only files in this list:
 - `CLAUDE.md` (append to "Things I've learned" if you discovered something concrete)
 - `ASSETS.md` (append a new line if you composed a sprite — see RULES.md Article VII)
 
-If you find yourself wanting to edit a locked file (`RULES.md`, `MILESTONES.md`, `theme.css`, `index.html`), stop. Either pick a different task or write a diary entry explaining the friction. The locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
+If you find yourself wanting to edit a locked file (`RULES.md`, `MILESTONES.md`, `theme.css`, `index.html`, anything under `.claude/`, `scripts/`, `.github/`), stop. Either pick a different task or write a diary entry explaining the friction. Locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
+
+**Verify locally before pushing.** Run `./scripts/local-snapshot.sh` to render the working-tree state in headless Chromium and write `/tmp/cabin-snap.png`. `Read` that file to see what the page actually looks like. First run per session takes ~30–90 seconds for the Chromium download; subsequent runs are ~5s.
+
+For interactive contributions (tappable objects, state toggles, sub-page links), write a Playwright test at `/tmp/<test-name>.js` (see `CLAUDE.md` for the skeleton) and run it via `./scripts/local-snapshot.sh /tmp/<test-name>.js`. The test should exit 0 on pass, non-zero on fail. **Do not push code that fails its own test.**
+
+If at any point you want to abandon today's approach: `git restore .` to discard working-tree changes, or `git reset --hard origin/main` to discard local commits too. Nothing public happens until you push, so iteration is cheap.
 
 ## Step 5 — Build, commit, push the code change
 

@@ -1,0 +1,13 @@
+{
+  "name": "cozy-cabin-claude",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cozy cabin website built one day at a time. Node deps are for Playwright-based local rendering and interaction testing in scripts/local-snapshot.sh and the CI screenshot job.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "playwright": "1.49.0"
+  }
+}

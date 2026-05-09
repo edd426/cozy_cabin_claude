@@ -42,9 +42,11 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas;
 │
 ├── scripts/
 │   ├── build.sh            # generates build-sha.js
-│   ├── verify-deploy.sh    # post-push verification
+│   ├── verify-deploy.sh    # post-push verification (curl-grep)
 │   ├── lint-diary.sh       # schema linter (you may run before commit)
-│   └── run-day.sh          # routine wrapper
+│   ├── local-snapshot.sh   # render working-tree state in Playwright; in-session visual + interaction checks
+│   ├── screenshot.js       # Playwright snapshot helper (called by local-snapshot.sh and CI)
+│   └── run-day.sh          # routine wrapper (local only; not used in remote routine)
 │
 ├── .claude/
 │   ├── settings.json       # destructive-bash denies + allowlist
@@ -101,11 +103,8 @@ Every 7th day (the wrapper writes `day_n` into `.cabin-state.json` — read it),
 ## Common commands
 
 ```bash
-# Inspect what day it is
-cat .cabin-state.json | jq .day_n
-
-# See the last 7 diary entries
-ls -1 diary/*.md | tail -n 7
+# See all diary entries (you have a 1M context — read them all if you want)
+ls -1 diary/*.md
 
 # See what's currently in the scene
 cat scene.html scene.css
@@ -113,12 +112,52 @@ cat scene.html scene.css
 # What sprites are available
 find assets/vendor -name '*.png' | head -n 30
 
-# Generate build SHA artifacts (do this BEFORE git push)
-./scripts/build.sh
+# Render the working-tree state of the page locally and read the screenshot
+./scripts/local-snapshot.sh
+# then: Read /tmp/cabin-snap.png
 
-# Verify the deployed site reflects HEAD
+# Run a Playwright interaction test you wrote in /tmp/
+./scripts/local-snapshot.sh /tmp/my-test.js
+
+# Verify the deployed site reflects HEAD (after push)
 ./scripts/verify-deploy.sh https://edd426.github.io/cozy_cabin_claude/ "smoke from chimney"
+
+# UNDO YOUR DAY: discard all uncommitted work
+git restore .
+
+# UNDO MORE: discard local commits too, snap to what's published
+git reset --hard origin/main
 ```
+
+## Test-script pattern (for interaction testing)
+
+When you change something interactive (a tappable object, a state toggle, a sub-page link), write a small Playwright script in `/tmp/` and run it via `./scripts/local-snapshot.sh /tmp/<name>.js`. The wrapper sets `COZY_CABIN_URL` and `COZY_CABIN_OUTDIR` for the script. Tests **live in `/tmp/` and are never committed** — they're disposable scaffolding for today's session.
+
+Skeleton:
+
+```js
+// /tmp/test-bookshelf.js
+const { chromium } = require('playwright');
+
+(async () => {
+  const url = process.env.COZY_CABIN_URL;
+  const outdir = process.env.COZY_CABIN_OUTDIR;
+
+  const browser = await chromium.launch();
+  const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
+  const page = await ctx.newPage();
+
+  await page.goto(url, { waitUntil: 'networkidle' });
+  // Your assertions here:
+  await page.click('#bookshelf');
+  await page.waitForURL(/library/, { timeout: 5000 });
+  await page.screenshot({ path: `${outdir}/after-click.png` });
+  console.log('test: PASS');
+  await browser.close();
+})().catch(e => { console.error('test: FAIL —', e.message); process.exit(1); });
+```
+
+If the test fails, fix the working tree and re-run. **Do not push code that fails its own test.**
 
 ## Things I've learned
 

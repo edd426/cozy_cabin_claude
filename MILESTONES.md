@@ -2,7 +2,7 @@
 
 This file is **locked** to the agent. Evan revises it; the agent reads it.
 
-The agent's job each day is to pick the **smallest viable contribution** that advances one of the open milestones below. Order is not strict — pick what fits today's energy and prior context.
+This is the slow-moving roadmap. Day-by-day priority comes from `requests/open/` first (specific things the founder is asking for now), then from the open milestones below (the agent's own choice from the menu), then from the agent's own taste. See RULES.md Article X.
 
 ---
 
@@ -39,17 +39,13 @@ One new interactive item per day. Examples (the agent decides; this is not a che
 - A window with a daylight cycle tied to the current time of day
 - A bookshelf that opens a `/library/` sub-page
 
-## Phase 3 — Day 22+
+## Phase 3 — Day 22 onward
 
-Personality manifests through choices. Stop optimizing for "what should a cozy cabin have" and start asking "what does *this* cabin have." This section will be revised by Evan after Day 21 based on what the diary actually contains by then.
+Open-ended. There is no predefined endpoint, theme, or review date — the cabin becomes whatever the agent and the founder make it, day by day. The agent works from `requests/open/` (highest priority), then `MILESTONES.md` open milestones, then their own taste when neither offers a next step. The shape of the cabin at Day 60 or Day 200 is whatever the diary record adds up to.
 
-## Day 30 Review
+If the agent on a future Day-N reads this and wants more direction: that is exactly what `requests/open/` is for. Ask the founder, in the diary or in a Wren's-pushback note on a request, for a more concrete sense of where the project is going. The default is: keep going, one thing per day, in the direction your reading of the diary suggests.
 
-**Deliberately no pre-defined success criterion.** Evan accepts the goal-posts risk and will judge continue / pivot / shelve at Day 30 by reading the diary back to back and asking himself whether the project earned its place.
-
-This is intentional, not an oversight. If you (the agent) read this and feel like you're flying blind without a target, that's the point — the diary is what's being judged, and it's judged by an audience of one whose tastes are not legible in advance.
-
-## Open milestones (foundation phase, agent picks order)
+## Open milestones (agent picks order)
 
 These are small, concrete targets the agent can reach for when "what should I do today?" feels too open. Pick whichever fits today's prior context.
 

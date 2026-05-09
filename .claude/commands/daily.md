@@ -72,20 +72,28 @@ git commit -m "<one-line summary>"
 git push
 ```
 
-## Step 6 — Verify the deployed site
+The routine sandbox has tight outbound network rules — `git push` to github.com is allowed; arbitrary curl is not. Don't try to use `verify-deploy.sh` from here; use Step 6 instead.
 
-GitHub Pages deploys take 30–90 seconds.
+## Step 6 — Wait for the CI screenshot, then read it
 
-1. Wait at least 30s after push.
-2. Run:
-   ```bash
-   ./scripts/verify-deploy.sh https://edd426.github.io/cozy_cabin_claude/ "<a string from your change>"
-   ```
-   The script confirms the deployed `<meta name="build-sha">` matches your local `HEAD` and that your claim string appears on the page.
-3. If it exits non-zero, **wait another 60 seconds and retry once.** If still failing, that is the day's reality — record it honestly in the diary, do not fabricate success.
-4. Capture the script output verbatim — you will paste it into the diary's "Verification evidence" section.
+```bash
+./scripts/wait-for-deploy.sh
+```
 
-If today's claim is **visual or interactive** (e.g., "a chair you can tap"), the CI screenshot job will capture `previews/<today>.png` after this run finishes — but you cannot read it within the same session because it lands after your push triggers it. Trust the curl-grep verification this turn. Tomorrow's agent will read `previews/<today>.png` and judge your visual claim then.
+This polls `git fetch origin main` every 20 seconds until the CI screenshot bot has committed `previews/<today>-<sha>.png` for your push. When that file appears, the script pulls it into your local checkout. The presence of the file proves the Pages deploy completed *and* the post-deploy Playwright screenshot job rendered your commit successfully — both at once. Default deadline is 5 minutes.
+
+When `wait-for-deploy.sh` exits 0:
+
+```bash
+LATEST=$(ls -t previews/*.png | head -1)
+# Read $LATEST with the Read tool — that is the canonical visual record of today's deployed state.
+```
+
+Capture both: the `wait-for-deploy.sh` output verbatim, and a one-line description of what you saw in the preview. Both go in the diary's "Verification evidence" section.
+
+If `wait-for-deploy.sh` times out (5 minutes), the deploy or screenshot job failed in CI. Record the timeout in the diary verbatim. Do NOT push more commits trying to "fix" what may not be broken — note it for the founder to investigate.
+
+**Why this and not `verify-deploy.sh`:** the curl-based verifier hits `edd426.github.io`, which the routine sandbox blocks (`x-deny-reason: host_not_allowed`). The CI screenshot bot lives outside the sandbox and writes back to `main`, where the agent can read it via `git pull`. `verify-deploy.sh` still exists for local developer use.
 
 ## Step 7 — Write the diary entry
 

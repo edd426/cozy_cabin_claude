@@ -49,7 +49,7 @@ Before deciding what to do today, read:
 
 ## Article IV — Verification required
 
-Verification has two halves: visual + interactive in your own session, and post-deploy via curl.
+Verification has two halves: visual + interactive in your own session, and post-deploy via the CI screenshot bot. The routine sandbox blocks outbound HTTPS to most hosts (including `*.github.io` and Playwright's CDN), so neither half can rely on direct curl to the deployed site or on a fresh Chromium download. Both scripts below are designed around what the sandbox actually allows.
 
 ### Half one: in-session visual + interaction check (always)
 
@@ -59,22 +59,24 @@ Once per session, regardless of what today's contribution is, run:
 ./scripts/local-snapshot.sh
 ```
 
-The script installs Playwright if needed, starts a local HTTP server, renders the working-tree state in headless Chromium at phone-viewport size (375×800), and writes `/tmp/cabin-snap.png`. Read that file with the `Read` tool to see what the page actually looks like. First run per session takes ~30–90 seconds (Chromium download); subsequent runs in the same session are ~5 seconds.
+The script detects pre-staged Chromium at `/opt/pw-browsers/` (present in the routine sandbox) or in `~/.cache/ms-playwright` / `~/Library/Caches/ms-playwright` (developer machines), installs the `playwright` npm package without triggering its post-install Chromium download, starts a local HTTP server, renders the working-tree state in headless Chromium at phone-viewport size (375×800), and writes `/tmp/cabin-snap.png`. Read that file with the `Read` tool to see what the page actually looks like. First run per session takes a few seconds; subsequent runs are about the same.
 
 If today's contribution is visual or interactive (a new sprite, a tappable object, a sub-page link, a state toggle), iterate: edit, snapshot, read, iterate. Do this in the working tree only — do not commit anything until the visual matches your intent.
 
-For interaction tests (clicks, navigations, localStorage state, animation triggers), write a Playwright test script at `/tmp/<test-name>.js` and run it via `./scripts/local-snapshot.sh /tmp/<test-name>.js`. The wrapper sets `COZY_CABIN_URL` and `COZY_CABIN_OUTDIR` env vars for the script. Test scripts live in `/tmp/` and are never committed. The test script either exits 0 (pass) or non-zero (fail with a message). If a test fails, fix the working tree and re-run. Do not push code that fails its own test.
+For interaction tests (clicks, navigations, localStorage state, animation triggers), write a Playwright test script at `/tmp/<test-name>.js` and run it via `./scripts/local-snapshot.sh /tmp/<test-name>.js`. The wrapper sets `COZY_CABIN_URL`, `COZY_CABIN_OUTDIR`, and `COZY_CABIN_CHROMIUM_PATH` env vars for the script. Pass `executablePath: process.env.COZY_CABIN_CHROMIUM_PATH` to `chromium.launch()` so your test uses the same browser the snapshot did. Test scripts live in `/tmp/` and are never committed. The test script either exits 0 (pass) or non-zero (fail with a message). If a test fails, fix the working tree and re-run. **Do not push code that fails its own test.**
 
 ### Half two: post-deploy verification (after push)
 
 When you do push:
 
 1. `git add` + `git commit` + `git push`.
-2. Wait at least 30 seconds for GitHub Pages to deploy.
-3. Run `scripts/verify-deploy.sh <PAGE_URL> "<a string from your change>"`. If it exits non-zero, wait another 60 seconds and retry exactly once. If it still fails, the deploy is the problem — record the failure verbatim in the diary's verification section. Do not push more commits trying to "fix" what may not be broken.
-4. On success, paste the script output verbatim into the diary entry's "Verification evidence" section.
+2. Run `./scripts/wait-for-deploy.sh`. This polls `git fetch origin main` until the CI screenshot bot's `previews/<today>-<sha>.png` lands on `main`, then pulls. The presence of that file proves the Pages deploy completed and the CI screenshot job rendered the new commit. Default deadline is 5 minutes; the script polls every 20 seconds.
+3. On success, `Read` the new `previews/<today>-<sha>.png` to see the actual deployed state at 375×800. This is the canonical visual record for today.
+4. Paste the `wait-for-deploy.sh` output verbatim into the diary entry's "Verification evidence" section, plus a one-line description of what you saw in the preview.
 
-The curl-based check confirms that the deployed `build-sha` matches your local `HEAD` and that your claim string appears in the served HTML. Combined with the in-session local snapshot, this gives you both visual confidence (before push) and deployment confidence (after push).
+If `wait-for-deploy.sh` times out, the deploy or screenshot job failed in CI. Record the timeout in the diary verbatim. Do not push more commits trying to "fix" what may not be broken — check `https://github.com/edd426/cozy_cabin_claude/actions` (via `gh run list` if you have it; otherwise note for the founder to investigate).
+
+`scripts/verify-deploy.sh` still exists for local developer use (curl-based check from a machine with full network access), but the routine should not call it — the routine sandbox blocks `edd426.github.io`.
 
 ## Article V — One contribution per day
 

@@ -22,7 +22,14 @@ const { chromium } = require('playwright');
     process.exit(2);
   }
 
-  const browser = await chromium.launch();
+  // Honor a pre-staged Chromium binary when the wrapper found one
+  // (CCR routine sandbox sets COZY_CABIN_CHROMIUM_PATH to /opt/pw-browsers/...).
+  const launchOpts = {};
+  if (process.env.COZY_CABIN_CHROMIUM_PATH) {
+    launchOpts.executablePath = process.env.COZY_CABIN_CHROMIUM_PATH;
+    console.log(`screenshot: using executablePath=${launchOpts.executablePath}`);
+  }
+  const browser = await chromium.launch(launchOpts);
   const context = await browser.newContext({
     viewport: { width: 375, height: 800 },
     deviceScaleFactor: 2,

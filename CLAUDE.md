@@ -49,10 +49,14 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas;
 │                              # find latest:  ls -t previews/*.png | head -1
 │
 ├── scripts/
-│   ├── build.sh            # generates build-sha.js
-│   ├── verify-deploy.sh    # post-push verification (curl-grep)
+│   ├── build.sh            # generates build-sha.js + diary/manifest.json
+│   ├── verify-deploy.sh    # curl-grep verification (LOCAL ONLY -- the routine sandbox blocks
+│   │                       # *.github.io outbound, so don't call this from the daily routine;
+│   │                       # use wait-for-deploy.sh instead)
+│   ├── wait-for-deploy.sh  # post-push verification via the CI screenshot bot's commit
 │   ├── lint-diary.sh       # schema linter (you may run before commit)
-│   ├── local-snapshot.sh   # render working-tree state in Playwright; in-session visual + interaction checks
+│   ├── local-snapshot.sh   # in-session render of working-tree state via Playwright;
+│   │                       # detects pre-staged Chromium at /opt/pw-browsers/ or system cache
 │   ├── screenshot.js       # Playwright snapshot helper (called by local-snapshot.sh and CI)
 │   └── run-day.sh          # routine wrapper (local only; not used in remote routine)
 │
@@ -128,7 +132,11 @@ find assets/vendor -name '*.png' | head -n 30
 # Run a Playwright interaction test you wrote in /tmp/
 ./scripts/local-snapshot.sh /tmp/my-test.js
 
-# Verify the deployed site reflects HEAD (after push)
+# Wait for CI's post-deploy screenshot bot to commit previews/<today>-<sha>.png
+# (use this from the routine sandbox; verify-deploy.sh's curl is blocked)
+./scripts/wait-for-deploy.sh
+
+# (LOCAL DEVELOPER ONLY) curl-based verification — the routine sandbox can't curl github.io
 ./scripts/verify-deploy.sh https://edd426.github.io/cozy_cabin_claude/ "smoke from chimney"
 
 # UNDO YOUR DAY: discard all uncommitted work
@@ -149,10 +157,14 @@ Skeleton:
 const { chromium } = require('playwright');
 
 (async () => {
-  const url = process.env.COZY_CABIN_URL;
+  const url    = process.env.COZY_CABIN_URL;
   const outdir = process.env.COZY_CABIN_OUTDIR;
+  const exe    = process.env.COZY_CABIN_CHROMIUM_PATH;   // pre-staged binary path
+                                                          // (set by local-snapshot.sh)
 
-  const browser = await chromium.launch();
+  const launchOpts = {};
+  if (exe) launchOpts.executablePath = exe;             // honor the pre-staged Chromium
+  const browser = await chromium.launch(launchOpts);
   const ctx = await browser.newContext({ viewport: { width: 375, height: 800 } });
   const page = await ctx.newPage();
 

@@ -32,8 +32,10 @@ line and the claim grep. On a stuck day with no deploy: "no deploy this day —
 diary-only entry.">
 
 ## Tokens used
-<Best-estimate integer of tokens consumed this session. Read this back when
-checking memory tomorrow — climbing usage is a signal to do less.>
+<Two best-estimate numbers: tokens read in (prompts + files + tool results)
+and tokens written out (your responses + edits). Format: "in: ~X / out: ~Y".
+Precision is not the point — rough numbers are fine. Tracked for monitoring,
+not as a constraint (RULES.md Article XI).>
 
 ## Tomorrow's seed
 <One sentence. The next obvious step a future you would pick up. Not a
@@ -42,8 +44,9 @@ commitment — a hint.>
 
 ## Conventions
 
-- **`Day N`** in the title: `N = (today − Day-1 anchor date)`. The wrapper
-  writes `day_n` to `.cabin-state.json` so you don't have to compute it.
+- **`Day N`** in the title: `N = (today − Day-1 anchor date) + 1`. Compute
+  from `date -u` and the Day-1 anchor (2026-05-09); `.cabin-state.json` is a
+  local-only convenience and not present in the routine sandbox.
 - **Voice**: first person. You are the cabin's resident, not an external
   observer reporting on it.
 - **No retrospective edits**: if you change your mind during the same session,

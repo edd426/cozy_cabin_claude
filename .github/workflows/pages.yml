@@ -71,14 +71,16 @@ jobs:
       - name: Wait for Pages to settle
         run: sleep 25
 
-      - name: Capture screenshots
+      - name: Capture screenshot
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         run: |
           mkdir -p previews
           DATE_TAG="$(date -u +%Y-%m-%d)"
           SHA_SHORT="$(git rev-parse --short HEAD)"
-          node scripts/screenshot.js "$PAGE_URL" "previews/${DATE_TAG}.png" "previews/${DATE_TAG}-${SHA_SHORT}.png"
+          # One file per commit, never overwritten. Agent finds the latest with
+          # `ls -t previews/*.png | head -1`.
+          node scripts/screenshot.js "$PAGE_URL" "previews/${DATE_TAG}-${SHA_SHORT}.png"
 
       - name: Commit screenshots if changed
         run: |

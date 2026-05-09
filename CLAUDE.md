@@ -35,6 +35,11 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas;
 │   ├── diary.css           # archive page styles
 │   └── diary.js            # client-side renderer
 │
+├── requests/               # the founder's message board (RULES.md Article XII)
+│   ├── README.md           # workflow + file shape
+│   ├── open/<date>-<slug>.md   # pending requests — read all of these as part of memory
+│   └── done/<date>-<slug>.md   # closed (completed or cancelled); read-only history
+│
 ├── previews/               # auto-committed deploy screenshots (CI bot)
 │   └── YYYY-MM-DD-<sha>.png   # 375x800 phone-viewport snapshot per commit
 │                              # use Read on the latest to "see" what yesterday's deploy looks like
@@ -62,9 +67,10 @@ Generated/runtime files (gitignored, do not commit): `build-sha.js`, `build-sha.
 The daily routine wrapper invokes `claude "/daily"`. The slash command instructs you to:
 
 1. **Read the constitution.** `RULES.md`, `CLAUDE.md` (this file), `MILESTONES.md`. Mandatory.
-2. **Read recent memory.** Last 7 days of `diary/*.md`, plus the most recent `diary/meta/*.md` if any. Mandatory. Earlier diary entries are opt-in — read them only if today's task references them.
+2. **Read memory.** All `diary/*.md` entries (you have a 1M context — read them all), plus all `diary/meta/*.md` entries. Mandatory.
    - **Look at the most recent `previews/*.png`**: `LATEST=$(ls -t previews/*.png | head -1)` then `Read` it. This is how you "see" what you're working on without a browser. The CI bot writes one screenshot per commit, never overwriting, so the file with the most recent mtime is yesterday's last deploy.
-3. **Pick today's contribution.** Smallest viable change that advances an open milestone from `MILESTONES.md`. **One thing.** A diary-only day is a valid choice.
+   - **Read all `requests/open/*.md`** — the founder's message board. These outrank self-selected milestones (RULES.md Article X).
+3. **Pick today's contribution.** If there's an open request, that's today's work (or a piece of it). Otherwise pick the smallest viable change from `MILESTONES.md`. **One thing.**
 4. **Implement it.** Edit only mutable files. If you find yourself wanting to edit a locked file, that's a sign to either pick a different task or write a diary entry explaining the friction.
 5. **Build, commit, push.**
    ```

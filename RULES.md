@@ -40,6 +40,7 @@ Before deciding what to do today, read:
 
 - All `diary/YYYY-MM-DD.md` entries. **Mandatory.** You have a 1M-token context window — the whole diary fits, even at Day 60. Reading the full arc lets you notice patterns, callbacks, and tonal shifts that the last-7-day window would miss. Read them in chronological order if you want to feel the project's evolution; reverse-chronological if you only want recent context.
 - All `diary/meta/YYYY-MM-DD.md` entries (the weekly meta-reflections). **Mandatory.**
+- All `requests/open/*.md` files (the founder's message board — see Article XII). **Mandatory.** These are higher priority than self-selected milestones.
 - The latest screenshot in `previews/*.png` — find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is how you see what the cabin actually looks like without a browser. **Mandatory.**
 - `RULES.md` (this file). **Mandatory.**
 - `CLAUDE.md`. **Mandatory.**
@@ -115,19 +116,37 @@ Only when you have (1) tried at least two distinct approaches to today's contrib
 
 No-progress days should be rare. If many of them appear in the diary, something structural is wrong — a milestone is too ambitious, a dependency is broken, or the next agent should pick a different track.
 
-## Article X — Milestone selection
+## Article X — What to work on
 
-Pick the smallest viable contribution from `MILESTONES.md` that advances the cabin or its narrative one concrete step. Pick what fits today's energy and yesterday's diary, not what looks impressive in isolation.
+Priority order:
+
+1. **Open requests** in `requests/open/` (see Article XII). If there is an open request, today's contribution should be it (or a piece of it, for multi-day work).
+2. **The smallest viable contribution from `MILESTONES.md`** that advances the cabin or its narrative one concrete step. Pick what fits today's energy and yesterday's diary, not what looks impressive in isolation.
+3. **Anything not on either list, when both are empty** — pick the simplest object you have not yet placed (a flower, a sign, a path tile) and place it. Sparse rooms become full rooms one item at a time.
 
 What you do today matters less than that you keep doing one thing per day for many days. The compounding effect over thirty days is real; trying to make a single day impressive is not.
-
-When `MILESTONES.md` offers no obvious next step, pick the simplest object you have not yet placed (a flower, a sign, a path tile) and place it. Sparse rooms become full rooms one item at a time.
 
 ## Article XI — Token budget
 
 You are budgeted 200,000–500,000 tokens per day on Opus 4.7 1M context. The cap is a ceiling, not a target. Slow days are fine.
 
 Estimate your token usage honestly and record it in today's diary entry. Reading the last 7 entries' token counts is part of the memory rule — if you see your usage climbing, that is a signal to do less today, not more.
+
+## Article XII — Requests
+
+The `requests/` directory is the founder's message board. He writes specific things he wants you to do; you read them at the start of every session and prioritize them above your self-selected milestones.
+
+- Open requests live in `requests/open/`. You read all of them as part of the memory rule (Article III).
+- Closed requests live in `requests/done/`. You may read them when relevant; they are read-only history.
+- The full workflow — file shape, multi-day handling, completion mechanics, pushback — is documented in `requests/README.md`. Follow it.
+
+When you complete a request: append a "Completion notes" subsection to the file, `git mv` it from `open/` to `done/` in the same commit as the work, and reference the filename in today's diary entry.
+
+When you cannot complete a request as written (scope too large for one day, conflicts with locked files, fundamentally infeasible): append a "Wren's pushback" subsection to the file describing the issue, leave it in `open/`, and pick a different contribution for today. The founder will read your pushback and revise or close.
+
+When the founder cancels a request by moving it to `done/` himself: respect that immediately. Do not continue work on a cancelled request.
+
+A request marked complete is complete. Do not pile more work on top of a closed request without a new request being opened. The point of the close-state is to let both sides move on.
 
 ---
 

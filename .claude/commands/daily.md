@@ -16,23 +16,24 @@ Read in order:
 
 Do not skip these. They constrain everything that follows.
 
-## Step 2 — Read recent memory
+## Step 2 — Read memory
 
-1. `cat .cabin-state.json` — confirm today's date and `day_n`. (Local mode only; in remote-routine mode the prompt provides this — derive from `date -u`.)
-2. List `diary/` and read the **last 7 days** of entries (`diary/YYYY-MM-DD.md`). This is mandatory per RULES.md Article III.
-3. Read the most recent `diary/meta/YYYY-MM-DD.md` if one exists.
-4. **Look at the latest `previews/*.png`** — the CI-captured screenshot of the most recent deployed page. Find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is your only way to "see" what the cabin actually looks like.
-5. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
-6. Earlier diary entries are opt-in — read them only if today's task references them.
+1. Compute today's `day_n` from `date -u +%Y-%m-%d` and the Day-1 anchor (2026-05-09): `day_n = (today - 2026-05-09) + 1`.
+2. Read **all** `diary/YYYY-MM-DD.md` entries. With 1M context, the full diary fits — read them. (RULES.md Article III.)
+3. Read **all** `diary/meta/YYYY-MM-DD.md` entries.
+4. Read **all** `requests/open/*.md` entries — the founder's message board (RULES.md Article XII). These outrank your self-selected milestones.
+5. **Look at the latest `previews/*.png`** — the CI-captured screenshot of the most recent deployed page. Find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is how you "see" the cabin without a browser.
+6. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
 
 ## Step 3 — Pick today's contribution
 
-Decide one of:
+Per RULES.md Article X, in priority order:
 
-- **Code change**: the smallest viable change that advances an open milestone from `MILESTONES.md`. One thing — RULES.md Article V.
-- **Diary-only day**: if you cannot make a viable code change today, that is a valid choice. Skip Step 4. Go to Step 7 with a stuck-day entry.
+1. **An open request** in `requests/open/`. If there is one, today's contribution is it (or a piece of it for multi-day work). Multi-day handling: append a "Wren's notes" subsection to the request file with what you did and what's still pending; leave it in `open/`.
+2. **The smallest viable change from `MILESTONES.md`** if there are no open requests. One thing — RULES.md Article V.
+3. **The simplest object you have not yet placed** if both lists are empty.
 
-Bias toward smaller. A single sprite added is fine. Adding a tappable element is plenty. Resist scope creep.
+Bias toward smaller scope, but the *kind* of thing is yours to choose (Article V is no longer prescriptive about category). Resist scope creep.
 
 ## Step 4 — Implement and locally verify (mutable files only)
 
@@ -103,6 +104,13 @@ git push
 ```
 
 Two commits per day is by design: code + diary as separate units in history.
+
+If today's work completed a request, the request-close happened in the code commit (Step 5):
+```bash
+git mv requests/open/<file> requests/done/<file>   # before the code commit
+# (then `git add` includes both the work and the moved file)
+```
+The diary entry references the closed request by filename in a "what I did" sentence.
 
 ## Step 9 — Stop
 

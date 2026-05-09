@@ -24,6 +24,22 @@ else
 fi
 SHORT="${SHA:0:7}"
 NOW_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+TODAY_ISO="$(date -u +%Y-%m-%d)"
+
+# Day-1 anchor — must match scripts/run-day.sh and the routine prompt.
+# Edit here if Day 1 ever needs to shift.
+DAY_ONE_DATE="2026-05-09"
+
+# Compute day_n. Negative values mean "before Day 1" — render as "Day 0".
+DAY_N="$(python3 - "$DAY_ONE_DATE" "$TODAY_ISO" <<'PY'
+import sys, datetime
+day_one = datetime.date.fromisoformat(sys.argv[1])
+today   = datetime.date.fromisoformat(sys.argv[2])
+n = (today - day_one).days + 1
+print(max(0, n))
+PY
+)"
+DAY_LABEL="Day ${DAY_N}"
 
 echo "$SHA" > build-sha.txt
 
@@ -33,15 +49,20 @@ cat > build-sha.js <<JS
   var SHA       = "$SHA";
   var SHORT_SHA = "$SHORT";
   var BUILT_AT  = "$NOW_UTC";
+  var DAY_N     = $DAY_N;
+  var DAY_LABEL = "$DAY_LABEL";
 
   var meta = document.querySelector('meta[name="build-sha"]');
   if (meta) meta.setAttribute('content', SHA);
 
-  var label = document.getElementById('build-sha-label');
-  if (label) label.textContent = SHORT_SHA + ' · ' + BUILT_AT;
+  var sha_label = document.getElementById('build-sha-label');
+  if (sha_label) sha_label.textContent = SHORT_SHA + ' · ' + BUILT_AT;
+
+  var day_label = document.getElementById('day-label');
+  if (day_label) day_label.textContent = DAY_LABEL;
 
   // Stash on window for any inline scripts that want it.
-  window.__cabinBuild = { sha: SHA, shortSha: SHORT_SHA, builtAt: BUILT_AT };
+  window.__cabinBuild = { sha: SHA, shortSha: SHORT_SHA, builtAt: BUILT_AT, dayN: DAY_N, dayLabel: DAY_LABEL };
 })();
 JS
 

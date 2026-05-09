@@ -1,23 +1,24 @@
 #!/usr/bin/env node
-// scripts/screenshot.js URL [OUT_DAY_PNG] [OUT_DAY_SHA_PNG]
+// scripts/screenshot.js URL OUT_PNG
 //
 // Captures the deployed cabin site at phone-viewport size (375×800) and
-// writes one or two PNGs the agent can read on the next day to "see" what
-// the previous day's deploy looks like.
+// writes a single PNG the next day's agent can Read to "see" what the
+// previous day's deploy looks like.
+//
+// One file per commit; never overwritten. Agent uses `ls -t previews/*.png`
+// to find the latest.
 //
 // Run from the GitHub Actions screenshot job. Locally it works too if you
 // have playwright installed (`npm install playwright`).
 
 const { chromium } = require('playwright');
-const path = require('path');
 
 (async () => {
   const url = process.argv[2];
-  const outA = process.argv[3] || 'previews/today.png';
-  const outB = process.argv[4]; // optional second copy keyed by SHA
+  const out = process.argv[3];
 
-  if (!url) {
-    console.error('screenshot: URL required as first argument');
+  if (!url || !out) {
+    console.error('screenshot: usage — screenshot.js URL OUT_PNG');
     process.exit(2);
   }
 
@@ -33,13 +34,8 @@ const path = require('path');
   // Give the inline scene loader a moment to fetch and render scene.html.
   await page.waitForTimeout(1500);
 
-  console.log(`screenshot: writing ${outA}`);
-  await page.screenshot({ path: outA, fullPage: true });
-
-  if (outB) {
-    console.log(`screenshot: writing ${outB}`);
-    await page.screenshot({ path: outB, fullPage: true });
-  }
+  console.log(`screenshot: writing ${out}`);
+  await page.screenshot({ path: out, fullPage: true });
 
   await browser.close();
   console.log('screenshot: done');

@@ -21,7 +21,7 @@ Do not skip these. They constrain everything that follows.
 1. `cat .cabin-state.json` — confirm today's date and `day_n`. (Local mode only; in remote-routine mode the prompt provides this — derive from `date -u`.)
 2. List `diary/` and read the **last 7 days** of entries (`diary/YYYY-MM-DD.md`). This is mandatory per RULES.md Article III.
 3. Read the most recent `diary/meta/YYYY-MM-DD.md` if one exists.
-4. **Look at `previews/<latest>.png`** — the CI-captured screenshot of the most recent deployed page. The `Read` tool renders PNGs visually. This is your only way to "see" what the cabin actually looks like.
+4. **Look at the latest `previews/*.png`** — the CI-captured screenshot of the most recent deployed page. Find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is your only way to "see" what the cabin actually looks like.
 5. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
 6. Earlier diary entries are opt-in — read them only if today's task references them.
 

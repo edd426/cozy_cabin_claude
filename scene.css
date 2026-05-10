@@ -143,9 +143,54 @@
   z-index: 3;
 }
 
+/* Smoke from the chimney. Three small pixel-art puffs rising on
+ * staggered timers, drawn from scratch — a single 6x6 px block plus
+ * box-shadow neighbours forms a four-block puff cluster. White against
+ * the warm cream sky for contrast. The container anchors above the
+ * cabin chimney; tweak `bottom`/`left` if the cabin moves. */
+.sprite--smoke {
+  width: 6px;
+  height: 78px;
+  /* Chimney cap sits roughly above cabin centre at 3x scale. Cabin top
+   * is at scene-bottom + 6% + 240px; chimney cap is ~12px below that. */
+  left: 50%;
+  bottom: calc(6% + 228px);
+  margin-left: -3px;
+  z-index: 3;
+}
+
+.smoke-puff {
+  position: absolute;
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: #fff8ec;
+  opacity: 0;
+  bottom: 0;
+  left: 0;
+  /* Pixel-art cluster: the puff plus three neighbouring pixel blocks
+   * make a chunky 12x12 cloud while keeping integer pixel edges. */
+  box-shadow:
+     6px  0   0 #fff8ec,
+     0   -6px 0 #fff8ec,
+     6px -6px 0 #fdeed0;
+  animation: smoke-rise 4.5s linear infinite;
+}
+.smoke-puff--1 { animation-delay: 0s;    left:  0px;  }
+.smoke-puff--2 { animation-delay: 1.5s;  left: -4px;  }
+.smoke-puff--3 { animation-delay: 3.0s;  left:  4px;  }
+
+@keyframes smoke-rise {
+  0%   { transform: translateY(0)     scale(0.7); opacity: 0;    }
+  12%  {                                           opacity: 0.95; }
+  60%  {                                           opacity: 0.55; }
+  100% { transform: translateY(-72px) scale(1.3); opacity: 0;    }
+}
+
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
   .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
   .sprite--tree        { width: calc(28px * 2); height: calc(33px * 2); }
   .sprite--tree-small  { width: calc(15px * 2); height: calc(33px * 2); }
+  .sprite--smoke       { bottom: calc(8% + 152px); }
 }

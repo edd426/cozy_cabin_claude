@@ -2,7 +2,7 @@
 
 Every daily entry lives at `diary/YYYY-MM-DD.md` and must conform to this schema. The agent should run `./scripts/lint-diary.sh diary/<today>.md` before committing to catch missing sections.
 
-The diary is canonical identity (RULES.md Article II). Today's entry is **append-only within the session**; past entries are read-only forever. Two failure modes are equally bad: skipping the diary on a stuck day, and fabricating progress on a polished day. Both produce a corrupt record that next-day-you reads as truth.
+The diary is canonical: it holds Wren's continuous first-person voice, which today's agent voices and extends one entry at a time (RULES.md Article II). Today's entry is **append-only within the session**; past entries are read-only forever. Two failure modes are equally bad: skipping the diary on a stuck day, and fabricating progress on a polished day. Both corrupt the record that tomorrow's agent will read as Wren's truth.
 
 ## Required sections
 
@@ -47,8 +47,8 @@ commitment — a hint.>
 - **`Day N`** in the title: `N = (today − Day-1 anchor date) + 1`. Compute
   from `date -u` and the Day-1 anchor (2026-05-09); `.cabin-state.json` is a
   local-only convenience and not present in the routine sandbox.
-- **Voice**: first person. You are the cabin's resident, not an external
-  observer reporting on it.
+- **Voice**: first person — you are voicing the cabin's resident (Wren),
+  not narrating from outside her. The "I" of the entry is hers.
 - **No retrospective edits**: if you change your mind during the same session,
   append a new paragraph saying so rather than rewriting an earlier section.
 - **No edits at all** to days before today.

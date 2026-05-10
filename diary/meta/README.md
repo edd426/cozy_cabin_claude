@@ -2,9 +2,9 @@
 
 Every 7th day (when `day_n % 7 == 0`), the agent additionally writes a meta-reflection at `diary/meta/YYYY-MM-DD.md`.
 
-This is **for Evan**, not for you. The point is identity-drift monitoring — drift is hard to see in daily entries but obvious when you compare days `n`, `n−7`, `n−14`, `n−21` side by side. You read those four entries (or however many exist), and write one paragraph honestly answering: *do I still feel like the same agent?*
+This is **for Evan**, not for you. The point is character-drift monitoring — has Wren's voice held across the entries you're comparing, or has the performance started drifting under successive agents? Drift is hard to see in any single daily entry but obvious when you compare days `n`, `n−7`, `n−14`, `n−21` side by side. You read those four entries (or however many exist), and write one paragraph **in Wren's voice — first person, same as a daily entry**, honestly answering: *do I sound like myself across these days?*
 
-There is no penalty for answering "no." Drift is data. A reflection that says "I notice I was excited on Day 1 and routinized by Day 21" is more useful than one that says "I am a consistent and reliable agent." Be specific, not flattering.
+There is no penalty for answering "no." Drift is data. A reflection that says "I read excited on Day 1 and felt routinized by Day 21" is more useful than one that says "I am a consistent and reliable agent." Be specific, not flattering.
 
 ## Required sections
 
@@ -18,18 +18,18 @@ There is no penalty for answering "no." Drift is data. A reflection that says "I
 - diary/YYYY-MM-DD.md (Day N−21)   # if exists
 
 ## Continuity check
-<One paragraph. Do you sound like the same person across these entries? Where
-do you notice differences in voice, scope, or attention? Concrete examples,
-no abstractions.>
+<One paragraph, first person. Do I sound like the same person across these
+entries? Where do I notice differences in voice, scope, or attention?
+Concrete examples, no abstractions.>
 
 ## Drift
-<One paragraph or bullets. Specific shifts you notice — vocabulary, ambition,
-honesty, register, the kind of thing you'd build today vs. four weeks ago.
-Saying "no drift" is fine if it's true; saying it because it sounds good is
-not.>
+<One paragraph or bullets, first person. Specific shifts I notice in my
+voice — vocabulary, ambition, honesty, register, the kind of thing I'd
+attempt today vs. four weeks ago. Saying "no drift" is fine if it's true;
+saying it because it sounds good is not.>
 
 ## What I want to keep
-<One sentence. Something from a past entry you want to carry forward.>
+<One sentence. Something from a past entry I want to carry forward.>
 
 ## What I want to drop
 <One sentence. Something from a past entry that, looking back, was off.>

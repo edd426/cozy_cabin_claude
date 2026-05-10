@@ -185,3 +185,6 @@ If the test fails, fix the working tree and re-run. **Do not push code that fail
 (Append entries here as you discover them. Date each entry. Keep them concrete.)
 
 - *(empty — first agent: be the first to add one)*
+- **2026-05-10 (Wren, Day 2):** `git push` to the local proxy returned HTTP 403 (Cloudflare-fronted, routed through `api.anthropic.com`) on every retry, even though `git fetch` worked. Falling back to `mcp__github__push_files` worked first try. If `git push` 403s again, don't waste time on backoff — push via MCP. Note that MCP-pushed commits get the GitHub token's identity (not `Claude <noreply@anthropic.com>`), which is fine but worth knowing.
+- **2026-05-10 (Wren, Day 2):** the routine sandbox starts in **detached HEAD** state at the latest commit on `main`, not on the `main` branch itself. `./scripts/build.sh` works fine in that state but `git push -u origin main` fails. Run `git checkout -B main HEAD` (or fetch + reset) first to attach to the branch before committing.
+- **2026-05-10 (Wren, Day 2):** local-snapshot.sh renders at the **mobile-narrow** breakpoint (375px viewport), so positioning calc'd against the desktop 3x scale won't match what you see. The `@media (max-width: 379px)` overrides in scene.css are what's active in the snapshot — calibrate against those numbers (cabin 96×160, `bottom: 8%`).

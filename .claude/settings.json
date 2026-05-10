@@ -2,10 +2,10 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "deny": [
-      "Bash(git commit:*--no-verify*)",
-      "Bash(git push:*--no-verify*)",
-      "Bash(git push:*--force*)",
-      "Bash(git push:*-f *)",
+      "Bash(git commit *--no-verify*)",
+      "Bash(git push *--no-verify*)",
+      "Bash(git push *--force*)",
+      "Bash(git push *-f*)",
       "Bash(rm -rf:*)"
     ],
     "allow": [
@@ -20,10 +20,10 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push)",
-      "Bash(git push:origin*)",
+      "Bash(git push origin*)",
       "Bash(git pull)",
       "Bash(git pull:*)",
-      "Bash(git reset:*origin/main*)",
+      "Bash(git reset *origin/main*)",
       "Bash(git restore:*)",
       "Bash(./scripts/build.sh)",
       "Bash(./scripts/build.sh:*)",

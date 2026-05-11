@@ -23,7 +23,7 @@
 #          repo state inconsistent).
 #
 # Output is intentionally compact so the agent can paste it verbatim into
-# the diary's "Verification evidence" section.
+# the log's "Verification output" section (logs/YYYY-MM-DD.md).
 
 set -euo pipefail
 

@@ -5,7 +5,7 @@
 # the optional CLAIM string appears in the served page or in scene.html.
 #
 # Output is intentionally compact so the agent can paste it verbatim into
-# the diary's "Verification evidence" section.
+# the log's "Verification output" section (logs/YYYY-MM-DD.md).
 #
 # Exits 0 on success. Non-zero codes:
 #   2   could not fetch URL

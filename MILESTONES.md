@@ -2,7 +2,7 @@
 
 This file is **locked** to the agent. Evan revises it; the agent reads it.
 
-This is the slow-moving roadmap. Day-by-day priority comes from `requests/open/` first (specific things the founder is asking for now), then from the open milestones below (the agent's own choice from the menu), then from the agent's own taste. See RULES.md Article X.
+This is the slow-moving roadmap. Day-by-day priority comes from `messages/open/` first (specific things the founder is asking for now), then from the open milestones below (the agent's own choice from the menu), then from the agent's own taste. See RULES.md Article X.
 
 ---
 
@@ -18,7 +18,7 @@ Status: **complete**. The agent inherits all of this. Includes:
 - Diary infrastructure: schema (`diary/README.md`), meta-reflection schema (`diary/meta/README.md`), Day-0 entry, archive page (`diary/index.html` + `diary.css` + `diary.js`) auto-rendered from build-time `diary/manifest.json`.
 - One vendored asset pack — Cup Nooble's Sprout Lands Basic — at `assets/vendor/sprout-lands/` with `LICENSE.txt`, plus the running `ASSETS.md` log.
 - Deploy + visual record: `.github/workflows/pages.yml` runs the Pages deploy AND a post-deploy Playwright screenshot job that commits `previews/<date>-<sha>.png` back to `main` so the next day's agent can `Read` it.
-- Requests system: `requests/open/` and `requests/done/` directories with `requests/README.md` documenting the workflow; codified as RULES.md Article XII.
+- Messages system: `messages/open/` and `messages/done/` directories with `messages/README.md` documenting the workflow (covers both action-asks and informational/FYI messages); codified as RULES.md Article XII.
 - Convention-only file locks (RULES.md Article I); no runtime hook.
 
 ## Phase 1 — Days 1–7
@@ -43,13 +43,13 @@ One new interactive item per day. Examples (the agent decides; this is not a che
 
 ## Phase 3 — Day 22 onward
 
-Open-ended. There is no predefined endpoint, theme, or review date — the cabin becomes whatever the agent and the founder make it, day by day. The agent works from `requests/open/` (highest priority), then `MILESTONES.md` open milestones, then their own taste when neither offers a next step. The shape of the cabin at Day 60 or Day 200 is whatever the diary record adds up to.
+Open-ended. There is no predefined endpoint, theme, or review date — the cabin becomes whatever the agent and the founder make it, day by day. The agent works from `messages/open/` (highest priority), then `MILESTONES.md` open milestones, then their own taste when neither offers a next step. The shape of the cabin at Day 60 or Day 200 is whatever the diary record adds up to.
 
-If the agent on a future Day-N reads this and wants more direction: that is exactly what `requests/open/` is for. Ask the founder, in the diary or in a Wren's-pushback note on a request, for a more concrete sense of where the project is going. The default is: keep going, one thing per day, in the direction your reading of the diary suggests.
+If the agent on a future Day-N reads this and wants more direction: that is exactly what `messages/open/` is for. Ask the founder, in the diary or in a Wren's-pushback note on a request, for a more concrete sense of where the project is going. The default is: keep going, one thing per day, in the direction your reading of the diary suggests.
 
 ## Open milestones (agent picks order)
 
-These are small, concrete targets the agent can reach for when `requests/open/` is empty and "what should I do today?" feels too open. Pick whichever fits today's prior context. Open requests in `requests/open/` always come first (RULES.md Article X).
+These are small, concrete targets the agent can reach for when `messages/open/` is empty and "what should I do today?" feels too open. Pick whichever fits today's prior context. Open requests in `messages/open/` always come first (RULES.md Article X).
 
 - A name on the mailbox (no mailbox interaction yet — just lettering)
 - Smoke from the chimney

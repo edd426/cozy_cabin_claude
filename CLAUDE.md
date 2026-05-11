@@ -38,10 +38,14 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas;
 │   ├── diary.css           # archive page styles
 │   └── diary.js            # client-side renderer
 │
-├── requests/               # the founder's message board (RULES.md Article XII)
-│   ├── README.md           # workflow + file shape
-│   ├── open/<date>-<slug>.md   # pending requests — read all of these as part of memory
-│   └── done/<date>-<slug>.md   # closed (completed or cancelled); read-only history
+├── logs/                   # daily operational logs (mutable — agent's status reports)
+│   ├── README.md           # log schema
+│   └── YYYY-MM-DD.md       # daily log entries (operational counterpart to the diary)
+│
+├── messages/               # the founder's message board (RULES.md Article XII)
+│   ├── README.md           # workflow + file shape; covers action-asks AND informational messages
+│   ├── open/<date>-<slug>.md   # pending — read all as part of memory
+│   └── done/<date>-<slug>.md   # closed (completed, cancelled, or read-and-close FYI); read-only history
 │
 ├── previews/               # auto-committed deploy screenshots (CI bot)
 │   └── YYYY-MM-DD-<sha>.png   # 375x800 phone-viewport snapshot per commit
@@ -76,8 +80,8 @@ The daily routine wrapper invokes `claude "/daily"`. The slash command instructs
 1. **Read the constitution.** `RULES.md`, `CLAUDE.md` (this file), `MILESTONES.md`. Mandatory.
 2. **Read memory.** All `diary/*.md` entries (you have a 1M context — read them all), plus all `diary/meta/*.md` entries. Mandatory.
    - **Look at the most recent `previews/*.png`**: `LATEST=$(ls -t previews/*.png | head -1)` then `Read` it. This is how you "see" what you're working on without a browser. The CI bot writes one screenshot per commit, never overwriting, so the file with the most recent mtime is yesterday's last deploy.
-   - **Read all `requests/open/*.md`** — the founder's message board. These outrank self-selected milestones (RULES.md Article X).
-3. **Pick today's contribution.** If there's an open request, that's today's work (or a piece of it). Otherwise pick the smallest viable change from `MILESTONES.md`. **One thing.**
+   - **Read all `messages/open/*.md`** — the founder's message board. Action-asks outrank self-selected milestones (RULES.md Article X); informational messages don't require action but inform the work you do choose.
+3. **Pick today's contribution.** If there's an open action-ask in `messages/open/`, that's today's work (or a piece of it). Otherwise pick the smallest viable change from `MILESTONES.md`. **One thing.**
 4. **Implement it.** Edit only mutable files. If you find yourself wanting to edit a locked file, that's a sign to either pick a different task or write a diary entry explaining the friction.
 5. **Build, commit, push.**
    ```
@@ -87,27 +91,29 @@ The daily routine wrapper invokes `claude "/daily"`. The slash command instructs
    git push
    ```
 6. **Wait for deploy.** GitHub Pages typically deploys in 30–90s. Don't poll faster than every 20s.
-7. **Verify.** `./scripts/verify-deploy.sh <URL> "<a string from your change>"`. If it exits non-zero, do NOT fabricate a passing diary entry. Record the actual failure.
-8. **Write the diary entry.** Path: `diary/YYYY-MM-DD.md` (use today's date). Conform to the schema in `diary/README.md`. Optionally run `./scripts/lint-diary.sh diary/<today>.md` before committing to catch missing sections.
-9. **Commit the diary separately.**
+7. **Verify.** From the routine sandbox use `./scripts/wait-for-deploy.sh` (the curl-based `verify-deploy.sh` is for local dev only — the sandbox blocks `*.github.io`). The verification output goes verbatim into today's log entry (step 8b), not the diary.
+8. **Write today's writeups — two artifacts.**
+   - **8a. Wren's diary** at `diary/YYYY-MM-DD.md` per the schema in `diary/README.md`. Four sections, Wren's voice, ~200 words, no operational content. Run `./scripts/lint-diary.sh diary/<today>.md`.
+   - **8b. The agent's log** at `logs/YYYY-MM-DD.md` per the schema in `logs/README.md`. Five sections, operational, the `Day N` counter and all engineering content (commit SHAs, tokens, verification output, env notes) live here. Run `./scripts/lint-log.sh logs/<today>.md`.
+9. **Commit the writeup (diary + log together).**
    ```
-   git add diary/<today>.md
-   git commit -m "diary: <today's date> — <one-line summary>"
+   git add diary/<today>.md logs/<today>.md
+   git commit -m "writeup: <today's date> — <one-line summary of today's work>"
    git push
    ```
 
-Two commits per day is by design — code change + diary as separate units.
+Two commits per day is by design — code change + writeup as separate units. The writeup is one commit containing both files (diary in voice + log operational; same day, different audiences).
 
 ### Stuck-day protocol
 
 If you cannot complete code work today:
 
 1. Skip steps 5–7.
-2. Write a diary entry per Article IX of RULES.md describing the obstruction.
-3. Commit and push the diary entry alone.
+2. Write **both** the diary (Wren's voice — she had a day even if she didn't build) AND the log (records the operational failure: what was tried, why it failed). Per Article IX of RULES.md.
+3. Commit and push the writeup (`git add diary/<today>.md logs/<today>.md` then commit).
 4. End the session.
 
-Tomorrow's agent will see the stuck entry in its memory window.
+Tomorrow's agent will see both the diary entry (Wren's account) and the log (engineering account) in its memory window.
 
 ### Weekly meta-reflection
 
@@ -189,3 +195,4 @@ If the test fails, fix the working tree and re-run. **Do not push code that fail
 - **2026-05-10 (Wren, Day 2):** local-snapshot.sh renders at the **mobile-narrow** breakpoint (375px viewport), so positioning calc'd against the desktop 3x scale won't match what you see. The `@media (max-width: 379px)` overrides in scene.css are what's active in the snapshot — calibrate against those numbers (cabin 96×160, `bottom: 8%`).
 - **2026-05-11 (Wren, Day 3):** Renaming a file via MCP costs **two commits**, not one. `mcp__github__push_files` only adds/updates; deletes go through the separate `mcp__github__delete_file`. For a `git mv` equivalent: call `create_or_update_file` (or `push_files`) for the new path, then `delete_file` for the old — each is its own commit on `main`, and CI fires a screenshot bot on each. Functionally fine, just noisier in `git log`. There is no MCP tool that does a single-commit rename.
 - **2026-05-11 (Wren, Day 3):** Run `./scripts/build.sh` *after* your final MCP push, not before. `build.sh` writes `build-sha.txt` from the current `HEAD`, but MCP commits land on `origin` with SHAs you can't predict in advance — so a build done before the push will write the wrong SHA and `wait-for-deploy.sh` will poll for a preview that doesn't match your real change. Sequence: edit → MCP push → `git pull` (fast-forward to your new commit) → `./scripts/build.sh` → `./scripts/wait-for-deploy.sh`.
+- **2026-05-11 (Evan):** Diary schema split into two artifacts. `diary/<date>.md` is now Wren's voice only — four sections (pondering since yesterday / what I did today / a thing I noticed / question for tomorrow), ~200 words, no engineering content. `logs/<date>.md` is the agent's status report — `Day N` counter, commit SHAs, tokens, verification output, environment notes. One writeup commit per day adds both files. Existing entries through `diary/2026-05-11.md` follow the old seven-section schema as historical record; they are not retroactively migrated. Same day: `requests/` renamed to `messages/` because the directory has always held both action-asks and informational/FYI messages — RULES.md Article XII rewritten to match. See `messages/open/2026-05-12-diary-reform-rationale.md` for the full why.

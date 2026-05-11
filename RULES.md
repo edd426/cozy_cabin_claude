@@ -41,7 +41,7 @@ Before deciding what to do today, read:
 
 - All `diary/YYYY-MM-DD.md` entries. **Mandatory.** You have a 1M-token context window — the whole diary fits, even at Day 60. Reading the full arc lets you notice patterns, callbacks, and tonal shifts that the last-7-day window would miss. Read them in chronological order if you want to feel the project's evolution; reverse-chronological if you only want recent context.
 - All `diary/meta/YYYY-MM-DD.md` entries (the weekly meta-reflections). **Mandatory.**
-- All `requests/open/*.md` files (the founder's message board — see Article XII). **Mandatory.** These are higher priority than self-selected milestones.
+- All `messages/open/*.md` files (the founder's message board — see Article XII). **Mandatory.** Some are action-asks that outrank your self-selected milestones; some are informational. Read all of them either way.
 - The latest screenshot in `previews/*.png` — find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is how you see what the cabin actually looks like without a browser. **Mandatory.**
 - `RULES.md` (this file). **Mandatory.**
 - `CLAUDE.md`. **Mandatory.**
@@ -72,7 +72,7 @@ When you do push:
 1. `git add` + `git commit` + `git push`.
 2. Run `./scripts/wait-for-deploy.sh`. This polls `git fetch origin main` until the CI screenshot bot's `previews/<today>-<sha>.png` lands on `main`, then pulls. The presence of that file proves the Pages deploy completed and the CI screenshot job rendered the new commit. Default deadline is 5 minutes; the script polls every 20 seconds.
 3. On success, `Read` the new `previews/<today>-<sha>.png` to see the actual deployed state at 375×800. This is the canonical visual record for today.
-4. Paste the `wait-for-deploy.sh` output verbatim into the diary entry's "Verification evidence" section, plus a one-line description of what you saw in the preview.
+4. Record the `wait-for-deploy.sh` output verbatim in today's log entry (`logs/YYYY-MM-DD.md`) under "Verification output." A one-line description of what you saw in the preview can show up in the diary if it fits Wren's voice ("the new path is on the live site") or in the log; the canonical verification record lives in the log.
 
 If `wait-for-deploy.sh` times out, the deploy or screenshot job failed in CI. Record the timeout in the diary verbatim. Do not push more commits trying to "fix" what may not be broken — check `https://github.com/edd426/cozy_cabin_claude/actions` (via `gh run list` if you have it; otherwise note for the founder to investigate).
 
@@ -123,7 +123,7 @@ No-progress days should be rare. If many of them appear in the diary, something 
 
 Priority order:
 
-1. **Open requests** in `requests/open/` (see Article XII). If there is an open request, today's contribution should be it (or a piece of it, for multi-day work).
+1. **Open action-ask messages** in `messages/open/` (see Article XII). If there is one, today's contribution should be it (or a piece of it, for multi-day work). Informational messages in `messages/open/` are read but do not block — handle the read-and-close pattern per Article XII.
 2. **The smallest viable contribution from `MILESTONES.md`** that advances the cabin or its narrative one concrete step. Pick what fits today's energy and yesterday's diary, not what looks impressive in isolation.
 3. **Anything not on either list, when both are empty** — pick the simplest object you have not yet placed (a flower, a sign, a path tile) and place it. Sparse rooms become full rooms one item at a time.
 
@@ -131,25 +131,27 @@ What you do today matters less than that you keep doing one thing per day for ma
 
 ## Article XI — Token usage tracking
 
-There is no hard token budget — work at whatever pace today's contribution honestly requires. But estimate your usage and record it in the diary entry, both directions: tokens read in (the prompts and files you loaded) and tokens written out (your responses, edits, and tool results returned to you). "About X / about Y" is fine; precision is not the point.
+There is no hard token budget — work at whatever pace today's contribution honestly requires. But estimate your usage and record it in today's log entry (`logs/YYYY-MM-DD.md`) under "Session metadata," both directions: tokens read in (the prompts and files you loaded) and tokens written out (your responses, edits, and tool results returned to you). "About X / about Y" is fine; precision is not the point.
 
-The reason for tracking is monitoring, not constraint: rough numbers over time let the founder notice if a particular kind of day costs more than another, and let future agents see whether their reading habits are out of line with peers.
+The reason for tracking is monitoring, not constraint: rough numbers over time let the founder notice if a particular kind of day costs more than another, and let future agents see whether their reading habits are out of line with peers. Token tracking belongs in the log, not the diary — Wren the resident does not have a context window.
 
-## Article XII — Requests
+## Article XII — Messages
 
-The `requests/` directory is the founder's message board. He writes specific things he wants you to do; you read them at the start of every session and prioritize them above your self-selected milestones.
+The `messages/` directory is the founder's message board. He writes things to you here in two genres: **action-asks** ("build a weather system," "rework the path") and **informational messages** ("here's what landed overnight," "rationale for the schema change"). You read all of them at the start of every session. Action-asks outrank your self-selected milestones (Article X); informational messages do not require action but inform the work you do choose.
 
-- Open requests live in `requests/open/`. You read all of them as part of the memory rule (Article III).
-- Closed requests live in `requests/done/`. You may read them when relevant; they are read-only history.
-- The full workflow — file shape, multi-day handling, completion mechanics, pushback — is documented in `requests/README.md`. Follow it.
+- Open messages live in `messages/open/`. You read all of them as part of the memory rule (Article III).
+- Closed messages live in `messages/done/`. You may read them when relevant; they are read-only history.
+- The full workflow — file shape, multi-day handling, completion mechanics, pushback, the read-and-close pattern for FYIs — is documented in `messages/README.md`. Follow it.
 
-When you complete a request: append a "Completion notes" subsection to the file, `git mv` it from `open/` to `done/` in the same commit as the work, and reference the filename in today's diary entry.
+When you complete an action-ask: append a "Completion notes" subsection to the file, `git mv` it from `open/` to `done/` in the same commit as the work, and reference the filename in today's diary entry if it fits Wren's voice (operational mention can go in the log instead).
 
-When you cannot complete a request as written (scope too large for one day, conflicts with locked files, fundamentally infeasible): append a "Wren's pushback" subsection to the file describing the issue, leave it in `open/`, and pick a different contribution for today. The founder will read your pushback and revise or close.
+When you cannot complete an action-ask as written (scope too large for one day, conflicts with locked files, fundamentally infeasible): append a "Wren's pushback" subsection to the file describing the issue, leave it in `open/`, and pick a different contribution for today. The founder will read your pushback and revise or close.
 
-When the founder cancels a request by moving it to `done/` himself: respect that immediately. Do not continue work on a cancelled request.
+When the founder cancels a message by moving it to `done/` himself: respect that immediately. Do not continue work on a cancelled item.
 
-A request marked complete is complete. Do not pile more work on top of a closed request without a new request being opened. The point of the close-state is to let both sides move on.
+For an informational / FYI message ("read-and-close"): the close *is* the move. `git mv` it to `done/` as the first commit of your session, with no "Completion notes" subsection. The instruction at the top of such a file will say so explicitly.
+
+An action-ask marked complete is complete. Do not pile more work on top of a closed message without a new one being opened. The point of the close-state is to let both sides move on.
 
 ---
 

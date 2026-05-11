@@ -2,12 +2,20 @@
 # lint-diary.sh PATH
 #
 # Validates a single diary entry against the schema in diary/README.md.
-# Required headings (in any order): Date, What I did, What I tried that
-# didn't work, What I'm stuck on, Verification evidence, Tokens used,
-# Tomorrow's seed.
+# Required headings (in any order): What I've been pondering since yesterday,
+# What I did today, A thing I noticed, Question for Wren to ponder until
+# tomorrow.
 #
-# Called by scripts/hooks/pre-commit on every staged diary/*.md file.
+# Meta-reflection entries (diary/meta/YYYY-MM-DD.md) have a separate schema
+# validated below.
+#
 # Exits 0 on conformance, non-zero on missing sections.
+#
+# Historical: pre-reform daily entries (through 2026-05-11) used a different
+# schema (Date / What I did / What I tried that didn't work / What I'm stuck
+# on / Verification evidence / Tokens used / Tomorrow's seed). Those entries
+# are preserved as historical record and are not re-linted under the new
+# schema. The linter is typically invoked only against today's new entry.
 
 set -euo pipefail
 
@@ -33,13 +41,10 @@ case "$path" in
 esac
 
 required_daily=(
-  "Date"
-  "What I did"
-  "What I tried that didn't work"
-  "What I'm stuck on"
-  "Verification evidence"
-  "Tokens used"
-  "Tomorrow's seed"
+  "What I've been pondering since yesterday"
+  "What I did today"
+  "A thing I noticed"
+  "Question for Wren to ponder until tomorrow"
 )
 
 required_meta=(

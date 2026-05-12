@@ -187,17 +187,19 @@
   100% { transform: translateY(-72px) scale(1.3); opacity: 0;    }
 }
 
-/* Footpath: three pixel-art stepping stones below the cabin door, leading
- * off the bottom edge of the scene. Drawn from scratch — each stone is a
- * small earth-brown rectangle with a one-pixel darker band below it for
+/* Footpath: three pixel-art stepping stones sweeping from beneath the
+ * cabin's lower-right corner off the right edge of the scene. The front
+ * face of the cabin is a window, not a door (see messages/done/
+ * 2026-05-11-door-or-window.md) — the path bends around the cabin to
+ * a door that lives off-frame. Stones drawn from scratch — each is a
+ * small earth-brown rectangle with a one-pixel darker band below for
  * depth. The stones grow toward the viewer so the path reads as receding
- * into the cabin door. Day-2 seeded this; today's the day. */
+ * off into the unseen right-of-frame. */
 .sprite--path {
   left: 50%;
   bottom: 0;
-  width: 32px;
-  margin-left: -16px;
-  height: 18px;
+  width: 130px;
+  height: 28px;
   z-index: 1;
 }
 
@@ -208,9 +210,9 @@
   /* One-pixel darker band below each stone, stamped via box-shadow. */
   box-shadow: 0 1px 0 #6e4a3a;
 }
-.path-stone--1 { width: 12px; height: 3px; bottom: 14px; left: 10px; }  /* back  */
-.path-stone--2 { width: 20px; height: 4px; bottom:  8px; left:  6px; }  /* mid   */
-.path-stone--3 { width: 30px; height: 5px; bottom:  0;   left:  1px; }  /* front */
+.path-stone--1 { width: 12px; height: 3px; bottom: 20px; left:  10px; }  /* back, near cabin corner */
+.path-stone--2 { width: 20px; height: 4px; bottom: 10px; left:  44px; }  /* mid, curving outward    */
+.path-stone--3 { width: 30px; height: 5px; bottom:  0;   left:  96px; }  /* front, exiting right    */
 
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {

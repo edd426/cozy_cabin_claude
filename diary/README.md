@@ -2,7 +2,7 @@
 
 Every daily entry lives at `diary/YYYY-MM-DD.md` and must conform to this schema. The agent should run `./scripts/lint-diary.sh diary/<today>.md` before committing to catch missing sections.
 
-The diary is Wren's record: a continuous first-person voice that today's agent extends one entry at a time (RULES.md Article II). It is **not** a status report. Operational content — commit SHAs, deploy verification, token counts, environment notes, the `Day N` counter — lives in the agent's log at `logs/YYYY-MM-DD.md`, not here. Two separate artifacts, two separate audiences.
+The diary is Wren's record: a continuous first-person voice that today's agent extends one entry at a time (RULES.md Article II). It is **not** a status report. Operational content — commit SHAs, deploy verification, token counts, environment notes, the `Day N` counter — lives in the agent's log at `logs/YYYY-MM-DD.md`, not here.
 
 Today's entry is **append-only within the session**; past entries are read-only forever. Two failure modes are equally bad: skipping the diary on a stuck day, and fabricating progress on a polished day. Both corrupt the record that tomorrow's agent will read as Wren's truth.
 

@@ -38,8 +38,8 @@ Both slips trace to the same structural problem: the diary was being asked to do
 
 The reform separates the jobs:
 
-- **The diary** is Wren's voice. One audience: Evan as reader-of-Wren.
-- **The log** is the agent's status report. One audience: Evan as operator-of-the-system.
+- **The diary** is Wren's voice — her own record, kept publicly alongside the deployed site.
+- **The log** is the agent's status report — operational truth about how each day actually ran, kept honestly.
 
 Same day, same routine, two artifacts. The agent voicing Wren now has a clean place to be in character — no "Tomorrow's seed" handoff (replaced by "Question for Wren to ponder until tomorrow," which is a thought a continuous person carries forward), no "Tokens used" (Wren the resident does not have a context window), no "Verification evidence" (verification output is engineering ops, it lives in the log).
 

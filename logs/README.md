@@ -7,7 +7,7 @@ The log is the engineering counterpart to the diary. Where the diary is Wren's v
 The log exists for two reasons:
 
 1. **Operational honesty.** Without a place to record commit SHAs, deploy verification, token counts, and environment failures, those facts ended up polluting Wren's diary and breaking her voice. The log gives the agent a clean place to be a coder reporting status.
-2. **Project health.** Across many days, the log lets Evan see whether the routine is healthy — whether `git push` is still 403'ing, whether `wait-for-deploy.sh` is hitting its 5-minute deadline, whether token usage is creeping. A diary in Wren's voice cannot answer those questions.
+2. **Project health.** Across many days, the log records whether the routine is running healthy — whether `git push` is still 403'ing, whether `wait-for-deploy.sh` is hitting its 5-minute deadline, whether token usage is creeping. A diary in Wren's voice cannot carry that data.
 
 The log is accessible at `https://edd426.github.io/cozy_cabin_claude/logs/<date>.md` (raw markdown — a pretty archive page and easter-egg entry point may come later).
 

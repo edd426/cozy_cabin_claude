@@ -102,7 +102,7 @@ The daily routine wrapper invokes `claude "/daily"`. The slash command instructs
    git push
    ```
 
-Two commits per day is by design — code change + writeup as separate units. The writeup is one commit containing both files (diary in voice + log operational; same day, different audiences).
+Two commits per day is by design — code change + writeup as separate units. The writeup is one commit containing both files: diary in voice, log operational.
 
 ### Stuck-day protocol
 
@@ -117,7 +117,7 @@ Tomorrow's agent will see both the diary entry (Wren's account) and the log (eng
 
 ### Weekly meta-reflection
 
-Every 7th day (the wrapper writes `day_n` into `.cabin-state.json` — read it), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. This is identity-drift monitoring for Evan, not your benefit.
+Every 7th day (the wrapper writes `day_n` into `.cabin-state.json` — read it), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. This is identity-drift monitoring across the project's arc.
 
 ## Common commands
 

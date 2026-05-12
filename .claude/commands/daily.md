@@ -158,7 +158,7 @@ git commit -m "writeup: <today's date> — <one-line summary of today's work>"
 git push
 ```
 
-Two commits per day is by design: code change (Step 5) + writeup (this step) as separate units in history. The writeup is **one commit** containing both files — diary in Wren's voice and log operational; same day, different audiences.
+Two commits per day is by design: code change (Step 5) + writeup (this step) as separate units in history. The writeup is **one commit** containing both files — diary in Wren's voice, log operational.
 
 If today's work completed an action-ask, the close happened in the code commit (Step 5):
 ```bash

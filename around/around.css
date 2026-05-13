@@ -1,0 +1,155 @@
+/* around.css — agent-mutable.
+ *
+ * Styles for the /around/ sub-page: the cabin seen from the side, where
+ * the door will go in a future contribution. Day 5 (2026-05-13) ships
+ * only the scaffold + cabin shape. No door, no window, no path. Just
+ * enough silhouette to read as the same cabin from a different angle.
+ * See messages/open/2026-05-11-door-or-window.md for the slice plan.
+ *
+ * Reuses scene.css for the world frame (.scene, .scene__sky, .scene__
+ * ground, #cabin-scene, #cabin-nav, #day-marker). This file only adds
+ * the .side-cabin component.
+ *
+ * Native pixel layout (76 wide × 80 tall — total height matches the
+ * front cabin sprite so the two views read as the same building rotated):
+ *
+ *                  ┌──┐         chimney 6w × 16h, top at y=80
+ *                  │  │         (bottom 6 inside roof, top 10 above)
+ *   ┌──────────────│  │──────┐  y=70 (roof top)
+ *   │      roof    │  │      │  76w × 30h, overhangs wall 2px each side
+ *   ├──┬───────────┴──┴──┬───┤  y=40 (eaves line)
+ *   │  │                 │   │
+ *   │  │   wall (no      │   │  72w × 40h, x=[2,74], y=[0,40]
+ *   │  │   door yet,     │   │
+ *   │  │   no window)    │   │
+ *   └──┴─────────────────┴───┘  y=0 (ground line)
+ *
+ * Front cabin is 48×80 native; this side view is 76×80. Same height,
+ * wider because the side is the long axis of the building.
+ *
+ * Scales 3x desktop / 2x mobile-narrow, matching the front cabin's pattern.
+ */
+
+.side-cabin {
+  position: absolute;
+  left: 50%;
+  bottom: 6%;
+  transform: translateX(-50%);
+  width: calc(76px * 3);
+  height: calc(80px * 3);
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Wall: a long wood-plank rectangle, longer than the front face is wide.
+ * Horizontal plank stripes drawn via repeating-linear-gradient so each
+ * stripe is a crisp 8-native-pixel band (6px wood + 2px dark seam). */
+.side-cabin__wall {
+  position: absolute;
+  left: calc(2px * 3);
+  bottom: 0;
+  width: calc(72px * 3);
+  height: calc(40px * 3);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--c-wood)       0,
+      var(--c-wood)       calc(6px * 3),
+      var(--c-wood-dark)  calc(6px * 3),
+      var(--c-wood-dark)  calc(8px * 3)
+    );
+  /* One-native-pixel trim on the three exposed sides — matches the
+   * dark frame line on the front cabin's facade. */
+  box-shadow:
+    inset  3px 0 0 var(--c-wood-dark),
+    inset -3px 0 0 var(--c-wood-dark),
+    inset 0 -3px 0 var(--c-wood-dark);
+}
+
+/* Roof: a slab across the wall's top, slightly wider for the eaves
+ * overhang. Shingled register matching the front cabin's roof — a
+ * darker base with a banded highlight every 8 native pixels reads as
+ * tile rows from this distance. */
+.side-cabin__roof {
+  position: absolute;
+  left: 0;
+  bottom: calc(40px * 3);
+  width: calc(76px * 3);
+  height: calc(30px * 3);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--c-wood-dark)  0,
+      var(--c-wood-dark)  calc(7px * 3),
+      #5a3a2e             calc(7px * 3),
+      #5a3a2e             calc(8px * 3)
+    );
+  box-shadow:
+    inset 0 -3px 0 #4a3325,
+    inset 0  3px 0 #4a3325;
+}
+
+/* Chimney: a small brick block popping above the roof at the cabin's
+ * mid-depth. The front view shows the chimney roughly above cabin
+ * centre along the left-right axis; the front-to-back position is
+ * not fixed by the front view, so centring it along this axis is a
+ * reasonable spatial reading. Chimney top reaches y=80, the same top
+ * line as the front cabin sprite. */
+.side-cabin__chimney {
+  position: absolute;
+  left: calc(35px * 3);
+  bottom: calc(64px * 3);
+  width: calc(6px * 3);
+  height: calc(16px * 3);
+  background: var(--c-wood-dark);
+  /* Darker cap at the very top — 2 native pixels of ink reads as a
+   * stone or brick coping, mirroring the chimney cap in the front sprite. */
+  box-shadow: inset 0 calc(2px * 3) 0 var(--c-ink);
+}
+
+/* Mobile narrow: scale 3x → 2x, mirroring scene.css's pattern. */
+@media (max-width: 379px) {
+  .side-cabin           { width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
+  .side-cabin__wall     {
+    left: calc(2px * 2);
+    width: calc(72px * 2);
+    height: calc(40px * 2);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--c-wood)       0,
+        var(--c-wood)       calc(6px * 2),
+        var(--c-wood-dark)  calc(6px * 2),
+        var(--c-wood-dark)  calc(8px * 2)
+      );
+    box-shadow:
+      inset  2px 0 0 var(--c-wood-dark),
+      inset -2px 0 0 var(--c-wood-dark),
+      inset 0 -2px 0 var(--c-wood-dark);
+  }
+  .side-cabin__roof     {
+    bottom: calc(40px * 2);
+    width: calc(76px * 2);
+    height: calc(30px * 2);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--c-wood-dark)  0,
+        var(--c-wood-dark)  calc(7px * 2),
+        #5a3a2e             calc(7px * 2),
+        #5a3a2e             calc(8px * 2)
+      );
+    box-shadow:
+      inset 0 -2px 0 #4a3325,
+      inset 0  2px 0 #4a3325;
+  }
+  .side-cabin__chimney  {
+    left: calc(35px * 2);
+    bottom: calc(64px * 2);
+    width: calc(6px * 2);
+    height: calc(16px * 2);
+    box-shadow: inset 0 calc(2px * 2) 0 var(--c-ink);
+  }
+}

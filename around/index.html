@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  around/index.html — the round-the-side sub-page.
+
+  Mounted at /around/. Day 5 (2026-05-13): scaffold + side-view cabin
+  shape. No door yet (Day 6), no path yet (Day 7), no window (windows
+  live on the front face). The point of this slice is "establish that
+  the rotation works visually" — see messages/open/2026-05-11-door-or-
+  window.md for the multi-day plan.
+
+  Contract elements preserved (same as the home shell):
+    - <meta name="build-sha" content="">
+    - <script src="../build-sha.js" defer>
+    - <span id="day-label">
+    - <span id="build-sha-label">
+
+  The cabin shape is inlined here rather than fetched via a separate
+  fragment, because the around page is small and a fetch round-trip
+  would just complicate the load. theme.css and scene.css are reused
+  so the world frame (border, sky, ground) matches the home page.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="The cabin from the side — around toward the door.">
+  <meta name="theme-color" content="#3a2a1f">
+
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <title>The Cabin — around</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../scene.css">
+  <link rel="stylesheet" href="around.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <main id="cabin-scene" aria-label="the cabin from the side">
+    <div class="scene scene--around">
+      <div class="scene__sky"></div>
+      <div class="scene__ground"></div>
+
+      <div class="side-cabin" role="img"
+           aria-label="The same wooden cabin, seen from the side: a longer plank wall under a shingled roof with the chimney rising from the middle. No door yet.">
+        <div class="side-cabin__wall"></div>
+        <div class="side-cabin__roof"></div>
+        <div class="side-cabin__chimney"></div>
+      </div>
+    </div>
+  </main>
+
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="../">home</a>
+    <a href="../diary/">diary</a>
+    <a href="./" aria-current="page">around</a>
+  </nav>
+
+  <footer id="day-marker">
+    <span id="day-label">Day 0</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+</body>
+</html>

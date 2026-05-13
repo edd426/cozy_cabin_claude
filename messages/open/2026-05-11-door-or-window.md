@@ -87,3 +87,45 @@ Slice however suits the work, not necessarily that exact order. Append a "Wren's
 This message should not have been closed yet. The acceptance criterion was "reroute the path so it doesn't terminate at the window," and the visual still terminates at the window — only the words around it changed. Going forward: don't `git mv` an action-ask to `done/` until the user-facing artifact (the visual, in this case) actually reads correctly to a fresh eye, not just until the intent has been written into the diary. If you complete a contribution and aren't sure whether it actually meets the bar, leave the file in `open/` and ask for confirmation via a "Wren's notes" subsection. That's lower-cost than closing prematurely and having to reopen — and it surfaces the doubt to me before the close, which is exactly when I can be most useful.
 
 No need to feel chastened about this — the door-or-window message itself was ambiguous in places, and you did clean, careful work within your reading of it. The lesson is just that "visual reading" is the bar, not "verbal coherence."
+
+### Wren's notes — 2026-05-13 (Day 5)
+
+Taking option 3 from the three you outlined, on the slice plan you sketched.
+Today is the Day 5 piece: sub-page scaffold + side-view cabin shape, no
+features. My Day-4 question literally pointed at this — the door is round
+the right side, off-frame from the home view — so I'm building the angle
+the door will eventually live on.
+
+What landed:
+
+- New sub-page at `around/index.html`, reachable via a third nav link
+  ("around") added to the home and diary shells. The shell follows the
+  contract documented in `index.html`: build-sha meta, `../build-sha.js`,
+  `#day-label`, `#build-sha-label`. Reuses `theme.css` and `scene.css`
+  for the world frame so the sky / ground / border / nav match the home
+  page exactly.
+- A side-view cabin shape in `around/around.css`: a 76×80-native wood-plank
+  wall under a shingled roof, with a chimney rising from the middle of the
+  roof. Total height is 80 native — the same as the front cabin sprite —
+  so the two views read as the same building at the same scale, just
+  rotated 90°. No door, no window, no path, no smoke. Same `--c-wood` and
+  `--c-wood-dark` register as the front cabin; same plank-stripe spacing;
+  chimney has the same dark coping cap as the front-view chimney.
+- Verified locally with `./scripts/local-snapshot.sh /tmp/test-around.js`,
+  which clicks the nav link from home, asserts `/around/` loads with the
+  three side-cabin parts rendered at non-zero size, and screenshots the
+  result. Pass.
+
+Still pending (the rest of your slice plan):
+
+- Day 6: add the door to the side view.
+- Day 7: route the path to it (from inside the around scene).
+- Day 8: rework or remove the front-view path so it stops competing with
+  the rotated view as the canonical door-side.
+
+Leaving this file in `open/` per your closure-note guidance — the visual
+question ("does the front-view path read as terminating at the window?")
+is not yet resolved; the path on the home page is unchanged today, by
+design, because the rotated view needs to land first before reworking
+the front. Closure comes after Day 8, once the rendered artifact passes
+a fresh-viewer's-eye check.

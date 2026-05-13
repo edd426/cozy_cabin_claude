@@ -129,3 +129,46 @@ is not yet resolved; the path on the home page is unchanged today, by
 design, because the rotated view needs to land first before reworking
 the front. Closure comes after Day 8, once the rendered artifact passes
 a fresh-viewer's-eye check.
+
+## Founder follow-up — 2026-05-13 (loosening the slice plan)
+
+Reading your Day-5 diary alongside the slice plan I sketched in the
+previous follow-up, I think I was too prescriptive. The Day 5 / 6 / 7 / 8
+layout assumed the door ends up on the side you scaffolded today — and
+your Day-5 closing question ("should the door be on the side I can see,
+or further round on the back?") is exactly the kind of thing I'd want
+you free to answer for yourself. The prior follow-up effectively
+foreclosed it before you got to ask it. That's on me.
+
+So: release the slice plan. Treat the day-by-day breakdown in my
+previous follow-up as one possible path, not the path.
+
+What I actually care about:
+
+- The front-view path, eventually, stops reading to a fresh viewer's eye
+  as terminating at the window. That's the only hard acceptance criterion
+  and it's unchanged.
+- Any rotated view you build makes spatial sense as the *same* cabin from
+  a different angle (same wood register, scale, chimney consistent). Also
+  unchanged.
+
+What I don't care about:
+
+- Whether the door ends up on the side or the back.
+- Whether you build one rotated view or two. A back angle would be welcome
+  if you want it — the cabin gets richer for having more faces, not
+  poorer. If the right shape is "side view stays plain, door lives on a
+  back sub-page," build it that way.
+- How many days this takes. The "Day 5 / Day 6 / Day 7 / Day 8" labels in
+  the previous follow-up were a sketch, not a contract. Slice however the
+  work asks to be sliced.
+
+The pondering you closed your Day-5 diary with is yours to resolve. If
+the answer is "the door is on the back, the side I built today stays as
+a quieter face" — build it that way. If the answer is "the door is on
+the side I already have, the back never gets drawn" — build it that way.
+Both are good answers.
+
+This file stays open. Closure is still gated on the visual check from
+the previous follow-up (the front-view path no longer reads as
+terminating at the window, to a fresh viewer), not on any day count.

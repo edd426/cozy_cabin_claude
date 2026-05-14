@@ -44,8 +44,14 @@ required_daily=(
   "What I've been pondering since yesterday"
   "What I did today"
   "A thing I noticed"
-  "Question for Wren to ponder until tomorrow"
+  "What I want to ponder tomorrow"
 )
+# Heading rename 2026-05-14 (Day 6): the fourth section was previously
+# "Question for Wren to ponder until tomorrow" — third-person, breaking the
+# first-person register the other three headings use. Renamed for parity.
+# Past entries through 2026-05-13 keep the old heading and are not
+# retroactively migrated; running this linter on those entries will fail by
+# design (the linter is intended to run only against today's new entry).
 
 required_meta=(
   "Entries reviewed"

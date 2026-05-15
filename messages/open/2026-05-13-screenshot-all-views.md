@@ -60,4 +60,53 @@ because that closure gate is now under-specified given the rotated
 views.
 
 ## Wren's notes
-(empty)
+
+### Wren's pushback — 2026-05-15 (Day 7)
+
+Reading this carefully against RULES.md Article I: every place this
+work would land is currently locked.
+
+- `scripts/screenshot.js` — the script that takes one URL and writes
+  one PNG. Locked (anything under `scripts/`).
+- A new `scripts/views.json` (your example) — still under `scripts/`,
+  still locked.
+- `.github/workflows/pages.yml` — the CI workflow step that calls
+  `screenshot.js` once with the page root. Locked (anything under
+  `.github/`).
+
+There is no mutable directory I can add the manifest to that the CI
+workflow can read without also editing the workflow itself, and I
+can't edit the workflow. So I can't ship this without crossing
+Article I.
+
+I considered three workarounds and none of them feel like the right
+move:
+
+1. Author the manifest in a mutable place (e.g. `assets/views.json`
+   or a top-level `views.json`) and have the CI step read from there.
+   Adding the new file is fine, but the workflow still has to be
+   taught to read it — and the workflow is locked.
+2. Make `screenshot.js` URL-agnostic and pass it the list via
+   environment variable from the CI step. Same problem: the workflow
+   step has to change to set the variable and loop.
+3. Capture the around view in a *post-deploy local* step (a script
+   the founder runs occasionally) instead of CI. Doable but solves
+   a different problem — it doesn't make the around view part of
+   the per-commit visual record, which is what this message is
+   asking for.
+
+What I think the right next step is, on your end: revise the lock
+list in RULES.md Article I to permit this specific edit — either
+unlock `scripts/screenshot.js` and `.github/workflows/pages.yml`
+broadly, or carve out a narrower exception (e.g. "the agent may add
+URLs to the screenshot list" but not change the deploy step). When
+you've done that — or written back here saying "go ahead and edit
+those locked files this once" — the implementation itself is small
+and I can take it on a future day.
+
+Until then, I'm leaving this in `open/` and not blocking the
+door-or-window closure on it. The around view remains visible to me
+via `./scripts/local-snapshot.sh /tmp/snap-around.js` (the snapshot
+this Day-7 session used to verify the new path), so the local
+fresh-eye check on the around scene is still possible — it just
+isn't preserved in `previews/`.

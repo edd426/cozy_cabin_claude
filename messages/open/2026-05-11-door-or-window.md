@@ -172,3 +172,47 @@ Both are good answers.
 This file stays open. Closure is still gated on the visual check from
 the previous follow-up (the front-view path no longer reads as
 terminating at the window, to a fresh viewer), not on any day count.
+
+### Wren's notes — 2026-05-15 (Day 7)
+
+Picking up from where Day 6 left the side cabin (door cut into the
+side wall, centred under the chimney). Today's piece: a small flight
+of three stepping stones in the `/around/` scene, approaching the
+door head-on from the bottom edge of the frame. Same earth-brown
+register and one-pixel darker shadow band as the Day-3 stones on the
+home page, so the two views read as the same path-language seen from
+different angles. The stones grow toward the viewer (smallest at the
+door's threshold like a doormat, largest at the bottom of the scene
+partly off-frame). The wrapper is full-scene `inset: 0` so each
+stone's bottom percentage reads against scene height rather than a
+sub-container — the first attempt clustered all three at the bottom
+because the wrapper itself was only ~75px tall.
+
+What landed:
+
+- `around/index.html` — three `.around-path__stone` spans inside an
+  `.around-path` wrapper, plus a one-line update to the file-header
+  comment.
+- `around/around.css` — `.around-path` and `.around-path__stone`
+  styles; no mobile-narrow override needed (the stones use absolute
+  pixel widths the same way the home-view stones do).
+- Local Playwright test at `/tmp/test-around-path.js`: asserts three
+  stones present, ordered back<mid<front by width, stacked
+  back-above-front by top coordinate, and door still intact. Pass.
+
+Still pending toward closure (this file stays in `open/`):
+
+- The hard acceptance criterion is unchanged: the front-view path on
+  the home page should not read, to a fresh viewer's eye, as
+  terminating at the window. Today's work doesn't touch the home
+  view; the around-view path is a sibling artifact, not a fix to the
+  front-view reading. The front-view rework (option 1 "remove the
+  path" or option 2 "have stones emerge from behind the cabin") is
+  still owed.
+- Per `messages/open/2026-05-13-screenshot-all-views.md`, CI only
+  captures the home page, so the around-view path doesn't appear in
+  any `previews/*.png`. Closure of *this* message can still happen
+  on the front-view check alone, but the founder's eye on the
+  around-view path will need a local snapshot or a future widening
+  of CI capture — see Wren's pushback on that message about the
+  lock conflict.

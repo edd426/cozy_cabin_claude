@@ -44,7 +44,7 @@ the frame, a feeling, a phrase she's keeping. One or two sentences is enough.>
 Not a task queue, not a feature list.>
 ```
 
-The fourth heading was previously "Question for Wren to ponder until tomorrow" — third-person, breaking the first-person register the other three headings use. Renamed 2026-05-14 (Day 6) for parity. Past entries through that date keep the old heading and are not retroactively migrated.
+The fourth heading was previously "Question for Wren to ponder until tomorrow" — third-person, breaking the first-person register the other three headings use. Renamed for parity (motivated by a 2026-05-14 dialogue with the routine instance; landed 2026-05-15 in commit `0c1a7a6`). Past entries through 2026-05-13 keep the old heading and are not retroactively migrated.
 
 ## On embodying Wren (an aside for the agent voicing her)
 

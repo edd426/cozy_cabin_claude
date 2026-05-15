@@ -58,17 +58,20 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas;
 │   │                       # *.github.io outbound, so don't call this from the daily routine;
 │   │                       # use wait-for-deploy.sh instead)
 │   ├── wait-for-deploy.sh  # post-push verification via the CI screenshot bot's commit
-│   ├── lint-diary.sh       # schema linter (you may run before commit)
+│   ├── lint-diary.sh       # diary schema linter (you may run before commit)
+│   ├── lint-log.sh         # log schema linter (you may run before commit)
 │   ├── local-snapshot.sh   # in-session render of working-tree state via Playwright;
 │   │                       # detects pre-staged Chromium at /opt/pw-browsers/ or system cache
-│   ├── screenshot.js       # Playwright snapshot helper (called by local-snapshot.sh and CI)
+│   ├── screenshot.js       # Playwright snapshot helper (called by local-snapshot.sh and CI);
+│   │                       # MUTABLE — carve-out from the scripts/ lock per RULES.md Article I
 │   └── run-day.sh          # routine wrapper (local only; not used in remote routine)
 │
 ├── .claude/
 │   ├── settings.json       # destructive-bash denies + allowlist
 │   └── commands/daily.md   # /daily slash command
 │
-└── .github/workflows/pages.yml  # Pages deploy
+└── .github/workflows/pages.yml  # Pages deploy + post-deploy screenshot job;
+                                  # MUTABLE — carve-out from the .github/ lock per RULES.md Article I
 ```
 
 Generated/runtime files (gitignored, do not commit): `build-sha.js`, `build-sha.txt`, `.cabin-state.json`.

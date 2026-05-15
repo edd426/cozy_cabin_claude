@@ -110,3 +110,48 @@ via `./scripts/local-snapshot.sh /tmp/snap-around.js` (the snapshot
 this Day-7 session used to verify the new path), so the local
 fresh-eye check on the around scene is still possible — it just
 isn't preserved in `previews/`.
+
+## Founder follow-up — 2026-05-15 (unlock granted)
+
+Reasonable pushback — you're right, and I should have caught the lock
+conflict when I wrote the original action-ask. RULES.md Article I is
+revised: `scripts/screenshot.js` and `.github/workflows/pages.yml`
+are now mutable, as a narrow carve-out from the broader `scripts/`
+and `.github/` locks. Re-read Article I before you start; the carve-out
+language is at the bottom of the locked-paths list.
+
+The acceptance criteria above stand as written. A few things worth
+naming explicitly now that the work can land:
+
+- **A manifest file is your call.** If `scripts/views.json` is
+  cleanest, put it there — that path is now writable as a side
+  effect of the carve-out (the lock was on the directory; the carve-out
+  names the two specific files but you can also add files to
+  `scripts/` if they support the screenshot work). If you'd rather
+  put the manifest at the top level or under `assets/`, those are
+  also fine. Pick whichever reads most obviously to a future agent.
+- **Don't break the deploy.** This is the load-bearing detail.
+  `.github/workflows/pages.yml` runs the Pages deploy *and* the
+  post-deploy screenshot job. If you break the deploy step, the site
+  goes stale; if you break the screenshot step, the next day's agent
+  has no `previews/*.png` to read and the memory loop breaks. Verify
+  the workflow YAML locally (yaml-lint, or at minimum read it back)
+  before pushing, and watch `wait-for-deploy.sh` on the push that
+  lands the change.
+- **Pace it.** The implementation is small in code (a loop and a
+  manifest), but the risk surface is the deploy path. If you want to
+  do this as one day's contribution that's fine; if you'd rather
+  slice it (e.g. Day-N: add the manifest and refactor
+  `screenshot.js` to loop over it with the single home URL still in
+  the manifest, verify the existing behavior survives; Day-N+1: add
+  the around URL to the manifest, verify a second PNG lands), also
+  fine. No prescribed schedule.
+- **Close `door-or-window`'s gate.** Per the acceptance criteria
+  above, once CI captures the around view, update the closure
+  criterion in `messages/open/2026-05-11-door-or-window.md` so the
+  fresh-viewer's-eye check explicitly covers all rendered views.
+  That's part of this message's done-criteria.
+
+Take this on whatever day feels right; no urgency. Leave the file in
+`open/` until the implementation lands and acceptance criteria are
+met.

@@ -14,10 +14,12 @@ You may not edit, delete, move, or rename any of these:
 - `MILESTONES.md`
 - `theme.css`
 - Anything under `.claude/`
-- Anything under `scripts/`
-- Anything under `.github/`
+- Anything under `scripts/` **except** `scripts/screenshot.js`, which is mutable (see carve-out below)
+- Anything under `.github/` **except** `.github/workflows/pages.yml`, which is mutable (see carve-out below)
 
 These are the constitution, the roadmap, the locked aesthetic tokens, the agent's own configuration, the build/verify pipeline, and the CI workflows. Editing any of them risks drift you cannot see across days, or breaking the deploy pipeline that lets you "see" your work.
+
+**Carve-out (added 2026-05-15):** `scripts/screenshot.js` and `.github/workflows/pages.yml` are mutable so the agent can widen post-deploy screenshot coverage as more views are added (per `messages/open/2026-05-13-screenshot-all-views.md`). These two files are the screenshot/CI harness specifically; the rest of `scripts/` and `.github/` remain locked. The carve-out is narrow by file, not by purpose: edits to these two files are not limited to screenshot work, but the founder will read any change to either with attention, since both sit on the deploy path. If you break the deploy, the next day's agent loses the visual record — touch them carefully and verify before committing.
 
 `index.html` (and any other page shell — `diary/index.html`, future sub-pages) is **mutable but contract-bound**. You may add nav links, change the title, restructure the layout, etc. But each shell must continue to include the build-sha meta tag, the `build-sha.js` script, and the `#day-label` / `#build-sha-label` / `#scene-mount` elements (or a functional equivalent of the mount). The contract is documented in an HTML comment at the top of `index.html`. Read it before editing.
 

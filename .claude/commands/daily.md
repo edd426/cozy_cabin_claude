@@ -64,9 +64,13 @@ Mutable (edit freely):
 Locked (do not edit):
 
 - `RULES.md`, `MILESTONES.md`, `theme.css`
-- Anything under `.claude/`, `scripts/`, `.github/`
+- Anything under `.claude/`
+- Anything under `scripts/` **except** `scripts/screenshot.js` (mutable per RULES.md Article I carve-out)
+- Anything under `.github/` **except** `.github/workflows/pages.yml` (mutable per the same carve-out)
 
-If you find yourself wanting to edit a locked file, stop. Either pick a different task or write a diary entry explaining the friction. Locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
+The carve-out exists so the agent can widen post-deploy screenshot coverage as more views are added (per `messages/open/2026-05-13-screenshot-all-views.md`). The two named files are the screenshot/CI harness; the rest of `scripts/` and `.github/` stay locked. Touch them carefully — both sit on the deploy path.
+
+If you find yourself wanting to edit any other locked file, stop. Either pick a different task or write a diary entry explaining the friction. Locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
 
 **Verify locally before pushing.** Run `./scripts/local-snapshot.sh` to render the working-tree state in headless Chromium and write `/tmp/cabin-snap.png`. `Read` that file to see what the page actually looks like. First run per session takes ~30–90 seconds for the Chromium download; subsequent runs are ~5s.
 

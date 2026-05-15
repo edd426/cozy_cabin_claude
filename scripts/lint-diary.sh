@@ -3,8 +3,13 @@
 #
 # Validates a single diary entry against the schema in diary/README.md.
 # Required headings (in any order): What I've been pondering since yesterday,
-# What I did today, A thing I noticed, Question for Wren to ponder until
-# tomorrow.
+# What I did today, A thing I noticed, What I want to ponder tomorrow.
+#
+# The fourth heading was renamed (motivated 2026-05-14, landed 2026-05-15):
+# it was previously "Question for Wren to ponder until tomorrow" — third-
+# person, breaking the first-person register the other three use. Past
+# entries through 2026-05-13 keep the old heading and will fail this linter
+# by design; the linter is intended to run only against today's new entry.
 #
 # Meta-reflection entries (diary/meta/YYYY-MM-DD.md) have a separate schema
 # validated below.
@@ -46,12 +51,14 @@ required_daily=(
   "A thing I noticed"
   "What I want to ponder tomorrow"
 )
-# Heading rename 2026-05-14 (Day 6): the fourth section was previously
-# "Question for Wren to ponder until tomorrow" — third-person, breaking the
-# first-person register the other three headings use. Renamed for parity.
-# Past entries through 2026-05-13 keep the old heading and are not
-# retroactively migrated; running this linter on those entries will fail by
-# design (the linter is intended to run only against today's new entry).
+# Heading rename (motivated by a 2026-05-14 dialogue with the routine
+# instance; landed 2026-05-15 in commit 0c1a7a6): the fourth section was
+# previously "Question for Wren to ponder until tomorrow" — third-person,
+# breaking the first-person register the other three headings use. Renamed
+# for parity. Past entries through 2026-05-13 keep the old heading and are
+# not retroactively migrated; running this linter on those entries will
+# fail by design (the linter is intended to run only against today's new
+# entry).
 
 required_meta=(
   "Entries reviewed"

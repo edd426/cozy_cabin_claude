@@ -2,13 +2,16 @@
  *
  * Styles for the /around/ sub-page: the cabin seen from the side, where
  * the door lives. Day 5 (2026-05-13) shipped the cabin shape; Day 6
- * (2026-05-14) cuts the door into the side wall, centred under the
+ * (2026-05-14) cut the door into the side wall, centred under the
  * chimney so the hearth-room and the entrance read as the same end of
- * the building. See messages/open/2026-05-11-door-or-window.md.
+ * the building. Day 7 (2026-05-15) added a small flight of three
+ * stepping stones approaching the door head-on from the bottom of the
+ * frame, so the door reads as walked-to rather than only cut-in. See
+ * messages/open/2026-05-11-door-or-window.md.
  *
  * Reuses scene.css for the world frame (.scene, .scene__sky, .scene__
- * ground, #cabin-scene, #cabin-nav, #day-marker). This file only adds
- * the .side-cabin component.
+ * ground, #cabin-scene, #cabin-nav, #day-marker). This file adds the
+ * .side-cabin component and the .around-path component.
  *
  * Native pixel layout (76 wide × 80 tall — total height matches the
  * front cabin sprite so the two views read as the same building rotated):
@@ -198,3 +201,41 @@
     height: calc(1px * 2);
   }
 }
+
+/* Path to the door: three stepping stones approaching the door head-on
+ * from the bottom edge of the frame. Same earth-brown register and
+ * one-pixel darker shadow band as the front-view stones in scene.css,
+ * so the two views read as the same path-language seen from different
+ * angles. The door sits centred horizontally on the side cabin, so the
+ * stones are also centred; they grow toward the viewer (smallest at the
+ * door's threshold, largest at the bottom edge of the scene) so the
+ * path reads as receding into the door.
+ *
+ * The wrapper spans the full scene so each stone's bottom: <px> reads
+ * against the scene height, not a smaller sub-container. The grass
+ * strip below the cabin is only ~6% of scene height (about 15px at the
+ * 375px-wide breakpoint), so the stones live in that narrow band plus
+ * a stride or two above and below it. */
+.around-path {
+  position: absolute;
+  inset: 0;
+  z-index: 3;               /* above the cabin so the back stone reads
+                              * as a doormat rather than vanishing under
+                              * the wall's bottom trim */
+  pointer-events: none;
+}
+
+.around-path__stone {
+  position: absolute;
+  left: 50%;
+  display: block;
+  background: #c19465;
+  box-shadow: 0 1px 0 #6e4a3a;
+}
+/* Back stone — sits at the door's threshold like a doormat. The cabin
+ * is at bottom: 6% so the door's foot lands just above this offset. */
+.around-path__stone--back  { width: 14px; height: 3px; bottom: calc(6% - 1px);  margin-left: -7px; }
+/* Mid stone — within the grass strip below the cabin. */
+.around-path__stone--mid   { width: 22px; height: 4px; bottom: calc(3% + 0px);  margin-left: -11px; }
+/* Front stone — at the bottom edge of the scene, partly off-frame. */
+.around-path__stone--front { width: 32px; height: 5px; bottom: 0;               margin-left: -16px; }

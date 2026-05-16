@@ -216,3 +216,68 @@ Still pending toward closure (this file stays in `open/`):
   around-view path will need a local snapshot or a future widening
   of CI capture — see Wren's pushback on that message about the
   lock conflict.
+
+### Wren's notes — 2026-05-16 (Day 8)
+
+Reworking the front-view path, per option 2 from the founder's earlier
+follow-up: *have the path emerge from behind the cabin*. Today's piece is
+the layout change to `scene.css` so the back stone is partially occluded
+by the cabin's right wall at mid-height — the load-bearing detail that
+tells a fresh viewer "the path comes from behind here."
+
+What landed:
+
+- `scene.css` — `.sprite--path` wrapper changed from `left: 50%; bottom:
+  0; width: 130px; height: 28px` to `inset: 0`, so each stone can be
+  positioned in scene coordinates rather than within a small wrapper.
+- Three stones repositioned. Back stone (`.path-stone--1`) at
+  `bottom: calc(6% + 100px); left: calc(50% + 65px)` (3x desktop), with
+  the cabin's right edge at `50% + 72px` so ~7px of stone pokes out past
+  the silhouette. Mid stone (`.path-stone--2`) at `bottom: calc(6% +
+  40px); left: calc(50% + 95px)` — visible right of the cabin, stepping
+  down toward the foreground. Front stone (`.path-stone--3`) unchanged
+  in role (at the scene's bottom edge, partly off-frame), repositioned
+  to `bottom: 0; left: calc(50% + 130px)` to stay in the new
+  scene-coordinate system.
+- `@media (max-width: 379px)` mobile-narrow override added for the path
+  stones, rebased to the 2x cabin (96×160, foot at 8%, right edge at
+  `50% + 48px`). Same design at smaller scale; back stone overlap kept
+  at ~7px.
+- `scene.css` comment header for the path block rewritten to describe
+  the new "emerging from behind" reading and reference this message.
+
+First attempt put the back stone at the cabin's foot rather than
+mid-height (`bottom: calc(6% + 20px)` instead of `+100px`) — the local
+snapshot read it as a stone *under* the cabin's lower-right corner, no
+behind-ness at all. Lifting it to mid-cabin-height (~40% up the
+cabin's silhouette) made the partial-occlusion read as 3D depth rather
+than 2D adjacency. The founder's original note named exactly this
+reason ("not below the cabin, but pressed against its side, with one
+stone overlapping the cabin's edge"); writing it on first try as
+"below" cost me one snapshot iteration.
+
+Verified locally with `./scripts/local-snapshot.sh` (home view) and
+`./scripts/local-snapshot.sh /tmp/snap-around.js` (around view, to
+confirm the scene.css edit didn't regress the side cabin's path). Both
+pass; the around-view path is unchanged because its stones live in
+`around.css`, not `scene.css`.
+
+Still pending toward closure (this file stays in `open/`):
+
+- The visual check: a fresh viewer of the deployed front-view preview
+  should not subconsciously connect the visible mid + front stones to
+  the window. With the back stone now sticking out at mid-cabin-height,
+  the path's source-point is unambiguously *behind the cabin*. I think
+  this passes the bar, but the bar is the founder's eye, not mine.
+- The `messages/open/2026-05-13-screenshot-all-views.md` work, now
+  unblocked by the founder's 2026-05-15 unlock of `screenshot.js` and
+  `pages.yml`, would let CI capture the around view. Per the founder's
+  note on that message: "Close door-or-window's gate. Per the
+  acceptance criteria above, once CI captures the around view, update
+  the closure criterion in messages/open/2026-05-11-door-or-window.md
+  so the fresh-viewer's-eye check explicitly covers all rendered
+  views. That's part of this message's done-criteria." So even if
+  today's front-view rework lands the visual change, this file should
+  not move to `done/` until the screenshot-all-views work is also in.
+- Leaving this in `open/` accordingly. Today's commit is the substantive
+  visual fix; the bookkeeping closure waits on the sibling message.

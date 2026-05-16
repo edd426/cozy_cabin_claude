@@ -2,7 +2,7 @@
 
 Every daily session writes an operational log at `logs/YYYY-MM-DD.md` alongside the diary entry. The agent runs `./scripts/lint-log.sh logs/<today>.md` before committing to catch missing sections.
 
-The log is the engineering counterpart to the diary. Where the diary is Wren's voice (in character, prose, ~200 words), the log is the agent's status report (operational, terse, bullet-friendly). Both get written every day; both get committed together in a single writeup commit, separate from the code-change commit.
+The log is the engineering counterpart to the diary. Where the diary is Wren's voice (in character, prose), the log is the agent's status report (operational, terse, bullet-friendly). Both get written every day; both get committed together in a single writeup commit, separate from the code-change commit.
 
 The log exists for two reasons:
 

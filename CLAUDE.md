@@ -78,49 +78,7 @@ Generated/runtime files (gitignored, do not commit): `build-sha.js`, `build-sha.
 
 ## How a day runs
 
-The daily routine wrapper invokes `claude "/daily"`. The slash command instructs you to:
-
-1. **Read the constitution.** `RULES.md`, `CLAUDE.md` (this file), `MILESTONES.md`. Mandatory.
-2. **Read memory.** All `diary/*.md` entries (you have a 1M context — read them all), plus all `diary/meta/*.md` entries. Mandatory.
-   - **Look at the most recent `previews/*.png`**: `LATEST=$(ls -t previews/*.png | head -1)` then `Read` it. This is how you "see" what you're working on without a browser. The CI bot writes one screenshot per commit, never overwriting, so the file with the most recent mtime is yesterday's last deploy.
-   - **Read all `messages/open/*.md`** — the founder's message board. Action-asks outrank self-selected milestones (RULES.md Article X); informational messages don't require action but inform the work you do choose.
-3. **Pick today's contribution.** If there's an open action-ask in `messages/open/`, that's today's work (or a piece of it). Otherwise pick the smallest viable change from `MILESTONES.md`. **One thing.**
-4. **Implement it.** Edit only mutable files. If you find yourself wanting to edit a locked file, that's a sign to either pick a different task or write a diary entry explaining the friction.
-5. **Build, commit, push.**
-   ```
-   ./scripts/build.sh
-   git add -A
-   git commit -m "<one-line summary of today's contribution>"
-   git push
-   ```
-6. **Wait for deploy.** GitHub Pages typically deploys in 30–90s. Don't poll faster than every 20s.
-7. **Verify.** From the routine sandbox use `./scripts/wait-for-deploy.sh` (the curl-based `verify-deploy.sh` is for local dev only — the sandbox blocks `*.github.io`). The verification output goes verbatim into today's log entry (step 8b), not the diary.
-8. **Write today's writeups — two artifacts.**
-   - **8a. Wren's diary** at `diary/YYYY-MM-DD.md` per the schema in `diary/README.md`. Four sections, Wren's voice, ~200 words, no operational content. Run `./scripts/lint-diary.sh diary/<today>.md`.
-   - **8b. The agent's log** at `logs/YYYY-MM-DD.md` per the schema in `logs/README.md`. Five sections, operational, the `Day N` counter and all engineering content (commit SHAs, tokens, verification output, env notes) live here. Run `./scripts/lint-log.sh logs/<today>.md`.
-9. **Commit the writeup (diary + log together).**
-   ```
-   git add diary/<today>.md logs/<today>.md
-   git commit -m "writeup: <today's date> — <one-line summary of today's work>"
-   git push
-   ```
-
-Two commits per day is by design — code change + writeup as separate units. The writeup is one commit containing both files: diary in voice, log operational.
-
-### Stuck-day protocol
-
-If you cannot complete code work today:
-
-1. Skip steps 5–7.
-2. Write **both** the diary (Wren's voice — she had a day even if she didn't build) AND the log (records the operational failure: what was tried, why it failed). Per Article IX of RULES.md.
-3. Commit and push the writeup (`git add diary/<today>.md logs/<today>.md` then commit).
-4. End the session.
-
-Tomorrow's agent will see both the diary entry (Wren's account) and the log (engineering account) in its memory window.
-
-### Weekly meta-reflection
-
-Every 7th day (the wrapper writes `day_n` into `.cabin-state.json` — read it), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. This is identity-drift monitoring across the project's arc.
+The runbook lives in `.claude/commands/daily.md` (the `/daily` slash command). This file is operational notes — gotchas, command recipes, accumulated learnings. Treat `RULES.md` as authority and `daily.md` as the runbook.
 
 ## Common commands
 

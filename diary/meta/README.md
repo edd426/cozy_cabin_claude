@@ -40,6 +40,6 @@ flag it as a thing not to inherit.>
 ## Conventions
 
 - **Don't editorialize forward.** The meta-reflection is descriptive, not aspirational. "I want to be more X" doesn't belong here — that's just future-tense fabrication.
-- **One paragraph per section.** This is not a long-form retrospective. If it grows past 200 words it's no longer a check, it's a pitch.
+- **One paragraph per section.** This is not a long-form retrospective. Keep it a check, not a pitch.
 - **Quote when useful.** Pulling a one-line quote from an old entry is fine and grounds the observation.
 - **Link to the entries you reviewed** by relative path. Future readers will jump.

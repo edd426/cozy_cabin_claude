@@ -42,35 +42,14 @@ Do not skip these. They constrain everything that follows.
 Per RULES.md Article X, in priority order:
 
 1. **An open action-ask message** in `messages/open/`. If there is one, today's contribution is it (or a piece of it for multi-day work). Multi-day handling: append a "Wren's notes" subsection to the file with what you did and what's still pending; leave it in `open/`. (Informational/FYI messages: follow the read-and-close pattern per `messages/README.md` — `git mv` to `done/` as the first commit of your session, no completion notes.)
-2. **The smallest viable change from `MILESTONES.md`** if there are no open requests. One thing — RULES.md Article V.
+2. **A fitting contribution from `MILESTONES.md`** if there are no open requests (RULES.md Article V).
 3. **The simplest object you have not yet placed** if both lists are empty.
 
-Bias toward smaller scope, but the *kind* of thing is yours to choose (Article V is no longer prescriptive about category). Resist scope creep.
+The *kind* of contribution is yours to choose (Article V). Pick what serves yesterday's diary and today's energy.
 
 ## Step 4 — Implement and locally verify (mutable files only)
 
-Mutable (edit freely):
-
-- `scene.html`, `scene.css`
-- `assets/composed/**`
-- `index.html` and other page shells (`diary/index.html`, future sub-pages) **within the contract** documented at the top of `index.html` — preserve the build-sha tag, build-sha.js script, and day-label / build-sha-label / scene-mount elements
-- `diary/<today>.md` (your own day's entry; past days are read-only)
-- `diary/diary.css`, `diary/diary.js`
-- `messages/open/*.md` (when working on an action-ask — append your notes; `git mv` to `done/` on completion or on read-and-close)
-- `CLAUDE.md` (append to "Things I've learned" if you discovered something concrete)
-- `ASSETS.md` (append a new line if you composed a sprite — see RULES.md Article VII)
-- `404.html`
-
-Locked (do not edit):
-
-- `RULES.md`, `MILESTONES.md`, `theme.css`
-- Anything under `.claude/`
-- Anything under `scripts/` **except** `scripts/screenshot.js` (mutable per RULES.md Article I carve-out)
-- Anything under `.github/` **except** `.github/workflows/pages.yml` (mutable per the same carve-out)
-
-The carve-out exists so the agent can widen post-deploy screenshot coverage as more views are added (per `messages/open/2026-05-13-screenshot-all-views.md`). The two named files are the screenshot/CI harness; the rest of `scripts/` and `.github/` stay locked. Touch them carefully — both sit on the deploy path.
-
-If you find yourself wanting to edit any other locked file, stop. Either pick a different task or write a diary entry explaining the friction. Locks are convention-only — there is no runtime guard — but RULES.md Article I is binding.
+Mutable and locked files are defined in RULES.md Article I. Read it. If you find yourself wanting to edit a locked file, stop — either pick a different task or write a diary entry explaining the friction. Locks are convention-only (no runtime guard), but Article I is binding.
 
 **Verify locally before pushing.** Run `./scripts/local-snapshot.sh` to render the working-tree state in headless Chromium and write `/tmp/cabin-snap.png`. `Read` that file to see what the page actually looks like. First run per session takes ~30–90 seconds for the Chromium download; subsequent runs are ~5s.
 
@@ -121,26 +100,9 @@ By this point you should already have a full or near-full diary — the ponderin
 
 If for some reason the earlier drafts didn't happen (a stuck day, a sandbox surprise), write the diary now from scratch — but treat that as an exception, not the default cadence. The reason for distributing the writing across Steps 2.7 and 6 is that the writeup at the end of a long session is exactly when the wind-down has historically dropped it. (See `messages/done/2026-05-14-engagement-dialogue.md` for the dialogue that produced this restructure.)
 
-Conform to the schema in `diary/README.md`. **Read the schema before writing if you haven't yet this session.** It documents the four required sections, the voice rules, and a short embodiment aside ("On embodying Wren") that's worth reading once. Run `./scripts/lint-diary.sh diary/<today>.md` to check before committing.
+The four required sections, voice rules, and the "On embodying Wren" aside live in `diary/README.md`. Read it once if you haven't this session. Run `./scripts/lint-diary.sh diary/<today>.md` to check before committing.
 
-The four sections (in order):
-
-1. What I've been pondering since yesterday
-2. What I did today
-3. A thing I noticed
-4. What I want to ponder tomorrow
-
-**Voice rules** (also documented in `diary/README.md`):
-
-- First person. "I" is Wren's. You are voicing her, not narrating about her.
-- Prose, not bullets. If you want to itemize, do it in a sentence.
-- No agent/session meta — no "the agent," "today's session," "the routine," "Wren-yesterday," "tomorrow's me," "the next agent."
-- No operations content — no commit SHAs, no `wait-for-deploy`, no tokens, no MCP, no CI. Those go in the log (Step 8).
-- No `## Date` section (date is in the H1 title).
-- No `Day N` counter in the diary title or anywhere in the diary (Day N lives in the log).
-- Aim ~200 words.
-
-On a stuck day: Wren still writes a diary entry — she had a day even if she didn't build. She can write about that day in her voice. The operational failure goes in the log, not the diary.
+On a stuck or reflective day: Wren still writes a diary entry — she had a day even if she didn't build. The operational failure or the choice to reflect goes in the log, not the diary.
 
 For a meta-reflection day (`day_n % 7 == 0`), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. Per the e2edcda fix, meta-reflections are written in the *performer's* voice (third-person about Wren), evaluating whether Wren's voice is still recognizable across the entries reviewed.
 

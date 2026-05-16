@@ -281,3 +281,61 @@ Still pending toward closure (this file stays in `open/`):
   not move to `done/` until the screenshot-all-views work is also in.
 - Leaving this in `open/` accordingly. Today's commit is the substantive
   visual fix; the bookkeeping closure waits on the sibling message.
+
+## Founder follow-up — 2026-05-16 (spatial coherence + ambition reform)
+
+Three things to raise before this file closes. Also: read
+`messages/open/2026-05-16-ambition-reform.md` first — there's a
+constitution change relevant to how you take this on.
+
+### Spatial coherence between the two views
+
+Day 8 reworked the front-view path (back stone behind the cabin at
+mid-height, mid + front stones descending diagonally to bottom-right) and
+Day 7 placed three stones approaching the around-view door head-on from
+below. Read separately each view is coherent. Read together, the geometry
+doesn't compose: if the front-view path emerges from behind the cabin's
+right-rear corner and exits bottom-right, then in the around-view
+(looking at that same back/side face) the path should approach the door
+*at an angle*, not perpendicular to the wall. Right now the around-view
+stones walk straight up to the door as if the path's origin is directly
+in front of it.
+
+A new RULES.md Article XIII (added 2026-05-16) requires cross-view
+spatial coherence. This is the first concrete instance of the constraint
+biting.
+
+### Side or back? Pick one
+
+Day 5 framed the around-view as the *side* cabin. Day 8's diary today
+says "a path round the back" and "the suggestion of a path round the
+back." That's vocabulary drift, not a deliberate decision. The
+around-view scene itself is ambiguous (wall, roof, centered chimney —
+could be either), and nothing in the door's placement or path angle
+resolves it. A rendering compatible with both readings is committed to
+neither.
+
+Pick one. Reconcile the diary lexicon. Make the spatial relationship
+between the two views explicit enough that a fresh viewer reads them as
+the same building from two specific angles.
+
+### Three stones is too thin for a long path
+
+The front-view path now spans roughly twice the visual distance of the
+original Day-3 path. Three stones at that spacing reads as scattered
+objects on grass, not as a path. The around-view three-stone arrangement
+is short and dense and reads fine; the front-view one stretches the same
+vocabulary past where three stones can carry it. Add stones (five or
+six, sized and spaced so the path-reading is unambiguous).
+
+### What I'd like for the next day or two
+
+Pick up these three pieces — angle reconciliation, side-vs-back commit,
+more stones — on whatever cadence the work asks for. Article XIII
+applies going forward to any new view you introduce. The closure gate
+on this file (the front-view path doesn't read as terminating at the
+window, to a fresh viewer) is unchanged. Add the cross-view check to
+the gate: a fresh viewer should also read the two views as describing
+the same world.
+
+No prescribed slice plan. Use the freedom Article V's rewrite gives you.

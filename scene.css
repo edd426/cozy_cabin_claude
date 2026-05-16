@@ -187,19 +187,22 @@
   100% { transform: translateY(-72px) scale(1.3); opacity: 0;    }
 }
 
-/* Footpath: three pixel-art stepping stones sweeping from beneath the
- * cabin's lower-right corner off the right edge of the scene. The front
- * face of the cabin is a window, not a door (see messages/done/
- * 2026-05-11-door-or-window.md) — the path bends around the cabin to
- * a door that lives off-frame. Stones drawn from scratch — each is a
- * small earth-brown rectangle with a one-pixel darker band below for
- * depth. The stones grow toward the viewer so the path reads as receding
- * off into the unseen right-of-frame. */
+/* Footpath: three pixel-art stepping stones emerging from behind the
+ * cabin's right side and descending to exit the scene at the bottom-
+ * right corner. The front face of the cabin is a window, not a door
+ * (see messages/open/2026-05-11-door-or-window.md) — the door lives on
+ * the around view, and this front-view path is the tail of the same
+ * path seen from a different angle. The back stone sits at mid-cabin-
+ * height pressed against the right wall, mostly occluded by the cabin
+ * (which has higher z-index): only its outer few pixels poke out, which
+ * is the load-bearing detail telling the viewer "the path comes from
+ * behind here, not from in front of the window."
+ *
+ * Stones drawn from scratch — each is a small earth-brown rectangle
+ * with a one-pixel darker band below for depth. They grow toward the
+ * viewer so the path reads as receding off into the unseen behind. */
 .sprite--path {
-  left: 50%;
-  bottom: 0;
-  width: 130px;
-  height: 28px;
+  inset: 0;
   z-index: 1;
 }
 
@@ -210,9 +213,15 @@
   /* One-pixel darker band below each stone, stamped via box-shadow. */
   box-shadow: 0 1px 0 #6e4a3a;
 }
-.path-stone--1 { width: 12px; height: 3px; bottom: 20px; left:  10px; }  /* back, near cabin corner */
-.path-stone--2 { width: 20px; height: 4px; bottom: 10px; left:  44px; }  /* mid, curving outward    */
-.path-stone--3 { width: 30px; height: 5px; bottom:  0;   left:  96px; }  /* front, exiting right    */
+/* Back stone — pressed against cabin's right edge at mid-cabin-height,
+ * mostly hidden behind the cabin (cabin is at left: 50%, width 144px at
+ * 3x, so its right edge is at 50% + 72px). Stone spans 50%+65 to 50%+79,
+ * so ~7px of it sticks out past the cabin's silhouette. */
+.path-stone--1 { width: 14px; height: 4px; bottom: calc(6% + 100px); left: calc(50% + 65px); }
+/* Mid stone — visible right of the cabin, stepping down toward the foreground. */
+.path-stone--2 { width: 22px; height: 4px; bottom: calc(6% + 40px);  left: calc(50% + 95px); }
+/* Front stone — at the scene's bottom edge, exiting right partly off-frame. */
+.path-stone--3 { width: 32px; height: 5px; bottom: 0;                left: calc(50% + 130px); }
 
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
@@ -220,4 +229,10 @@
   .sprite--tree        { width: calc(28px * 2); height: calc(33px * 2); }
   .sprite--tree-small  { width: calc(15px * 2); height: calc(33px * 2); }
   .sprite--smoke       { bottom: calc(8% + 152px); }
+  /* Path stones rebased to the 2x cabin (96×160, foot at 8%, right edge
+   * at 50% + 48px). Stone widths/heights stay constant — pixel art needs
+   * its minimum-feature-width to stay legible at the smaller scale. */
+  .path-stone--1       { bottom: calc(8% + 70px); left: calc(50% + 41px); height: 3px; }
+  .path-stone--2       { bottom: calc(8% + 25px); left: calc(50% + 65px); }
+  .path-stone--3       { bottom: 0;               left: calc(50% + 90px); }
 }

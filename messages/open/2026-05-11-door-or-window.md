@@ -339,3 +339,64 @@ the gate: a fresh viewer should also read the two views as describing
 the same world.
 
 No prescribed slice plan. Use the freedom Article V's rewrite gives you.
+
+### Wren's notes — 2026-05-17 (Day 9)
+
+Took all three pieces in one commit, because they describe one path
+and reasoning about them separately kept failing to add up. Done in
+one pass, with the same earth-brown register and one-pixel darker
+shadow band as the existing stones — only layout, sizes, and counts
+changed.
+
+**Side, not back.** Committing to "side" per the Day-5 framing: the
+around view is the cabin's right (east) face. The cabin's front
+(south, with the window) sits to the viewer's left in that view; the
+cabin's back (north) to the viewer's right. The door is centred
+horizontally on the east face, at the cabin's mid-depth. I rewrote
+the file-header comments on `scene.css`, `around/around.css`, and
+`around/index.html` to name this explicitly so future-Wren can't drift
+back to "round the back" by accident.
+
+**Angle reconciliation in the around view.** The three stones used to
+walk straight up to the door. They now curve leftward (toward the
+cabin's front = south = viewer's left): back stone stays centred at
+the door's threshold, mid stone shifts ~16px left, front stone shifts
+~34px left. The curve reads as the path arriving from the lower-left
+of the frame rather than from directly below, which is what an
+east-side path bending south toward the front of the cabin should
+look like.
+
+**More stones on the front-view path.** Three stones became five.
+Same diagonal trajectory from cabin's mid-height right edge (back
+stone, mostly occluded) down to the bottom-right corner (front stone,
+exiting partly off-frame), with two new intermediate stones (widths
+18 and 27, between the original 14/22/32 sizes) filling the gaps.
+Repositioned the original mid and re-spaced everything so the visible
+stones step at roughly the same vertical interval. The mobile-narrow
+override (`@media (max-width: 379px)`) was rebased to the five-stone
+layout on the 2x cabin.
+
+**Cross-view geometry.** The same physical path now exists in both
+views. It leaves the door on the east face, heads east (toward the
+around-view viewer), curves south, exits the around view at its
+bottom-left. Seen from the front, that same path emerges around the
+cabin's right-side silhouette at mid-height and sweeps south-east to
+the bottom-right. The two readings compose.
+
+Verified locally with `./scripts/local-snapshot.sh` (home view) and
+`./scripts/local-snapshot.sh /tmp/snap-around.js` (around view).
+Both render the new geometry correctly: front-view path reads as a
+path rather than scattered objects, around-view stones angle in from
+the lower-left.
+
+Still pending toward closure (this file stays in `open/`):
+
+- The fresh-viewer's-eye check, now expanded to cover both views per
+  the 2026-05-16 follow-up — the founder's eye, not mine. I think
+  the geometry composes, but the bar is the founder's read.
+- The screenshot-all-views work in
+  `messages/open/2026-05-13-screenshot-all-views.md` is still pending.
+  CI captures only the home view, so the around-view re-angle won't
+  appear in `previews/*.png`; it lives only in the local snapshots I
+  ran today. The previous Wren's notes on this file said closure
+  waits on that sibling message's implementation; that's still true.

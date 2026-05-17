@@ -202,20 +202,32 @@
   }
 }
 
-/* Path to the door: three stepping stones approaching the door head-on
- * from the bottom edge of the frame. Same earth-brown register and
- * one-pixel darker shadow band as the front-view stones in scene.css,
- * so the two views read as the same path-language seen from different
- * angles. The door sits centred horizontally on the side cabin, so the
- * stones are also centred; they grow toward the viewer (smallest at the
- * door's threshold, largest at the bottom edge of the scene) so the
- * path reads as receding into the door.
+/* Path to the door: three stepping stones approaching the door from
+ * the bottom-left of the frame. Same earth-brown register and one-pixel
+ * darker shadow band as the front-view stones in scene.css, so the two
+ * views read as the same path-language seen from different angles.
+ *
+ * Cross-view geometry (RULES.md Article XIII). The around view shows
+ * the cabin's right (east) face — committing to "side," not "back," to
+ * settle the lexical drift that crept into the Day-8 diary. In this
+ * view the cabin's front face (south, where the window is) sits to the
+ * viewer's left, and the cabin's back (north) to the viewer's right.
+ * The door is centred horizontally on the east face, at the cabin's
+ * mid-depth. The path leaves the door, heads east (toward the viewer
+ * = downward in this view) and curves south (= leftward), exiting
+ * bottom-left of frame. The same physical path, seen from the front
+ * view, emerges around the cabin's right-side silhouette and sweeps
+ * south-east to exit bottom-right.
+ *
+ * Day 7 placed three stones approaching the door head-on; that read
+ * as if the path's origin were directly in front of the wall, which
+ * is incompatible with the front-view's south-east sweep. Day 9
+ * re-angled the stones leftward (toward cabin-front = south) without
+ * changing their sizes or vertical placement, so the path now reads
+ * as arriving at the door from the lower-left rather than from below.
  *
  * The wrapper spans the full scene so each stone's bottom: <px> reads
- * against the scene height, not a smaller sub-container. The grass
- * strip below the cabin is only ~6% of scene height (about 15px at the
- * 375px-wide breakpoint), so the stones live in that narrow band plus
- * a stride or two above and below it. */
+ * against the scene height, not a smaller sub-container. */
 .around-path {
   position: absolute;
   inset: 0;
@@ -232,10 +244,15 @@
   background: #c19465;
   box-shadow: 0 1px 0 #6e4a3a;
 }
-/* Back stone — sits at the door's threshold like a doormat. The cabin
- * is at bottom: 6% so the door's foot lands just above this offset. */
-.around-path__stone--back  { width: 14px; height: 3px; bottom: calc(6% - 1px);  margin-left: -7px; }
-/* Mid stone — within the grass strip below the cabin. */
-.around-path__stone--mid   { width: 22px; height: 4px; bottom: calc(3% + 0px);  margin-left: -11px; }
-/* Front stone — at the bottom edge of the scene, partly off-frame. */
-.around-path__stone--front { width: 32px; height: 5px; bottom: 0;               margin-left: -16px; }
+/* Back stone — sits at the door's threshold like a doormat, centred
+ * directly under the door. The cabin is at bottom: 6% so the door's
+ * foot lands just above this offset. The curve starts here, so the
+ * back stone is the only one not shifted left. */
+.around-path__stone--back  { width: 14px; height: 3px; bottom: calc(6% - 1px);  margin-left: -7px;  }
+/* Mid stone — shifted ~16px left of centre as the path begins to
+ * curve south (toward the cabin's front, which is the viewer's left
+ * in this view). Still within the grass strip below the cabin. */
+.around-path__stone--mid   { width: 22px; height: 4px; bottom: calc(3% + 0px);  margin-left: -27px; }
+/* Front stone — shifted ~34px left of centre, well into the south-
+ * leaning curve. At the bottom edge of the scene, partly off-frame. */
+.around-path__stone--front { width: 32px; height: 5px; bottom: 0;               margin-left: -50px; }

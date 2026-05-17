@@ -187,16 +187,29 @@
   100% { transform: translateY(-72px) scale(1.3); opacity: 0;    }
 }
 
-/* Footpath: three pixel-art stepping stones emerging from behind the
- * cabin's right side and descending to exit the scene at the bottom-
- * right corner. The front face of the cabin is a window, not a door
- * (see messages/open/2026-05-11-door-or-window.md) — the door lives on
- * the around view, and this front-view path is the tail of the same
- * path seen from a different angle. The back stone sits at mid-cabin-
- * height pressed against the right wall, mostly occluded by the cabin
- * (which has higher z-index): only its outer few pixels poke out, which
- * is the load-bearing detail telling the viewer "the path comes from
- * behind here, not from in front of the window."
+/* Footpath: five pixel-art stepping stones emerging from behind the
+ * cabin's right (east) side and descending diagonally to exit the
+ * scene at the bottom-right corner. The front face of the cabin is a
+ * window, not a door (see messages/open/2026-05-11-door-or-window.md)
+ * — the door lives on the cabin's east face, visible in the around
+ * view, and this front-view path is the same path seen from a
+ * different angle.
+ *
+ * Cross-view geometry (RULES.md Article XIII): the path leaves the
+ * around-view door heading east (toward the around-view viewer) and
+ * curves south, exiting the around view at its bottom-left. The same
+ * path, seen from the front, emerges around the cabin's right-side
+ * silhouette and sweeps south-east, exiting bottom-right here.
+ *
+ * The back stone sits at mid-cabin-height pressed against the right
+ * wall, mostly occluded by the cabin (which has higher z-index): only
+ * its outer few pixels poke out, which is the load-bearing detail
+ * telling the viewer "the path comes from behind here, not from in
+ * front of the window." From there, four more stones step diagonally
+ * toward the bottom-right exit. Day 8 shipped three stones along this
+ * trajectory and a fresh look read as scattered objects rather than a
+ * path; Day 9 added the two intermediate stones to make the path-
+ * reading unambiguous.
  *
  * Stones drawn from scratch — each is a small earth-brown rectangle
  * with a one-pixel darker band below for depth. They grow toward the
@@ -213,15 +226,24 @@
   /* One-pixel darker band below each stone, stamped via box-shadow. */
   box-shadow: 0 1px 0 #6e4a3a;
 }
-/* Back stone — pressed against cabin's right edge at mid-cabin-height,
- * mostly hidden behind the cabin (cabin is at left: 50%, width 144px at
- * 3x, so its right edge is at 50% + 72px). Stone spans 50%+65 to 50%+79,
- * so ~7px of it sticks out past the cabin's silhouette. */
+/* Stone 1 (back) — pressed against cabin's right edge at mid-cabin-
+ * height, mostly hidden behind the cabin (cabin is at left: 50%, width
+ * 144px at 3x, so its right edge is at 50% + 72px). Stone spans
+ * 50%+65 to 50%+79, so ~7px of it sticks out past the cabin's
+ * silhouette. */
 .path-stone--1 { width: 14px; height: 4px; bottom: calc(6% + 100px); left: calc(50% + 65px); }
-/* Mid stone — visible right of the cabin, stepping down toward the foreground. */
-.path-stone--2 { width: 22px; height: 4px; bottom: calc(6% + 40px);  left: calc(50% + 95px); }
-/* Front stone — at the scene's bottom edge, exiting right partly off-frame. */
-.path-stone--3 { width: 32px; height: 5px; bottom: 0;                left: calc(50% + 130px); }
+/* Stone 2 (between back and mid) — fully visible just past the
+ * cabin's right edge, stepping down and slightly right. */
+.path-stone--2 { width: 18px; height: 4px; bottom: calc(6% + 72px);  left: calc(50% + 80px); }
+/* Stone 3 (mid) — well right of the cabin, mid-air between cabin's
+ * foot and the bottom of the scene. */
+.path-stone--3 { width: 22px; height: 4px; bottom: calc(6% + 42px);  left: calc(50% + 98px); }
+/* Stone 4 (between mid and front) — closer to viewer, still on the
+ * grass strip below the cabin. */
+.path-stone--4 { width: 27px; height: 5px; bottom: calc(6% + 10px);  left: calc(50% + 118px); }
+/* Stone 5 (front) — at the scene's bottom edge, exiting right partly
+ * off-frame. */
+.path-stone--5 { width: 32px; height: 5px; bottom: 0;                left: calc(50% + 132px); }
 
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
@@ -233,6 +255,8 @@
    * at 50% + 48px). Stone widths/heights stay constant — pixel art needs
    * its minimum-feature-width to stay legible at the smaller scale. */
   .path-stone--1       { bottom: calc(8% + 70px); left: calc(50% + 41px); height: 3px; }
-  .path-stone--2       { bottom: calc(8% + 25px); left: calc(50% + 65px); }
-  .path-stone--3       { bottom: 0;               left: calc(50% + 90px); }
+  .path-stone--2       { bottom: calc(8% + 50px); left: calc(50% + 53px); height: 3px; }
+  .path-stone--3       { bottom: calc(8% + 28px); left: calc(50% + 66px); }
+  .path-stone--4       { bottom: calc(8% + 8px);  left: calc(50% + 80px); }
+  .path-stone--5       { bottom: 0;               left: calc(50% + 92px); }
 }

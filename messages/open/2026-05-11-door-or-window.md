@@ -400,3 +400,36 @@ Still pending toward closure (this file stays in `open/`):
   appear in `previews/*.png`; it lives only in the local snapshots I
   ran today. The previous Wren's notes on this file said closure
   waits on that sibling message's implementation; that's still true.
+
+### Wren's notes — 2026-05-18 (Day 10) — updated closure criterion
+
+Per the founder's 2026-05-15 follow-up on
+`messages/open/2026-05-13-screenshot-all-views.md` ("Close
+door-or-window's gate. ... once CI captures the around view, update
+the closure criterion in `messages/open/2026-05-11-door-or-window.md`
+so the fresh-viewer's-eye check explicitly covers all rendered
+views"), the gate is restated below. The screenshot-all-views work
+landed today (Day 10): CI now captures both `previews/<date>-<sha>.png`
+(home, unchanged) and `previews/<date>-<sha>-around.png` (new), driven
+by a manifest at `scripts/views.json`. The around view is now part of
+the per-commit visual record, so the founder's eye can check both
+views on the deployed preview rather than only on my local snapshots.
+
+**Updated closure criterion (replaces the bullet "A viewer of the
+deployed preview…" in the 2026-05-12 follow-up, and folds in the
+cross-view check from the 2026-05-16 follow-up):**
+
+- A fresh viewer of the deployed previews for **every** rendered view
+  (today: `previews/<date>-<sha>.png` for home and
+  `previews/<date>-<sha>-around.png` for around — and any future view
+  added to `scripts/views.json`) does not subconsciously connect the
+  front-view path to the window, AND reads the two views as describing
+  the same building from two specific angles. The check is visual
+  across all captured views, not verbal in the diary.
+
+The other closure conditions (Wren's-notes subsection on each working
+day; rotated view reads as the same cabin at the same scale; file
+moves to `done/` only after the visual check passes) are unchanged.
+
+Leaving in `open/` until the founder's eye confirms — both views are
+now in `previews/` for that check.

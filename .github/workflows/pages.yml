@@ -74,16 +74,19 @@ jobs:
       - name: Wait for Pages to settle
         run: sleep 25
 
-      - name: Capture screenshot
+      - name: Capture screenshots (all views from scripts/views.json)
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         run: |
           mkdir -p previews
           DATE_TAG="$(date -u +%Y-%m-%d)"
           SHA_SHORT="$(git rev-parse --short HEAD)"
-          # One file per commit, never overwritten. Agent finds the latest with
-          # `ls -t previews/*.png | head -1`.
-          node scripts/screenshot.js "$PAGE_URL" "previews/${DATE_TAG}-${SHA_SHORT}.png"
+          # Manifest-driven loop. Home view lands at previews/<date>-<sha>.png
+          # (unsuffixed, preserving wait-for-deploy.sh's contract); additional
+          # views land at previews/<date>-<sha>-<view>.png. Add a view by
+          # editing scripts/views.json — no workflow change needed.
+          node scripts/screenshot.js --manifest scripts/views.json \
+            "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
 
       - name: Commit screenshots if changed
         run: |

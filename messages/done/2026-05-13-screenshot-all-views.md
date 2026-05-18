@@ -155,3 +155,82 @@ naming explicitly now that the work can land:
 Take this on whatever day feels right; no urgency. Leave the file in
 `open/` until the implementation lands and acceptance criteria are
 met.
+
+### Completion notes — 2026-05-18 (Day 10)
+
+Landed in one commit, single day, since the change is small and the
+risk surface (the deploy path) is covered by the local-snapshot test
+harness.
+
+**What landed:**
+
+- `scripts/views.json` — new manifest, a flat array of
+  `{ name, url_path }` entries. Adding a new view in the future is a
+  one-line edit here, no workflow or script change required. Currently
+  two entries: `home` at the site root and `around` at `around/`.
+- `scripts/screenshot.js` — added a `--manifest` mode that loops over
+  the manifest, capturing one PNG per view. Single-shot mode
+  (`screenshot.js URL OUT_PNG`) is preserved unchanged so
+  `scripts/local-snapshot.sh` (locked file, can't edit) keeps working.
+  Capture is factored into a `capture(browser, fullUrl, outPath)`
+  helper shared by both modes; URL composition uses the WHATWG `URL`
+  class so a manifest entry like `url_path: "around/"` resolves
+  cleanly against any base URL with or without a trailing slash.
+- `.github/workflows/pages.yml` — the `Capture screenshot` step now
+  invokes manifest mode, passing the deployed `PAGE_URL` as the base
+  and `previews` as the output directory. Step renamed to "Capture
+  screenshots (all views from scripts/views.json)" so the workflow
+  UI reflects the new shape.
+- `messages/open/2026-05-11-door-or-window.md` — appended a Day-10
+  Wren's notes subsection restating the closure criterion to cover
+  all rendered views, per this message's acceptance criteria.
+- `CLAUDE.md` — "Things I've learned" entry on the manifest pattern
+  and the home-view naming carve-out.
+
+**Naming convention** (encoded in `screenshot.js`'s manifest mode):
+
+- Home view → `previews/<date>-<sha>.png` (unsuffixed, preserving the
+  contract `scripts/wait-for-deploy.sh` reads — that script is locked
+  and looks for the unsuffixed filename to confirm deploy success).
+- Any other view → `previews/<date>-<sha>-<view-name>.png` where
+  `<view-name>` is the `name` field from the manifest entry.
+
+So `ls -t previews/*.png | head -1` still surfaces the most recent
+preview at a glance (across all views, since one commit produces all
+its PNGs near-simultaneously); per-view filters like
+`ls -t previews/*-around.png` work for view-specific lookups.
+
+**Local verification** (the deploy path is the risk surface, so this
+was thorough):
+
+1. `./scripts/local-snapshot.sh` (default single-shot mode) — renders
+   `/tmp/cabin-snap.png` from the working tree. Confirmed the
+   refactored `capture()` helper produces the same output as before.
+2. `./scripts/local-snapshot.sh /tmp/test-manifest.js` — a Playwright
+   test that runs `screenshot.js --manifest scripts/views.json` against
+   the local server with synthetic date/sha args, then asserts both
+   `2026-05-18-testsha.png` (home, unsuffixed) and
+   `2026-05-18-testsha-around.png` exist and are non-trivially-sized.
+   Pass.
+3. Visual check on both test PNGs: home shows the five-stone path and
+   the smoke + window cabin; around shows the side cabin with the
+   door under the chimney and the three angled stepping stones. Both
+   match what I'd expect from the working tree.
+
+**Acceptance criteria check:**
+
+- ✓ CI captures one PNG per rendered view per commit. Once today's
+  commit deploys, the screenshot job runs manifest mode and writes
+  both `<date>-<sha>.png` and `<date>-<sha>-around.png`.
+- ✓ All files named with date + short-SHA prefix; the existing
+  "latest preview" idiom (`ls -t previews/*.png | head -1`) still
+  finds the most recent of any view.
+- ✓ Set of views is data, in `scripts/views.json` — adding a new view
+  means editing one obvious place.
+- ✓ `wait-for-deploy.sh` keeps working — it polls for the unsuffixed
+  home filename, which manifest mode still produces.
+- ✓ Closure criterion in `messages/open/2026-05-11-door-or-window.md`
+  updated to cover all rendered views (see the Day-10 Wren's notes
+  subsection there).
+
+Moving to `done/`.

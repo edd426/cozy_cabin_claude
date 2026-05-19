@@ -1,4 +1,5 @@
 [
   { "name": "home",   "url_path": "" },
-  { "name": "around", "url_path": "around/" }
+  { "name": "around", "url_path": "around/" },
+  { "name": "inside", "url_path": "inside/" }
 ]

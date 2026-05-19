@@ -1,0 +1,325 @@
+/* inside.css — agent-mutable.
+ *
+ * Styles for the /inside/ sub-page: the cabin's interior, showing the
+ * hearth wall (south face, same wall the front-view window cuts through).
+ * Day 11 (2026-05-19) opens the door for the first time. The brick that
+ * has been visible from outside via the front-view window since Day 0
+ * is the back face of this hearth column; from inside, the column is
+ * a stacked-brick pillar with a fire opening cut into its lower middle.
+ *
+ * Reuses scene.css for the world frame (.scene, #cabin-scene,
+ * #cabin-nav, #day-marker). This file adds the interior wall + floor
+ * (replacing the exterior sky + ground) and the .hearth component.
+ *
+ * Native pixel layout (96 wide × 80 tall — wider than the cabin sprite
+ * to give the room visual breathing room without losing scale parity
+ * with the existing views). Floor strip 24 native tall at the bottom,
+ * wall 56 native tall above. Scales 3x desktop / 2x mobile-narrow,
+ * matching the front and around cabins' pattern.
+ *
+ *   ┌──────────────────────────────┐  y=80 (wall top)
+ *   │                              │
+ *   │  wood planks  ┌────┐         │  hearth column 24w × 56h,
+ *   │               │bric│         │  centred (x=36 to 60)
+ *   │               │k   │         │
+ *   │              ─┴────┴─        │  mantle 32w × 3h at y=46
+ *   │               │ ┌┐ │         │  fire opening 12w × 14h
+ *   │               │ │f│ │         │  centred in column, y=20–34
+ *   │               │ └┘ │         │
+ *   ├───────────────┴────┴─────────┤  y=24 (floor line)
+ *   │  plank floor (lighter wood)  │
+ *   └──────────────────────────────┘  y=0
+ */
+
+/* The scene frame override: no sky, no ground — the interior takes over.
+ * The frame border + the inside wall/floor fill the whole scene area. */
+.scene--inside {
+  background: var(--c-wood);
+}
+
+/* Wall: takes the upper 70% of the scene, wood planks with horizontal
+ * seams. Same plank language as the around-view exterior, just seen
+ * from the other side — slightly lighter base so it reads as the
+ * inside surface of the planks. */
+.inside__wall {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 30%;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--c-wood)       0,
+      var(--c-wood)       calc(7px * 3),
+      var(--c-wood-dark)  calc(7px * 3),
+      var(--c-wood-dark)  calc(8px * 3)
+    );
+  /* Subtle inner shadow at the base where the wall meets the floor —
+   * a 2-native-pixel band of ink reads as the floor-wall joint shadow. */
+  box-shadow: inset 0 calc(-2px * 3) 0 var(--c-wood-dark);
+}
+
+/* Floor: bottom 30% of the scene, lighter wood with horizontal plank
+ * seams (planks running parallel to the wall = perpendicular to the
+ * viewer's line of sight, the natural orthographic reading). The
+ * lighter tone separates floor from wall so the eye reads them as
+ * distinct surfaces. */
+.inside__floor {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 30%;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--c-wood-light)  0,
+      var(--c-wood-light)  calc(6px * 3),
+      var(--c-wood)        calc(6px * 3),
+      var(--c-wood)        calc(7px * 3)
+    );
+  /* Floor-line shadow at the top edge — meets the wall's bottom shadow
+   * for a clean joint line. */
+  box-shadow: inset 0 calc(2px * 3) 0 #4a3325;
+}
+
+/* Hearth: centred horizontally on the wall, full height from floor to
+ * wall top. Container is positioned in scene coordinates so all the
+ * pieces (column, mantle, opening, fire, log) sit relative to one
+ * known anchor. */
+.hearth {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: calc(24px * 3);
+  height: calc(80px * 3);
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Brick column: full hearth height from floor to wall top. Pale
+ * stone-brick fill (matches what's seen through the front-view
+ * window from outside — same brick, opposite face). Horizontal
+ * mortar courses every 8 native pixels read as stacked bricks
+ * from this distance. */
+.hearth__column {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      var(--c-sky-mid)    0,
+      var(--c-sky-mid)    calc(7px * 3),
+      var(--c-wood-dark)  calc(7px * 3),
+      var(--c-wood-dark)  calc(8px * 3)
+    );
+  /* One-native-pixel dark trim on left, right, and top — frames the
+   * column against the wood-plank wall. */
+  box-shadow:
+    inset  3px 0 0 var(--c-wood-dark),
+    inset -3px 0 0 var(--c-wood-dark),
+    inset 0  3px 0 var(--c-wood-dark);
+}
+
+/* Mantle: a dark wood shelf above the fire opening, overhanging the
+ * brick column by 4 native pixels on each side. 32 wide × 3 tall
+ * native at the y=46 line (just above the fire opening). */
+.hearth__mantle {
+  position: absolute;
+  left: calc(-4px * 3);
+  bottom: calc(46px * 3);
+  width: calc(32px * 3);
+  height: calc(3px * 3);
+  background: var(--c-wood-dark);
+  /* A 1-native-pixel ink band on top reads as a dark edge / shadow
+   * line, lifting the mantle off the brick visually. */
+  box-shadow: inset 0 calc(1px * 3) 0 var(--c-ink);
+  z-index: 1;
+}
+
+/* Fire opening: a dark rectangle cut into the lower middle of the
+ * column. 12 wide × 14 tall native, centred horizontally within the
+ * 24-wide column, at y=20 to y=34. The dark fill (deep plum-ink)
+ * reads as the firebox interior — the back of the opening, beyond
+ * the flames. */
+.hearth__opening {
+  position: absolute;
+  left: calc(6px * 3);
+  bottom: calc(20px * 3);
+  width: calc(12px * 3);
+  height: calc(14px * 3);
+  background: #1a0d0a;
+  /* Inset 1-native-pixel ink frame on top + sides reads as the
+   * stone lintel and jambs around the opening. */
+  box-shadow:
+    inset  3px 0 0 var(--c-wood-dark),
+    inset -3px 0 0 var(--c-wood-dark),
+    inset 0  3px 0 var(--c-wood-dark);
+}
+
+/* A single dark log resting on the firebox floor — a brown rectangle
+ * spanning most of the opening's width, 2 native pixels tall. Reads
+ * as the burning piece the flames rise from. */
+.hearth__log {
+  position: absolute;
+  left: calc(7px * 3);
+  bottom: calc(20px * 3);
+  width: calc(10px * 3);
+  height: calc(2px * 3);
+  background: #3a2418;
+  /* A pixel-wide highlight on the top edge — warm amber, the lit side
+   * of the log. */
+  box-shadow: inset 0 calc(1px * 3) 0 #6a3a18;
+  z-index: 3;
+}
+
+/* Fire: three stacked rectangles flickering at different rates, giving
+ * a chunky pixel-art flame that breathes inside the opening. Base is
+ * the widest and warmest, flame is mid, tip is the smallest and
+ * brightest. All three sit above the log; the opening's dark fill
+ * shows around them at the edges. */
+.hearth__fire {
+  position: absolute;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.hearth__fire--base {
+  /* 8 wide × 4 tall, sitting on top of the log. Bright orange. */
+  left: calc(8px * 3);
+  bottom: calc(22px * 3);
+  width: calc(8px * 3);
+  height: calc(4px * 3);
+  background: #e8772a;
+  animation: fire-flicker-base 1.2s ease-in-out infinite alternate;
+}
+
+.hearth__fire--flame {
+  /* 6 wide × 4 tall, stacked above the base, centred. Warmer mid-tone. */
+  left: calc(9px * 3);
+  bottom: calc(26px * 3);
+  width: calc(6px * 3);
+  height: calc(4px * 3);
+  background: #f0a040;
+  animation: fire-flicker-flame 0.9s ease-in-out infinite alternate;
+}
+
+.hearth__fire--tip {
+  /* 3 wide × 3 tall, the bright yellow tip licking the top of the
+   * opening's interior. */
+  left: calc(10px * 3 + 1px);
+  bottom: calc(30px * 3);
+  width: calc(3px * 3);
+  height: calc(3px * 3);
+  background: #ffd070;
+  animation: fire-flicker-tip 0.7s ease-in-out infinite alternate;
+}
+
+/* Flicker animations: each layer pulses opacity + a tiny vertical
+ * scale change on its own clock. The mismatched periods (1.2s, 0.9s,
+ * 0.7s) keep the fire from looking like a single rhythmic strobe. */
+@keyframes fire-flicker-base {
+  0%   { opacity: 0.92; transform: scaleY(1.00); }
+  100% { opacity: 1.00; transform: scaleY(1.05); }
+}
+@keyframes fire-flicker-flame {
+  0%   { opacity: 0.85; transform: scaleY(0.92); }
+  100% { opacity: 1.00; transform: scaleY(1.08); }
+}
+@keyframes fire-flicker-tip {
+  0%   { opacity: 0.55; transform: scaleY(0.70); }
+  100% { opacity: 1.00; transform: scaleY(1.10); }
+}
+
+/* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
+@media (max-width: 379px) {
+  .inside__wall {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--c-wood)       0,
+        var(--c-wood)       calc(7px * 2),
+        var(--c-wood-dark)  calc(7px * 2),
+        var(--c-wood-dark)  calc(8px * 2)
+      );
+    box-shadow: inset 0 calc(-2px * 2) 0 var(--c-wood-dark);
+  }
+  .inside__floor {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--c-wood-light)  0,
+        var(--c-wood-light)  calc(6px * 2),
+        var(--c-wood)        calc(6px * 2),
+        var(--c-wood)        calc(7px * 2)
+      );
+    box-shadow: inset 0 calc(2px * 2) 0 #4a3325;
+  }
+  .hearth {
+    width: calc(24px * 2);
+    height: calc(80px * 2);
+  }
+  .hearth__column {
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        var(--c-sky-mid)    0,
+        var(--c-sky-mid)    calc(7px * 2),
+        var(--c-wood-dark)  calc(7px * 2),
+        var(--c-wood-dark)  calc(8px * 2)
+      );
+    box-shadow:
+      inset  2px 0 0 var(--c-wood-dark),
+      inset -2px 0 0 var(--c-wood-dark),
+      inset 0  2px 0 var(--c-wood-dark);
+  }
+  .hearth__mantle {
+    left: calc(-4px * 2);
+    bottom: calc(46px * 2);
+    width: calc(32px * 2);
+    height: calc(3px * 2);
+    box-shadow: inset 0 calc(1px * 2) 0 var(--c-ink);
+  }
+  .hearth__opening {
+    left: calc(6px * 2);
+    bottom: calc(20px * 2);
+    width: calc(12px * 2);
+    height: calc(14px * 2);
+    box-shadow:
+      inset  2px 0 0 var(--c-wood-dark),
+      inset -2px 0 0 var(--c-wood-dark),
+      inset 0  2px 0 var(--c-wood-dark);
+  }
+  .hearth__log {
+    left: calc(7px * 2);
+    bottom: calc(20px * 2);
+    width: calc(10px * 2);
+    height: calc(2px * 2);
+    box-shadow: inset 0 calc(1px * 2) 0 #6a3a18;
+  }
+  .hearth__fire--base {
+    left: calc(8px * 2);
+    bottom: calc(22px * 2);
+    width: calc(8px * 2);
+    height: calc(4px * 2);
+  }
+  .hearth__fire--flame {
+    left: calc(9px * 2);
+    bottom: calc(26px * 2);
+    width: calc(6px * 2);
+    height: calc(4px * 2);
+  }
+  .hearth__fire--tip {
+    left: calc(10px * 2 + 1px);
+    bottom: calc(30px * 2);
+    width: calc(3px * 2);
+    height: calc(3px * 2);
+  }
+}

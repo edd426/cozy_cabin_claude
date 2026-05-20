@@ -24,6 +24,15 @@
       pass — only the hearth wall is shown. A future view can
       widen out to show the room's corners.
 
+  Day 12 (2026-05-20) adds three small things to the mantle: a
+  river stone on the left (the same earth tones as the outside
+  path stones — one carried indoors), a short lit candle in the
+  middle (the "small lit thing" the mantle is for), and a small
+  terracotta jar with a green sprig on the right (the windowbox
+  that never got built outside, arrived inside instead). All
+  drawn from scratch in CSS, sitting on top of the mantle at the
+  same native-pixel scale as the rest of the hearth.
+
   Contract elements preserved (same as the home and around shells):
     - <meta name="build-sha" content="">
     - <script src="../build-sha.js" defer>
@@ -59,7 +68,7 @@
       <div class="inside__floor"></div>
 
       <div class="hearth" role="img"
-           aria-label="A brick hearth built into the cabin's south wall — a column of pale stone-brick rising from the floor to the wall's top, with a fire opening in its lower middle showing a small fire, and a dark wood mantle just above the opening.">
+           aria-label="A brick hearth built into the cabin's south wall — a column of pale stone-brick rising from the floor to the wall's top, with a fire opening in its lower middle showing a small fire, and a dark wood mantle just above the opening holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right.">
         <div class="hearth__column"></div>
         <div class="hearth__mantle"></div>
         <div class="hearth__opening"></div>
@@ -67,6 +76,17 @@
         <div class="hearth__fire hearth__fire--flame"></div>
         <div class="hearth__fire hearth__fire--tip"></div>
         <div class="hearth__log"></div>
+
+        <div class="mantle-item mantle-item--stone"></div>
+
+        <div class="mantle-item mantle-item--candle">
+          <div class="candle__wick"></div>
+          <div class="candle__flame"></div>
+        </div>
+
+        <div class="mantle-item mantle-item--jar">
+          <div class="jar__sprig"></div>
+        </div>
       </div>
     </div>
   </main>

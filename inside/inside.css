@@ -238,6 +238,134 @@
   100% { opacity: 1.00; transform: scaleY(1.10); }
 }
 
+/* ─── Mantle objects (Day 12) ───────────────────────────────────────
+ *
+ * Three small things sitting on top of the mantle. The mantle's top
+ * surface is at hearth-local y=49 (mantle bottom 46 + height 3), so
+ * every object's `bottom` is calc(49px * 3). Each object is
+ * positioned in hearth-local x-coords (mantle spans x=-4 to x=28).
+ *
+ *   left-edge ─┐                                    ┌─ right-edge
+ *              │   ▢ stone   🕯 candle      ⚱ jar   │
+ *              │                                    │
+ *   x = -4    -2          10  13         20    24  28
+ *
+ * Stone (left, x=-2 to x=3): a smooth oblong river stone, same
+ * earth-brown register as the outside path. The hand brought one
+ * inside.
+ * Candle (middle, x=10 to x=13): a short pillar with a tiny lit
+ * flame. The "small lit thing" the mantle is for.
+ * Jar (right, x=20 to x=24): a terracotta pot with a single green
+ * sprig — the windowbox that never made it outdoors, here instead. */
+
+.mantle-item {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2; /* above column + opening, below fire (fire is z=4) */
+}
+
+/* Stone: 5w × 3h native, same #c19465 fill and #6e4a3a one-pixel
+ * shadow band beneath as the outside path stones. */
+.mantle-item--stone {
+  left: calc(-2px * 3);
+  bottom: calc(49px * 3);
+  width: calc(5px * 3);
+  height: calc(3px * 3);
+  background: #c19465;
+  box-shadow: 0 3px 0 #6e4a3a; /* 1 native px below */
+}
+
+/* Candle body: 3w × 6h native, cream wax. A 1-native-px darker band
+ * along the bottom suggests a base shadow against the mantle. */
+.mantle-item--candle {
+  left: calc(10px * 3);
+  bottom: calc(49px * 3);
+  width: calc(3px * 3);
+  height: calc(6px * 3);
+  background: var(--c-cream);
+  /* Inset 1-native-px on the right gives the candle a soft warm
+   * shadow side, so it reads as a 3D cylinder rather than a flat
+   * rectangle. */
+  box-shadow: inset calc(-1px * 3) 0 0 var(--c-cream-soft);
+}
+
+/* Wick: 1×1 native, dark, sitting on top centre of the wax body. */
+.candle__wick {
+  position: absolute;
+  left: calc(1px * 3);
+  bottom: calc(6px * 3);
+  width: calc(1px * 3);
+  height: calc(1px * 3);
+  background: var(--c-ink);
+}
+
+/* Candle flame: 1w × 2h native, warm yellow, just above the wick.
+ * Flickers on its own period (1.7s) — distinct from the fire's
+ * 1.2 / 0.9 / 0.7s rhythms so the eye doesn't lock the two together. */
+.candle__flame {
+  position: absolute;
+  left: calc(1px * 3);
+  bottom: calc(7px * 3);
+  width: calc(1px * 3);
+  height: calc(2px * 3);
+  background: #ffd070; /* matches the fire's tip — same lit-thing register */
+  animation: candle-flicker 1.7s ease-in-out infinite alternate;
+  transform-origin: center bottom;
+}
+
+@keyframes candle-flicker {
+  0%   { opacity: 0.78; transform: scaleY(0.85); }
+  100% { opacity: 1.00; transform: scaleY(1.10); }
+}
+
+/* Jar: 4w × 4h native, terracotta — same #c19465 as the path stones
+ * and the river stone above. Earth carried up onto a wood mantle. */
+.mantle-item--jar {
+  left: calc(20px * 3);
+  bottom: calc(49px * 3);
+  width: calc(4px * 3);
+  height: calc(4px * 3);
+  background: #c19465;
+  /* Inset 1-native-px darker band along the bottom gives the jar a
+   * soft base shadow, and the top trim reads as the lip of the pot. */
+  box-shadow:
+    inset 0 calc(-1px * 3) 0 #6e4a3a,
+    inset 0 calc( 1px * 3) 0 var(--c-wood-light);
+}
+
+/* Sprig: a thin sage stem rising from the jar's mouth, with two
+ * small leaves on either side. The stem is a 1×5 native rectangle
+ * (positioned relative to the jar's box), and the two leaves are
+ * 1×1 native squares painted by the stem's ::before and ::after. */
+.jar__sprig {
+  position: absolute;
+  /* Jar width is 4 native; stem sits one native-px in from the
+   * jar's left edge, so it lands centred-ish in the jar's mouth. */
+  left: calc(1px * 3);
+  bottom: calc(4px * 3);
+  width: calc(1px * 3);
+  height: calc(5px * 3);
+  background: var(--c-grass-shadow);
+}
+.jar__sprig::before,
+.jar__sprig::after {
+  content: "";
+  position: absolute;
+  width: calc(1px * 3);
+  height: calc(1px * 3);
+  background: var(--c-grass);
+}
+/* Right leaf: 1 native-px right of stem, 1 native-px up from stem base. */
+.jar__sprig::before {
+  left: calc(1px * 3);
+  bottom: calc(2px * 3);
+}
+/* Left leaf: 1 native-px left of stem, 3 native-px up from stem base. */
+.jar__sprig::after {
+  left: calc(-1px * 3);
+  bottom: calc(4px * 3);
+}
+
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
 @media (max-width: 379px) {
   .inside__wall {
@@ -321,5 +449,61 @@
     bottom: calc(30px * 2);
     width: calc(3px * 2);
     height: calc(3px * 2);
+  }
+
+  /* Mantle objects rebased to the 2x scale. */
+  .mantle-item--stone {
+    left: calc(-2px * 2);
+    bottom: calc(49px * 2);
+    width: calc(5px * 2);
+    height: calc(3px * 2);
+    box-shadow: 0 2px 0 #6e4a3a;
+  }
+  .mantle-item--candle {
+    left: calc(10px * 2);
+    bottom: calc(49px * 2);
+    width: calc(3px * 2);
+    height: calc(6px * 2);
+    box-shadow: inset calc(-1px * 2) 0 0 var(--c-cream-soft);
+  }
+  .candle__wick {
+    left: calc(1px * 2);
+    bottom: calc(6px * 2);
+    width: calc(1px * 2);
+    height: calc(1px * 2);
+  }
+  .candle__flame {
+    left: calc(1px * 2);
+    bottom: calc(7px * 2);
+    width: calc(1px * 2);
+    height: calc(2px * 2);
+  }
+  .mantle-item--jar {
+    left: calc(20px * 2);
+    bottom: calc(49px * 2);
+    width: calc(4px * 2);
+    height: calc(4px * 2);
+    box-shadow:
+      inset 0 calc(-1px * 2) 0 #6e4a3a,
+      inset 0 calc( 1px * 2) 0 var(--c-wood-light);
+  }
+  .jar__sprig {
+    left: calc(1px * 2);
+    bottom: calc(4px * 2);
+    width: calc(1px * 2);
+    height: calc(5px * 2);
+  }
+  .jar__sprig::before,
+  .jar__sprig::after {
+    width: calc(1px * 2);
+    height: calc(1px * 2);
+  }
+  .jar__sprig::before {
+    left: calc(1px * 2);
+    bottom: calc(2px * 2);
+  }
+  .jar__sprig::after {
+    left: calc(-1px * 2);
+    bottom: calc(4px * 2);
   }
 }

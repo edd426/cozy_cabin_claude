@@ -366,6 +366,99 @@
   bottom: calc(4px * 3);
 }
 
+/* ─── Chair (Day 13) ────────────────────────────────────────────────
+ *
+ * A small wooden chair on the floor to the left of the hearth, side-
+ * view, facing right (toward the fire). The first piece of the room
+ * beyond the hearth wall. Same wood-dark register as the mantle so
+ * the two read as the same kind of furniture.
+ *
+ * Native pixel layout (6 wide × 14 tall, anchored at scene-bottom):
+ *
+ *     ##........   y=13  finial cap (2w × 1h, jutting 1px right of stile)
+ *     #.........   y=12
+ *     #.........   y=11
+ *     #.........   y=10
+ *     #.........   y=9
+ *     #.........   y=8   back stile (1w, full 14 tall, leg+back in one)
+ *     #.........   y=7
+ *     ######....   y=6   seat (6w × 1h)
+ *     #....#....   y=5
+ *     #....#....   y=4
+ *     #....#....   y=3   front leg (1w × 6h at column 5)
+ *     #....#....   y=2
+ *     #....#....   y=1
+ *     #....#....   y=0   floor line (scene bottom)
+ *     0123456789
+ *
+ * Positioned to the left of the hearth column. Hearth's left edge is
+ * at scene-x = 50% − (12px * 3) = 50% − 36px (3x scale). The chair's
+ * right edge sits ~14px left of that, leaving a small gap so the
+ * chair doesn't crowd the brick. Chair anchors via `right` on the
+ * left half of the scene so its position is described relative to
+ * the hearth, not the scene edge.
+ */
+.chair {
+  position: absolute;
+  bottom: 0;
+  /* Right edge of chair = 50% − 50px (= 14px gap left of hearth's
+   * left edge at 50% − 36px). With width 18px (= 6px × 3), the
+   * chair's left edge lands at 50% − 68px. */
+  right: calc(50% + 50px);
+  width: calc(6px * 3);
+  height: calc(14px * 3);
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Back stile: the back leg + backrest in one continuous vertical
+ * piece. 1 native wide, full chair height (14). Anchored at the
+ * chair's left edge. */
+.chair__back-stile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: calc(1px * 3);
+  height: calc(14px * 3);
+  background: var(--c-wood-dark);
+}
+
+/* Front leg: 1 native wide, 6 native tall, at the chair's right
+ * edge (column 5 in native coords). Stops at the seat. */
+.chair__front-leg {
+  position: absolute;
+  bottom: 0;
+  left: calc(5px * 3);
+  width: calc(1px * 3);
+  height: calc(6px * 3);
+  background: var(--c-wood-dark);
+}
+
+/* Seat: 6 native wide × 1 native tall, at y=6. Spans both legs. */
+.chair__seat {
+  position: absolute;
+  bottom: calc(6px * 3);
+  left: 0;
+  width: calc(6px * 3);
+  height: calc(1px * 3);
+  background: var(--c-wood-dark);
+}
+
+/* Finial: a small cap on top of the back stile, 2 native wide × 1
+ * native tall at y=13. Juts 1 native pixel to the right of the
+ * stile, giving the backrest a tiny shoulder you can read at this
+ * scale. */
+.chair__finial {
+  position: absolute;
+  bottom: calc(13px * 3);
+  left: 0;
+  width: calc(2px * 3);
+  height: calc(1px * 3);
+  background: var(--c-wood-dark);
+}
+
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
 @media (max-width: 379px) {
   .inside__wall {
@@ -505,5 +598,34 @@
   .jar__sprig::after {
     left: calc(-1px * 2);
     bottom: calc(4px * 2);
+  }
+
+  /* Chair rebased to the 2x scale. The gap-to-hearth (~14px desktop)
+   * scales to ~10px on mobile-narrow so the relative spacing reads
+   * the same; chair right edge sits at 50% − 34px (hearth's left
+   * edge at the 2x scale is 50% − 24px). */
+  .chair {
+    right: calc(50% + 34px);
+    width: calc(6px * 2);
+    height: calc(14px * 2);
+  }
+  .chair__back-stile {
+    width: calc(1px * 2);
+    height: calc(14px * 2);
+  }
+  .chair__front-leg {
+    left: calc(5px * 2);
+    width: calc(1px * 2);
+    height: calc(6px * 2);
+  }
+  .chair__seat {
+    bottom: calc(6px * 2);
+    width: calc(6px * 2);
+    height: calc(1px * 2);
+  }
+  .chair__finial {
+    bottom: calc(13px * 2);
+    width: calc(2px * 2);
+    height: calc(1px * 2);
   }
 }

@@ -459,6 +459,83 @@
   background: var(--c-wood-dark);
 }
 
+/* ─── Woodpile (Day 14) ────────────────────────────────────────────
+ *
+ * A short stack of cut firewood on the floor to the right of the
+ * hearth, mirroring the chair's anchor on the left. Same gap from
+ * the hearth (~14px desktop / ~10px mobile-narrow) — the two pieces
+ * answer each other across the brick column without mirroring each
+ * other's *shape*. The chair on the left says *sat in*; the woodpile
+ * on the right says *used* — different registers from a person who
+ * lives here alone and uses each side for a different thing.
+ *
+ * Native pixel layout (7 wide × 6 tall, anchored at scene-bottom):
+ *
+ *     ███████   y=5  log 3 highlight (lit cylinder top)
+ *     e██████   y=4  log 3 body, with cream cut-end (e) on left
+ *     ███████   y=3  log 2 highlight
+ *     e██████   y=2  log 2 body, with cream cut-end
+ *     ███████   y=1  log 1 highlight
+ *     ███████   y=0  log 1 body (cut end faces away; no marker)
+ *     0123456
+ *
+ * Wood register matches the burning log inside the fire (#3a2418 /
+ * #6a3a18) so the pile reads as the same kind of wood that's
+ * already burning — a supply for the fire that's lit. Cream cut-end
+ * pixels on the top two logs mark the sawn ends; the bottom log's
+ * end faces the other way (or is hidden by the floor's wood
+ * register) so it gets no marker — the asymmetry keeps the pile
+ * from reading as a perfectly-aligned grid. */
+.woodpile {
+  position: absolute;
+  bottom: 0;
+  /* Left edge of woodpile = 50% + 50px (= 14px gap right of hearth's
+   * right edge at 50% + 36px). Mirrors the chair's right-edge anchor
+   * at 50% + 50px. */
+  left: calc(50% + 50px);
+  width: calc(7px * 3);
+  height: calc(6px * 3);
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  /* Three stacked logs, each 2 native tall: a 1-px highlight band
+   * on top of a 1-px dark body. Repeats every 2 native pixels —
+   * with height 6, that's exactly 3 logs. */
+  background: repeating-linear-gradient(
+    to bottom,
+    #6a3a18 0,
+    #6a3a18 calc(1px * 3),
+    #3a2418 calc(1px * 3),
+    #3a2418 calc(2px * 3)
+  );
+}
+
+/* Cut-end of the topmost log: a 1-native-px cream square on the
+ * left edge of log 3's dark body (y=4 in native coords = 1 native
+ * px from the top of the pile). */
+.woodpile::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(1px * 3);
+  width: calc(1px * 3);
+  height: calc(1px * 3);
+  background: var(--c-cream-soft);
+}
+
+/* Cut-end of the middle log: same pixel, 2 native rows lower (y=2
+ * in native = 3 native px from the top). */
+.woodpile::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(3px * 3);
+  width: calc(1px * 3);
+  height: calc(1px * 3);
+  background: var(--c-cream-soft);
+}
+
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
 @media (max-width: 379px) {
   .inside__wall {
@@ -626,6 +703,32 @@
   .chair__finial {
     bottom: calc(13px * 2);
     width: calc(2px * 2);
+    height: calc(1px * 2);
+  }
+
+  /* Woodpile rebased to 2x. The hearth's right edge is at 50% + 24px
+   * on mobile-narrow; the woodpile's left edge sits at 50% + 34px
+   * (~10px gap, mirroring the chair's gap on this scale). */
+  .woodpile {
+    left: calc(50% + 34px);
+    width: calc(7px * 2);
+    height: calc(6px * 2);
+    background: repeating-linear-gradient(
+      to bottom,
+      #6a3a18 0,
+      #6a3a18 calc(1px * 2),
+      #3a2418 calc(1px * 2),
+      #3a2418 calc(2px * 2)
+    );
+  }
+  .woodpile::before {
+    top: calc(1px * 2);
+    width: calc(1px * 2);
+    height: calc(1px * 2);
+  }
+  .woodpile::after {
+    top: calc(3px * 2);
+    width: calc(1px * 2);
     height: calc(1px * 2);
   }
 }

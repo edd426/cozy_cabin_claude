@@ -545,14 +545,12 @@
  * lives here, currently elsewhere; the cloak is the trace of their
  * body.
  *
- * Native pixel layout (6 wide × 10 tall total, with the peg sitting
+ * Native pixel layout (6 wide × 8 tall total, with the peg sitting
  * inside the top row of the envelope):
  *
- *     ......   y=9    air above peg
- *     .####.   y=8    peg (4w × 1h, dark wood; centred 1px in from
+ *     .####.   y=7    peg (4w × 1h, dark wood; centred 1px in from
  *                     each edge)
- *     ######   y=7    cloak shoulders (full 6 wide)
- *     ######   y=6
+ *     ######   y=6    cloak shoulders (full 6 wide)
  *     ######   y=5
  *     ######   y=4
  *     ######   y=3
@@ -565,6 +563,18 @@
  * at 3x / 12px at 2x), anchored at the same `right: 50% + 50px` (3x)
  * / `right: 50% + 34px` (2x). The chair's vertical column extends
  * upward into the wall here.
+ *
+ * Vertical layout: the scene splits into a 70% wall (upper) and 30%
+ * floor strip (lower). At the 2x mobile-narrow render the floor strip
+ * is ~75px tall, which means anything with `bottom < 38 native px` at
+ * 2x sits visibly inside the floor strip. The cloak's bottom is at
+ * y=38 native (just clearing the floor-wall joint), and the peg sits
+ * at y=45 native — 1 native px under the mantle bottom at y=46. The
+ * cloak occupies the full available wall band between joint and
+ * mantle without overlapping either; an earlier 9-native-tall draft
+ * dangled the hem into the floor strip and the joint line cut across
+ * it visibly, which was the giveaway that the wall band is tighter
+ * than I'd estimated.
  *
  * Color: --c-plum (#6e4565). Introduces a new tone into a room that
  * has so far been brown / cream / sage / amber — soft and warm-dark,
@@ -582,22 +592,17 @@
 
 .coat {
   position: absolute;
-  /* Bottom at y=33 native: lifts the cloak above the fire opening's top
-   * (fire opening tops out at y=34) so the cloak occupies the mid-upper
-   * wall band rather than reading as "another object at fire height."
-   * Cloak spans y=33–42; peg at y=42; mantle bottom at y=46, leaving 4
-   * native px of breathing room. */
-  bottom: calc(33px * 3);
+  bottom: calc(38px * 3);     /* just above the floor-wall joint at the 2x render */
   right: calc(50% + 50px);    /* same right as chair — shared vertical column */
   width: calc(6px * 3);       /* 6 native = matches chair envelope */
-  height: calc(9px * 3);      /* cloak only; peg adds 1 native on top */
+  height: calc(7px * 3);      /* cloak only; peg adds 1 native on top */
   z-index: 2;
   pointer-events: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
 
-/* Cloak body: 6 wide × 9 tall, plum fill. Top band lighter (cloth
+/* Cloak body: 6 wide × 7 tall, plum fill. Top band lighter (cloth
  * fold over the peg), left band darker (away from the firelight to
  * the right). */
 .coat__cloak {
@@ -605,7 +610,7 @@
   left: 0;
   bottom: 0;
   width: calc(6px * 3);
-  height: calc(9px * 3);
+  height: calc(7px * 3);
   background: var(--c-plum);
   box-shadow:
     inset 0 calc(1px * 3) 0 var(--c-purple-soft),
@@ -628,15 +633,14 @@
 .coat__cloak::before { left: 0; }
 .coat__cloak::after  { right: 0; }
 
-/* Peg: 4 native wide × 1 native tall, dark wood, sitting one native-px
- * above the cloak's top edge. Centred 1 native-px in from each side
- * of the cloak envelope, so the peg ends are inside the silhouette
- * of the cloth — the cloth reads as draped over the peg, not pierced
- * by it. */
+/* Peg: 4 native wide × 1 native tall, dark wood, sitting at the
+ * cloak's top edge. Centred 1 native-px in from each side of the
+ * cloak envelope, so the peg ends are inside the silhouette of the
+ * cloth — the cloth reads as draped over the peg, not pierced by it. */
 .coat__peg {
   position: absolute;
   left: calc(1px * 3);
-  bottom: calc(9px * 3);       /* 1 native-px above cloak top */
+  bottom: calc(7px * 3);       /* flush with cloak's top edge */
   width: calc(4px * 3);
   height: calc(1px * 3);
   background: var(--c-wood-dark);
@@ -843,14 +847,14 @@
    * mobile-narrow; the coat shares that anchor so the two stack in one
    * vertical column. */
   .coat {
-    bottom: calc(33px * 2);
+    bottom: calc(38px * 2);
     right: calc(50% + 34px);
     width: calc(6px * 2);
-    height: calc(9px * 2);
+    height: calc(7px * 2);
   }
   .coat__cloak {
     width: calc(6px * 2);
-    height: calc(9px * 2);
+    height: calc(7px * 2);
     box-shadow:
       inset 0 calc(1px * 2) 0 var(--c-purple-soft),
       inset calc(1px * 2) 0 0 #4a2e44;
@@ -862,7 +866,7 @@
   }
   .coat__peg {
     left: calc(1px * 2);
-    bottom: calc(9px * 2);
+    bottom: calc(7px * 2);
     width: calc(4px * 2);
     height: calc(1px * 2);
   }

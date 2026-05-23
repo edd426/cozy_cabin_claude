@@ -536,6 +536,113 @@
   background: var(--c-cream-soft);
 }
 
+/* ─── Coat on peg (Day 15) ──────────────────────────────────────────
+ *
+ * A small cloak hanging from a wooden peg on the wall above the chair.
+ * The first thing on the room's mid-wall band — between the floor
+ * (chair, woodpile) and the mantle (stone, candle, jar). The chair
+ * directly below says *sat in*; the cloak says *worn*. A person who
+ * lives here, currently elsewhere; the cloak is the trace of their
+ * body.
+ *
+ * Native pixel layout (6 wide × 10 tall total, with the peg sitting
+ * inside the top row of the envelope):
+ *
+ *     ......   y=9    air above peg
+ *     .####.   y=8    peg (4w × 1h, dark wood; centred 1px in from
+ *                     each edge)
+ *     ######   y=7    cloak shoulders (full 6 wide)
+ *     ######   y=6
+ *     ######   y=5
+ *     ######   y=4
+ *     ######   y=3
+ *     ######   y=2
+ *     ######   y=1
+ *     .####.   y=0    hem (4 wide; tapered ends suggest drape)
+ *     012345
+ *
+ * Horizontal envelope matches the chair below (6 native wide = 18px
+ * at 3x / 12px at 2x), anchored at the same `right: 50% + 50px` (3x)
+ * / `right: 50% + 34px` (2x). The chair's vertical column extends
+ * upward into the wall here.
+ *
+ * Color: --c-plum (#6e4565). Introduces a new tone into a room that
+ * has so far been brown / cream / sage / amber — soft and warm-dark,
+ * not loud. The 1-native-px lighter band along the top suggests
+ * cloth catching light where it folds over the peg; the 1-native-px
+ * darker band along the left suggests the side away from the fire
+ * (the fire is to the right of the chair, behind the hearth column).
+ * The hem narrows by 1 native-px on each side, sketched via two 1-px
+ * pseudo-element corner cuts at the bottom.
+ *
+ * Cross-view geometry (RULES.md Article XIII): the coat is on the
+ * inside of the south wall (the same wall the front-view window
+ * cuts through). It is not visible from any other view — no
+ * geometry to compose with outside this scene. */
+
+.coat {
+  position: absolute;
+  /* Bottom at y=33 native: lifts the cloak above the fire opening's top
+   * (fire opening tops out at y=34) so the cloak occupies the mid-upper
+   * wall band rather than reading as "another object at fire height."
+   * Cloak spans y=33–42; peg at y=42; mantle bottom at y=46, leaving 4
+   * native px of breathing room. */
+  bottom: calc(33px * 3);
+  right: calc(50% + 50px);    /* same right as chair — shared vertical column */
+  width: calc(6px * 3);       /* 6 native = matches chair envelope */
+  height: calc(9px * 3);      /* cloak only; peg adds 1 native on top */
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Cloak body: 6 wide × 9 tall, plum fill. Top band lighter (cloth
+ * fold over the peg), left band darker (away from the firelight to
+ * the right). */
+.coat__cloak {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: calc(6px * 3);
+  height: calc(9px * 3);
+  background: var(--c-plum);
+  box-shadow:
+    inset 0 calc(1px * 3) 0 var(--c-purple-soft),
+    inset calc(1px * 3) 0 0 #4a2e44;
+}
+
+/* Hem cuts: two 1-native-px squares at the bottom corners, painted
+ * the wall colour, that "take a pixel off" each corner so the hem
+ * reads as draped rather than as a hard rectangle. The wall behind
+ * shows through these cuts because they match its base tone. */
+.coat__cloak::before,
+.coat__cloak::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: calc(1px * 3);
+  height: calc(1px * 3);
+  background: var(--c-wood);
+}
+.coat__cloak::before { left: 0; }
+.coat__cloak::after  { right: 0; }
+
+/* Peg: 4 native wide × 1 native tall, dark wood, sitting one native-px
+ * above the cloak's top edge. Centred 1 native-px in from each side
+ * of the cloak envelope, so the peg ends are inside the silhouette
+ * of the cloth — the cloth reads as draped over the peg, not pierced
+ * by it. */
+.coat__peg {
+  position: absolute;
+  left: calc(1px * 3);
+  bottom: calc(9px * 3);       /* 1 native-px above cloak top */
+  width: calc(4px * 3);
+  height: calc(1px * 3);
+  background: var(--c-wood-dark);
+  z-index: 3;                   /* above the cloak so the peg edges are visible */
+}
+
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
 @media (max-width: 379px) {
   .inside__wall {
@@ -729,6 +836,34 @@
   .woodpile::after {
     top: calc(3px * 2);
     width: calc(1px * 2);
+    height: calc(1px * 2);
+  }
+
+  /* Coat rebased to 2x. The chair's right edge sits at 50% + 34px on
+   * mobile-narrow; the coat shares that anchor so the two stack in one
+   * vertical column. */
+  .coat {
+    bottom: calc(33px * 2);
+    right: calc(50% + 34px);
+    width: calc(6px * 2);
+    height: calc(9px * 2);
+  }
+  .coat__cloak {
+    width: calc(6px * 2);
+    height: calc(9px * 2);
+    box-shadow:
+      inset 0 calc(1px * 2) 0 var(--c-purple-soft),
+      inset calc(1px * 2) 0 0 #4a2e44;
+  }
+  .coat__cloak::before,
+  .coat__cloak::after {
+    width: calc(1px * 2);
+    height: calc(1px * 2);
+  }
+  .coat__peg {
+    left: calc(1px * 2);
+    bottom: calc(9px * 2);
+    width: calc(4px * 2);
     height: calc(1px * 2);
   }
 }

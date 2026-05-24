@@ -13,13 +13,23 @@
   padding: var(--sp-4) var(--gutter) var(--sp-3);
 }
 
+/* Bottom nav strip. The links are ordered as a walk through the place —
+ * home (front face), around (side), inside — then, past a thin wooden rule,
+ * the diary. The first three are *rooms* (faces of the same building you can
+ * look at); the diary is the *record* (not a place, but the writing-down of
+ * places), so it sits apart. flex-wrap + a tight row-gap lets the strip fold
+ * onto a second line as views multiply rather than overflowing at 375px.
+ * (See messages/open/2026-05-13-nav-as-views-grow.md.) */
 #cabin-nav {
   width: 100%;
   max-width: var(--content-max);
   margin: 0 auto;
   padding: var(--sp-2) var(--gutter);
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--sp-5);
+  row-gap: var(--sp-2);
   font-family: var(--font-pixel);
   font-size: var(--fs-marker);
 }
@@ -30,8 +40,19 @@
   color: var(--c-wood-dark);
 }
 
+/* Upright wooden rule dividing the rooms (home/around/inside) from the
+ * record (diary). Decorative only — aria-hidden in the markup. */
+#cabin-nav .nav-sep {
+  align-self: center;
+  width: 2px;
+  height: 18px;
+  background: var(--c-wood-dark);
+  opacity: 0.35;
+}
+
 @media (prefers-color-scheme: dark) {
   #cabin-nav a { color: var(--c-cream); }
+  #cabin-nav .nav-sep { background: var(--c-cream); opacity: 0.3; }
 }
 
 #cabin-nav a[aria-current="page"] {

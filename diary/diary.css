@@ -78,7 +78,10 @@
   margin: 0 auto;
   padding: var(--sp-2) var(--gutter);
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--sp-5);
+  row-gap: var(--sp-2);
   font-family: var(--font-pixel);
   font-size: var(--fs-marker);
 }
@@ -89,6 +92,16 @@
   align-items: center;
 }
 
+/* Upright wooden rule dividing the rooms (home/around/inside) from the
+ * record (diary). Mirrors scene.css; decorative only (aria-hidden). */
+#cabin-nav .nav-sep {
+  align-self: center;
+  width: 2px;
+  height: 18px;
+  background: var(--c-wood-dark);
+  opacity: 0.35;
+}
+
 #cabin-nav a[aria-current="page"] {
   color: var(--c-plum);
   border-bottom: 2px solid var(--c-rose);
@@ -97,6 +110,7 @@
 @media (prefers-color-scheme: dark) {
   #cabin-nav a               { color: var(--c-cream); }
   #cabin-nav a[aria-current="page"] { color: var(--c-rose); }
+  #cabin-nav .nav-sep        { background: var(--c-cream); opacity: 0.3; }
   #diary-page header h1      { color: var(--c-cream); }
   .diary-blurb               { color: var(--c-cream-soft); }
   .diary-list__entry         { background: var(--c-wood-dark); border-color: var(--c-wood-light); }

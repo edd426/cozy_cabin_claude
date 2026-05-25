@@ -266,6 +266,48 @@
  * off-frame. */
 .path-stone--5 { width: 32px; height: 5px; bottom: 0;                left: calc(50% + 132px); }
 
+/* A small clump of wildflowers at the foot of the cabin's left wall —
+ * soft and stationary, the counterweight to the rising smoke and the path
+ * leaving to the right that the front face had been wanting since Day 8.
+ * Drawn from scratch in the same idiom as the smoke and path: each flower
+ * is a thin green stem (foliage-shadow green) carrying a small rose blossom
+ * with a warm near-white pollen centre, built from a 3px centre block plus
+ * four box-shadow petals. Three stems at staggered heights and depths read
+ * as a tuft rather than a single stalk. Rose (#d77a76, the palette's
+ * "flowers" accent) is the first deliberate bloom-colour outside — every
+ * other colour out here is wood, grass, or sky. */
+.sprite--flowers {
+  inset: 0;
+  z-index: 1;
+}
+
+.flower {
+  position: absolute;
+  width: 2px;
+  background: var(--c-grass-shadow);
+}
+
+.flower__head {
+  position: absolute;
+  top: -3px;
+  left: -1px;            /* centre the 3px head over the 2px stem */
+  width: 3px;
+  height: 3px;
+  background: #fff8ec;   /* pollen centre, same warm near-white as the smoke */
+  box-shadow:
+    -3px  0   0 var(--c-rose),
+     3px  0   0 var(--c-rose),
+     0   -3px 0 var(--c-rose),
+     0    3px 0 var(--c-rose);
+}
+
+/* Flower 1 — tallest, set back (higher = further in this flat projection). */
+.flower--1 { height: 15px; bottom: calc(6% + 6px); left: calc(50% - 88px); }
+/* Flower 2 — mid height, furthest left. */
+.flower--2 { height: 12px; bottom: calc(6% + 2px); left: calc(50% - 96px); }
+/* Flower 3 — shortest, nearest the viewer and closest to the wall. */
+.flower--3 { height: 10px; bottom: 6%;             left: calc(50% - 80px); }
+
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
   .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
@@ -280,4 +322,10 @@
   .path-stone--3       { bottom: calc(8% + 28px); left: calc(50% + 66px); }
   .path-stone--4       { bottom: calc(8% + 8px);  left: calc(50% + 80px); }
   .path-stone--5       { bottom: 0;               left: calc(50% + 92px); }
+  /* Flowers rebased to the 2x cabin (left wall edge at 50% - 48px, foot at
+   * 8%). Stem widths and the 3px blossom blocks stay constant — pixel art
+   * needs its minimum feature width to stay legible at the smaller scale. */
+  .flower--1           { height: 10px; bottom: calc(8% + 4px); left: calc(50% - 60px); }
+  .flower--2           { height: 8px;  bottom: calc(8% + 2px); left: calc(50% - 66px); }
+  .flower--3           { height: 7px;  bottom: 8%;             left: calc(50% - 54px); }
 }

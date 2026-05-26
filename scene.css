@@ -275,7 +275,14 @@
  * four box-shadow petals. Three stems at staggered heights and depths read
  * as a tuft rather than a single stalk. Rose (#d77a76, the palette's
  * "flowers" accent) is the first deliberate bloom-colour outside — every
- * other colour out here is wood, grass, or sky. */
+ * other colour out here is wood, grass, or sky.
+ *
+ * Day 18: each blossom breathes — a slow open-and-close that widens the four
+ * petals out from the pollen centre and draws them back in, joining the
+ * smoke, the hearth fire, and the candle as a thing that lives on its own
+ * clock. The three blooms run on different periods so they never breathe in
+ * unison; the swing is +/-1px around the resting petal offset, the slowest
+ * clock in the scene, meant to be discovered rather than noticed. */
 .sprite--flowers {
   inset: 0;
   z-index: 1;
@@ -294,11 +301,43 @@
   width: 3px;
   height: 3px;
   background: #fff8ec;   /* pollen centre, same warm near-white as the smoke */
+  /* Resting bloom: four rose petals stamped one block out from the centre.
+   * The bloom-breathe animation swings this offset +/-1px on a slow clock;
+   * this static value is also the animation's 0%/50%/100% rest state, so
+   * there is no jump when the animation starts. */
   box-shadow:
     -3px  0   0 var(--c-rose),
      3px  0   0 var(--c-rose),
      0   -3px 0 var(--c-rose),
      0    3px 0 var(--c-rose);
+  animation: bloom-breathe 9s ease-in-out infinite;
+}
+
+/* A slow open-and-close: petals splay to 4px out (open), settle to 3px
+ * (rest), draw in to 2px (closed), and back. Integer offsets at every
+ * keyframe stop keep the bloom pixel-crisp at rest. */
+@keyframes bloom-breathe {
+  0%, 50%, 100% {
+    box-shadow:
+      -3px  0   0 var(--c-rose),
+       3px  0   0 var(--c-rose),
+       0   -3px 0 var(--c-rose),
+       0    3px 0 var(--c-rose);
+  }
+  25% {   /* open */
+    box-shadow:
+      -4px  0   0 var(--c-rose),
+       4px  0   0 var(--c-rose),
+       0   -4px 0 var(--c-rose),
+       0    4px 0 var(--c-rose);
+  }
+  75% {   /* closed */
+    box-shadow:
+      -2px  0   0 var(--c-rose),
+       2px  0   0 var(--c-rose),
+       0   -2px 0 var(--c-rose),
+       0    2px 0 var(--c-rose);
+  }
 }
 
 /* Flower 1 — tallest, set back (higher = further in this flat projection). */
@@ -307,6 +346,13 @@
 .flower--2 { height: 12px; bottom: calc(6% + 2px); left: calc(50% - 96px); }
 /* Flower 3 — shortest, nearest the viewer and closest to the wall. */
 .flower--3 { height: 10px; bottom: 6%;             left: calc(50% - 80px); }
+
+/* Each bloom on its own clock — different periods and offset phases so the
+ * three never breathe in unison (the smoke puffs and hearth flames stagger
+ * the same way). Negative delays start each mid-cycle. */
+.flower--1 .flower__head { animation-duration: 8.5s; animation-delay: 0s;    }
+.flower--2 .flower__head { animation-duration: 10s;  animation-delay: -4s;   }
+.flower--3 .flower__head { animation-duration: 7.5s; animation-delay: -2.5s; }
 
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {

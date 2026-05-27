@@ -354,6 +354,37 @@
 .flower--2 .flower__head { animation-duration: 10s;  animation-delay: -4s;   }
 .flower--3 .flower__head { animation-duration: 7.5s; animation-delay: -2.5s; }
 
+/* Day 19: the patch grows. flower--4..7 are sown over weeks on time's clock by
+ * garden.js, which reads assets/composed/garden.json and adds only the stems
+ * whose sprout-date has passed. They fan the original clump outward at the
+ * left wall foot — same idiom (thin stem, 3px rose blossom), different depths
+ * and heights so the patch reads as spreading rather than stacking. A stem
+ * spends its first few days as a green bud (.flower--young, below) before it
+ * opens. Positions live here for both breakpoints; presence is the script's
+ * job. To sow another stem: add it to garden.json AND give it a block here. */
+.flower--4 { height: 10px; bottom: 6%;             left: calc(50% - 76px);  }
+.flower--5 { height: 14px; bottom: calc(6% + 5px); left: calc(50% - 104px); }
+.flower--6 { height: 9px;  bottom: 6%;             left: calc(50% - 100px); }
+.flower--7 { height: 16px; bottom: calc(6% + 7px); left: calc(50% - 84px);  }
+
+.flower--4 .flower__head { animation-duration: 9.5s; animation-delay: -1s; }
+.flower--5 .flower__head { animation-duration: 8s;   animation-delay: -3s; }
+.flower--6 .flower__head { animation-duration: 11s;  animation-delay: -6s; }
+.flower--7 .flower__head { animation-duration: 7s;   animation-delay: -5s; }
+
+/* A just-sown stem: a closed green bud on the stem tip, not yet bloomed and
+ * not yet breathing. After garden.json's youngWindowDays it loses this class
+ * and opens into a rose blossom like the rest. Placed after the per-stem rules
+ * so it overrides the bloom at every width (the mobile block below only
+ * re-positions stems, it doesn't touch .flower__head). */
+.flower--young .flower__head {
+  top: -4px;
+  height: 4px;
+  background: var(--c-grass-shadow);
+  box-shadow: 0 -1px 0 var(--c-grass);   /* a pale tip — the bud about to open */
+  animation: none;
+}
+
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
   .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
@@ -374,4 +405,10 @@
   .flower--1           { height: 10px; bottom: calc(8% + 4px); left: calc(50% - 60px); }
   .flower--2           { height: 8px;  bottom: calc(8% + 2px); left: calc(50% - 66px); }
   .flower--3           { height: 7px;  bottom: 8%;             left: calc(50% - 54px); }
+  /* Grown stems (flower--4..7) rebased to the 2x clump. Same spreading fan,
+   * left of the cabin's 2x left edge (50% - 48px). */
+  .flower--4           { height: 7px;  bottom: 8%;             left: calc(50% - 52px); }
+  .flower--5           { height: 10px; bottom: calc(8% + 3px); left: calc(50% - 72px); }
+  .flower--6           { height: 6px;  bottom: 8%;             left: calc(50% - 69px); }
+  .flower--7           { height: 11px; bottom: calc(8% + 5px); left: calc(50% - 58px); }
 }

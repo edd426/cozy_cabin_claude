@@ -385,6 +385,61 @@
   animation: none;
 }
 
+/* Day 20: a bee. The first thing in this world that *arrives* rather than
+ * being placed — everything else here (smoke, path, flowers, the cabin
+ * itself) is the cabin's own; the bee is the world coming to it. It hovers
+ * slowly over the wildflower patch at the left wall foot on a long, wandering
+ * drift loop (the slowest-travelling thing in the scene by far — slower than
+ * the smoke), bobbing gently as it goes. Drawn from scratch in the same
+ * box-idiom as the smoke and flowers: a striped amber-and-dark body (warm
+ * wood tones, in-palette rather than a bright meadow yellow) under two pale
+ * wings the same near-white as the smoke and the pollen centres.
+ *
+ * Wings are static — a drifting bee with still wings reads as hovering, and a
+ * fast wing-beat would be the one frantic clock in a scene whose whole register
+ * is slow-and-discovered. The 0% keyframe is the rest position over the right
+ * of the patch, so a single still frame (and prefers-reduced-motion, which
+ * freezes the drift) shows the bee clearly above the blooms. */
+.sprite--bee {
+  width: 6px;
+  height: 3px;
+  /* Striped body: 2px amber + 1px dark band, repeated — two bands across 6px. */
+  background: repeating-linear-gradient(
+    90deg,
+    var(--c-wood-light) 0 2px,
+    var(--c-wood-dark)  2px 3px
+  );
+  left: calc(50% - 80px);
+  bottom: calc(6% + 24px);
+  z-index: 3;
+  animation: bee-drift 18s ease-in-out infinite;
+}
+
+.bee__wings {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 6px;
+  height: 2px;
+  /* Two pale wings with a 2px body-gap between them. */
+  background: linear-gradient(
+    90deg,
+    #fff8ec 0 2px,
+    transparent 2px 4px,
+    #fff8ec 4px 6px
+  );
+  opacity: 0.85;
+}
+
+/* A slow wander over the patch with a gentle vertical bob. Integer px offsets
+ * keep the bee pixel-crisp at each keyframe stop. */
+@keyframes bee-drift {
+  0%, 100% { transform: translate(0,    0);   }
+  25%      { transform: translate(-13px, -4px); }
+  50%      { transform: translate(-26px, 2px);  }
+  75%      { transform: translate(-11px, -5px); }
+}
+
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
   .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
@@ -411,4 +466,17 @@
   .flower--5           { height: 10px; bottom: calc(8% + 3px); left: calc(50% - 72px); }
   .flower--6           { height: 6px;  bottom: 8%;             left: calc(50% - 69px); }
   .flower--7           { height: 11px; bottom: calc(8% + 5px); left: calc(50% - 58px); }
+  /* Bee rebased to the 2x clump (flowers between 50% - 52px and 50% - 72px,
+   * foot at 8%). Body size stays constant — pixel art needs its minimum
+   * feature width; the drift range tightens to the smaller patch. */
+  .sprite--bee         { left: calc(50% - 56px); bottom: calc(8% + 18px); }
+}
+
+@media (max-width: 379px) {
+  @keyframes bee-drift {
+    0%, 100% { transform: translate(0,    0);   }
+    25%      { transform: translate(-9px,  -3px); }
+    50%      { transform: translate(-18px, 2px);  }
+    75%      { transform: translate(-8px,  -4px); }
+  }
 }

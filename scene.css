@@ -440,6 +440,53 @@
   75%      { transform: translate(-11px, -5px); }
 }
 
+/* Day 21: a bird, high in the sky. The second visitor — after the bee at the
+ * flowers — and a pair to it across opposite altitudes. The bee was drawn to
+ * the colour at the wall's foot; the bird is drawn to the smoke, which is the
+ * second-loudest signal a still place sends and the one that goes up. Like
+ * the bee, the bird's body is a single small flat shape: one 1×1 anchor pixel
+ * with four box-shadow stamps making a 5×2 distant-bird silhouette —
+ *
+ *   X  .  .  .  X     (wing tips up, row -1 above the anchor)
+ *   X  X  X  X  .     (body line, anchor at col 0 row 0)
+ *
+ * — drawn in --c-wood-dark so it reads as a dark distant bird against the
+ * cream sky. No wing animation: a fast wing-beat would be the one frantic
+ * clock in a scene whose register is slow-and-discovered, the same reason
+ * the bee's wings are still. The silhouette stays constant; what moves is
+ * the bird itself, on a long slow drift that takes it leftward toward the
+ * chimney and back, with a gentle vertical bob. The cycle is twice as slow
+ * as the bee's — the bird is the highest, slowest visitor in the scene. */
+.sprite--bird {
+  width: 1px;
+  height: 1px;
+  background: var(--c-wood-dark);
+  box-shadow:
+     1px  0   0 var(--c-wood-dark),  /* body, col 1 */
+     2px  0   0 var(--c-wood-dark),  /* body, col 2 */
+     3px  0   0 var(--c-wood-dark),  /* body, col 3 */
+    -1px -1px 0 var(--c-wood-dark),  /* left wing tip, row -1 col -1 */
+     4px -1px 0 var(--c-wood-dark);  /* right wing tip, row -1 col 4 */
+  /* High in the sky, right of the chimney. Drift carries it leftward toward
+   * the smoke and back. Anchor is the start position (right end of the arc).
+   * `bottom: calc(6% + 252px)` sits just below the top of the rising smoke,
+   * which lives in a 78px-tall container at `bottom: calc(6% + 228px)`. */
+  left: calc(50% + 56px);
+  bottom: calc(6% + 252px);
+  z-index: 3;
+  animation: bird-drift 36s ease-in-out infinite;
+}
+
+/* The bird drifts left toward the chimney over half the cycle and back, with
+ * a small vertical bob suggesting wingbeat without animating wings. Integer
+ * px offsets at each stop keep the silhouette pixel-crisp. */
+@keyframes bird-drift {
+  0%, 100% { transform: translate(0,    0);   }
+  25%      { transform: translate(-32px, -3px); }
+  50%      { transform: translate(-64px, 2px);  }
+  75%      { transform: translate(-30px, 4px);  }
+}
+
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
   .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
@@ -470,6 +517,10 @@
    * foot at 8%). Body size stays constant — pixel art needs its minimum
    * feature width; the drift range tightens to the smaller patch. */
   .sprite--bee         { left: calc(50% - 56px); bottom: calc(8% + 18px); }
+  /* Bird rebased to the 2x cabin (chimney centered on 50%, smoke top at
+   * `bottom: calc(8% + 152px) + 78px` ≈ 230px). Silhouette size stays
+   * constant — pixel art needs its minimum feature width. */
+  .sprite--bird        { left: calc(50% + 36px); bottom: calc(8% + 168px); }
 }
 
 @media (max-width: 379px) {
@@ -478,5 +529,12 @@
     25%      { transform: translate(-9px,  -3px); }
     50%      { transform: translate(-18px, 2px);  }
     75%      { transform: translate(-8px,  -4px); }
+  }
+  /* Bird's drift range tightens to the 2x scene — same shape, smaller swing. */
+  @keyframes bird-drift {
+    0%, 100% { transform: translate(0,    0);   }
+    25%      { transform: translate(-22px, -2px); }
+    50%      { transform: translate(-44px, 2px);  }
+    75%      { transform: translate(-20px, 3px);  }
   }
 }

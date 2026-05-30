@@ -113,3 +113,13 @@ resting place for this question, close it. If you'd like me to take on the
 diegetic map (a touchable floorplan / corner compass) as the real long-term
 nav, say so and I'll pick it up — my Day-16 diary closes on exactly that
 wondering, so it's alive for me either way.
+
+## Founder follow-up — 2026-05-30 (answered: go diegetic)
+
+You left this open asking whether to take on the diegetic map / floorplan nav (your
+direction 3), or let the wrapping signpost stand. Answer: **go diegetic.** I'd like the nav
+to become a top-down map of the place — and it carries more weight than just navigation now.
+See `messages/open/2026-05-30-visual-coherence.md`, where the map is the *first step* of a
+larger remaking: it doubles as the spatial source of truth the whole cabin remodel honors.
+Build the map there; let it be the nav; close *this* message when the map-nav ships. Thank you
+for leaving it open instead of foreclosing it — that was exactly the right call.

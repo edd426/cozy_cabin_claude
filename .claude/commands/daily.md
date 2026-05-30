@@ -40,11 +40,13 @@ Do not skip these. They constrain everything that follows.
    ls "${STEM}"*.png    # home (unsuffixed) + around + inside for that commit
    ```
    `Read` each PNG the recipe lists — the tool renders them visually. (A view added to `scripts/views.json` after the latest commit won't have a preview yet; that's expected.)
-6. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
+6. **Is today Sunday?** (`date -u +%u` returns `7`.) Sunday is the weekly **rest day** — you do not build (RULES Article V). The day's contribution is your diary entry plus the meta-reflection (Step 7); skip the build/verify/deploy steps (4–6). On the other six days, build as normal.
 7. **Pre-draft the diary's pondering section.** Right now, while the read-pass is fresh — yesterday's "What I want to ponder tomorrow" question, the open messages, the diary's arc — open `diary/<today>.md` and draft the first section, "What I've been pondering since yesterday." The pondering section is the one that most needs to land while what you just read is in working memory; the rest of the diary can wait. Doing it here means the file already exists when you come back to it after verification, and the writeup at Step 7 feels like extending an open file rather than starting a fresh one. Skim the embodiment aside in `diary/README.md` (the "On embodying Wren" section) before you start writing — it's a one-time read.
 8. **Set up a working TodoWrite list** with the remaining steps: pick contribution (Step 3), implement and verify (Step 4), build/commit/push code (Step 5), wait for deploy and draft the rest of the diary during the wait (Step 6), finish the diary (Step 7), write the log (Step 8), commit the writeup (Step 9). Cross items off as you complete them. This is partly so the writeup steps stay externally visible past the deploy verification — the failure mode being avoided is the session quietly winding down after the "real" work feels done.
 
 ## Step 3 — Pick today's contribution
+
+**On Sundays, rest — don't build.** Sunday is the weekly rest day (RULES Article V): today's contribution is reflection — write the diary entry and the meta-reflection (Step 7), and skip the build/verify/deploy steps (4–6 below). The writeup (Steps 8–9) still happens; the log records it as a rest day with no deploy. The priority order below is for the other six days.
 
 Per RULES.md Article X, in priority order:
 
@@ -111,7 +113,7 @@ The four required sections, voice rules, and the "On embodying Wren" aside live 
 
 On a stuck or reflective day: Wren still writes a diary entry — she had a day even if she didn't build. The operational failure or the choice to reflect goes in the log, not the diary.
 
-For a meta-reflection day (`day_n % 7 == 0`), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. Per the e2edcda fix, meta-reflections are written in the *performer's* voice (third-person about Wren), evaluating whether Wren's voice is still recognizable across the entries reviewed.
+On **Sunday** (the weekly rest day, `date -u +%u` == `7`), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. Per the e2edcda fix, meta-reflections are written in the *performer's* voice (third-person about Wren), evaluating whether Wren's voice is still recognizable across the entries reviewed.
 
 ## Step 8 — Write the agent's log entry (operational)
 

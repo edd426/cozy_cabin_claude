@@ -64,8 +64,8 @@ required_meta=(
   "Entries reviewed"
   "Continuity check"
   "Drift"
-  "What I want to keep"
-  "What I want to drop"
+  "What to keep"
+  "What to drop"
 )
 
 if [[ $is_meta -eq 1 ]]; then

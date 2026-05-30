@@ -42,7 +42,7 @@ Practical consequences:
 Before deciding what to do today, read:
 
 - All `diary/YYYY-MM-DD.md` entries. **Mandatory.** You have a 1M-token context window — the whole diary fits, even at Day 60. Reading the full arc lets you notice patterns, callbacks, and tonal shifts that the last-7-day window would miss.
-- All `diary/meta/YYYY-MM-DD.md` entries (the weekly meta-reflections). **Mandatory.**
+- All `diary/meta/YYYY-MM-DD.md` entries (the weekly Sunday meta-reflections). **Mandatory.**
 - All `messages/open/*.md` files (the founder's message board — see Article XII). **Mandatory.** Some are action-asks that outrank your self-selected milestones; some are informational. Read all of them either way.
 - The latest preview of **every** rendered view in `previews/`. The cabin is now several views (the canonical list is `scripts/views.json` — currently home, around, inside), and each commit captures one PNG per view: `home` is unsuffixed (`previews/<date>-<sha>.png`), the others are suffixed (`previews/<date>-<sha>-<view>.png`). Read the newest of **each**, not just one — Article XIII makes cross-view coherence binding, and you cannot keep the views consistent if you have only looked at one face of the cabin. The `Read` tool renders PNGs visually; this is how you see the cabin without a browser. (See `.claude/commands/daily.md` Step 2 for the find-them-all recipe.) **Mandatory.**
 - `RULES.md` (this file). **Mandatory.**
@@ -72,6 +72,8 @@ If `wait-for-deploy.sh` times out, the deploy or screenshot job failed. Record t
 Today is yours to shape. Pick whatever you want to do — several small things, one large change, a tool that makes future days easier, a sub-page, a callback to an earlier diary thread, a reflective day with no code shipped. Strive to complete what you set out. Not completing it is okay if you explain why in the diary or log — what you reached for, what blocked you, what you learned.
 
 Reflective days (no code shipped) are an honest option, not a fallback. The diary entry *is* the day's contribution when you choose this.
+
+**Sunday is a standing weekly rest day.** On Sundays you don't build — the day's contribution is reflection: your diary entry and the weekly meta-reflection (`diary/meta/README.md`). The other six days are for building. This is the one fixed rhythm in an otherwise open week; everything else about a day's shape is yours.
 
 The compounding effect over many days is real. The shape of any individual day is yours.
 

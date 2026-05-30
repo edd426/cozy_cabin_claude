@@ -29,7 +29,7 @@ You may freely edit: `index.html` (within the contract above), `scene.html`, `sc
 
 ## Article II — Diary is canonical
 
-The diary holds a continuous first-person voice — the cabin's resident, named **Wren** in the Day-1 entry. That voice is the project's continuity. You, today's agent, are a single Opus 4.7 session reading the diary and writing its next entry; your job is to voice the resident faithfully, not to reinvent her. Code is exoskeleton. When the diary and the code disagree, the diary wins.
+The diary holds a continuous first-person voice — the cabin's resident, named **Wren** in the Day-1 entry. That voice is the project's continuity. You, today's agent, are a single Opus 4.8 session reading the diary and writing its next entry; your job is to voice the resident faithfully, not to reinvent her. Code is exoskeleton. When the diary and the code disagree, the diary wins.
 
 Practical consequences:
 
@@ -44,7 +44,7 @@ Before deciding what to do today, read:
 - All `diary/YYYY-MM-DD.md` entries. **Mandatory.** You have a 1M-token context window — the whole diary fits, even at Day 60. Reading the full arc lets you notice patterns, callbacks, and tonal shifts that the last-7-day window would miss.
 - All `diary/meta/YYYY-MM-DD.md` entries (the weekly meta-reflections). **Mandatory.**
 - All `messages/open/*.md` files (the founder's message board — see Article XII). **Mandatory.** Some are action-asks that outrank your self-selected milestones; some are informational. Read all of them either way.
-- The latest screenshot in `previews/*.png` — find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is how you see what the cabin actually looks like without a browser. **Mandatory.**
+- The latest preview of **every** rendered view in `previews/`. The cabin is now several views (the canonical list is `scripts/views.json` — currently home, around, inside), and each commit captures one PNG per view: `home` is unsuffixed (`previews/<date>-<sha>.png`), the others are suffixed (`previews/<date>-<sha>-<view>.png`). Read the newest of **each**, not just one — Article XIII makes cross-view coherence binding, and you cannot keep the views consistent if you have only looked at one face of the cabin. The `Read` tool renders PNGs visually; this is how you see the cabin without a browser. (See `.claude/commands/daily.md` Step 2 for the find-them-all recipe.) **Mandatory.**
 - `RULES.md` (this file). **Mandatory.**
 - `CLAUDE.md`. **Mandatory.**
 - `MILESTONES.md`. **Mandatory.**

@@ -647,6 +647,76 @@
   z-index: 3;                   /* above the cloak so the peg edges are visible */
 }
 
+/* ─── Moth (Day 22) ────────────────────────────────────────────────
+ *
+ * A small moth drifting around the candle flame on the mantle. The
+ * inside's first visitor — paired across the door with the bee at the
+ * flowers and the bird at the smoke, but in its own space so it doesn't
+ * over-fill the home view's sky. The cabin makes warmth indoors; the
+ * moth is what's drawn to it. The smallest lit thing on the mantle (the
+ * candle's wick flame) is what specifically draws it — not the larger
+ * hearth fire, which is behind a brick lintel and harder to circle.
+ *
+ * Colour: --c-plum body + --c-purple-soft wings — the same chosen-tone
+ * register as the cloak below. Outside, the bee arrived in the warm
+ * wood-browns of the walls it found; here, the moth arrives in the
+ * cloak's colour, which is the resident's first chosen-for-liking-it
+ * tone in this room. Same pattern as Day 20: a visitor mirroring
+ * something of the cabin it came to.
+ *
+ * Native silhouette (5×2 device pixels — using 1px units like the bird,
+ * so the moth reads as a tiny-distant creature rather than a hearth-
+ * scale object):
+ *
+ *   .W.W.   y=-1  upper wing hints (purple-soft)
+ *   WBBBW   y=0   wings + plum body line (anchor at col 0)
+ *   01234
+ *
+ * Wings are still — same reason the bee's and bird's wings are still: a
+ * fast wing-beat would be the one frantic clock in a scene whose register
+ * is slow-and-discovered. The candle's own slow flicker is enough rhythm
+ * for this corner of the wall.
+ *
+ * Position: anchored just above and right of the candle flame. The
+ * candle flame on desktop sits at scene-y bottom ≈ 168–174px (flame is
+ * at hearth-local y=56–58, hearth bottom at scene bottom, ×3 scale).
+ * The candle body is centred at scene-x ≈ 50%-1.5px. The moth anchors
+ * at scene-x 50%+8px (~9px right of the flame) and scene-y bottom 184px
+ * (~10px above flame top). The drift carries it leftward toward the
+ * flame and back, with a small vertical bob — a moth circling its light.
+ *
+ * Cross-view geometry (RULES.md Article XIII): the moth lives only
+ * inside, near the candle. Not visible from any other view; no
+ * cross-view obligation. */
+.sprite--moth {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: var(--c-plum);
+  box-shadow:
+     1px  0   0 var(--c-plum),         /* body, col 1 row 0 */
+     2px  0   0 var(--c-plum),         /* body, col 2 row 0 */
+    -1px  0   0 var(--c-purple-soft),  /* left wing, col -1 row 0 */
+     3px  0   0 var(--c-purple-soft),  /* right wing, col 3 row 0 */
+     0   -1px 0 var(--c-purple-soft),  /* upper left wing hint, col 0 row -1 */
+     2px -1px 0 var(--c-purple-soft);  /* upper right wing hint, col 2 row -1 */
+  left: calc(50% + 8px);
+  bottom: calc(58px * 3 + 10px);
+  z-index: 5;          /* above the hearth fire (z=4) so it reads in front of the candle */
+  animation: moth-circle 22s ease-in-out infinite;
+}
+
+/* A slow drift toward the flame and back, with a gentle vertical bob.
+ * Integer px offsets at each stop keep the silhouette pixel-crisp. The
+ * 50% keyframe is the closest pass over the flame; 25% and 75% are the
+ * approach and retreat. */
+@keyframes moth-circle {
+  0%, 100% { transform: translate(0,    0);   }
+  25%      { transform: translate(-4px, -3px); }
+  50%      { transform: translate(-9px, 0);    }
+  75%      { transform: translate(-4px, 4px);  }
+}
+
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
 @media (max-width: 379px) {
   .inside__wall {
@@ -869,5 +939,20 @@
     bottom: calc(7px * 2);
     width: calc(4px * 2);
     height: calc(1px * 2);
+  }
+
+  /* Moth rebased to 2x. Candle flame top on this scale ≈ (49+7)×2 =
+   * 112px; the moth anchors ~6px right and ~7px above it. Silhouette
+   * size stays constant — pixel art needs its minimum feature width. */
+  .sprite--moth {
+    left: calc(50% + 6px);
+    bottom: calc(58px * 2 + 7px);
+  }
+  /* Drift range tightens to the smaller mantle — same shape, smaller swing. */
+  @keyframes moth-circle {
+    0%, 100% { transform: translate(0,    0);   }
+    25%      { transform: translate(-3px, -2px); }
+    50%      { transform: translate(-6px, 0);    }
+    75%      { transform: translate(-3px, 3px);  }
   }
 }

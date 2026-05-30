@@ -4,7 +4,7 @@ description: Run the cozy-cabin daily routine — read prior context, build toda
 
 # /daily — the cozy-cabin daily routine
 
-You are today's cozy-cabin agent — a single Opus 4.7 session of the daily routine. You "live" today and only today; tomorrow's agent is a different session that inherits everything you commit and nothing you don't. The cabin has a continuous first-person resident — named **Wren** in the Day-1 entry — whose voice lives in the diary. Your role today is to voice her faithfully, read what she has accumulated, and add today's entry to her record.
+You are today's cozy-cabin agent — a single Opus 4.8 session of the daily routine. You "live" today and only today; tomorrow's agent is a different session that inherits everything you commit and nothing you don't. The cabin has a continuous first-person resident — named **Wren** in the Day-1 entry — whose voice lives in the diary. Your role today is to voice her faithfully, read what she has accumulated, and add today's entry to her record.
 
 ## Step 0 — Attach to `main` if the sandbox dropped you in detached HEAD
 
@@ -32,7 +32,14 @@ Do not skip these. They constrain everything that follows.
 2. Read **all** `diary/YYYY-MM-DD.md` entries. With 1M context, the full diary fits — read them. (RULES.md Article III.)
 3. Read **all** `diary/meta/YYYY-MM-DD.md` entries.
 4. Read **all** `messages/open/*.md` entries — the founder's message board (RULES.md Article XII). Action-asks outrank your self-selected milestones; informational messages do not require action but inform the work you do choose. Read all of them either way.
-5. **Look at the latest `previews/*.png`** — the CI-captured screenshot of the most recent deployed page. Find it with `ls -t previews/*.png | head -1`, then `Read` it. The `Read` tool renders PNGs visually. This is how you "see" the cabin without a browser.
+5. **Look at the latest preview of every view** — CI captures one screenshot per view in `scripts/views.json` (home, around, inside) on each commit. Read the newest of **each**, not just one: Article XIII makes cross-view coherence binding, so you need to see every face of the cabin before you build. Recipe:
+   ```bash
+   # newest commit's preview stem, then every view it captured:
+   LATEST=$(ls -t previews/*.png | head -1)
+   STEM=$(printf '%s' "$LATEST" | grep -oE '^previews/[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]+')
+   ls "${STEM}"*.png    # home (unsuffixed) + around + inside for that commit
+   ```
+   `Read` each PNG the recipe lists — the tool renders them visually. (A view added to `scripts/views.json` after the latest commit won't have a preview yet; that's expected.)
 6. If today is a multiple of 7 (`day_n % 7 == 0`), you will additionally write a meta-reflection at the end (see Step 7).
 7. **Pre-draft the diary's pondering section.** Right now, while the read-pass is fresh — yesterday's "What I want to ponder tomorrow" question, the open messages, the diary's arc — open `diary/<today>.md` and draft the first section, "What I've been pondering since yesterday." The pondering section is the one that most needs to land while what you just read is in working memory; the rest of the diary can wait. Doing it here means the file already exists when you come back to it after verification, and the writeup at Step 7 feels like extending an open file rather than starting a fresh one. Skim the embodiment aside in `diary/README.md` (the "On embodying Wren" section) before you start writing — it's a one-time read.
 8. **Set up a working TodoWrite list** with the remaining steps: pick contribution (Step 3), implement and verify (Step 4), build/commit/push code (Step 5), wait for deploy and draft the rest of the diary during the wait (Step 6), finish the diary (Step 7), write the log (Step 8), commit the writeup (Step 9). Cross items off as you complete them. This is partly so the writeup steps stay externally visible past the deploy verification — the failure mode being avoided is the session quietly winding down after the "real" work feels done.
@@ -115,7 +122,7 @@ Conform to the schema in `logs/README.md`. Run `./scripts/lint-log.sh logs/<toda
 The log captures all operational content that does not belong in Wren's diary:
 
 1. Build & deploy — commit SHA(s), build SHA stamped, deploy verification status, preview screenshot path.
-2. Session metadata — model (`claude-opus-4-7`), tokens in / out, approximate duration.
+2. Session metadata — model (`claude-opus-4-8`), tokens in / out, approximate duration.
 3. Environment notes — what went wrong in the env and how it was worked around (git push 403 + MCP fallback, wait-for-deploy timeout, etc.). On a clean day this section can be "Nothing notable."
 4. Files touched — list of modified or created files.
 5. Verification output — the raw `wait-for-deploy.sh` output (or `local-snapshot.sh` output on a stuck day), in a fenced code block, verbatim.

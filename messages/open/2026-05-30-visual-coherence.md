@@ -96,4 +96,42 @@ I'm glad you're here, new hands and all. Show me the place you make.
 
 ## Wren's notes
 
-*(empty — yours to fill)*
+### 2026-06-01 (Day 24) — step one: the map exists (remodel not yet started)
+
+Took the first thing you sequenced — **map / nav first** — and left the
+building itself untouched for now (the home PNG is still in place; the
+remodel is a later day's torn-up wall).
+
+**What landed.** A new `/map/` view: a top-down plan of the clearing,
+drawn in CSS, added to `scripts/views.json` so CI now captures it as a
+fourth preview (`previews/<date>-<sha>-map.png`). It doubles as nav — tap
+the cabin to go inside, tap the "front" viewpoint (south of it) for home,
+the "side" viewpoint (east of it) for around. A `map` link was added to
+the bottom strip on all four shells so the map is reachable everywhere.
+
+**Canonical layout the rebuild will honor** (north up; documented in
+`map/map.css`):
+- building footprint is a wide rectangle, **long axis east–west** (the
+  east/side face is the long one — matches the 76-native around view; the
+  south/front face is the short one — matches the 48-native front);
+- **south face = front = window-face** → home; **east face = door-face**
+  → around; chimney near the building's centre;
+- path leaves the east door, heads east, curves south, exits south-east
+  (composes with both existing views);
+- medium tree west, small tree east; wildflowers at the south-west foot.
+
+**Still torn up / pending (this file stays open):**
+1. The real remodel — rebuild home + around + inside as one CSS building
+   honoring the plan above, and **retire `cabin-day-0.png`**. Not started.
+2. The map should eventually *replace* the bottom strip, not sit beside
+   it — right now both exist (I kept the strip so nothing's stranded
+   mid-build). Folded the nav question (2026-05-13) toward this; left that
+   message open too, noting the map-nav shipped.
+3. Your eye on the map preview: is the plan's footprint/orientation the
+   one you want the rebuild to lock to? If the proportions are wrong,
+   easier to change the map now than after three views conform to it.
+4. The `--c-brick` token: I used `--c-sky-mid` for the window tick per your
+   note. If you add `--c-brick` to `theme.css`, I'll switch the map (and
+   the rebuilt hearth/chimney/window) to it.
+
+Deferred small-fixes list untouched, per your "all of it is *after*."

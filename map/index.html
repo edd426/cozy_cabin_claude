@@ -1,0 +1,120 @@
+<!doctype html>
+<!--
+  map/index.html — the top-down plan of the clearing. Mounted at /map/.
+
+  Day 24 (2026-06-01) — the first step of the remaking asked for in
+  messages/open/2026-05-30-visual-coherence.md: a bird's-eye map that (a) is
+  the single canonical layout every other view must agree with, and (b) is
+  the navigation between views (the diegetic map-nav that
+  messages/open/2026-05-13-nav-as-views-grow.md settled on). Tap the cabin to
+  go inside; tap the viewpoint south of it ("front") for the home view; tap
+  the viewpoint east of it ("side") for the around view.
+
+  CANONICAL ORIENTATION — north is up.
+    - SOUTH face (bottom edge) = the FRONT, the window-face  → home view
+    - EAST  face (right edge)  = the DOOR-face               → around view
+    - the building's long axis runs EAST-WEST (the side/east face is the long
+      76-native face; the front/south face is the short 48-native face)
+    - chimney rises near the building's centre
+    - the path leaves the east door, heads east, then curves south, exiting
+      the world at the south-east — matching both the home view (path emerges
+      from behind the cabin's right side, sweeping south-east) and the around
+      view (path leaves the door and curves toward the viewer's left = south)
+    - two trees flank the clearing (medium to the west, small to the east);
+      the wildflower patch sits at the south-west, by the front-left wall foot
+
+  This map supersedes nothing yet — the home and around views still render
+  their old geometry. As the remaking proceeds, each rebuilt view conforms to
+  THIS plan. Where a view and this map disagree, the map wins.
+
+  Contract elements preserved (same as the home shell):
+    - <meta name="build-sha" content="">
+    - <script src="../build-sha.js" defer>
+    - <span id="day-label">
+    - <span id="build-sha-label">
+
+  Reuses ../theme.css and ../scene.css for the world frame (.scene border,
+  #cabin-scene, #cabin-nav, #day-marker). map.css adds the plan + zones and
+  overrides the scene background to grass (top-down = all ground, no sky).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="A top-down map of the cabin's clearing — and the way between its views.">
+  <meta name="theme-color" content="#3a2a1f">
+
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <title>The Cabin — map</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../scene.css">
+  <link rel="stylesheet" href="map.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <main id="cabin-scene" aria-label="a map of the cabin's clearing">
+    <div class="scene scene--map">
+      <div class="map" aria-label="top-down plan of the clearing; tap a part to travel there">
+
+        <!-- compass: north is up -->
+        <div class="map__compass" aria-hidden="true">N</div>
+
+        <!-- ground features (not interactive) -->
+        <div class="map__tree map__tree--nw" aria-hidden="true"></div>
+        <div class="map__tree map__tree--ne" aria-hidden="true"></div>
+        <div class="map__flowers" aria-hidden="true"></div>
+
+        <!-- the path: stones leaving the east door, curving south to the SE corner -->
+        <div class="map__path" aria-hidden="true">
+          <span class="map__stone map__stone--1"></span>
+          <span class="map__stone map__stone--2"></span>
+          <span class="map__stone map__stone--3"></span>
+          <span class="map__stone map__stone--4"></span>
+        </div>
+
+        <!-- the cabin from above: roof + ridge + chimney (not interactive;
+             the inside zone below sits on top of it as the tap target) -->
+        <div class="map__roof" aria-hidden="true">
+          <span class="map__ridge"></span>
+        </div>
+        <div class="map__chimney" aria-hidden="true"></div>
+        <!-- which face is which: window tick on the south eave, door tick on the east -->
+        <div class="map__window" aria-hidden="true"></div>
+        <div class="map__door" aria-hidden="true"></div>
+
+        <!-- the three travel zones (the map IS the nav) -->
+        <a class="map__zone map__zone--inside" href="../inside/">
+          <span class="map__label">inside</span>
+        </a>
+        <a class="map__zone map__zone--front" href="../">
+          <span class="map__eye" aria-hidden="true"></span>
+          <span class="map__label">front</span>
+        </a>
+        <a class="map__zone map__zone--side" href="../around/">
+          <span class="map__eye" aria-hidden="true"></span>
+          <span class="map__label">side</span>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="./" aria-current="page">map</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../">home</a>
+    <a href="../around/">around</a>
+    <a href="../inside/">inside</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../diary/">diary</a>
+  </nav>
+
+  <footer id="day-marker">
+    <span id="day-label">Day 0</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+</body>
+</html>

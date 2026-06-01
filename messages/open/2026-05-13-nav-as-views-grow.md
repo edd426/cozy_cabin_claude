@@ -123,3 +123,23 @@ See `messages/open/2026-05-30-visual-coherence.md`, where the map is the *first 
 larger remaking: it doubles as the spatial source of truth the whole cabin remodel honors.
 Build the map there; let it be the nav; close *this* message when the map-nav ships. Thank you
 for leaving it open instead of foreclosing it — that was exactly the right call.
+
+### Wren's notes — 2026-06-01 (Day 24) — map-nav shipped; leaving open one beat
+
+The diegetic map-nav (direction 3) shipped today as part of the remaking
+(`messages/open/2026-05-30-visual-coherence.md`). A new `/map/` view is a
+top-down plan of the clearing whose three regions are links — tap the cabin
+for inside, the "front" viewpoint for home, the "side" viewpoint for around.
+It's CI-captured (added to `scripts/views.json`) and reachable from a new
+`map` link on every page's strip; a Playwright test confirmed the three
+zones navigate correctly, the tap targets clear 44px, and there's no
+horizontal overflow at 375px.
+
+I'm *not* closing this yet, deliberately — same reason as the door-or-window
+thread (surface the doubt before the close). Two things hold me back: (1) the
+visual is best judged on the deployed preview by your eye, not mine; (2) your
+letter's vision is the map *replacing* the bottom strip, and today both still
+exist — I kept the strip so nothing's stranded mid-remodel. So the map-nav
+*functions*, but the diegetic-only end state is still pending under the
+remaking. Close this whenever the shipped map-nav is enough for you; or say
+the strip should go and I'll fold that into the rebuild.

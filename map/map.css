@@ -1,0 +1,263 @@
+/* map.css — agent-mutable.
+ *
+ * The /map/ sub-page: a top-down plan of the cabin's clearing that doubles as
+ * the navigation between views. Built Day 24 (2026-06-01) as the first step of
+ * the remaking in messages/open/2026-05-30-visual-coherence.md, and the
+ * diegetic map-nav settled in messages/open/2026-05-13-nav-as-views-grow.md.
+ *
+ * This file is the SPATIAL SOURCE OF TRUTH for the whole world. North is up.
+ * Coordinates are percentages of the .scene frame (4/3). The canonical layout:
+ *
+ *        N
+ *        ^            (.) small tree
+ *   ( )                          .map__tree--ne
+ *  tree-nw   ┌───────────────┐
+ *            │   ▓ chimney    │   roof, long axis E-W
+ *            │ ─── ridge ──── │── .map__roof
+ *            └──────┬───[door]┤●  east face = DOOR  → around
+ *          window-face(south) │   .map__door  → .map__path curves south
+ *          = FRONT → home     │
+ *      ✿ flowers    ▲front    ●side
+ *                  (viewpoints you tap to travel)
+ *
+ * Reuses ../scene.css for the frame (.scene, #cabin-scene, #cabin-nav,
+ * #day-marker). Top-down means no sky/ground split — the whole frame is the
+ * clearing, so .scene--map overrides the scene background to grass.
+ */
+
+/* The clearing fills the frame: a lit grassy centre fading to the darker
+ * forest edge, so the place reads as a clearing ringed by trees. */
+.scene--map { background: var(--c-grass); }
+
+.map {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 75% 80% at 50% 48%,
+    var(--c-grass-light) 0%,
+    var(--c-grass)       58%,
+    var(--c-grass-shadow) 100%
+  );
+  font-family: var(--font-pixel);
+}
+
+/* Compass — north is up. */
+.map__compass {
+  position: absolute;
+  top: 3%;
+  left: 4%;
+  font-size: var(--fs-marker);
+  color: var(--c-wood-dark);
+  line-height: 1;
+}
+.map__compass::before {
+  content: "";
+  display: block;
+  margin: 0 auto 2px;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 8px solid var(--c-wood-dark);
+}
+
+/* Trees from above — filled canopies, lit centre to shadowed rim. Medium to
+ * the west, small to the east; both flank the clearing as the home view shows
+ * them flanking the cabin. */
+.map__tree {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 42% 38%,
+    var(--c-grass-light) 0%,
+    var(--c-grass) 45%,
+    var(--c-grass-shadow) 100%
+  );
+  box-shadow: 0 2px 0 rgba(58, 42, 58, 0.12);
+  z-index: 1;
+}
+.map__tree--nw { left: 8%;  top: 22%; width: 15%; height: 20%; }
+.map__tree--ne { left: 80%; top: 11%; width: 10%; height: 13%; }
+
+/* Wildflower patch — a few rose dots at the south-west, by the front-left
+ * (west) wall foot, matching the home view's clump. */
+.map__flowers {
+  position: absolute;
+  left: 22%;
+  top: 64%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--c-rose);
+  box-shadow:
+     8px  2px 0 var(--c-rose),
+     4px -6px 0 var(--c-rose),
+    14px -3px 0 var(--c-rose),
+    -3px  5px 0 var(--c-rose);
+  z-index: 1;
+}
+
+/* The path: stepping stones leaving the east door, heading east then curving
+ * south to exit the clearing at the south-east — the same physical path the
+ * home and around views show from their angles. Earth-brown with the one-pixel
+ * darker band, the path idiom used everywhere. */
+.map__path { position: absolute; inset: 0; z-index: 1; }
+.map__stone {
+  position: absolute;
+  width: 9px;
+  height: 6px;
+  border-radius: 2px;
+  background: #c19465;
+  box-shadow: 0 1px 0 #6e4a3a;
+}
+.map__stone--1 { left: 72%; top: 46%; }   /* just outside the east door */
+.map__stone--2 { left: 79%; top: 53%; }
+.map__stone--3 { left: 84%; top: 62%; }
+.map__stone--4 { left: 88%; top: 72%; }   /* exiting the SE corner */
+
+/* The cabin from above: the roof. Long axis east-west. A bright ridge line
+ * down the middle (the gable peak) with the slopes falling to darker eaves
+ * north and south reads as a peaked roof seen from overhead. */
+.map__roof {
+  position: absolute;
+  left: 30%;
+  top: 30%;
+  width: 40%;
+  height: 34%;
+  background: linear-gradient(
+    to bottom,
+    #4a3325 0%,
+    var(--c-wood-dark) 22%,
+    #5a3a2e 48%,
+    #5a3a2e 52%,
+    var(--c-wood-dark) 78%,
+    #4a3325 100%
+  );
+  box-shadow: inset 0 0 0 2px #4a3325;
+  z-index: 2;
+}
+.map__ridge {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-1px);
+  background: var(--c-wood-light);
+  opacity: 0.7;
+}
+
+/* Chimney — a small dark block near the building's centre (E-W centre, mid
+ * depth), with an ink cap, matching the chimney in the other views. */
+.map__chimney {
+  position: absolute;
+  left: 46.5%;
+  top: 41%;
+  width: 5%;
+  height: 7%;
+  background: var(--c-wood-dark);
+  box-shadow: inset 0 3px 0 var(--c-ink), 0 1px 0 rgba(58,42,58,0.2);
+  z-index: 3;
+}
+
+/* Window tick on the south (front) eave, brick-coloured (--c-sky-mid is the
+ * brick colour in use until a --c-brick token exists). */
+.map__window {
+  position: absolute;
+  left: 42%;
+  top: 62.5%;
+  width: 16%;
+  height: 2%;
+  background: var(--c-sky-mid);
+  z-index: 3;
+}
+/* Door tick on the east face, dark wood. */
+.map__door {
+  position: absolute;
+  left: 69.2%;
+  top: 43%;
+  width: 1.6%;
+  height: 8%;
+  background: var(--c-wood-dark);
+  z-index: 3;
+}
+
+/* ── The three travel zones: the map IS the nav ────────────────────────────
+ * Each is a tap target ≥44px (Article VIII). They stay mostly transparent so
+ * the plan reads through them; a dashed wood border + a label chip mark them
+ * as tappable. The "front" and "side" zones sit where you'd stand to look at
+ * that face (south of the cabin / east of it), each with a little viewpoint
+ * triangle pointing back toward the building. */
+.map__zone {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-decoration: none;
+  border: 1.5px dashed rgba(110, 74, 58, 0.6);
+  border-radius: 5px;
+  background: rgba(249, 239, 210, 0.10);
+  z-index: 4;
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.map__zone:hover,
+.map__zone:focus-visible {
+  background: rgba(249, 239, 210, 0.32);
+  border-color: var(--c-rose);
+  outline: none;
+}
+.map__label {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  color: var(--c-wood-dark);
+  background: rgba(249, 239, 210, 0.85);
+  padding: 0 5px;
+  border-radius: 3px;
+  line-height: 1.2;
+}
+
+/* inside = the footprint itself (sits on the roof) */
+.map__zone--inside {
+  left: 30%;
+  top: 30%;
+  width: 40%;
+  height: 34%;
+  background: rgba(249, 239, 210, 0.06);
+  border-style: solid;
+  border-color: rgba(110, 74, 58, 0.35);
+}
+
+/* front = the viewpoint south of the cabin → home view. Eye points north (up). */
+.map__zone--front {
+  left: 27%;
+  top: 67%;
+  width: 46%;
+  height: 22%;
+  flex-direction: column;
+}
+.map__zone--front .map__eye {
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 8px solid var(--c-wood-dark);
+}
+
+/* side = the viewpoint east of the cabin → around view. Eye points west (left). */
+.map__zone--side {
+  left: 72.5%;
+  top: 30%;
+  width: 22%;
+  height: 34%;
+  flex-direction: row;
+}
+.map__zone--side .map__eye {
+  width: 0; height: 0;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 8px solid var(--c-wood-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* nothing animates on the map; here for parity with the other views */
+}

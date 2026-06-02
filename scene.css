@@ -123,15 +123,138 @@
   pointer-events: none;
 }
 
-/* Cabin: 48×80 native, scaled 3x = 144×240. Centered, sitting on the ground line. */
-.sprite--cabin {
-  width: calc(48px * 3);
-  height: calc(80px * 3);
+/* ── Front face of the cabin, drawn in CSS ─────────────────────────────────
+ * Day 25 (2026-06-02): the home view's cabin is rebuilt from scratch in CSS,
+ * retiring the Day-0 PNG (assets/composed/cabin-day-0.png) so the front reads
+ * as the SAME building as the side (around.css) and the inside — the founder's
+ * remaking (messages/open/2026-05-30-visual-coherence.md). The seam it closes:
+ * the old PNG was a tall, busy, log-stacked tower next to the broad plank
+ * cabin I drew by hand; now both come from one hand, in one material idiom.
+ *
+ * Native 48×80 — the short (south/window) face per the map plan; the around
+ * view is the long (east/door) 76-wide face. Wall/roof/chimney native heights
+ * MATCH around.css exactly (wall 40, roof 30, chimney 16; total 80) so the
+ * eave line, roof top, and chimney cap land at the same scene height in both
+ * views — one building, two angles (RULES Art XIII).
+ *
+ * Scale lives in --s (3x desktop, 2x mobile-narrow); the mobile block only
+ * overrides --s and bottom. Children paint in DOM order (chimney behind roof).
+ */
+.front-cabin {
+  --s: 3;
+  position: absolute;
   left: 50%;
   bottom: 6%;
   transform: translateX(-50%);
+  width: calc(48px * var(--s));
+  height: calc(80px * var(--s));
   z-index: 2;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  pointer-events: none;
 }
+
+/* Wall — plank stripes, the same idiom as around.css's side wall: a 6-native
+ * wood band + 2-native dark seam, repeated. Inset 2 native each side of the
+ * 48-wide face; 1-native dark trim on the three exposed edges. */
+.front-cabin__wall {
+  position: absolute;
+  left: calc(2px * var(--s));
+  bottom: 0;
+  width: calc(44px * var(--s));
+  height: calc(40px * var(--s));
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--c-wood)      0,
+    var(--c-wood)      calc(6px * var(--s)),
+    var(--c-wood-dark) calc(6px * var(--s)),
+    var(--c-wood-dark) calc(8px * var(--s))
+  );
+  box-shadow:
+    inset  calc(1px * var(--s)) 0 0 var(--c-wood-dark),
+    inset calc(-1px * var(--s)) 0 0 var(--c-wood-dark),
+    inset 0 calc(-1px * var(--s)) 0 var(--c-wood-dark);
+}
+
+/* Roof — shingle bands, the same idiom as around.css's roof: a 7-native
+ * wood-dark course with a 1-native lighter ridge line, repeated. Full 48 wide,
+ * overhanging the 44 wall by 2 native each side. */
+.front-cabin__roof {
+  position: absolute;
+  left: 0;
+  bottom: calc(40px * var(--s));
+  width: calc(48px * var(--s));
+  height: calc(30px * var(--s));
+  background: repeating-linear-gradient(
+    to bottom,
+    var(--c-wood-dark) 0,
+    var(--c-wood-dark) calc(7px * var(--s)),
+    #5a3a2e            calc(7px * var(--s)),
+    #5a3a2e            calc(8px * var(--s))
+  );
+  box-shadow:
+    inset 0 calc(-1px * var(--s)) 0 #4a3325,
+    inset 0  calc(1px * var(--s)) 0 #4a3325;
+}
+
+/* Chimney — the same block + ink coping cap as around.css. Rises from the
+ * building's centre (x=24=50%, where the smoke anchors); its lower 6 native
+ * sit behind the roof, so only the top 10 show above the ridge. No z-index:
+ * DOM order (chimney before roof) lets the roof paint over the base. */
+.front-cabin__chimney {
+  position: absolute;
+  left: calc(21px * var(--s));
+  bottom: calc(64px * var(--s));
+  width: calc(6px * var(--s));
+  height: calc(16px * var(--s));
+  background: var(--c-wood-dark);
+  box-shadow: inset 0 calc(2px * var(--s)) 0 var(--c-ink);
+}
+
+/* Window — the front face's defining feature: a wood-framed opening filled
+ * with brick (the hearth seen through the glass — window, hearth, and chimney
+ * are one masonry column, per the founder's "material truth" note). Centred
+ * horizontally and set mid-wall so it doesn't reach the ground — it reads as a
+ * window, not a door (the door lives on the east face, in the around view;
+ * messages/open/2026-05-11-door-or-window.md). Frame is wood-dark. */
+.front-cabin__window {
+  position: absolute;
+  left: calc(15px * var(--s));
+  bottom: calc(10px * var(--s));
+  width: calc(18px * var(--s));
+  height: calc(20px * var(--s));
+  background: var(--c-wood-dark);
+}
+
+/* Brick infill — warm peach brick (--c-sky-mid is the brick colour in use
+ * until a --c-brick token exists, per the founder's note) laid in running
+ * bond: four courses, vertical joints in --c-wood, alternate courses shifted
+ * half a brick so the joints stagger (brick wants vertical joints, not just
+ * stacked horizontal courses). overflow:hidden clips the courses to the frame. */
+.front-cabin__brick {
+  position: absolute;
+  inset: calc(2px * var(--s));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-sky-mid);
+}
+
+.brick-course {
+  flex: 0 0 auto;
+  height: calc(4px * var(--s));
+  /* vertical mortar joint: a 1-native --c-wood tick every 8 native (one brick
+   * wide); transparent lets the peach brick body (parent bg) show between. */
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--c-wood) 0 calc(1px * var(--s)),
+    transparent   calc(1px * var(--s)) calc(8px * var(--s))
+  );
+  /* horizontal mortar: a 1-native line along each course's bottom. */
+  box-shadow: inset 0 calc(-1px * var(--s)) 0 var(--c-wood);
+}
+/* Running bond: shift alternate courses half a brick so the joints stagger. */
+.brick-course--b { background-position: calc(4px * var(--s)) 0; }
 
 /* Tree (medium) — 28×33 native, scaled 3x. Sitting to the left of the cabin. */
 .sprite--tree {
@@ -489,7 +612,9 @@
 
 /* Mobile narrow: scale down to 2x for 320–379 px viewports. */
 @media (max-width: 379px) {
-  .sprite--cabin       { width: calc(48px * 2); height: calc(80px * 2); bottom: 8%; }
+  /* Front cabin: drop to 2x by overriding --s; everything else recomputes via
+   * the var. bottom moves to 8% to match the other sprites' mobile baseline. */
+  .front-cabin         { --s: 2; bottom: 8%; }
   .sprite--tree        { width: calc(28px * 2); height: calc(33px * 2); }
   .sprite--tree-small  { width: calc(15px * 2); height: calc(33px * 2); }
   .sprite--smoke       { bottom: calc(8% + 152px); }

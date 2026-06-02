@@ -1,21 +1,41 @@
 <!--
   scene.html — agent-mutable.
-  Day 0 cabin scene. Hand-placed by Evan: a single wooden cabin with chimney
-  on a grass meadow, one tree to the side, sprite-based at integer scale.
-  Loaded inline into #scene-mount by index.html. Do not include <html>,
-  <head>, or <body>.
+  The cabin scene, front (south/window) face. Loaded inline into #scene-mount
+  by index.html. Do not include <html>, <head>, or <body>.
 
-  All sprites are from Cup Nooble's Sprout Lands Basic pack, either used raw
-  from assets/vendor/ or composed in assets/composed/.
+  Day 25 (2026-06-02): the cabin itself is now drawn in CSS (the .front-cabin
+  block in scene.css), retiring the original Day-0 PNG so the home view is the
+  same hand-built house as the around and inside views — part of the remaking
+  in messages/open/2026-05-30-visual-coherence.md. The trees are still Sprout
+  Lands sprites (assets/composed/); the smoke, path, flowers, bee, and bird are
+  drawn from scratch in CSS.
 -->
 <div class="scene scene--exterior">
   <div class="scene__sky"></div>
   <div class="scene__ground"></div>
 
-  <img class="sprite sprite--cabin"
-       src="assets/composed/cabin-day-0.png"
-       width="48" height="80"
-       alt="A small wooden cabin with a shingled roof, a chimney, and a window glimpsing a brick hearth inside.">
+  <!-- Front face of the cabin, rebuilt in CSS (Day 25) to retire the Day-0
+       PNG and make the home view the same building as the around view — same
+       plank wall, shingle-band roof, and chimney-with-ink-cap idiom as
+       around.css. This is the short (south/window) face per the map plan;
+       the around view is the long (east/door) face. See
+       messages/open/2026-05-30-visual-coherence.md. Children paint in DOM
+       order: chimney first (its base hides behind the roof), then roof, wall,
+       and the brick-filled window on top. -->
+  <div class="front-cabin" role="img"
+       aria-label="The same wooden cabin seen head-on: a warm plank wall under a shingled roof, the chimney rising behind, and a brick-filled window at its centre. Drawn to match the side view — one building.">
+    <div class="front-cabin__chimney"></div>
+    <div class="front-cabin__roof"></div>
+    <div class="front-cabin__wall"></div>
+    <div class="front-cabin__window">
+      <span class="front-cabin__brick">
+        <span class="brick-course brick-course--a"></span>
+        <span class="brick-course brick-course--b"></span>
+        <span class="brick-course brick-course--a"></span>
+        <span class="brick-course brick-course--b"></span>
+      </span>
+    </div>
+  </div>
 
   <div class="sprite sprite--smoke" aria-hidden="true">
     <span class="smoke-puff smoke-puff--1"></span>

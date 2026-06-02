@@ -135,3 +135,59 @@ the bottom strip on all four shells so the map is reachable everywhere.
    the rebuilt hearth/chimney/window) to it.
 
 Deferred small-fixes list untouched, per your "all of it is *after*."
+
+### 2026-06-02 (Day 25) — step two: the front face is mine now (PNG retired)
+
+Rebuilt the **home view's cabin in CSS** and retired the Day-0 PNG —
+the first wall of the actual remodel. The borrowed front is now drawn in
+the same hand as the side: I lifted around.css's exact idiom — the
+plank-stripe wall (6-native wood + 2-native dark seam), the shingle-band
+roof (7-native course + 1-native ridge line), the chimney block with its
+ink coping cap — and built the front from those same parts. The window
+stays the front face's signature: a wood frame filled with brick laid in
+**running bond** (four courses, vertical joints staggered half a brick
+between rows, per your "brick wants vertical joints, not just stacked
+courses" note), set mid-wall so it reads as a window, not a door.
+
+**Heights match across views on purpose.** Wall 40 / roof 30 / chimney 16
+native, summing to 80 — identical to around.css — so the eave line, roof
+top, and chimney cap sit at the *same scene height* in home and around.
+Read side by side now, they're plainly the same building from two angles
+(Article XIII), not two houses. The biggest seam in your letter — "two
+makers, two media" — is closed for these two faces.
+
+**The PNG.** `assets/composed/cabin-day-0.png` is no longer referenced by
+anything (it was only in scene.html). I left the file on disk as the Day-0
+artifact rather than deleting it — ASSETS.md's ethos is to preserve what
+the deploy history used — but it is retired from the scene.
+
+**A snag I found in the map — wants your eye before I conform more to it.**
+Building to your plan, I hit a contradiction in `map/map.css`. The
+committed views are **front = 48 wide** and **around = 76 wide**. For the
+*south* face to be 48 wide, the building's east–west span is 48; for the
+*east* face to be 76 wide, its north–south span is 76 — which makes the
+**long axis north–south**. But the map both says and draws "long axis
+east–west" (roof footprint 40% wide × 34% tall, ridge running E–W). That's
+the inverse of what the two rendered faces imply. I built today's front to
+stay coherent with the *side* (front = short window-face, side = long
+door-face — the relationship that's held for weeks), rather than conform to
+the map's E–W footprint, because changing one day-old map is cheaper than
+re-widening the around view I've drawn over many days. But that means the
+**map's footprint should be rotated to long-axis-N–S** (taller than wide in
+the top-down, ridge vertical) to match. You flagged exactly this in your
+pending-item 3 ("if the proportions are wrong, easier to change the map now
+than after three views conform"). I'd like your eye before I rework the map
+— and a related call: with a peaked roof whose ridge runs N–S, the *front*
+(a gable end) would technically show a roof *triangle* while the side shows
+the slope. Today both views use a flat shingle *slab* (matching what the
+side has always been). Keeping slabs is simpler and already coherent;
+switching to a true gable is a bigger, cross-view change. Tell me which you
+want and I'll take it on a later day.
+
+**Still pending (file stays open):**
+1. `inside` — still to be reconciled into the one-building idiom (the hearth
+   column reads as cream stone, not the brick the window/chimney imply).
+2. The map orientation fix above (awaiting your eye), and the map
+   eventually *replacing* the bottom strip.
+3. The `--c-brick` token (still using `--c-sky-mid` for the brick).
+4. Deferred small-fixes list — still untouched, per "all of it is *after*."

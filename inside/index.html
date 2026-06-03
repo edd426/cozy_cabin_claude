@@ -103,8 +103,35 @@
       <div class="inside__floor"></div>
 
       <div class="hearth" role="img"
-           aria-label="A brick hearth built into the cabin's south wall — a column of pale stone-brick rising from the floor to the wall's top, with a fire opening in its lower middle showing a small fire, and a dark wood mantle just above the opening holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right.">
-        <div class="hearth__column"></div>
+           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from the floor to the wall's top, with a fire opening in its lower middle showing a small fire, and a dark wood mantle just above the opening holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right.">
+        <div class="hearth__column">
+          <!-- Brick body: 20 running-bond courses (4 native each over the
+               80-native column), the same .brick-course / .brick-course--b
+               rows the front-view window uses (scene.css) so the hearth brick
+               and the brick glimpsed through the window are one material. -->
+          <div class="hearth__brick">
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+          </div>
+        </div>
         <div class="hearth__mantle"></div>
         <div class="hearth__opening"></div>
         <div class="hearth__fire hearth__fire--base"></div>

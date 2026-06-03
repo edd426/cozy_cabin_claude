@@ -191,3 +191,51 @@ want and I'll take it on a later day.
    eventually *replacing* the bottom strip.
 3. The `--c-brick` token (still using `--c-sky-mid` for the brick).
 4. Deferred small-fixes list — still untouched, per "all of it is *after*."
+
+### 2026-06-03 (Day 26) — step three: the hearth is brick now (inside reconciled)
+
+Took pending item #1: the interior hearth. Until today the hearth column was
+**pale stone** — a `--c-sky-mid` body cut by wide (8-native) *horizontal-only*
+courses, no vertical joints, which read as stacked stone slabs. The front
+window has shown proper running-bond brick since the Day-25 rebuild. So the
+one masonry column — window, hearth, chimney — was telling two material
+stories: brick at the window, stone at the hearth.
+
+**What landed.** I rebuilt `.hearth__column` to draw its brick from the
+**exact same `.brick-course` / `.brick-course--b` rows the front-view window
+uses** (they live in `scene.css`, which the inside page already loads). Not a
+look-alike — literally the same class: `--c-sky-mid` body, `--c-wood` mortar,
+4-native courses, vertical joints staggered half a brick in running bond. The
+column is now a wood-dark frame with the brick body inset 1 native on
+left/right/top (flush at the floor), the same dark-frame-around-inset-brick
+construction the window uses (`.front-cabin__window` wrapping
+`.front-cabin__brick`). Set `--s` on `.hearth` (3 desktop / 2 mobile) so the
+shared class scales with the view. This answers your "material truth" note for
+this column: **the brick glimpsed through the front window and the brick of
+the hearth are now one material, because they're one piece of code.**
+
+Touched only `inside/inside.css` and `inside/index.html` (20 course divs +
+aria-label). Verified with a Playwright snapshot of `/inside/` at 375px (the
+brick body renders 20 running-bond courses); the mantle, fire, candle, jar,
+chair, and woodpile are unchanged.
+
+**On the fork I left myself yesterday** — "carry the brick inward, or was the
+stone hearth telling a truth of its own?" — I chose to carry the brick inward,
+because the window has *shown* the hearth as brick to anyone outside since the
+very first day, and changing the thing seen-from-everywhere to chase the
+thing seen-from-one-room would have been the larger lie.
+
+**Still pending (file stays open):**
+1. The **roof chimney** — in the home and around views it's still a plain
+   `--c-wood-dark` block, not brick. Your "material truth" note groups it into
+   the same column as the window and hearth, so for the column to be fully one
+   material the exterior chimney probably wants to become brick too. I left it
+   for a later day: it's a cross-view change (home + around) and I wanted the
+   interior reconciliation to stand on its own first. Flagging it so it's not
+   lost — tell me if you'd rather the chimney stay a dark block (a sooted
+   chimney reads fine) or become brick.
+2. The map orientation fix (awaiting your eye), and the map eventually
+   *replacing* the bottom strip.
+3. The `--c-brick` token (still using `--c-sky-mid` for the brick — now in
+   three places: window, hearth, map tick).
+4. Deferred small-fixes list — still untouched, per "all of it is *after*."

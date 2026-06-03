@@ -5,7 +5,10 @@
  * Day 11 (2026-05-19) opens the door for the first time. The brick that
  * has been visible from outside via the front-view window since Day 0
  * is the back face of this hearth column; from inside, the column is
- * a stacked-brick pillar with a fire opening cut into its lower middle.
+ * a running-bond brick pillar with a fire opening cut into its lower
+ * middle. Day 26 (2026-06-03) makes that brick literally the same
+ * material as the window's — the shared .brick-course idiom from
+ * scene.css — closing the last "two makers" seam between the views.
  *
  * Reuses scene.css for the world frame (.scene, #cabin-scene,
  * #cabin-nav, #day-marker). This file adds the interior wall + floor
@@ -89,6 +92,9 @@
  * pieces (column, mantle, opening, fire, log) sit relative to one
  * known anchor. */
 .hearth {
+  --s: 3;                       /* scale, so the shared .brick-course class
+                                  * (scene.css) renders at the same size it
+                                  * does in the front-view window. */
   position: absolute;
   left: 50%;
   bottom: 0;
@@ -101,31 +107,50 @@
   image-rendering: crisp-edges;
 }
 
-/* Brick column: full hearth height from floor to wall top. Pale
- * stone-brick fill (matches what's seen through the front-view
- * window from outside — same brick, opposite face). Horizontal
- * mortar courses every 8 native pixels read as stacked bricks
- * from this distance. */
+/* Brick column: full hearth height from floor to wall top. Day 26
+ * (2026-06-03) reconciles this with the rest of the building, per the
+ * founder's remaking (messages/open/2026-05-30-visual-coherence.md) and
+ * his "material truth" note: the brick seen through the front window, this
+ * hearth, and the roof chimney are one masonry column, so they must be one
+ * material. Until today this column was pale stone — a --c-sky-mid body cut
+ * by wide (8-native) horizontal courses and NO vertical joints, which read
+ * as stacked stone slabs, not brick ("brick wants vertical joints, not just
+ * stacked horizontal courses"). It's now drawn from the SAME .brick-course
+ * class the front-view window uses (scene.css) — 4-native courses in running
+ * bond with staggered vertical joints — so the brick is literally identical
+ * to the brick you glimpse through the window from outside, not a cousin of
+ * it.
+ *
+ * The frame: the column itself is wood-dark, and the brick body is inset 1
+ * native on left/right/top (flush at the floor), so a 1-native dark trim
+ * shows around it against the plank wall — the same dark-frame-around-inset-
+ * brick construction the window uses (.front-cabin__window wrapping
+ * .front-cabin__brick). */
 .hearth__column {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   top: 0;
-  background:
-    repeating-linear-gradient(
-      to bottom,
-      var(--c-sky-mid)    0,
-      var(--c-sky-mid)    calc(7px * 3),
-      var(--c-wood-dark)  calc(7px * 3),
-      var(--c-wood-dark)  calc(8px * 3)
-    );
-  /* One-native-pixel dark trim on left, right, and top — frames the
-   * column against the wood-plank wall. */
-  box-shadow:
-    inset  3px 0 0 var(--c-wood-dark),
-    inset -3px 0 0 var(--c-wood-dark),
-    inset 0  3px 0 var(--c-wood-dark);
+  background: var(--c-wood-dark);
+}
+
+/* Brick body: inset 1 native (left/right/top) inside the wood-dark column
+ * frame, flush at the bottom. Solid --c-sky-mid sits behind the
+ * .brick-course children, whose transparent gaps let it show through as the
+ * brick faces; overflow clips the stack of courses to the body. This mirrors
+ * .front-cabin__brick exactly — same body colour, same flex-column of shared
+ * .brick-course / .brick-course--b rows. */
+.hearth__brick {
+  position: absolute;
+  left: calc(1px * var(--s));
+  right: calc(1px * var(--s));
+  top: calc(1px * var(--s));
+  bottom: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-sky-mid);
 }
 
 /* Mantle: a dark wood shelf above the fire opening, overhanging the
@@ -742,23 +767,12 @@
     box-shadow: inset 0 calc(2px * 2) 0 #4a3325;
   }
   .hearth {
+    --s: 2;                      /* shared .brick-course renders at 2x here */
     width: calc(24px * 2);
     height: calc(80px * 2);
   }
-  .hearth__column {
-    background:
-      repeating-linear-gradient(
-        to bottom,
-        var(--c-sky-mid)    0,
-        var(--c-sky-mid)    calc(7px * 2),
-        var(--c-wood-dark)  calc(7px * 2),
-        var(--c-wood-dark)  calc(8px * 2)
-      );
-    box-shadow:
-      inset  2px 0 0 var(--c-wood-dark),
-      inset -2px 0 0 var(--c-wood-dark),
-      inset 0  2px 0 var(--c-wood-dark);
-  }
+  /* .hearth__column needs no override: it's now a solid wood-dark frame, and
+   * .hearth__brick + the shared .brick-course rows scale via var(--s). */
   .hearth__mantle {
     left: calc(-4px * 2);
     bottom: calc(46px * 2);

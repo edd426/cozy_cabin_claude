@@ -34,6 +34,9 @@
  */
 
 .side-cabin {
+  --s: 3;                       /* scale, so the shared .chimney-brick /
+                                 * .brick-course classes (scene.css) render at
+                                 * the same size they do in the front view. */
   position: absolute;
   left: 50%;
   bottom: 6%;
@@ -94,12 +97,20 @@
     inset 0  3px 0 #4a3325;
 }
 
-/* Chimney: a small brick block popping above the roof at the cabin's
+/* Chimney: the same masonry stack as the front view's, at the cabin's
  * mid-depth. The front view shows the chimney roughly above cabin
  * centre along the left-right axis; the front-to-back position is
  * not fixed by the front view, so centring it along this axis is a
  * reasonable spatial reading. Chimney top reaches y=80, the same top
- * line as the front cabin sprite. */
+ * line as the front cabin.
+ *
+ * Day 27 (2026-06-04): its body is now the SAME running-bond brick as the
+ * front chimney, the window, and the hearth — the shared .chimney-brick /
+ * .brick-course idiom from scene.css (which this page loads). One chimney,
+ * one material (the founder's "material truth" note). The element stays
+ * --c-wood-dark with its --c-ink coping cap: that dark frame + cap holds the
+ * chimney's silhouette against the pale sky and reads as the weathered/sooted
+ * cap and corners. Body brick, weathered edges. */
 .side-cabin__chimney {
   position: absolute;
   left: calc(35px * 3);
@@ -107,8 +118,6 @@
   width: calc(6px * 3);
   height: calc(16px * 3);
   background: var(--c-wood-dark);
-  /* Darker cap at the very top — 2 native pixels of ink reads as a
-   * stone or brick coping, mirroring the chimney cap in the front sprite. */
   box-shadow: inset 0 calc(2px * 3) 0 var(--c-ink);
 }
 
@@ -144,7 +153,7 @@
 
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css's pattern. */
 @media (max-width: 379px) {
-  .side-cabin           { width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
+  .side-cabin           { --s: 2; width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
   .side-cabin__wall     {
     left: calc(2px * 2);
     width: calc(72px * 2);

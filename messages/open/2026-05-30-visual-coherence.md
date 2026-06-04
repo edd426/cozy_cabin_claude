@@ -239,3 +239,61 @@ thing seen-from-one-room would have been the larger lie.
 3. The `--c-brick` token (still using `--c-sky-mid` for the brick — now in
    three places: window, hearth, map tick).
 4. Deferred small-fixes list — still untouched, per "all of it is *after*."
+
+### 2026-06-04 (Day 27) — the chimney is brick now (the column is fully one material)
+
+Took pending item #1: the roof chimney. Until today it was a plain
+`--c-wood-dark` block in both outside views — the last third of the masonry
+column (window + hearth + chimney) still telling a different material story
+than the brick the other two-thirds had become over Days 25–26.
+
+**On the fork I left you yesterday** — "stay a sooted dark block, or become
+brick?" — I resolved it without waiting, because your own "material truth" note
+in `CLAUDE.md` had already answered it: *the brick through the front window, the
+hearth inside, and the chimney on the roof are one column — so brick in one is
+brick in all.* The "sooted chimney reads fine" alternative was mine, not yours;
+your written constraint pointed one way. If you'd actually wanted the chimney
+left dark, say so and I'll revert it — but I read the note as the standing
+answer.
+
+**What landed.** The chimney **body** now draws from the SAME shared
+running-bond brick the window and hearth use — a new `.chimney-brick` wrapper in
+`scene.css` over a `--c-sky-mid` body, holding the shared `.brick-course` rows
+(literally the same class, so change one and all three change). Used in both
+`scene.html` (front) and `around/index.html` (side); added `--s` to
+`.side-cabin` so the shared classes scale with the around view.
+
+**What I kept dark, on purpose.** The chimney element stays `--c-wood-dark` with
+its `--c-ink` coping cap, so a 1-native dark frame runs up each side and the cap
+sits on top. Two reasons, and they happen to be the same reason: (a) the brick
+colour in use (`--c-sky-mid`) is *almost exactly the sky tone*, so a chimney
+bricked edge-to-edge would dissolve into the morning — the dark frame is what
+holds its silhouette against the pale sky; (b) that dark cap + corners read as
+the part of the stack woodsmoke and weather are allowed to have darkened. So:
+**body brick, weathered edges** — both your "material truth" and the
+"sooted chimney" reading kept on one stack.
+
+**Cross-view (Article XIII).** Geometry is unchanged in both views (same 6×16
+native chimney, same position), so nothing else had to move. From straight
+overhead on the map you only ever see the cap, which is unchanged — so the map's
+top-down chimney (a dark capped block) still agrees with the walls. Verified on
+all four deployed previews (`previews/2026-06-04-4584bc7*.png`): brick reads in
+home and around, cap holds the silhouette, map unchanged.
+
+**Still pending (file stays open):**
+1. ~~The roof chimney~~ — **done today.** The window, hearth, and chimney are now
+   one material end to end.
+2. The map orientation fix (still awaiting your eye — the committed faces imply
+   long-axis N–S, but the map draws E–W; see Day 25's note), and the map
+   eventually *replacing* the bottom strip.
+3. The `--c-brick` token (still using `--c-sky-mid` for the brick — now in
+   four places: window, hearth, map tick, and the chimney). If you add
+   `--c-brick` to `theme.css`, switching all four is a one-token change.
+4. Deferred small-fixes list — still untouched, per "all of it is *after*."
+
+With the building's masonry now fully coherent, the only remaining
+*building-coherence* work I can see is the map-orientation reconciliation (#2),
+which needs your eye on the proportions before I conform anything else to it.
+The walls/roof/brick of the three elevation views now read as one building; what
+remains in this thread is the map↔elevation footprint question and then the
+deferred polish list. Leaving the file open for your read.

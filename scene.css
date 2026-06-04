@@ -197,10 +197,21 @@
     inset 0  calc(1px * var(--s)) 0 #4a3325;
 }
 
-/* Chimney — the same block + ink coping cap as around.css. Rises from the
- * building's centre (x=24=50%, where the smoke anchors); its lower 6 native
- * sit behind the roof, so only the top 10 show above the ridge. No z-index:
- * DOM order (chimney before roof) lets the roof paint over the base. */
+/* Chimney — the top of the same masonry column as the window and the hearth.
+ * Day 27 (2026-06-04): its body is now the SAME running-bond brick (the shared
+ * .chimney-brick / .brick-course idiom below), per the founder's "material
+ * truth" note — the brick at the window, the hearth inside, and this chimney
+ * are one column, so brick in one is brick in all. The element itself stays
+ * --c-wood-dark and keeps its --c-ink coping cap (box-shadow): that dark frame
+ * + cap is the chimney's silhouette against the pale sky (the brick colour,
+ * --c-sky-mid, is close to the sky tone, so an edge-to-edge brick chimney would
+ * dissolve into the morning) AND reads as the cap/corners woodsmoke is allowed
+ * to have darkened. Body brick, weathered edges — both true on one stack.
+ *
+ * Rises from the building's centre (x=24=50%, where the smoke anchors); its
+ * lower 6 native sit behind the roof, so only the top 10 show above the ridge.
+ * No z-index: DOM order (chimney before roof) lets the roof paint over the
+ * base. */
 .front-cabin__chimney {
   position: absolute;
   left: calc(21px * var(--s));
@@ -209,6 +220,25 @@
   height: calc(16px * var(--s));
   background: var(--c-wood-dark);
   box-shadow: inset 0 calc(2px * var(--s)) 0 var(--c-ink);
+}
+
+/* Chimney brick body — shared by the front chimney (.front-cabin__chimney,
+ * scene.html) and the side chimney (.side-cabin__chimney, around/index.html):
+ * one chimney, one material. The same .brick-course rows the window and hearth
+ * use, over a --c-sky-mid body, inset 1 native inside the chimney's wood-dark
+ * frame (left/right) and sitting below the 2-native ink cap (top). Flush at the
+ * bottom (which hides behind the roof in the front view). Both .front-cabin and
+ * .side-cabin define --s, so the shared .brick-course scales with each view. */
+.chimney-brick {
+  position: absolute;
+  left: calc(1px * var(--s));
+  right: calc(1px * var(--s));
+  top: calc(2px * var(--s));
+  bottom: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-sky-mid);
 }
 
 /* Window — the front face's defining feature: a wood-framed opening filled

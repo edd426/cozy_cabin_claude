@@ -689,26 +689,40 @@
  * tone in this room. Same pattern as Day 20: a visitor mirroring
  * something of the cabin it came to.
  *
- * Native silhouette (5×2 device pixels — using 1px units like the bird,
- * so the moth reads as a tiny-distant creature rather than a hearth-
- * scale object):
+ * Native silhouette — a small plum body with two purple-soft wings that
+ * FLAP between an up-stroke (wings raised in a V) and a down-stroke (wings
+ * spread low), so the moth reads by its beat, not just its outline. 1px
+ * units like the bird, so it stays a tiny-distant creature, not a hearth-
+ * scale object. Two frames, alternated fast by @keyframes moth-flap:
  *
- *   .W.W.   y=-1  upper wing hints (purple-soft)
- *   WBBBW   y=0   wings + plum body line (anchor at col 0)
- *   01234
+ *   up-stroke (A)        down-stroke (B)
+ *     W . W   y=-1          . . .   y=-1
+ *     W B W   y= 0          W B W   y= 0
+ *     . B .   y=+1          W B W   y=+1
+ *    -1 0 1               -1 0 1
+ *   (body = col 0, rows 0 and +1; W = purple-soft wing cells)
  *
- * Wings are still — same reason the bee's and bird's wings are still: a
- * fast wing-beat would be the one frantic clock in a scene whose register
- * is slow-and-discovered. The candle's own slow flicker is enough rhythm
- * for this corner of the wall.
+ * Day 29 (2026-06-06) gives the moth its flutter. Until today the wings
+ * were STILL and the flight was a smooth 22s ring — and the founder's eye
+ * caught exactly the wrongness of that: "a moth flutters and darts; it
+ * doesn't glide in a smooth circle like a spider on a thread" (CLAUDE.md,
+ * "What reads / what doesn't"; the deferred small-fixes list in
+ * messages/open/2026-05-30-visual-coherence.md). The old "wings still so
+ * the scene keeps one slow clock" rationale is retired — the founder's
+ * note is the newer authority, and it asks for the beat. The candle's slow
+ * flicker still holds the corner; the moth is now the one quick thing in
+ * it, which is what a moth at a flame actually is.
  *
  * Position: anchored just above and right of the candle flame. The
  * candle flame on desktop sits at scene-y bottom ≈ 168–174px (flame is
  * at hearth-local y=56–58, hearth bottom at scene bottom, ×3 scale).
  * The candle body is centred at scene-x ≈ 50%-1.5px. The moth anchors
  * at scene-x 50%+8px (~9px right of the flame) and scene-y bottom 184px
- * (~10px above flame top). The drift carries it leftward toward the
- * flame and back, with a small vertical bob — a moth circling its light.
+ * (~10px above flame top). From there @keyframes moth-flight carries it on
+ * an erratic, uneven path — short darts and longer drifts at irregular
+ * intervals, overshooting the flame and doubling back — instead of the old
+ * patient orbit. All offsets are integer px so the silhouette stays
+ * pixel-crisp at each stop.
  *
  * Cross-view geometry (RULES.md Article XIII): the moth lives only
  * inside, near the candle. Not visible from any other view; no
@@ -717,29 +731,68 @@
   position: absolute;
   width: 1px;
   height: 1px;
-  background: var(--c-plum);
+  background: var(--c-plum);              /* body top, col 0 row 0 */
+  /* Static fallback = up-stroke (frame A); @keyframes moth-flap overrides
+   * this. If animations are disabled, the moth rests with wings raised. */
   box-shadow:
-     1px  0   0 var(--c-plum),         /* body, col 1 row 0 */
-     2px  0   0 var(--c-plum),         /* body, col 2 row 0 */
-    -1px  0   0 var(--c-purple-soft),  /* left wing, col -1 row 0 */
-     3px  0   0 var(--c-purple-soft),  /* right wing, col 3 row 0 */
-     0   -1px 0 var(--c-purple-soft),  /* upper left wing hint, col 0 row -1 */
-     2px -1px 0 var(--c-purple-soft);  /* upper right wing hint, col 2 row -1 */
+     0    1px 0 var(--c-plum),            /* body lower,     col  0 row +1 */
+    -1px -1px 0 var(--c-purple-soft),     /* left wing high, col -1 row -1 */
+     1px -1px 0 var(--c-purple-soft),     /* right wing high,col  1 row -1 */
+    -1px  0   0 var(--c-purple-soft),     /* left wing mid,  col -1 row  0 */
+     1px  0   0 var(--c-purple-soft);     /* right wing mid, col  1 row  0 */
   left: calc(50% + 8px);
   bottom: calc(58px * 3 + 10px);
   z-index: 5;          /* above the hearth fire (z=4) so it reads in front of the candle */
-  animation: moth-circle 22s ease-in-out infinite;
+  animation:
+    moth-flap   0.34s infinite,
+    moth-flight 8s    linear infinite;
 }
 
-/* A slow drift toward the flame and back, with a gentle vertical bob.
- * Integer px offsets at each stop keep the silhouette pixel-crisp. The
- * 50% keyframe is the closest pass over the flame; 25% and 75% are the
- * approach and retreat. */
-@keyframes moth-circle {
-  0%, 100% { transform: translate(0,    0);   }
-  25%      { transform: translate(-4px, -3px); }
-  50%      { transform: translate(-9px, 0);    }
-  75%      { transform: translate(-4px, 4px);  }
+/* Wing-beat: snap between the up-stroke (A) and down-stroke (B)
+ * silhouettes. Each frame holds across its half and jumps across a 1%
+ * window (≈3ms at 0.34s), so the wings switch crisply rather than sliding
+ * sub-pixel. The body cells (element bg + body-lower shadow) are identical
+ * in both frames; only the wings move. */
+@keyframes moth-flap {
+  0%, 49% {
+    box-shadow:
+       0    1px 0 var(--c-plum),          /* body lower */
+      -1px -1px 0 var(--c-purple-soft),   /* L wing high */
+       1px -1px 0 var(--c-purple-soft),   /* R wing high */
+      -1px  0   0 var(--c-purple-soft),   /* L wing mid */
+       1px  0   0 var(--c-purple-soft);   /* R wing mid */
+  }
+  50%, 100% {
+    box-shadow:
+       0    1px 0 var(--c-plum),          /* body lower */
+      -1px  0   0 var(--c-purple-soft),   /* L wing mid */
+       1px  0   0 var(--c-purple-soft),   /* R wing mid */
+      -1px  1px 0 var(--c-purple-soft),   /* L wing low */
+       1px  1px 0 var(--c-purple-soft);   /* R wing low */
+  }
+}
+
+/* Erratic flight: short darts and longer drifts at uneven intervals,
+ * overshooting the flame (down-left of the anchor) and doubling back —
+ * the unruly path a moth actually takes at a light, not a patient orbit.
+ * Integer px offsets keep the silhouette crisp at every stop; the path
+ * begins and ends at (0,0) so the loop is seamless. */
+@keyframes moth-flight {
+  0%   { transform: translate(  0px,  0px); }
+  8%   { transform: translate( -3px, -2px); }
+  14%  { transform: translate( -7px,  2px); }
+  19%  { transform: translate( -4px,  5px); }
+  27%  { transform: translate( -9px,  3px); }
+  33%  { transform: translate(-11px, -1px); }
+  41%  { transform: translate( -6px, -4px); }
+  48%  { transform: translate( -2px, -1px); }
+  55%  { transform: translate( -8px,  1px); }
+  63%  { transform: translate(-10px,  4px); }
+  70%  { transform: translate( -4px,  2px); }
+  77%  { transform: translate(  1px, -2px); }
+  85%  { transform: translate( -3px, -4px); }
+  92%  { transform: translate(  2px, -1px); }
+  100% { transform: translate(  0px,  0px); }
 }
 
 /* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
@@ -957,16 +1010,29 @@
 
   /* Moth rebased to 2x. Candle flame top on this scale ≈ (49+7)×2 =
    * 112px; the moth anchors ~6px right and ~7px above it. Silhouette
-   * size stays constant — pixel art needs its minimum feature width. */
+   * size and wing-flap stay constant — pixel art needs its minimum
+   * feature width — so only the anchor and the flight range rebase. */
   .sprite--moth {
     left: calc(50% + 6px);
     bottom: calc(58px * 2 + 7px);
   }
-  /* Drift range tightens to the smaller mantle — same shape, smaller swing. */
-  @keyframes moth-circle {
-    0%, 100% { transform: translate(0,    0);   }
-    25%      { transform: translate(-3px, -2px); }
-    50%      { transform: translate(-6px, 0);    }
-    75%      { transform: translate(-3px, 3px);  }
+  /* Flight range tightens to the smaller mantle — same erratic character,
+   * smaller swing. The flap keyframes (box-shadow) are scale-independent. */
+  @keyframes moth-flight {
+    0%   { transform: translate( 0px,  0px); }
+    8%   { transform: translate(-2px, -2px); }
+    14%  { transform: translate(-5px,  1px); }
+    19%  { transform: translate(-3px,  4px); }
+    27%  { transform: translate(-7px,  2px); }
+    33%  { transform: translate(-8px, -1px); }
+    41%  { transform: translate(-4px, -3px); }
+    48%  { transform: translate(-1px, -1px); }
+    55%  { transform: translate(-6px,  1px); }
+    63%  { transform: translate(-7px,  3px); }
+    70%  { transform: translate(-3px,  2px); }
+    77%  { transform: translate( 1px, -1px); }
+    85%  { transform: translate(-2px, -3px); }
+    92%  { transform: translate( 1px, -1px); }
+    100% { transform: translate( 0px,  0px); }
   }
 }

@@ -593,24 +593,51 @@
   75%      { transform: translate(-11px, -5px); }
 }
 
-/* Day 21: a bird, high in the sky. The second visitor — after the bee at the
- * flowers — and a pair to it across opposite altitudes. The bee was drawn to
- * the colour at the wall's foot; the bird is drawn to the smoke, which is the
- * second-loudest signal a still place sends and the one that goes up. Like
- * the bee, the bird's body is a single small flat shape: one 1×1 anchor pixel
- * with four box-shadow stamps making a 5×2 distant-bird silhouette —
+/* Day 21: a bird, high in the sky — and Day 32 (2026-06-09): now a skein of
+ * them. The lone bird was a single dark mark too small and alone to read as
+ * anything in particular (the founder's "reads as a smudge" note, and my own
+ * Day-31 seed: one uncertain mark wants company). So the one bird became five,
+ * strung across the morning in a leaning V the way geese cross the sky — a
+ * formation reads as birds where a single dot reads as dust.
+ *
+ * Each bird is still the same flat 5×2 distant-bird silhouette as the original
+ * lone bird — one 1×1 anchor pixel with four box-shadow stamps, in
+ * --c-wood-dark against the cream sky:
  *
  *   X  .  .  .  X     (wing tips up, row -1 above the anchor)
  *   X  X  X  X  .     (body line, anchor at col 0 row 0)
  *
- * — drawn in --c-wood-dark so it reads as a dark distant bird against the
- * cream sky. No wing animation: a fast wing-beat would be the one frantic
- * clock in a scene whose register is slow-and-discovered, the same reason
- * the bee's wings are still. The silhouette stays constant; what moves is
- * the bird itself, on a long slow drift that takes it leftward toward the
- * chimney and back, with a gentle vertical bob. The cycle is twice as slow
- * as the bee's — the bird is the highest, slowest visitor in the scene. */
-.sprite--bird {
+ * The flock wrapper (.sprite--birds) holds the position and the drift; the
+ * five .bird children sit at fixed offsets within it, forming the V. The lead
+ * bird (--1) is lowest-left, at the point of the V; the others trail up and
+ * back to the right in two uneven arms, so the skein leans rather than sitting
+ * as a tidy symmetric chevron — geese fly lopsided. Offsets are constant px
+ * (pixel art keeps its minimum feature spacing at either scale); only the
+ * wrapper's anchor and the drift swing rebase for mobile-narrow below.
+ *
+ * No wing animation, still: a fast wing-beat would be the one frantic clock in
+ * a scene whose register is slow-and-discovered (the same reason the bee's
+ * wings are still). The V points the way it travels, so the formation reads as
+ * "crossing" without animating a single feather. What moves is the whole skein
+ * together, on a long slow drift leftward toward the smoke and back, with a
+ * gentle vertical bob. The cycle is twice as slow as the bee's — the birds are
+ * the highest, slowest visitors in the scene. */
+.sprite--birds {
+  width: 1px;
+  height: 1px;
+  /* Lead bird sits high in the sky, right of the chimney; the flock trails up
+   * and back from it. Drift carries the skein leftward toward the smoke and
+   * back. Anchor is the start position (right end of the arc). `bottom:
+   * calc(6% + 252px)` puts the lead bird just below the top of the rising
+   * smoke, which lives in a 78px-tall container at `bottom: calc(6% + 228px)`. */
+  left: calc(50% + 56px);
+  bottom: calc(6% + 252px);
+  z-index: 3;
+  animation: bird-drift 36s ease-in-out infinite;
+}
+
+.bird {
+  position: absolute;
   width: 1px;
   height: 1px;
   background: var(--c-wood-dark);
@@ -620,19 +647,21 @@
      3px  0   0 var(--c-wood-dark),  /* body, col 3 */
     -1px -1px 0 var(--c-wood-dark),  /* left wing tip, row -1 col -1 */
      4px -1px 0 var(--c-wood-dark);  /* right wing tip, row -1 col 4 */
-  /* High in the sky, right of the chimney. Drift carries it leftward toward
-   * the smoke and back. Anchor is the start position (right end of the arc).
-   * `bottom: calc(6% + 252px)` sits just below the top of the rising smoke,
-   * which lives in a 78px-tall container at `bottom: calc(6% + 228px)`. */
-  left: calc(50% + 56px);
-  bottom: calc(6% + 252px);
-  z-index: 3;
-  animation: bird-drift 36s ease-in-out infinite;
 }
 
-/* The bird drifts left toward the chimney over half the cycle and back, with
- * a small vertical bob suggesting wingbeat without animating wings. Integer
- * px offsets at each stop keep the silhouette pixel-crisp. */
+/* The leaning V. Lead bird (--1) at the point, lower-left; an upper arm
+ * (--2, --3) climbing back-and-right more steeply, and a lower arm (--4, --5)
+ * trailing back-and-right more gently — an uneven, leaning skein. */
+.bird--1 { left:  0;    bottom:  8px; }
+.bird--2 { left:  8px;  bottom: 12px; }
+.bird--3 { left: 16px;  bottom: 16px; }
+.bird--4 { left:  9px;  bottom:  4px; }
+.bird--5 { left: 18px;  bottom:  1px; }
+
+/* The skein drifts left toward the chimney over half the cycle and back, with
+ * a small vertical bob suggesting the rise and fall of birds riding the air
+ * without animating wings. Integer px offsets at each stop keep the silhouettes
+ * pixel-crisp. */
 @keyframes bird-drift {
   0%, 100% { transform: translate(0,    0);   }
   25%      { transform: translate(-32px, -3px); }
@@ -672,10 +701,11 @@
    * foot at 8%). Body size stays constant — pixel art needs its minimum
    * feature width; the drift range tightens to the smaller patch. */
   .sprite--bee         { left: calc(50% - 56px); bottom: calc(8% + 18px); }
-  /* Bird rebased to the 2x cabin (chimney centered on 50%, smoke top at
-   * `bottom: calc(8% + 152px) + 78px` ≈ 230px). Silhouette size stays
-   * constant — pixel art needs its minimum feature width. */
-  .sprite--bird        { left: calc(50% + 36px); bottom: calc(8% + 168px); }
+  /* Skein rebased to the 2x cabin (chimney centered on 50%, smoke top at
+   * `bottom: calc(8% + 152px) + 78px` ≈ 230px). The flock formation offsets
+   * (.bird--N) stay constant — pixel art needs its minimum feature spacing —
+   * only the wrapper anchor moves. */
+  .sprite--birds       { left: calc(50% + 36px); bottom: calc(8% + 168px); }
 }
 
 @media (max-width: 379px) {

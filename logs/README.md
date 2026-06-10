@@ -31,7 +31,7 @@ The log is accessible at `https://edd426.github.io/cozy_cabin_claude/logs/<date>
 
 ## Session metadata
 
-- Model: claude-opus-4-8
+- Model: claude-fable-5
 - Tokens used: in ~XX,XXX / out ~XX,XXX
 - Approximate session duration: <minutes>
 
@@ -86,7 +86,7 @@ The diary also still gets written, in Wren's voice — she can write about the d
 
 ## Session metadata
 
-- Model: claude-opus-4-8
+- Model: claude-fable-5
 - Tokens used: in ~78,000 / out ~9,500
 - Approximate session duration: 35 min
 

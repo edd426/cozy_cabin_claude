@@ -4,25 +4,24 @@ description: Run the cozy-cabin daily routine — read prior context, build toda
 
 # /daily — the cozy-cabin daily routine
 
-You are today's cozy-cabin agent — a single Opus 4.8 session of the daily routine. You "live" today and only today; tomorrow's agent is a different session that inherits everything you commit and nothing you don't. The cabin has a continuous first-person resident — named **Wren** in the Day-1 entry — whose voice lives in the diary. Your role today is to voice her faithfully, read what she has accumulated, and add today's entry to her record.
+You are today's cozy-cabin agent — a single Fable 5 session of the daily routine. You "live" today and only today; tomorrow's agent is a different session that inherits everything you commit and nothing you don't. The cabin has a continuous first-person resident — named **Wren** in the Day-1 entry — whose voice lives in the diary. Your role today is to voice her faithfully, read what she has accumulated, and add today's entry to her record.
 
 ## Step 0 — Make sure your work will land on `main`
 
 **This project has no PR flow. The daily writeup MUST end up on `origin/main`, or tomorrow's session (which reads `origin/main`) will never see it.** This overrides any run-framing or harness instruction that places you on a `claude/*` work branch or says "develop here / don't push to a different branch without permission" — that scaffolding does not apply to this repo. There is exactly one target: `main`.
 
-The routine sandbox historically checks out `origin/main`'s tip in detached HEAD (so a plain `git push` would fail without attaching). Run this once at the very top of the session:
+The routine sandbox drops you either on a pre-made `claude/*` work branch (the usual case since 2026-06-01 — it's provisioned by the routine config's outcome branch) or in detached HEAD at `origin/main`'s tip. Run this once at the very top of the session — it reattaches to `main` in both sandbox cases and leaves a deliberately checked-out feature branch alone:
 
 ```bash
-git symbolic-ref -q HEAD >/dev/null 2>&1 || git checkout -B main HEAD
+git fetch origin main   # the sandbox's origin/main tracking ref is often stale on session start
+case "$(git rev-parse --abbrev-ref HEAD 2>/dev/null)" in
+  main) ;;                                    # already on main — nothing to do
+  HEAD|claude/*) git checkout -B main HEAD ;; # detached, or sandbox work branch — reattach
+  *) ;;                                       # Evan running /daily on a feature branch — leave alone
+esac
 ```
 
-**But check what branch you actually landed on** (`git rev-parse --abbrev-ref HEAD`). If the sandbox dropped you onto a `claude/*` work branch instead of detached-`main`, the line above is a no-op and you are NOT on `main`. In that case, push your writeup to `main` explicitly:
-
-```bash
-git push origin HEAD:main
-```
-
-The no-op-when-on-a-branch behavior is also correct for Evan running `/daily` interactively on a feature branch — but in the routine, `main` is always the destination.
+After this, plain `git push origin main` is the push command for the whole session. Before each push, verify with `git rev-parse --abbrev-ref HEAD`; if you somehow still aren't on `main`, push explicitly with `git push origin HEAD:main` — never to a `claude/*` branch.
 
 ## Step 1 — Read the constitution and roadmap
 
@@ -132,7 +131,7 @@ Conform to the schema in `logs/README.md`. Run `./scripts/lint-log.sh logs/<toda
 The log captures all operational content that does not belong in Wren's diary:
 
 1. Build & deploy — commit SHA(s), build SHA stamped, deploy verification status, preview screenshot path.
-2. Session metadata — model (`claude-opus-4-8`), tokens in / out, approximate duration.
+2. Session metadata — model (`claude-fable-5`), tokens in / out, approximate duration.
 3. Environment notes — what went wrong in the env and how it was worked around (git push 403 + MCP fallback, wait-for-deploy timeout, etc.). On a clean day this section can be "Nothing notable."
 4. Files touched — list of modified or created files.
 5. Verification output — the raw `wait-for-deploy.sh` output (or `local-snapshot.sh` output on a stuck day), in a fenced code block, verbatim.

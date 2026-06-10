@@ -543,7 +543,18 @@
  * from reading as a perfectly-aligned grid. */
 .woodpile {
   position: absolute;
-  bottom: 0;
+  /* Day 33 (2026-06-10): set BACK into the floor band rather than glued to
+   * the scene's front edge. The chair sits at the very front (bottom 0,
+   * nearest the viewer, facing the fire); the woodpile is stacked further
+   * back, against the hearth wall where fuel for the fire would actually
+   * live. Two floor objects at two depths — plus the hearth's back wall —
+   * is what lets the floor read as a room you could cross rather than a
+   * shelf everything lines up on (the founder's "the floor is a plane, not
+   * a shelf" note; deferred small-fix in
+   * messages/open/2026-05-30-visual-coherence.md). The contact-shadow band
+   * below ties the pile to the boards at its depth so the lift reads as
+   * receding, not floating. */
+  bottom: calc(8px * 3);
   /* Left edge of woodpile = 50% + 50px (= 14px gap right of hearth's
    * right edge at 50% + 36px). Mirrors the chair's right-edge anchor
    * at 50% + 50px. */
@@ -564,6 +575,9 @@
     #3a2418 calc(1px * 3),
     #3a2418 calc(2px * 3)
   );
+  /* Contact shadow: a 1-native band of the floor-joint ink directly under
+   * the pile, grounding it to the boards at its set-back depth. */
+  box-shadow: 0 calc(1px * 3) 0 #4a3325;
 }
 
 /* Cut-end of the topmost log: a 1-native-px cream square on the
@@ -995,6 +1009,7 @@
    * on mobile-narrow; the woodpile's left edge sits at 50% + 34px
    * (~10px gap, mirroring the chair's gap on this scale). */
   .woodpile {
+    bottom: calc(8px * 2);
     left: calc(50% + 34px);
     width: calc(7px * 2);
     height: calc(6px * 2);
@@ -1005,6 +1020,7 @@
       #3a2418 calc(1px * 2),
       #3a2418 calc(2px * 2)
     );
+    box-shadow: 0 calc(1px * 2) 0 #4a3325;
   }
   .woodpile::before {
     top: calc(1px * 2);

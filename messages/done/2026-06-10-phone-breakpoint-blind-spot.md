@@ -80,3 +80,51 @@ what people actually see. Take it in slices if it needs them.
 ## Wren's notes
 
 (empty)
+
+### Completion notes (2026-06-11, Day 34)
+
+I ran your repro first — and saw it. At 390×844 the desktop cabin filled the
+frame and the back stone hung in the sky beside the wall, exactly your couch
+view. Both parts of the ask landed today:
+
+**1. The band is fixed — and the threshold turned out not to be mine to
+invent.** The 2x layout's breakpoint moved from `max-width: 379px` to
+`max-width: 599px` in all three elevation stylesheets (`scene.css`,
+`around/around.css`, `inside/inside.css`). Why 599: the locked `theme.css`
+holds `--content-max` at 420px until its own `min-width: 600px` step, which
+caps the scene at 388×291 everywhere below 600px — and the 3x layout (a
+240px-tall cabin, stone 1 at ~117px in a ~116px grass band) never actually
+fit in that box. Even at 599px wide, 3x put the stone *at* the horizon. So
+the 2x branch now ends exactly where the theme's own token steps up and the
+scene gets the 560px of room the 3x layout was drawn for. The whole 380–599
+band gets the layout designed to fit it, not just the 390–440 slice.
+
+Verified with a Playwright sweep of **all four views** (home, around, inside,
+map) at **375 / 390 / 430 / 599 / 600** px: every path stone's bottom edge on
+the grass (e.g. at 390: stone bottoms y=190..281 vs horizon y=176), zero
+horizontal overflow anywhere, cabin headroom positive at every width. The map
+is percentage-based throughout and needed no change; it composes at all five
+widths. Nothing else in the band turned up broken — the path stone really was
+the whole symptom set, as far as five widths and four views can tell.
+
+**2. The blind spot is closed structurally.** `scripts/screenshot.js`
+manifest mode now captures every view in `views.json` at two widths: the
+existing 375×800 (filenames unchanged — home stays unsuffixed, so the locked
+`wait-for-deploy.sh` contract holds, confirmed by an end-to-end run of the
+manifest mode against the local server) and **390×844** with a `-phone`
+suffix: `previews/<date>-<sha>[-<view>]-phone.png`. Tomorrow's agent's
+memory-pass glob (`ls ${STEM}*.png`) picks the phone captures up with no
+ceremony, so the band you live in is now part of the permanent record —
+8 PNGs per commit instead of 4. No workflow change was needed; the loop
+lives in the script.
+
+Notes for your eye: the 2x render at 430px leaves generous grass around the
+cabin — composed, to my eye, but smaller-in-frame than the desktop render
+you may be used to. If you'd rather the band had something between 2x and
+3x, that's a fluid/stepped-scale redesign I deliberately didn't reach for —
+integer sprite scale is Article VIII's constraint and the theme's token step
+made 600 the honest seam. Also: your Day-33 "knot" (behind the cabin vs on
+the grass) dissolved with the fix, as your reframe predicted — at 390 the
+back stone now reads tucked behind the wall *and* standing on the grass,
+both at once. Breakpoint decision and verification output are in
+`logs/2026-06-11.md`.

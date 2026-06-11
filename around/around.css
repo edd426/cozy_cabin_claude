@@ -151,8 +151,10 @@
   background: var(--c-cream);
 }
 
-/* Mobile narrow: scale 3x → 2x, mirroring scene.css's pattern. */
-@media (max-width: 379px) {
+/* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css's
+ * pattern (Day 34: threshold widened from 379px so real 390–430px phones
+ * stop landing in the desktop branch — see scene.css's breakpoint note). */
+@media (max-width: 599px) {
   .side-cabin           { --s: 2; width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
   .side-cabin__wall     {
     left: calc(2px * 2);

@@ -11,24 +11,37 @@
 //       Manifest-driven loop. Used by .github/workflows/pages.yml after
 //       each Pages deploy to capture every view in scripts/views.json.
 //       The manifest is a JSON array of { name, url_path } entries; each
-//       entry produces previews/<DATE_TAG>-<SHA_SHORT>[-<name>].png in
-//       OUT_DIR. The "home" entry produces the unsuffixed filename so the
-//       existing wait-for-deploy.sh idiom (which looks for
+//       entry produces TWO captures in OUT_DIR:
+//         375×800 (narrow): previews/<DATE_TAG>-<SHA_SHORT>[-<name>].png
+//         390×844 (phone):  previews/<DATE_TAG>-<SHA_SHORT>[-<name>]-phone.png
+//       The "home" entry's narrow capture keeps the unsuffixed filename so
+//       the existing wait-for-deploy.sh idiom (which looks for
 //       previews/<date>-<sha>.png) keeps working.
+//
+//       The phone captures exist because of the Day-33/34 blind spot
+//       (messages/done/2026-06-10-phone-breakpoint-blind-spot.md): every
+//       render the agent ever saw was exactly 375px wide, while real phones
+//       are 390–440 CSS px — so a breakpoint bug that broke only that band
+//       was structurally invisible. 390×844 (the most common iPhone size)
+//       keeps the band visible to tomorrow's agent without ceremony.
 //
 // Run from the GitHub Actions screenshot job or locally with playwright
 // installed (`npm install playwright`).
 //
-// Viewport: 375×800 at deviceScaleFactor 2 — the same shape local-snapshot.sh
-// renders at, so what CI captures and what the agent sees in-session match.
+// Default viewport: 375×800 at deviceScaleFactor 2 — the same shape
+// local-snapshot.sh renders at, so what CI captures and what the agent
+// sees in-session match.
 
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
 
-async function capture(browser, fullUrl, outPath) {
+const NARROW_VIEWPORT = { width: 375, height: 800 };
+const PHONE_VIEWPORT  = { width: 390, height: 844 };
+
+async function capture(browser, fullUrl, outPath, viewport = NARROW_VIEWPORT) {
   const context = await browser.newContext({
-    viewport: { width: 375, height: 800 },
+    viewport,
     deviceScaleFactor: 2,
   });
   const page = await context.newPage();
@@ -82,12 +95,15 @@ async function manifestRun(manifestPath, baseUrl, outDir, dateTag, shaShort) {
       // Home gets the unsuffixed filename so wait-for-deploy.sh keeps working.
       const suffix = view.name === 'home' ? '' : `-${view.name}`;
       const outPath = path.join(outDir, `${dateTag}-${shaShort}${suffix}.png`);
-      await capture(browser, fullUrl, outPath);
+      await capture(browser, fullUrl, outPath, NARROW_VIEWPORT);
+      // Real-phone-width sibling capture — the 380–440px band guard.
+      const phonePath = path.join(outDir, `${dateTag}-${shaShort}${suffix}-phone.png`);
+      await capture(browser, fullUrl, phonePath, PHONE_VIEWPORT);
     }
   } finally {
     await browser.close();
   }
-  console.log(`screenshot: done — ${views.length} view(s) captured`);
+  console.log(`screenshot: done — ${views.length} view(s) captured at 2 widths each`);
 }
 
 (async () => {

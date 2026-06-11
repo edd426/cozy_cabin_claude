@@ -669,8 +669,18 @@
   75%      { transform: translate(-30px, 4px);  }
 }
 
-/* Mobile narrow: scale down to 2x for 320–379 px viewports. */
-@media (max-width: 379px) {
+/* Phone-and-narrow: scale down to 2x below 600px viewports.
+ *
+ * Day 34 (2026-06-11): the threshold was 379px, which real phones MISS —
+ * iPhones are 390–430 CSS px wide, so they fell into the desktop 3x branch
+ * and got the 240px-tall cabin crammed into a scene that caps at 388×291
+ * (theme.css holds --content-max at 420px until its own 600px step), with
+ * path stone 1 floating above the horizon. The 3x layout only actually fits
+ * once --content-max steps up to 560px at 600px viewports — so the 2x branch
+ * now ends exactly where that token steps, and the whole 380–599 band gets
+ * the layout that was designed to fit it. See
+ * messages/done/2026-06-10-phone-breakpoint-blind-spot.md. */
+@media (max-width: 599px) {
   /* Front cabin: drop to 2x by overriding --s; everything else recomputes via
    * the var. bottom moves to 8% to match the other sprites' mobile baseline. */
   .front-cabin         { --s: 2; bottom: 8%; }
@@ -708,7 +718,7 @@
   .sprite--birds       { left: calc(50% + 36px); bottom: calc(8% + 168px); }
 }
 
-@media (max-width: 379px) {
+@media (max-width: 599px) {
   @keyframes bee-drift {
     0%, 100% { transform: translate(0,    0);   }
     25%      { transform: translate(-9px,  -3px); }

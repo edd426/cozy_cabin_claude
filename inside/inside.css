@@ -839,8 +839,10 @@
   100% { transform: translate(  0px,  0px); }
 }
 
-/* Mobile narrow: scale 3x → 2x, mirroring scene.css and around.css. */
-@media (max-width: 379px) {
+/* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css and
+ * around.css (Day 34: threshold widened from 379px so real 390–430px phones
+ * stop landing in the desktop branch — see scene.css's breakpoint note). */
+@media (max-width: 599px) {
   .inside__wall {
     background:
       repeating-linear-gradient(

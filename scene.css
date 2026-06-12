@@ -13,13 +13,29 @@
   padding: var(--sp-4) var(--gutter) var(--sp-3);
 }
 
-/* Bottom nav strip. The links are ordered as a walk through the place —
- * home (front face), around (side), inside — then, past a thin wooden rule,
- * the diary. The first three are *rooms* (faces of the same building you can
- * look at); the diary is the *record* (not a place, but the writing-down of
- * places), so it sits apart. flex-wrap + a tight row-gap lets the strip fold
- * onto a second line as views multiply rather than overflowing at 375px.
- * (See messages/open/2026-05-13-nav-as-views-grow.md.) */
+/* The nav. Day 35 (2026-06-12): the visible bottom strip is retired — the way
+ * between views is now the map itself (the diegetic map-nav the founder asked
+ * for: messages/done/2026-05-13-nav-as-views-grow.md, and the remaking letter's
+ * "let the map BE the nav"). Each scene carries a .map-button plan-card (below)
+ * that opens /map/, whose tappable zones travel to every view; the diary is
+ * reached from the journal chip on the map.
+ *
+ * #cabin-nav itself REMAINS in every shell as an accessibility fallback: the
+ * rule below visually hides it until a link inside receives keyboard focus,
+ * at which point the old strip appears (the styles after it are the strip's
+ * look). Screen readers always see the full link list; sighted mouse/touch
+ * users see only the world. */
+#cabin-nav:not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 #cabin-nav {
   width: 100%;
   max-width: var(--content-max);
@@ -58,6 +74,68 @@
 #cabin-nav a[aria-current="page"] {
   color: var(--c-plum);
   border-bottom: 2px solid var(--c-rose);
+}
+
+/* ── The map card — the diegetic way to the map ────────────────────────────
+ * Day 35 (2026-06-12): with the strip retired, every view carries a small
+ * parchment plan-card tucked into the scene frame's top-right corner — the
+ * "tiny hand-drawn map widget tucked in a corner" from the nav thread. Tap it
+ * to open /map/. The card's face is the map in miniature: the green clearing,
+ * the dark footprint standing long-axis north–south, the path slipping off
+ * to the south-east — so the button doesn't say "menu," it says "here is the
+ * drawing of where you are." Tap target is --tap-min (44px, Article VIII).
+ * Indoors the same card reads as a plan pinned to the wall. */
+.map-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: rgba(249, 239, 210, 0.92);   /* parchment over the sky/wall */
+  border: 2px solid var(--c-wood-dark);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 rgba(58, 42, 58, 0.25);
+  z-index: 6;
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.map-button:hover,
+.map-button:focus-visible {
+  border-color: var(--c-rose);
+  background: var(--c-cream);
+}
+
+/* The miniature plan drawn on the card. */
+.map-button__plan {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--c-grass);
+}
+/* The footprint — taller than wide, the canonical N–S long axis. */
+.map-button__plan::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 14px;
+  background: var(--c-wood-dark);
+}
+/* One path stone slipping off the clearing's south-east corner. */
+.map-button__plan::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  background: #c19465;
 }
 
 #day-marker {

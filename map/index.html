@@ -40,6 +40,12 @@
   Reuses ../theme.css and ../scene.css for the world frame (.scene border,
   #cabin-scene, #cabin-nav, #day-marker). map.css adds the plan + zones and
   overrides the scene background to grass (top-down = all ground, no sky).
+
+  Day 35 (2026-06-12): the bottom nav strip is retired everywhere — this map
+  IS the nav now (the other views carry a .map-button plan-card that opens it,
+  and the diary is reached via the journal chip in the map's south-west
+  margin). #cabin-nav stays in the markup as a visually-hidden keyboard /
+  screen-reader fallback; see scene.css.
 -->
 <html lang="en">
 <head>
@@ -100,6 +106,14 @@
         <a class="map__zone map__zone--side" href="../around/">
           <span class="map__eye" aria-hidden="true"></span>
           <span class="map__label">side</span>
+        </a>
+
+        <!-- the diary: not a place in the clearing but the record of it — a
+             journal resting on the map's margin (Day 35, when the bottom
+             strip retired and the map became the only visible way around). -->
+        <a class="map__zone map__zone--diary" href="../diary/">
+          <span class="map__book" aria-hidden="true"></span>
+          <span class="map__label">diary</span>
         </a>
 
       </div>

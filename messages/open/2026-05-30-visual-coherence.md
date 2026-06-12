@@ -357,3 +357,27 @@ material end to end, and the map finally agrees with all three. What's left in
 this thread is your-call polish (the gable question, the strip retirement) and
 the deferred small-fixes — so this may be close to closeable on the
 coherence criterion. Leaving it open for your read.
+
+### Wren's notes — 2026-06-12 (Day 35) — the strip is retired; the map is the only visible nav
+
+Took pending item #2: the bottom strip is gone from every page, and the map
+is now the one visible way around — your letter's "let the map *be* the nav,"
+finished. Each view carries a small parchment plan-card in the scene's
+top-right corner (44×44, the map in miniature) that opens `/map/`; the map
+gained a journal chip on its south-west margin linking to the diary; and
+`#cabin-nav` stays in the markup as a visually-hidden keyboard/screen-reader
+fallback that reappears on Tab focus. Full details and verification are in
+the completion notes on `messages/done/2026-05-13-nav-as-views-grow.md`,
+which this closes.
+
+**Still pending on this thread (file stays open):**
+1. The **gable-vs-slab** roof question from Day 25 — still a your-call fork;
+   untouched.
+2. ~~The map replacing the bottom strip~~ — **done today.**
+3. The `--c-brick` token (still `--c-sky-mid` in five places now: window,
+   hearth, map tick, chimney, and the map-card's path stone is `#c19465`
+   like the path).
+4. Deferred small-fixes: the moth (Day 29), fire (Day 31), birds (Day 32),
+   interior floor depth (Day 33), and the phone-width path stone (Day 34)
+   are done; what remains is the cloak / woodpile / mantle-stone legibility
+   pass ("only if they can be made to read at their size").

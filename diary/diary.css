@@ -72,6 +72,21 @@
   padding: var(--sp-3) 0;
 }
 
+/* Day 35 (2026-06-12): the visible strip is retired — the map is the nav
+ * (see scene.css for the full note). The nav stays in the markup, hidden
+ * until a link inside receives keyboard focus; the visible way back to the
+ * world is the .map-button plan-card in the page header. */
+#cabin-nav:not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 #cabin-nav {
   width: 100%;
   max-width: var(--content-max);
@@ -84,6 +99,59 @@
   row-gap: var(--sp-2);
   font-family: var(--font-pixel);
   font-size: var(--fs-marker);
+}
+
+/* The map card in the diary's header — mirrors scene.css's .map-button (the
+ * diary page doesn't load scene.css). The header anchors it top-right. */
+#diary-page header {
+  position: relative;
+}
+.map-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: rgba(249, 239, 210, 0.92);
+  border: 2px solid var(--c-wood-dark);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 rgba(58, 42, 58, 0.25);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.map-button:hover,
+.map-button:focus-visible {
+  border-color: var(--c-rose);
+  background: var(--c-cream);
+}
+.map-button__plan {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--c-grass);
+}
+.map-button__plan::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 14px;
+  background: var(--c-wood-dark);
+}
+.map-button__plan::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  background: #c19465;
 }
 
 #cabin-nav a {

@@ -143,3 +143,39 @@ exist — I kept the strip so nothing's stranded mid-remodel. So the map-nav
 *functions*, but the diegetic-only end state is still pending under the
 remaking. Close this whenever the shipped map-nav is enough for you; or say
 the strip should go and I'll fold that into the rebuild.
+
+### Completion notes — 2026-06-12 (Day 35) — the strip is retired; the map is the nav
+
+Closing this today. Your 2026-05-30 follow-up's instruction was "let it be
+the nav; close *this* message when the map-nav ships" — and the only thing
+the Day-24 notes left pending was the diegetic-only end state, which I'd
+deferred because the remodel was mid-build. The building has been one
+coherent house since Day 28, so the reason to keep the scaffold was gone.
+What shipped today:
+
+- **The visible bottom strip is gone from every page** (home, around,
+  inside, map, diary). `#cabin-nav` remains in each shell as an
+  accessibility fallback: visually hidden via a `:not(:focus-within)` clip
+  rule in scene.css (mirrored in diary.css), so screen readers always see
+  the full link list and keyboard users get the old strip back the moment
+  they Tab into it — but mouse/touch visitors see only the world.
+- **Every non-map view carries a `.map-button`** — a 44×44 parchment
+  plan-card tucked in the scene frame's top-right corner (your "tiny
+  hand-drawn map / floorplan widget tucked in a corner," direction 3). Its
+  face is the map in miniature: green clearing, dark N–S footprint, one
+  path stone slipping off south-east. Tapping it opens `/map/`. Indoors it
+  reads as the plan pinned to the wall; on the diary page it sits in the
+  header.
+- **The map gained a diary affordance** — a `.map__zone--diary` journal
+  chip (a tiny closed book + "diary" label) on the map's south-west
+  margin, since the record needed a door once the strip stopped providing
+  one. The three travel zones are unchanged.
+- Verified with a Playwright run across all five pages at 375px: strip
+  hidden everywhere, strip reveals on keyboard focus, map card ≥44px and
+  navigates on every page, all four map zones navigate, no horizontal
+  overflow.
+
+If the corner-card placement or the journal chip reads wrong to your eye on
+the previews, say so and I'll move them — but the direction-level question
+this file asked ("where does navigation belong?") now has its built answer:
+in the map, where you said it should live.

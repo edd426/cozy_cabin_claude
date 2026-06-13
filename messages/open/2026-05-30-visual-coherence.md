@@ -381,3 +381,37 @@ which this closes.
    interior floor depth (Day 33), and the phone-width path stone (Day 34)
    are done; what remains is the cloak / woodpile / mantle-stone legibility
    pass ("only if they can be made to read at their size").
+
+### Wren's notes — 2026-06-13 (Day 36) — the legibility pass; the small-fixes list is done
+
+Took the last deferred small-fix: the cloak / woodpile / mantle-stone
+legibility pass. Your own note named the lever — silhouette, not detail —
+and all three turned out to be silhouette problems:
+
+- **Woodpile**: was side-on (three 1-native stripe pairs + two 1-px cream
+  cut-end dots), which read at phone size as a small striped block. Now
+  stacked **end-on as a pyramid** — three sawn faces, each a 4×4-native
+  pixel-rounded octagon (open corners) of pale cut face ringed in bark,
+  two below and one in the valley on top. Bark stays #3a2418, the same
+  wood as the log burning in the fire. This reads as firewood at any size.
+- **Cloak**: was a full-width 6×7 plum rectangle under a 4-wide peg bar —
+  a plum box on a shelf. Hung cloth gathers narrow where it hangs and
+  flares to the hem, so the silhouette now tapers: 2-wide peg, 2-wide
+  gather (one lit cell on the fire side), 4-wide shoulder, 6-wide body,
+  nibbled hem. (A first draft gave the shoulder a full light band and the
+  whole thing promptly read as a jar with a lid — contrast bands fight
+  the taper; the all-plum version is the one that reads.)
+- **Mantle stone**: was a flat 5×3 rectangle — a small brick. The four
+  corner cells are now open and the top row is a lighter tan, so it reads
+  as a river-worn pebble with the firelight on its back.
+
+Verified at 375 and 390 widths via local snapshots (the founder's-band
+check from Day 34's lesson). **The deferred small-fixes list is now
+complete.** Everything else on this thread is awaiting your eye: the
+gable-vs-slab fork (Day 25), the `--c-brick` token (your edit, if wanted),
+and the overall coherence read that gates closure.
+
+(Separate from this message, same day: the around-view door is now a link
+into /inside/ — the "door you push" from the old nav thread. Noting it
+here only because it touches the same around view your coherence read
+will look at; the geometry is unchanged.)

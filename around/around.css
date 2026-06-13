@@ -125,30 +125,70 @@
  * (and thereby aligned under the chimney). Reaches the ground so it
  * reads unambiguously as a door, not a window. One native pixel of
  * ink runs along the top + sides as the lintel / jambs; the bottom
- * meets the ground without trim. */
+ * meets the ground without trim.
+ *
+ * Day 36 (2026-06-13): the door is a link to /inside/ — the first
+ * direct way between two rooms that doesn't pass through the map.
+ * It lives outside the role="img" cabin in the markup (so it stays in
+ * the accessibility tree) and is positioned in scene coordinates over
+ * the same pixels it has always occupied: the cabin is centred at 50%
+ * with a 76-native width, so the door's left edge (cabin-local x=32)
+ * lands at 50% − (38−32)·scale = 50% − 18px at 3x. Visuals unchanged;
+ * the door just opens now. */
 .side-cabin__door {
   position: absolute;
-  left: calc(32px * 3);
-  bottom: 0;
+  display: block;
+  left: calc(50% - 18px);
+  bottom: 6%;
   width: calc(12px * 3);
   height: calc(20px * 3);
+  /* theme.css gives every <a> a 44px min — right for text links, but it
+   * would swell the drawn door panel. The drawing keeps its true size;
+   * the ::after pad below carries the 44px tap target instead. */
+  min-width: 0;
+  min-height: 0;
   background: var(--c-wood-dark);
   box-shadow:
     inset  3px 0 0 var(--c-ink),
     inset -3px 0 0 var(--c-ink),
     inset 0  3px 0 var(--c-ink);
+  z-index: 3;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+
+/* Invisible tap pad: the drawn door is 24×40 at the 2x scale, under
+ * the 44px minimum (Article VIII / --tap-min). The pad extends the
+ * hit area past the visual without changing a pixel. */
+.side-cabin__door::after {
+  content: "";
+  position: absolute;
+  inset: -8px -12px;
+}
+
+.side-cabin__door:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
 }
 
 /* Handle: a tiny cream dot on the right side at mid-height — the
  * smallest readable detail at 3x scale, just enough to mark a door
- * rather than a void. */
+ * rather than a void. Positioned door-local now (door-local x=8 of
+ * the 12-wide panel, y=10 of its 20-height). On hover/focus it
+ * brightens to the lit-thing gold — the latch catching light, the
+ * one-pixel hint that the door will move. */
 .side-cabin__handle {
   position: absolute;
-  left: calc(40px * 3);
+  left: calc(8px * 3);
   bottom: calc(10px * 3);
   width: calc(1px * 3);
   height: calc(1px * 3);
   background: var(--c-cream);
+}
+.side-cabin__door:hover .side-cabin__handle,
+.side-cabin__door:focus-visible .side-cabin__handle {
+  background: #ffd070;
 }
 
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css's
@@ -197,7 +237,8 @@
     box-shadow: inset 0 calc(2px * 2) 0 var(--c-ink);
   }
   .side-cabin__door     {
-    left: calc(32px * 2);
+    left: calc(50% - 12px);   /* 50% − (38−32)·2 */
+    bottom: 8%;
     width: calc(12px * 2);
     height: calc(20px * 2);
     box-shadow:
@@ -206,7 +247,7 @@
       inset 0  2px 0 var(--c-ink);
   }
   .side-cabin__handle   {
-    left: calc(40px * 2);
+    left: calc(8px * 2);
     bottom: calc(10px * 2);
     width: calc(1px * 2);
     height: calc(1px * 2);

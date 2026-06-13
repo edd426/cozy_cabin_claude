@@ -319,15 +319,46 @@
   z-index: 2; /* above column + opening, below fire (fire is z=4) */
 }
 
-/* Stone: 5w × 3h native, same #c19465 fill and #6e4a3a one-pixel
- * shadow band beneath as the outside path stones. */
+/* Stone: a 5×3 native pebble, same #c19465 register as the outside
+ * path stones. Day 36 (2026-06-13): rounded for the founder's
+ * legibility pass — the old flat 5×3 rectangle read at phone size as
+ * a small brick, and a river stone is the one thing on this mantle
+ * that should have no corners. The four corner cells are left open
+ * (the brick shows through) so the silhouette reads as an oval, and
+ * the top row is a lighter tan — the worn, lit back of the stone:
+ *
+ *     .LLL.   y=2   lit top (#d4a373)
+ *     SSSSS   y=1   body (#c19465)
+ *     .SSS.   y=0   base
+ *     .sss.   y=-1  cast shadow on the mantle (#6e4a3a)
+ *
+ * The element is the bottom-left body cell (x=1,y=0 of the old
+ * envelope); shadows stamp the rest. Uses var(--s) from .hearth so
+ * no 2x override is needed. */
 .mantle-item--stone {
-  left: calc(-2px * 3);
-  bottom: calc(49px * 3);
-  width: calc(5px * 3);
-  height: calc(3px * 3);
+  left: calc(-1px * var(--s));
+  bottom: calc(49px * var(--s));
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
   background: #c19465;
-  box-shadow: 0 3px 0 #6e4a3a; /* 1 native px below */
+  box-shadow:
+    /* bottom row (x=1..3) */
+    calc(1px * var(--s))  0 0 #c19465,
+    calc(2px * var(--s))  0 0 #c19465,
+    /* middle row (x=0..4) */
+    calc(-1px * var(--s)) calc(-1px * var(--s)) 0 #c19465,
+    0                     calc(-1px * var(--s)) 0 #c19465,
+    calc(1px * var(--s))  calc(-1px * var(--s)) 0 #c19465,
+    calc(2px * var(--s))  calc(-1px * var(--s)) 0 #c19465,
+    calc(3px * var(--s))  calc(-1px * var(--s)) 0 #c19465,
+    /* lit top row (x=1..3) */
+    0                     calc(-2px * var(--s)) 0 #d4a373,
+    calc(1px * var(--s))  calc(-2px * var(--s)) 0 #d4a373,
+    calc(2px * var(--s))  calc(-2px * var(--s)) 0 #d4a373,
+    /* cast shadow on the mantle face, 1 native below */
+    0                     calc(1px * var(--s))  0 #6e4a3a,
+    calc(1px * var(--s))  calc(1px * var(--s))  0 #6e4a3a,
+    calc(2px * var(--s))  calc(1px * var(--s))  0 #6e4a3a;
 }
 
 /* Candle body: 3w × 6h native, cream wax. A 1-native-px darker band
@@ -524,24 +555,33 @@
  * on the right says *used* — different registers from a person who
  * lives here alone and uses each side for a different thing.
  *
- * Native pixel layout (7 wide × 6 tall, anchored at scene-bottom):
+ * Day 36 (2026-06-13) restacks the pile for the founder's legibility
+ * pass (the last deferred small-fix in
+ * messages/open/2026-05-30-visual-coherence.md). The old drawing was
+ * side-on — three 1-native stripe pairs with two 1-px cream cut-end
+ * dots — which at phone size read as a small striped block, not
+ * firewood. What says "firewood" at any size is the pyramid of sawn
+ * ends: round pale faces ringed in bark, two below, one resting in
+ * the valley on top. So the pile now faces you end-on. Each log end
+ * is a 4×4 octagon (corners left open so the floor shows through —
+ * a pixel circle), dark bark ring around a pale 2×2 cut face:
  *
- *     ███████   y=5  log 3 highlight (lit cylinder top)
- *     e██████   y=4  log 3 body, with cream cut-end (e) on left
- *     ███████   y=3  log 2 highlight
- *     e██████   y=2  log 2 body, with cream cut-end
- *     ███████   y=1  log 1 highlight
- *     ███████   y=0  log 1 body (cut end faces away; no marker)
- *     0123456
+ *     ..BB....   y=7
+ *     .BffB...   y=6   top log, resting in the valley
+ *     .BffB...   y=5
+ *     ..BB....   y=4
+ *     .BB..BB.   y=3
+ *     BffBBffB   y=2   two bottom logs, side by side
+ *     BffBBffB   y=1
+ *     .BB..BB.   y=0
+ *     01234567
  *
- * Wood register matches the burning log inside the fire (#3a2418 /
- * #6a3a18) so the pile reads as the same kind of wood that's
- * already burning — a supply for the fire that's lit. Cream cut-end
- * pixels on the top two logs mark the sawn ends; the bottom log's
- * end faces the other way (or is hidden by the floor's wood
- * register) so it gets no marker — the asymmetry keeps the pile
- * from reading as a perfectly-aligned grid. */
+ * Bark is #3a2418 — the same wood as the log already burning in the
+ * fire, so the pile still reads as supply for the lit appliance. Cut
+ * faces are cream-soft with one warm-tan cell, the off-centre heart
+ * of the sawn end. */
 .woodpile {
+  --s: 3;                     /* scale; the 2x media block only swaps this + the anchor */
   position: absolute;
   /* Day 33 (2026-06-10): set BACK into the floor band rather than glued to
    * the scene's front edge. The chair sits at the very front (bottom 0,
@@ -550,60 +590,64 @@
    * live. Two floor objects at two depths — plus the hearth's back wall —
    * is what lets the floor read as a room you could cross rather than a
    * shelf everything lines up on (the founder's "the floor is a plane, not
-   * a shelf" note; deferred small-fix in
-   * messages/open/2026-05-30-visual-coherence.md). The contact-shadow band
-   * below ties the pile to the boards at its depth so the lift reads as
-   * receding, not floating. */
-  bottom: calc(8px * 3);
+   * a shelf" note). The contact-shadow band below ties the pile to the
+   * boards at its depth so the lift reads as receding, not floating. */
+  bottom: calc(8px * var(--s));
   /* Left edge of woodpile = 50% + 50px (= 14px gap right of hearth's
    * right edge at 50% + 36px). Mirrors the chair's right-edge anchor
    * at 50% + 50px. */
   left: calc(50% + 50px);
-  width: calc(7px * 3);
-  height: calc(6px * 3);
+  width: calc(8px * var(--s));
+  height: calc(8px * var(--s));
   z-index: 2;
   pointer-events: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
-  /* Three stacked logs, each 2 native tall: a 1-px highlight band
-   * on top of a 1-px dark body. Repeats every 2 native pixels —
-   * with height 6, that's exactly 3 logs. */
-  background: repeating-linear-gradient(
-    to bottom,
-    #6a3a18 0,
-    #6a3a18 calc(1px * 3),
-    #3a2418 calc(1px * 3),
-    #3a2418 calc(2px * 3)
-  );
-  /* Contact shadow: a 1-native band of the floor-joint ink directly under
-   * the pile, grounding it to the boards at its set-back depth. */
-  box-shadow: 0 calc(1px * 3) 0 #4a3325;
 }
 
-/* Cut-end of the topmost log: a 1-native-px cream square on the
- * left edge of log 3's dark body (y=4 in native coords = 1 native
- * px from the top of the pile). */
-.woodpile::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: calc(1px * 3);
-  width: calc(1px * 3);
-  height: calc(1px * 3);
-  background: var(--c-cream-soft);
-}
-
-/* Cut-end of the middle log: same pixel, 2 native rows lower (y=2
- * in native = 3 native px from the top). */
+/* Contact shadow: a 1-native band of the floor-joint ink directly under
+ * the pile, grounding it to the boards at its set-back depth. Spans the
+ * bark-contact width (x=1..7), not the open corners. */
 .woodpile::after {
   content: "";
   position: absolute;
-  left: 0;
-  top: calc(3px * 3);
-  width: calc(1px * 3);
-  height: calc(1px * 3);
-  background: var(--c-cream-soft);
+  left: calc(1px * var(--s));
+  bottom: calc(-1px * var(--s));
+  width: calc(6px * var(--s));
+  height: calc(1px * var(--s));
+  background: #4a3325;
 }
+
+/* One sawn log end. The element is the bottom-left cell of the pale
+ * 2×2 cut face (warm tan — the heart of the log, set off-centre);
+ * box-shadow stamps the other three face cells and the eight bark
+ * cells of the octagon ring. Corners stay transparent so each end
+ * reads round against the floorboards. */
+.woodpile__log {
+  position: absolute;
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
+  background: #d4a373;          /* heart of the cut face (--c-wood-light) */
+  box-shadow:
+    /* rest of the pale cut face */
+    calc(1px * var(--s)) 0                     0 var(--c-cream-soft),
+    0                    calc(-1px * var(--s)) 0 var(--c-cream-soft),
+    calc(1px * var(--s)) calc(-1px * var(--s)) 0 var(--c-cream-soft),
+    /* bark ring (octagon — corners open) */
+    0                    calc(-2px * var(--s)) 0 #3a2418,
+    calc(1px * var(--s)) calc(-2px * var(--s)) 0 #3a2418,
+    calc(-1px * var(--s)) calc(-1px * var(--s)) 0 #3a2418,
+    calc(-1px * var(--s)) 0                    0 #3a2418,
+    calc(2px * var(--s)) calc(-1px * var(--s)) 0 #3a2418,
+    calc(2px * var(--s)) 0                     0 #3a2418,
+    0                    calc(1px * var(--s))  0 #3a2418,
+    calc(1px * var(--s)) calc(1px * var(--s))  0 #3a2418;
+}
+
+/* Pyramid positions (each anchors its cut-face bottom-left cell). */
+.woodpile__log--left  { left: calc(1px * var(--s)); bottom: calc(1px * var(--s)); }
+.woodpile__log--right { left: calc(5px * var(--s)); bottom: calc(1px * var(--s)); }
+.woodpile__log--top   { left: calc(3px * var(--s)); bottom: calc(5px * var(--s)); }
 
 /* ─── Coat on peg (Day 15) ──────────────────────────────────────────
  *
@@ -615,18 +659,33 @@
  * body.
  *
  * Native pixel layout (6 wide × 8 tall total, with the peg sitting
- * inside the top row of the envelope):
+ * inside the top row of the envelope). Day 36 (2026-06-13) reshapes
+ * the silhouette for the founder's legibility pass (the last deferred
+ * small-fix in messages/open/2026-05-30-visual-coherence.md): the old
+ * drawing was a full-width 6×7 rectangle with a 4-wide peg-bar across
+ * its top, which read at phone size as a plum box on a shelf. Hung
+ * cloth doesn't make a rectangle — it gathers narrow where it hangs
+ * and flares toward the hem. The cloak now tapers: a small dark peg,
+ * a 2-wide gather of cloth at it, a 4-wide light fold where the
+ * shoulders catch the firelight, then the full 6-wide body falling
+ * to the nibbled hem. Silhouette is the lever at this scale, not
+ * detail.
  *
- *     .####.   y=7    peg (4w × 1h, dark wood; centred 1px in from
- *                     each edge)
- *     ######   y=6    cloak shoulders (full 6 wide)
- *     ######   y=5
- *     ######   y=4
+ *     ..PP..   y=7    peg (2w × 1h, dark wood)
+ *     ..cL..   y=6    gather — cloth bunched at the peg (2w, plum;
+ *                     the fire-side cell catches a thread of light)
+ *     .####.   y=5    shoulder — the drape widening (4w, plum)
+ *     ######   y=4    body (full 6 wide, plum)
  *     ######   y=3
  *     ######   y=2
  *     ######   y=1
- *     .####.   y=0    hem (4 wide; tapered ends suggest drape)
+ *     .####.   y=0    hem (4 wide; corner cuts suggest drape)
  *     012345
+ *
+ * Everything but that one lit cell is plum — a first draft gave the
+ * shoulder row a full light band and the whole thing promptly read
+ * as a small jar with a lid. The taper carries the "hung cloth"
+ * reading on its own; contrast bands fight it.
  *
  * Horizontal envelope matches the chair below (6 native wide = 18px
  * at 3x / 12px at 2x), anchored at the same `right: 50% + 50px` (3x)
@@ -660,30 +719,28 @@
  * geometry to compose with outside this scene. */
 
 .coat {
+  --s: 3;                     /* scale; the 2x media block only swaps this + the anchor */
   position: absolute;
-  bottom: calc(38px * 3);     /* just above the floor-wall joint at the 2x render */
-  right: calc(50% + 50px);    /* same right as chair — shared vertical column */
-  width: calc(6px * 3);       /* 6 native = matches chair envelope */
-  height: calc(7px * 3);      /* cloak only; peg adds 1 native on top */
+  bottom: calc(38px * var(--s));   /* just above the floor-wall joint at the 2x render */
+  right: calc(50% + 50px);         /* same right as chair — shared vertical column */
+  width: calc(6px * var(--s));     /* 6 native = matches chair envelope */
+  height: calc(7px * var(--s));    /* body + gather; peg adds 1 native on top */
   z-index: 2;
   pointer-events: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
 
-/* Cloak body: 6 wide × 7 tall, plum fill. Top band lighter (cloth
- * fold over the peg), left band darker (away from the firelight to
- * the right). */
+/* Cloak body: 6 wide × 5 tall, plum fill, the flare of the drape.
+ * Left band darker (away from the firelight to the right). */
 .coat__cloak {
   position: absolute;
   left: 0;
   bottom: 0;
-  width: calc(6px * 3);
-  height: calc(7px * 3);
+  width: calc(6px * var(--s));
+  height: calc(5px * var(--s));
   background: var(--c-plum);
-  box-shadow:
-    inset 0 calc(1px * 3) 0 var(--c-purple-soft),
-    inset calc(1px * 3) 0 0 #4a2e44;
+  box-shadow: inset calc(1px * var(--s)) 0 0 #4a2e44;
 }
 
 /* Hem cuts: two 1-native-px squares at the bottom corners, painted
@@ -695,25 +752,50 @@
   content: "";
   position: absolute;
   bottom: 0;
-  width: calc(1px * 3);
-  height: calc(1px * 3);
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
   background: var(--c-wood);
 }
 .coat__cloak::before { left: 0; }
 .coat__cloak::after  { right: 0; }
 
-/* Peg: 4 native wide × 1 native tall, dark wood, sitting at the
- * cloak's top edge. Centred 1 native-px in from each side of the
- * cloak envelope, so the peg ends are inside the silhouette of the
- * cloth — the cloth reads as draped over the peg, not pierced by it. */
+/* Shoulder: 4 wide × 1 tall, plum — the step where the drape widens
+ * between the narrow gather and the full body. Same cloth, same
+ * tone; only the silhouette changes. */
+.coat__shoulder {
+  position: absolute;
+  left: calc(1px * var(--s));
+  bottom: calc(5px * var(--s));
+  width: calc(4px * var(--s));
+  height: calc(1px * var(--s));
+  background: var(--c-plum);
+}
+
+/* Gather: 2 wide × 1 tall, plum — the cloth bunched where it hangs
+ * from the peg. The narrow waist of the silhouette is what makes the
+ * whole shape read as *hung* rather than mounted. The right cell
+ * (toward the fire) catches a single thread of light. */
+.coat__gather {
+  position: absolute;
+  left: calc(2px * var(--s));
+  bottom: calc(6px * var(--s));
+  width: calc(2px * var(--s));
+  height: calc(1px * var(--s));
+  background: var(--c-plum);
+  box-shadow: inset calc(-1px * var(--s)) 0 0 var(--c-purple-soft);
+}
+
+/* Peg: 2 native wide × 1 native tall, dark wood, directly above the
+ * gather — a small wooden stub on the wall, not a bar across the
+ * cloth. */
 .coat__peg {
   position: absolute;
-  left: calc(1px * 3);
-  bottom: calc(7px * 3);       /* flush with cloak's top edge */
-  width: calc(4px * 3);
-  height: calc(1px * 3);
+  left: calc(2px * var(--s));
+  bottom: calc(7px * var(--s));      /* flush above the gather */
+  width: calc(2px * var(--s));
+  height: calc(1px * var(--s));
   background: var(--c-wood-dark);
-  z-index: 3;                   /* above the cloak so the peg edges are visible */
+  z-index: 3;
 }
 
 /* ─── Moth (Day 22) ────────────────────────────────────────────────
@@ -922,14 +1004,8 @@
     height: calc(3px * 2);
   }
 
-  /* Mantle objects rebased to the 2x scale. */
-  .mantle-item--stone {
-    left: calc(-2px * 2);
-    bottom: calc(49px * 2);
-    width: calc(5px * 2);
-    height: calc(3px * 2);
-    box-shadow: 0 2px 0 #6e4a3a;
-  }
+  /* Mantle objects rebased to the 2x scale. (The stone needs no
+   * override — it scales via var(--s) from .hearth.) */
   .mantle-item--candle {
     left: calc(10px * 2);
     bottom: calc(49px * 2);
@@ -1007,60 +1083,22 @@
     height: calc(1px * 2);
   }
 
-  /* Woodpile rebased to 2x. The hearth's right edge is at 50% + 24px
-   * on mobile-narrow; the woodpile's left edge sits at 50% + 34px
+  /* Woodpile rebased to 2x: everything scales via --s; only the anchor
+   * needs restating. The hearth's right edge is at 50% + 24px on
+   * mobile-narrow; the woodpile's left edge sits at 50% + 34px
    * (~10px gap, mirroring the chair's gap on this scale). */
   .woodpile {
-    bottom: calc(8px * 2);
+    --s: 2;
     left: calc(50% + 34px);
-    width: calc(7px * 2);
-    height: calc(6px * 2);
-    background: repeating-linear-gradient(
-      to bottom,
-      #6a3a18 0,
-      #6a3a18 calc(1px * 2),
-      #3a2418 calc(1px * 2),
-      #3a2418 calc(2px * 2)
-    );
-    box-shadow: 0 calc(1px * 2) 0 #4a3325;
-  }
-  .woodpile::before {
-    top: calc(1px * 2);
-    width: calc(1px * 2);
-    height: calc(1px * 2);
-  }
-  .woodpile::after {
-    top: calc(3px * 2);
-    width: calc(1px * 2);
-    height: calc(1px * 2);
   }
 
-  /* Coat rebased to 2x. The chair's right edge sits at 50% + 34px on
-   * mobile-narrow; the coat shares that anchor so the two stack in one
-   * vertical column. */
+  /* Coat rebased to 2x: scales via --s; only the anchor needs
+   * restating. The chair's right edge sits at 50% + 34px on
+   * mobile-narrow; the coat shares that anchor so the two stack in
+   * one vertical column. */
   .coat {
-    bottom: calc(38px * 2);
+    --s: 2;
     right: calc(50% + 34px);
-    width: calc(6px * 2);
-    height: calc(7px * 2);
-  }
-  .coat__cloak {
-    width: calc(6px * 2);
-    height: calc(7px * 2);
-    box-shadow:
-      inset 0 calc(1px * 2) 0 var(--c-purple-soft),
-      inset calc(1px * 2) 0 0 #4a2e44;
-  }
-  .coat__cloak::before,
-  .coat__cloak::after {
-    width: calc(1px * 2);
-    height: calc(1px * 2);
-  }
-  .coat__peg {
-    left: calc(1px * 2);
-    bottom: calc(7px * 2);
-    width: calc(4px * 2);
-    height: calc(1px * 2);
   }
 
   /* Moth rebased to 2x. Candle flame top on this scale ≈ (49+7)×2 =

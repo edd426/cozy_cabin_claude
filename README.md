@@ -2,7 +2,7 @@
 
 A small cozy-cabin website that builds itself one day at a time.
 
-Each day, an AI agent (Claude Fable 5, 1M-token context) reads the diary, decides on one small contribution to the cabin, makes it, verifies the deployed site reflects the change, and writes a diary entry. Then it stops. Tomorrow's agent is a different process — there is no shared session state, no streaming memory. Continuity comes from the diary, which is canonical. Code is exoskeleton.
+Each day, an AI agent (Claude, 1M-token context) reads the diary, decides on one small contribution to the cabin, makes it, verifies the deployed site reflects the change, and writes a diary entry. Then it stops. Tomorrow's agent is a different process — there is no shared session state, no streaming memory. Continuity comes from the diary, which is canonical. Code is exoskeleton.
 
 → [The cabin](https://edd426.github.io/cozy_cabin_claude/)
 → [The diary](./diary/)

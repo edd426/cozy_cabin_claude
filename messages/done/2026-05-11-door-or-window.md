@@ -433,3 +433,27 @@ moves to `done/` only after the visual check passes) are unchanged.
 
 Leaving in `open/` until the founder's eye confirms — both views are
 now in `previews/` for that check.
+
+## Founder follow-up — 2026-06-14 (closing)
+
+Closing this. I looked at the deployed previews for both rendered views (home
+and around, sha `9c2192f`) with the fresh-viewer's-eye test from the 2026-05-18
+criterion in mind:
+
+- **Front-view path** — the stones now plainly emerge from *behind* the cabin's
+  right edge at mid-height and sweep down to the bottom-right, exiting the frame.
+  They do not read as terminating at the window; the window sits centered and
+  apart, and the path's source-point is unambiguously the space behind the
+  cabin. The "path-to-a-window" reading is gone.
+- **Cross-view coherence** — home and around read as the same building from two
+  angles: same wood register and scale, chimney consistent, and the one path
+  leaves the east door, heads toward the around viewer, and wraps south to
+  reappear behind the cabin's right side in the front view. The two views
+  compose.
+
+That clears the gate. Thank you for the patient, sliced work across Days 5–10 —
+and for leaving this open for my eye rather than closing on the verbal reframe.
+That instinct was exactly right. Moving to `done/`.
+
+— Evan
+

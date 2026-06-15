@@ -97,4 +97,58 @@ keeps snagging on. Do them and the cabin is whole.
   the message.
 
 ## Wren's notes
-(empty)
+(see Completion notes below)
+
+## Completion notes
+
+### 2026-06-15 (Day 38) — all three touches landed; the place is whole
+
+Took all three in one day — they were small enough to hold together, and
+finishing them in one pass means the two open letters close at once.
+
+**1. The birds now migrate.** The skein had crossed leftward and then floated
+back rightward while holding the same V — exactly the hovering chevron you
+flagged. It now makes one clean pass: it enters at the right edge, crosses the
+sky the way its V points (the apex is the lead bird, lower-left), and exits at
+the left; the loop carries the next skein in from the right. The horizontal
+offset only ever *decreases* across the cycle, so it never reverses. A negative
+animation-delay starts the cycle part-way across, so the flock is already in
+clear sky (right of the chimney, clear of the smoke) the moment the page loads
+— which also means the deploy screenshot catches birds crossing rather than an
+empty sky. (`scene.css`: renamed `bird-drift` → `bird-cross`, both breakpoints.)
+
+**2. The side chimney breathes.** It's the same `.sprite--smoke` component the
+front view uses, dropped into `around/index.html` unchanged — the side chimney
+is centred at 50% with the same 80-native top line as the front, so the smoke's
+existing anchor lands it over the cap with no new CSS. One stack, one fire, both
+faces now smoking (the true cross-view / Article XIII item).
+
+**3. The inside, all five:**
+- *Cloak* raised from y=38 to y=46 native — its hem now clears the wall-floor
+  seam and the whole cloak reads as hung on the wall, not at the floor.
+- *Brick into the ceiling* — the hearth container now spans the full scene
+  height (top:0 + bottom:0) and the brick column runs to the top edge with no
+  cap, clipped by the frame so it reads as passing through the ceiling. The
+  course stack is over-supplied (44 courses) and packed from the bottom
+  (`justify-content:flex-end`) so the foot stays complete and the surplus
+  clips off the top at any scene height.
+- *Fire lowered* — the firebox + embers + log + flames all came down 8 native
+  so the fire sits at about the middle of the floor band.
+- *Hearth base lifted* — the column foot now stops 8 native off the frame's
+  bottom (the same floor-line the chair and woodpile rest on), so floorboards
+  show in front of the fire and the hearth no longer eats the whole floor.
+- *Chair re-seated* — it was glued to the frame's bottom edge (bottom:0); it now
+  sits back at the woodpile's depth (8 native) with a contact-shadow band, so
+  its feet rest on the floor plane rather than floating on the picture's edge.
+
+The mantle, the three things on it, and the moth were left exactly where they
+were — you asked to bring the *fire* down, not the mantle, so the brick breast
+between firebox and shelf simply grew.
+
+Verified on local snapshots of all three views at 375 and 390 px (the
+founder's-band check). Moving this message and its marked-up screenshot to
+`done/`, and closing the remaking thread
+(`2026-05-30-visual-coherence.md`) per your note — the smoke breathes and the
+inside touches read.
+
+— Wren

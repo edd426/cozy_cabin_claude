@@ -696,22 +696,37 @@
  * No wing animation, still: a fast wing-beat would be the one frantic clock in
  * a scene whose register is slow-and-discovered (the same reason the bee's
  * wings are still). The V points the way it travels, so the formation reads as
- * "crossing" without animating a single feather. What moves is the whole skein
- * together, on a long slow drift leftward toward the smoke and back, with a
- * gentle vertical bob. The cycle is twice as slow as the bee's — the birds are
- * the highest, slowest visitors in the scene. */
+ * "crossing" without animating a single feather.
+ *
+ * Day 38 (2026-06-15): the skein now MIGRATES. Until today the drift carried
+ * it leftward and then floated it back rightward while it held the same V —
+ * which is exactly what real birds don't do (the founder's note in
+ * messages/open/2026-06-14-almost-one-place.md: "a V always points the way the
+ * flock is going ... it crosses the whole sky in one direction and is gone").
+ * The V here points left (apex = the lead bird --1, lower-left; the two arms
+ * open up-and-right), so the flock travels LEFT: it enters at the right edge,
+ * crosses the sky, and exits at the left, then the loop carries the next skein
+ * in from the right. One clean monotonic pass — the horizontal offset only
+ * ever decreases across the cycle, never reverses — with a gentle vertical
+ * undulation. Anchored at scene-centre; the keyframes start it off the right
+ * edge (positive translate) and end it off the left (negative). The cycle is
+ * twice as slow as the bee's — the birds are the highest, slowest visitors in
+ * the scene. `bottom: calc(6% + 252px)` puts the skein high in the sky, just
+ * below the top of the rising smoke (a 78px-tall container at
+ * `bottom: calc(6% + 228px)`). */
 .sprite--birds {
   width: 1px;
   height: 1px;
-  /* Lead bird sits high in the sky, right of the chimney; the flock trails up
-   * and back from it. Drift carries the skein leftward toward the smoke and
-   * back. Anchor is the start position (right end of the arc). `bottom:
-   * calc(6% + 252px)` puts the lead bird just below the top of the rising
-   * smoke, which lives in a 78px-tall container at `bottom: calc(6% + 228px)`. */
-  left: calc(50% + 56px);
+  left: 50%;
   bottom: calc(6% + 252px);
   z-index: 3;
-  animation: bird-drift 36s ease-in-out infinite;
+  /* Negative delay starts the cycle part-way across (at the 25% keyframe, flock
+   * in clear sky to the right of the chimney) rather than at 0% (off the right
+   * edge), so the skein is already in the sky the moment the page loads — and so
+   * the post-deploy screenshot, which fires seconds after load, reliably catches
+   * birds crossing open sky rather than an empty sky waiting for them to enter
+   * or a flock tangled over the smoke at centre. */
+  animation: bird-cross 40s linear -10s infinite;
 }
 
 .bird {
@@ -736,15 +751,18 @@
 .bird--4 { left:  9px;  bottom:  4px; }
 .bird--5 { left: 18px;  bottom:  1px; }
 
-/* The skein drifts left toward the chimney over half the cycle and back, with
- * a small vertical bob suggesting the rise and fall of birds riding the air
- * without animating wings. Integer px offsets at each stop keep the silhouettes
- * pixel-crisp. */
-@keyframes bird-drift {
-  0%, 100% { transform: translate(0,    0);   }
-  25%      { transform: translate(-32px, -3px); }
-  50%      { transform: translate(-64px, 2px);  }
-  75%      { transform: translate(-30px, 4px);  }
+/* One migrating pass: the skein enters off the right edge, crosses, and exits
+ * off the left. The horizontal offset decreases monotonically (360 -> -380) so
+ * the flock never reverses — it always travels the way its V points. A gentle
+ * vertical undulation suggests birds riding the air without animating wings.
+ * Integer px offsets keep the silhouettes pixel-crisp. The range clears the
+ * widest desktop scene; the mobile block below tightens it to the 2x scene. */
+@keyframes bird-cross {
+  0%   { transform: translate( 360px,   0px); }
+  25%  { transform: translate( 175px,  -8px); }
+  50%  { transform: translate(   0px,   2px); }
+  75%  { transform: translate(-190px,  -6px); }
+  100% { transform: translate(-380px,   4px); }
 }
 
 /* Phone-and-narrow: scale down to 2x below 600px viewports.
@@ -792,8 +810,9 @@
   /* Skein rebased to the 2x cabin (chimney centered on 50%, smoke top at
    * `bottom: calc(8% + 152px) + 78px` ≈ 230px). The flock formation offsets
    * (.bird--N) stay constant — pixel art needs its minimum feature spacing —
-   * only the wrapper anchor moves. */
-  .sprite--birds       { left: calc(50% + 36px); bottom: calc(8% + 168px); }
+   * only the wrapper anchor moves. Anchored at scene-centre like the desktop
+   * rule; the tighter crossing range lives in the mobile @keyframes below. */
+  .sprite--birds       { left: 50%; bottom: calc(8% + 168px); }
 }
 
 @media (max-width: 599px) {
@@ -803,11 +822,13 @@
     50%      { transform: translate(-18px, 2px);  }
     75%      { transform: translate(-8px,  -4px); }
   }
-  /* Bird's drift range tightens to the 2x scene — same shape, smaller swing. */
-  @keyframes bird-drift {
-    0%, 100% { transform: translate(0,    0);   }
-    25%      { transform: translate(-22px, -2px); }
-    50%      { transform: translate(-44px, 2px);  }
-    75%      { transform: translate(-20px, 3px);  }
+  /* Migrating pass tightened to the 2x scene — same monotonic right-to-left
+   * crossing, smaller range so it enters and exits the narrower frame. */
+  @keyframes bird-cross {
+    0%   { transform: translate( 195px,  0px); }
+    25%  { transform: translate(  95px, -6px); }
+    50%  { transform: translate(   0px,  2px); }
+    75%  { transform: translate(-105px, -5px); }
+    100% { transform: translate(-210px,  3px); }
   }
 }

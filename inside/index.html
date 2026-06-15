@@ -136,13 +136,43 @@
       </a>
 
       <div class="hearth" role="img"
-           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from the floor to the wall's top, with a fire opening in its lower middle where a small fire rests on a glowing bed of coals, and a dark wood mantle just above the opening holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right.">
+           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from a low foot on the floor up and off the top of the frame as the chimney passes through the ceiling, with a fire opening down near the middle of the floor where a small fire rests on a glowing bed of coals, and a dark wood mantle higher up the column holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right.">
         <div class="hearth__column">
-          <!-- Brick body: 20 running-bond courses (4 native each over the
-               80-native column), the same .brick-course / .brick-course--b
-               rows the front-view window uses (scene.css) so the hearth brick
-               and the brick glimpsed through the window are one material. -->
+          <!-- Brick body: running-bond courses (4 native each), the same
+               .brick-course / .brick-course--b rows the front-view window uses
+               (scene.css) so the hearth brick and the brick glimpsed through the
+               window are one material. Day 38 (2026-06-15): the column now runs
+               floor-to-ceiling-and-off-the-top, whose native height varies with
+               the scene width, so the stack is deliberately OVER-supplied (44
+               courses). .hearth__brick packs them from the bottom
+               (justify-content:flex-end) and clips the surplus off the top with
+               overflow:hidden — so the foot is always complete and the brick
+               always reaches the frame's top edge, at any width. -->
           <div class="hearth__brick">
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
+            <div class="brick-course"></div>
+            <div class="brick-course brick-course--b"></div>
             <div class="brick-course"></div>
             <div class="brick-course brick-course--b"></div>
             <div class="brick-course"></div>

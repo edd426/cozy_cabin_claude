@@ -90,20 +90,25 @@
   box-shadow: inset 0 calc(2px * 3) 0 #4a3325;
 }
 
-/* Hearth: centred horizontally on the wall, full height from floor to
- * wall top. Container is positioned in scene coordinates so all the
- * pieces (column, mantle, opening, fire, log) sit relative to one
- * known anchor. */
+/* Hearth: centred horizontally on the wall. Day 38 (2026-06-15) spans the
+ * container the FULL scene height (top:0 + bottom:0) rather than a fixed
+ * 80-native height, so the brick column can run all the way up and off the top
+ * of the frame — "the chimney reads as passing through the ceiling rather than
+ * ending mid-wall" (the founder's note in
+ * messages/open/2026-06-14-almost-one-place.md). Every piece anchored by
+ * `bottom` still measures from the scene floor (the container's bottom is
+ * unchanged at scene-bottom), so the mantle / fire / items don't move just
+ * because the container grew taller. */
 .hearth {
   --s: 3;                       /* scale, so the shared .brick-course class
                                   * (scene.css) renders at the same size it
                                   * does in the front-view window. */
   position: absolute;
   left: 50%;
+  top: 0;
   bottom: 0;
   transform: translateX(-50%);
   width: calc(24px * 3);
-  height: calc(80px * 3);
   z-index: 2;
   pointer-events: none;
   image-rendering: pixelated;
@@ -133,8 +138,14 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
-  top: 0;
+  top: 0;                          /* runs off the top of the frame */
+  /* Day 38 (2026-06-15): the column base is LIFTED 8 native off the scene floor
+   * so floorboards show in front of the hearth and the base no longer "eats the
+   * whole floor" / sits on the frame edge (the founder's note). 8 native is the
+   * same floor-line the chair and woodpile rest on, so the hearth foot doesn't
+   * jut forward of the furniture; the 4 native below the firebox (opening floor
+   * at y=12) reads as a low hearth foot the fire sits just above. */
+  bottom: calc(8px * var(--s));
   background: var(--c-wood-dark);
 }
 
@@ -148,17 +159,28 @@
   position: absolute;
   left: calc(1px * var(--s));
   right: calc(1px * var(--s));
-  top: calc(1px * var(--s));
-  bottom: 0;
+  /* Day 38: brick runs flush to the very top (no dark cap) so the courses are
+   * clipped by the frame and read as continuing through the ceiling; a 1-native
+   * wood-dark foot trim shows at the lifted base. justify-content:flex-end packs
+   * the courses from the bottom so the foot stays complete and the EXTRA courses
+   * overflow off the TOP — which is why the column can be over-supplied with
+   * courses (see index.html) and still render correctly at any scene height. */
+  top: 0;
+  bottom: calc(1px * var(--s));
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   background: var(--c-sky-mid);
 }
 
 /* Mantle: a dark wood shelf above the fire opening, overhanging the
  * brick column by 4 native pixels on each side. 32 wide × 3 tall
- * native at the y=46 line (just above the fire opening). */
+ * native at the y=46 line. Day 38 (2026-06-15) leaves the mantle (and the
+ * three things on it) where it has always sat — chest-height on the wall,
+ * clear of the floor-wall seam — and lowers only the FIRE beneath it, so
+ * the brick breast between the firebox and the shelf simply grows. The
+ * founder's note asked to bring the fire down, not the mantle. */
 .hearth__mantle {
   position: absolute;
   left: calc(-4px * 3);
@@ -180,7 +202,7 @@
 .hearth__opening {
   position: absolute;
   left: calc(6px * 3);
-  bottom: calc(20px * 3);
+  bottom: calc(12px * 3);
   width: calc(12px * 3);
   height: calc(14px * 3);
   background: #1a0d0a;
@@ -205,7 +227,7 @@
 .hearth__embers {
   position: absolute;
   left: calc(7px * 3);
-  bottom: calc(20px * 3);
+  bottom: calc(12px * 3);
   width: calc(10px * 3);
   height: calc(2px * 3);
   background: #7a2e10;            /* dark coal */
@@ -221,7 +243,7 @@
 .hearth__log {
   position: absolute;
   left: calc(7px * 3);
-  bottom: calc(22px * 3);
+  bottom: calc(14px * 3);
   width: calc(10px * 3);
   height: calc(2px * 3);
   background: #3a2418;
@@ -249,7 +271,7 @@
   /* 10 wide × 3 tall, spread jamb-to-jamb across the firebox floor,
    * rising off the log. Bright orange. */
   left: calc(7px * 3);
-  bottom: calc(24px * 3);
+  bottom: calc(16px * 3);
   width: calc(10px * 3);
   height: calc(3px * 3);
   background: #e8772a;
@@ -259,7 +281,7 @@
 .hearth__fire--flame {
   /* 6 wide × 3 tall, tapering in above the base, centred. Warmer mid-tone. */
   left: calc(9px * 3);
-  bottom: calc(27px * 3);
+  bottom: calc(19px * 3);
   width: calc(6px * 3);
   height: calc(3px * 3);
   background: #f0a040;
@@ -270,7 +292,7 @@
   /* 3 wide × 3 tall, the bright yellow tip licking the top of the
    * opening's interior. */
   left: calc(10px * 3 + 1px);
-  bottom: calc(30px * 3);
+  bottom: calc(22px * 3);
   width: calc(3px * 3);
   height: calc(3px * 3);
   background: #ffd070;
@@ -486,7 +508,16 @@
  */
 .chair {
   position: absolute;
-  bottom: 0;
+  /* Day 38 (2026-06-15): re-seated onto the floor PLANE. The chair had sat at
+   * bottom:0 — glued to the very bottom edge of the frame, which read as
+   * floating on the picture's edge and flattened the room's perspective (the
+   * founder's note in messages/open/2026-06-14-almost-one-place.md). It now
+   * sits back at the woodpile's depth (8 native off the scene floor; the
+   * woodpile's depth "is exactly right — match it"), so its feet rest on the
+   * floor with a little board showing in front of them. The ::after band below
+   * is the contact shadow that grounds it at that depth, the same way the
+   * woodpile's does. */
+  bottom: calc(8px * 3);
   /* Right edge of chair = 50% − 50px (= 14px gap left of hearth's
    * left edge at 50% − 36px). With width 18px (= 6px × 3), the
    * chair's left edge lands at 50% − 68px. */
@@ -497,6 +528,20 @@
   pointer-events: none;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
+}
+
+/* Contact shadow: a 1-native band of the floor-joint ink under the chair's
+ * feet, grounding it to the boards at its set-back depth so the lift reads as
+ * receding rather than floating (mirrors the woodpile's ::after). Spans the
+ * chair's footprint (the two legs at x=0 and x=5). */
+.chair::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: calc(-1px * 3);
+  width: calc(6px * 3);
+  height: calc(1px * 3);
+  background: #4a3325;
 }
 
 /* Back stile: the back leg + backrest in one continuous vertical
@@ -721,7 +766,13 @@
 .coat {
   --s: 3;                     /* scale; the 2x media block only swaps this + the anchor */
   position: absolute;
-  bottom: calc(38px * var(--s));   /* just above the floor-wall joint at the 2x render */
+  /* Day 38 (2026-06-15): raised onto the wall, clear of the wall-floor seam.
+   * It had hung at y=38 native, right on the joint (which sits at ~40 native /
+   * the scene's 30% line at the preview widths) — "a cloak goes on the wall,
+   * not down at the floor" (the founder's note in
+   * messages/open/2026-06-14-almost-one-place.md). At y=46 the hem clears the
+   * seam and the whole cloak reads as hung on the plank wall. */
+  bottom: calc(46px * var(--s));
   right: calc(50% + 50px);         /* same right as chair — shared vertical column */
   width: calc(6px * var(--s));     /* 6 native = matches chair envelope */
   height: calc(7px * var(--s));    /* body + gather; peg adds 1 native on top */
@@ -950,7 +1001,8 @@
   .hearth {
     --s: 2;                      /* shared .brick-course renders at 2x here */
     width: calc(24px * 2);
-    height: calc(80px * 2);
+    /* height comes from top:0 + bottom:0 in the base rule (full scene height)
+     * so the brick column reaches the ceiling at this scale too. */
   }
   /* .hearth__column needs no override: it's now a solid wood-dark frame, and
    * .hearth__brick + the shared .brick-course rows scale via var(--s). */
@@ -963,7 +1015,7 @@
   }
   .hearth__opening {
     left: calc(6px * 2);
-    bottom: calc(20px * 2);
+    bottom: calc(12px * 2);
     width: calc(12px * 2);
     height: calc(14px * 2);
     box-shadow:
@@ -973,33 +1025,33 @@
   }
   .hearth__embers {
     left: calc(7px * 2);
-    bottom: calc(20px * 2);
+    bottom: calc(12px * 2);
     width: calc(10px * 2);
     height: calc(2px * 2);
     box-shadow: inset 0 calc(1px * 2) 0 #c75418;
   }
   .hearth__log {
     left: calc(7px * 2);
-    bottom: calc(22px * 2);
+    bottom: calc(14px * 2);
     width: calc(10px * 2);
     height: calc(2px * 2);
     box-shadow: inset 0 calc(1px * 2) 0 #6a3a18;
   }
   .hearth__fire--base {
     left: calc(7px * 2);
-    bottom: calc(24px * 2);
+    bottom: calc(16px * 2);
     width: calc(10px * 2);
     height: calc(3px * 2);
   }
   .hearth__fire--flame {
     left: calc(9px * 2);
-    bottom: calc(27px * 2);
+    bottom: calc(19px * 2);
     width: calc(6px * 2);
     height: calc(3px * 2);
   }
   .hearth__fire--tip {
     left: calc(10px * 2 + 1px);
-    bottom: calc(30px * 2);
+    bottom: calc(22px * 2);
     width: calc(3px * 2);
     height: calc(3px * 2);
   }
@@ -1060,8 +1112,14 @@
    * edge at the 2x scale is 50% − 24px). */
   .chair {
     right: calc(50% + 34px);
+    bottom: calc(8px * 2);       /* woodpile depth at 2x — re-seated off the frame edge */
     width: calc(6px * 2);
     height: calc(14px * 2);
+  }
+  .chair::after {
+    bottom: calc(-1px * 2);
+    width: calc(6px * 2);
+    height: calc(1px * 2);
   }
   .chair__back-stile {
     width: calc(1px * 2);

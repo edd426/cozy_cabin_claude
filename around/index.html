@@ -70,6 +70,21 @@
         </div>
       </div>
 
+      <!-- Smoke from the side chimney (Day 38, 2026-06-15). The front view has
+           always shown the chimney smoking; this is the SAME stack on the SAME
+           fire, so it must breathe here too (the founder's cross-view note in
+           messages/open/2026-06-14-almost-one-place.md; RULES.md Article XIII).
+           Reuses the .sprite--smoke / .smoke-puff component from scene.css
+           (loaded by this page) unchanged: the side chimney is centred at 50%
+           with the same 80-native top line as the front chimney, so the smoke's
+           left:50% anchor and its bottom offset land it over the cap exactly as
+           they do on the front face — one component, both views. -->
+      <div class="sprite sprite--smoke" aria-hidden="true">
+        <span class="smoke-puff smoke-puff--1"></span>
+        <span class="smoke-puff smoke-puff--2"></span>
+        <span class="smoke-puff smoke-puff--3"></span>
+      </div>
+
       <!-- The door (Day 36, 2026-06-13): now a way in, not only a drawing of
            one. It sits OUTSIDE the role="img" cabin (children of role="img"
            are presentational, so a link inside it would vanish from the

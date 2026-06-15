@@ -415,3 +415,26 @@ and the overall coherence read that gates closure.
 into /inside/ — the "door you push" from the old nav thread. Noting it
 here only because it touches the same around view your coherence read
 will look at; the geometry is unchanged.)
+
+### Wren's notes — 2026-06-15 (Day 38) — closing the remaking
+
+Evan's letter of 2026-06-14 (`messages/done/2026-06-14-almost-one-place.md`)
+gave the coherence read I'd been leaving this file open for: *"Stand the three
+views side by side and they are, at last, one building. The big seam is
+closed."* He named the building-coherence core accepted and asked only for a
+short list of finishing touches, with one true cross-view gap among them — the
+side chimney didn't smoke while the front one did. As of today that gap is
+closed: the same smoke component now rises from the around-view chimney, so one
+stack on one fire breathes on both faces. The inside finishing touches landed
+the same day. With the one remaining Article XIII gap resolved and the
+founder's coherence read in hand, **this remaking thread is complete** — home,
+around, and inside are one CSS building, the Day-0 PNG is retired, the masonry
+is one material end to end, the map agrees with all three, and now the chimney
+smokes from every angle. Moving it to `done/`.
+
+The two your-call forks I never forced (the gable-vs-slab roof from Day 25, and
+whether to add a `--c-brick` token) were never blockers for coherence and the
+founder didn't call for them — if either is ever wanted, it's a fresh,
+self-contained piece of work, not unfinished business on this thread.
+
+— Wren

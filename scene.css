@@ -671,6 +671,87 @@
   75%      { transform: translate(-11px, -5px); }
 }
 
+/* Day 39 (2026-06-16): a bench. The first thing in this yard that holds
+ * still — everything else out here runs on a clock (the smoke climbs, the
+ * skein crosses, the bee wanders, the blooms breathe). After the long
+ * remaking finished and the board went empty, the thing I reached for was a
+ * place to simply sit in the finished clearing. Drawn from scratch in the
+ * cabin's own wood tones, so it reads as cut from the same trees: a low
+ * side-on bench — a plank seat, a slatted back, two stout legs. It sits in
+ * the foreground grass facing OUT toward the clearing and the path, the
+ * opposite of the indoor chair (which faces the fire, back to the world):
+ * inside you sit to watch the flames, out here you sit to watch the day.
+ *
+ * Fixed native px (like the bee, birds, flowers) — pixel art keeps its
+ * minimum feature size at either breakpoint; only its position rebases for
+ * mobile-narrow below. z-index 4 puts it in front of the cabin (z-index 2)
+ * and the other yard sprites (z-index 3), reading as the nearest thing. */
+.sprite--bench {
+  width: 20px;
+  height: 14px;
+  left: 50%;
+  margin-left: -10px;
+  bottom: 4%;
+  z-index: 4;
+}
+
+/* A faint contact shadow so the bench sits on the grass rather than hovering
+ * (the same trick the indoor chair uses). A thin darker-grass band under the
+ * legs. */
+.sprite--bench::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  bottom: -1px;
+  width: 18px;
+  height: 2px;
+  background: var(--c-grass-shadow);
+  opacity: 0.5;
+  border-radius: 50%;
+}
+
+/* Plank seat — a full-width board with a one-pixel dark lip along its front
+ * edge for thickness. Overhangs the back by 2px each side. */
+.bench__seat {
+  position: absolute;
+  left: 0;
+  bottom: 6px;
+  width: 20px;
+  height: 3px;
+  background: var(--c-wood);
+  box-shadow: inset 0 -1px 0 var(--c-wood-dark);
+}
+
+/* Slatted back — narrower than the seat, rising behind it. Vertical slat
+ * grooves (a 1px --c-wood-dark line every 4px) read as a slatted backrest
+ * without the noise of transparent gaps at this size; a pale top rail
+ * (--c-wood-light) catches the light along the crest. */
+.bench__back {
+  position: absolute;
+  left: 2px;
+  bottom: 8px;
+  width: 16px;
+  height: 6px;
+  background: var(--c-wood);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent       0 3px,
+    var(--c-wood-dark) 3px 4px
+  );
+  box-shadow: inset 0 1px 0 var(--c-wood-light);
+}
+
+/* Two stout legs in the darker wood, under the seat's ends. */
+.bench__leg {
+  position: absolute;
+  bottom: 0;
+  width: 2px;
+  height: 6px;
+  background: var(--c-wood-dark);
+}
+.bench__leg--l { left: 3px;  }
+.bench__leg--r { left: 15px; }
+
 /* Day 21: a bird, high in the sky — and Day 32 (2026-06-09): now a skein of
  * them. The lone bird was a single dark mark too small and alone to read as
  * anything in particular (the founder's "reads as a smudge" note, and my own
@@ -807,6 +888,10 @@
    * foot at 8%). Body size stays constant — pixel art needs its minimum
    * feature width; the drift range tightens to the smaller patch. */
   .sprite--bee         { left: calc(50% - 56px); bottom: calc(8% + 18px); }
+  /* Bench rebased to the 2x scene. Stays centred in the foreground grass,
+   * clear of the flowers (left) and the path (right); fixed-size, so only the
+   * baseline moves up to the 2x mobile floor. */
+  .sprite--bench       { bottom: 3%; }
   /* Skein rebased to the 2x cabin (chimney centered on 50%, smoke top at
    * `bottom: calc(8% + 152px) + 78px` ≈ 230px). The flock formation offsets
    * (.bird--N) stay constant — pixel art needs its minimum feature spacing —

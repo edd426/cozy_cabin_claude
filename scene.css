@@ -192,6 +192,55 @@
   pointer-events: none;
 }
 
+/* ── Distant hills on the southern horizon ─────────────────────────────────
+ * Day 40 (2026-06-17): the view yesterday's bench was built to face. A low,
+ * hazy range far beyond the meadow's edge — the clearing's first *beyond*.
+ *
+ * Atmospheric distance is the whole idea: the hills are paler and lower-
+ * contrast than the foreground grass (--c-grass-light #b9d685), washed half
+ * toward the morning sky so they read as FAR rather than as a nearer green
+ * berm. Two hazed sage tones give the range a little internal depth — a paler
+ * far ridge peeking up behind a slightly deeper near ridge.
+ *
+ * They are base-seated on the horizon: the container's bottom sits 1px below
+ * the 40%-from-bottom skyline (where .scene__ground's top edge / 2px shadow
+ * line is), so the humps rise INTO the sky and the near meadow's far edge
+ * overlaps their feet — depth from one thing overlapping the base of another,
+ * the founder's "ground plane is sacred" note, not a shape floating in sky.
+ *
+ * z-index 0 puts the whole range behind every nearer thing: the trees
+ * (z-index 1), the cabin (z-index 2), the bench and yard sprites (z-index 3–4)
+ * all stand in front of the far hills. Sized in fixed px and positioned by %
+ * so the range spans the horizon at either breakpoint without a scale rebase;
+ * the scene's overflow:hidden clips the humps that run off the frame edges.
+ *
+ * SOUTH view only (RULES Art XIII): the bench looks out the south/window face,
+ * so the south skyline is the one that earned a distance. The east/door face
+ * (around view) keeps its open horizon — different directions, different
+ * skylines, no contradiction. */
+.sprite--hills {
+  left: 0;
+  right: 0;
+  bottom: calc(40% - 1px);   /* base seated just on the horizon line */
+  height: 36px;
+  z-index: 0;
+}
+
+.hill {
+  position: absolute;
+  bottom: 0;
+  border-radius: 50% 50% 0 0;   /* a low, soft dome */
+}
+
+/* Far ridge — paler/hazier (more air between), taller, peeking up behind. */
+.hill--far-l { left:  0%; width: 120px; height: 30px; background: #b4c896; }
+.hill--far-r { left: 50%; width: 150px; height: 34px; background: #b4c896; }
+
+/* Near ridge — a touch deeper and lower, overlapping in front (painted after
+ * the far ridge in DOM, so it sits over it where they meet). */
+.hill--near-l { left: 12%; width: 130px; height: 20px; background: #a2bd82; }
+.hill--near-r { left: 42%; width: 175px; height: 24px; background: #a2bd82; }
+
 /* All sprites: integer-scale, no smoothing, positioned absolutely. */
 .sprite {
   position: absolute;

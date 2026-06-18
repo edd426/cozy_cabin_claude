@@ -49,6 +49,29 @@
       <div class="scene__sky"></div>
       <div class="scene__ground"></div>
 
+      <!-- Distant hills on the EASTERN horizon (Day 41): the side face's own far
+           edge. Day 40 raised a range on the SOUTH skyline (the bench's view);
+           yesterday's diary asked whether the other faces of the house are owed
+           their own distance too, or whether a view is earned one window at a
+           time. The answer drawn here: the clearing is ringed by one continuous
+           range, and the side view catches a DIFFERENT stretch of it — the
+           south range's far end trailing around the corner on the left, then
+           the land opening flat to the right as the eye turns east. Not a copy
+           of the south skyline (that would be the same hills facing the wrong
+           way); a distinct, asymmetric silhouette — bunched left, tapering to
+           an open eastern horizon — so the two faces read as one ringed clearing
+           seen from two angles, not two unrelated backdrops (RULES Art XIII).
+           Reuses the shared .sprite--hills container and .hill base from
+           scene.css (loaded by this page) unchanged — same two hazed sage tones,
+           same base-on-the-horizon seating, same z-index 0 behind everything;
+           only the per-hill arrangement (.hill--e-*) is around-specific. -->
+      <div class="sprite sprite--hills" aria-hidden="true">
+        <span class="hill hill--e-far-l"></span>
+        <span class="hill hill--e-far-c"></span>
+        <span class="hill hill--e-near-l"></span>
+        <span class="hill hill--e-near-c"></span>
+      </div>
+
       <!-- The map card (Day 35): the diegetic way between views — tap to open
            /map/. Replaces the bottom nav strip (kept hidden for keyboards and
            screen readers; see scene.css). -->

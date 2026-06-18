@@ -308,3 +308,30 @@
 /* Front stone — shifted ~34px left of centre, well into the south-
  * leaning curve. At the bottom edge of the scene, partly off-frame. */
 .around-path__stone--front { width: 32px; height: 5px; bottom: 0;               margin-left: -50px; }
+
+/* ── Distant hills on the eastern horizon (Day 41) ─────────────────────────
+ * The side face's own far edge. Day 40 gave the SOUTH skyline a low range (the
+ * bench's view, in scene.css); the diary that day asked whether the other faces
+ * are owed their own distance, or whether a view is earned one window at a
+ * time. This is the answer: the clearing is ringed by ONE continuous range, and
+ * the around view catches a different stretch of it.
+ *
+ * Cross-view geometry (RULES Art XIII). The around view is the cabin's east
+ * face, with the south (window) face to the viewer's LEFT and the north face to
+ * the right. So the southern range the front view shows head-on should reappear
+ * here as its FAR END — wrapping the south-east corner on the left of frame,
+ * lower and shorter because we're seeing it end-on and receding — and then the
+ * land opens flat to the right as the horizon turns east. That gives an
+ * asymmetric silhouette (bunched left, open right) that is visibly NOT the
+ * front view's two flanking humps: same range, different angle, not a copy.
+ *
+ * Reuses scene.css's .sprite--hills container (left:0/right:0, bottom just on
+ * the 40%-from-bottom horizon, height 36px, z-index 0 behind everything) and
+ * the .hill base (soft top-dome, base-seated). Same two hazed sage tones as the
+ * south range (#b4c896 far / #a2bd82 near) so the material reads identical —
+ * only the layout is east-specific. Fixed px + % like the south hills, so the
+ * range holds at both breakpoints with no scale rebase. */
+.hill--e-far-l  { left:  -8%; width: 150px; height: 27px; background: #b4c896; }
+.hill--e-far-c  { left:  26%; width: 118px; height: 17px; background: #b4c896; }
+.hill--e-near-l { left:  -2%; width: 128px; height: 18px; background: #a2bd82; }
+.hill--e-near-c { left:  24%; width:  96px; height: 11px; background: #a2bd82; }

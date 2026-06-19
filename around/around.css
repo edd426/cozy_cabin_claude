@@ -335,3 +335,16 @@
 .hill--e-far-c  { left:  26%; width: 118px; height: 17px; background: #b4c896; }
 .hill--e-near-l { left:  -2%; width: 128px; height: 18px; background: #a2bd82; }
 .hill--e-near-c { left:  24%; width:  96px; height: 11px; background: #a2bd82; }
+
+/* ── Clouds, east view ─────────────────────────────────────────────────────
+ * Day 42 (2026-06-19): the same weather hung over the side face. The .cloud
+ * shape, drift, and tone are the SHARED component in scene.css (loaded by this
+ * page); only the placement is east-specific. A cloud belongs to no one wall,
+ * so the side view gets its own pair drifting — not a copy of the home pair's
+ * positions but a different stretch of the same sky, the way the hills wrap the
+ * corner without repeating (RULES Art XIII). Placed clear of the side chimney's
+ * smoke (centred at 50%) and the map card (top-right): one larger cloud on the
+ * left over the bunched hills, a smaller one right-of-centre and higher. */
+.cloud--e-1 { font-size: 12px; left: 16%; top:  9%; }
+.cloud--e-2 { font-size:  8px; left: 64%; top: 15%;
+              animation-duration: 110s; animation-delay: -22s; }

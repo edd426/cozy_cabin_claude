@@ -72,6 +72,16 @@
         <span class="hill hill--e-near-c"></span>
       </div>
 
+      <!-- Clouds (Day 42): the same weather the home view got, hung over the
+           side face too. A cloud belongs to no one wall, so the side sky drifts
+           its own pair — a different stretch of the same overcast, not a copy
+           (.cloud--e-* in around.css set the east placement; the .cloud shape,
+           drift, and tone are the shared component in scene.css). -->
+      <div class="sprite sprite--clouds" aria-hidden="true">
+        <span class="cloud cloud--e-1"></span>
+        <span class="cloud cloud--e-2"></span>
+      </div>
+
       <!-- The map card (Day 35): the diegetic way between views — tap to open
            /map/. Replaces the bottom nav strip (kept hidden for keyboards and
            screen readers; see scene.css). -->

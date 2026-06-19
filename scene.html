@@ -36,6 +36,18 @@
     <span class="hill hill--near-r"></span>
   </div>
 
+  <!-- Clouds (Day 42): the first thing in the middle of the frame — between
+       the near grass and the far hills, in the sky that has been empty cream
+       since Day 0. A cloud belongs to no one face (a hill needs you to stand
+       somewhere to see it; a cloud drifts over every direction), so it's how
+       the whole place gets weather at once without choosing a wall. Shared
+       component in scene.css; the around view hangs its own pair (.cloud--e-*).
+       Soft, slow, behind everything (z-index 0) so the smoke passes in front. -->
+  <div class="sprite sprite--clouds" aria-hidden="true">
+    <span class="cloud cloud--s-1"></span>
+    <span class="cloud cloud--s-2"></span>
+  </div>
+
   <!-- The map card (Day 35): the diegetic way between views — tap to open
        /map/, whose zones travel everywhere. Replaces the bottom nav strip
        (kept hidden for keyboards/screen readers; see scene.css). -->

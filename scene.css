@@ -241,6 +241,69 @@
 .hill--near-l { left: 12%; width: 130px; height: 20px; background: #a2bd82; }
 .hill--near-r { left: 42%; width: 175px; height: 24px; background: #a2bd82; }
 
+/* ── Clouds in the sky ─────────────────────────────────────────────────────
+ * Day 42 (2026-06-19): the first thing in the *middle* of the frame. The
+ * clearing has had a near (grass), a far (the hills on the south/east rim),
+ * and an empty cream sky between them since Day 0. A hill belongs to a face —
+ * you have to stand somewhere to see it — but a cloud belongs to no face, so
+ * the sky is the one thing that could be added to the whole place at once
+ * without choosing a direction. That's also why this component is SHARED
+ * (scene.css, loaded by every view): the home view places its pair via the
+ * .cloud--s-* modifiers below, and the around view hangs its own pair via
+ * .cloud--e-* in around.css — the same weather over both faces, a different
+ * stretch of it each (RULES Art XIII), the way the hills wrap the corner
+ * without repeating.
+ *
+ * Shape: one element per cloud, lumped by box-shadow. A box-shadow inherits
+ * the source element's border-radius, so three offset copies of a rounded
+ * pill (shrunk with negative spread) stack into a soft, bumpy cloud from a
+ * single span — no child puffs needed. The geometry is in `em` so a cloud
+ * scales by its own `font-size` alone; that leaves `transform` free for the
+ * drift, and lets each placement pick a size without a bespoke shape.
+ *
+ * Tone: a soft warm near-white, only a little lighter than --c-sky-light
+ * (#f4e3c4) — atmospheric, a low-contrast haze rather than a hard cutout (the
+ * founder's legibility note: a far, soft thing is allowed to be quiet). They
+ * sit high in the sky (positioned by `top`) and z-index 0 keeps them behind
+ * the cabin, trees, and rising smoke — a distant cloud the chimney's smoke
+ * passes in front of, which is the right depth order. Positioned by % and
+ * sized in fixed em, so no breakpoint rebase: one block holds at both scales,
+ * the scene's overflow:hidden clipping anything that drifts off an edge. */
+.sprite--clouds {
+  inset: 0;
+  z-index: 0;
+}
+
+.cloud {
+  position: absolute;
+  width: 2.6em;
+  height: 1em;
+  border-radius: 999px;
+  background: #fdf7e6;
+  box-shadow:
+     1.25em  0.20em 0 -0.10em #fdf7e6,   /* right lump */
+    -1.05em  0.30em 0 -0.20em #fdf7e6,   /* left lump  */
+     0.40em -0.45em 0 -0.30em #fdf7e6;   /* top hump   */
+  /* A very slow, small drift — far clouds barely move; this reads as "hanging,
+   * just adrift" rather than sailing. ease-in-out softens the turn; per-cloud
+   * duration/delay overrides below keep the pair off lockstep. A cloud has no
+   * pointing direction (unlike the skein's V), so a gentle there-and-back drift
+   * isn't the "geese reversing" mistake — it's just air moving. */
+  animation: cloud-drift 96s ease-in-out infinite;
+}
+
+@keyframes cloud-drift {
+  0%, 100% { transform: translateX(0);    }
+  50%      { transform: translateX(15px); }
+}
+
+/* Home (south) view's pair: one larger cloud high on the left, a smaller one
+ * higher and right-of-centre — clear of the map card (far top-right) and the
+ * central smoke. Different sizes/speeds so they don't pulse together. */
+.cloud--s-1 { font-size: 12px; left: 11%; top: 12%; }
+.cloud--s-2 { font-size:  8px; left: 58%; top:  7%;
+              animation-duration: 124s; animation-delay: -34s; }
+
 /* All sprites: integer-scale, no smoothing, positioned absolutely. */
 .sprite {
   position: absolute;

@@ -192,6 +192,67 @@
   pointer-events: none;
 }
 
+/* ── Time-of-day wash ──────────────────────────────────────────────────────
+ * Day 43 (2026-06-20): the clearing keeps the real hour. Every other clock out
+ * here runs on a frozen morning; this one answers to the visitor's actual time
+ * (sky.js reads `new Date().getHours()` and sets `data-tod` on each `.scene` in
+ * both exterior views — home and around, which share this stylesheet, so the
+ * same hour lights both faces; RULES Art XIII).
+ *
+ * A single ambient overlay, not a repaint of the sky: a `::after` laid over the
+ * whole frame at z-index 5 — above the world (sprites are z-index 0–4) but below
+ * the map card (z-index 6, a UI affordance that shouldn't take the light). Light
+ * falls on a whole place at once, so the cabin, hills, clouds, and grass all
+ * take the hour's colour together. `pointer-events: none` keeps it inert.
+ *
+ * Deliberately soft. The default (no `data-tod`, or day) is NO wash — the plain
+ * cream morning the place has always had, so JS-off loses nothing. Only the two
+ * edges of the day and the night carry colour, and even those are a whisper:
+ *   - dawn  — a thin rose, warm and low over the horizon/grass (gradient bottom-
+ *             weighted: the low sun), clearing before it reaches the high sky.
+ *   - dusk  — a late-afternoon gold, same low-sun weighting, a touch stronger.
+ *   - night — a quiet dusk-blue leaning on the palette's plum (--c-plum is the
+ *             tokens' own "dusk shadow"), top-weighted (the darkening sky) but
+ *             never black: a clearing that still remembers the sun, lit enough
+ *             to walk up to. This is a day that *greets*, not one that turns. */
+.scene::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background: transparent;
+  transition: opacity 1.6s ease, background 1.6s ease;
+}
+.scene[data-tod="dawn"]::after {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(215, 122, 118, 0.18) 0%,   /* rose (--c-rose), low — the dawn horizon */
+    rgba(215, 122, 118, 0.06) 42%,
+    rgba(215, 122, 118, 0) 64%
+  );
+}
+.scene[data-tod="dusk"]::after {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(216, 150, 92, 0.24) 0%,    /* late-afternoon gold, low — the setting sun */
+    rgba(216, 150, 92, 0.09) 46%,
+    rgba(216, 150, 92, 0) 68%
+  );
+}
+.scene[data-tod="night"]::after {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(86, 74, 116, 0.30) 0%,     /* dusk-blue (plum-leaning), the darkening sky */
+    rgba(92, 82, 122, 0.18) 55%,
+    rgba(98, 90, 126, 0.12) 100%    /* still lit at the grass — never black */
+  );
+}
+
 /* ── Distant hills on the southern horizon ─────────────────────────────────
  * Day 40 (2026-06-17): the view yesterday's bench was built to face. A low,
  * hazy range far beyond the meadow's edge — the clearing's first *beyond*.

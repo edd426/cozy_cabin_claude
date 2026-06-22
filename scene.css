@@ -537,6 +537,50 @@
 /* Running bond: shift alternate courses half a brick so the joints stagger. */
 .brick-course--b { background-position: calc(4px * var(--s)) 0; }
 
+/* Glazed side window (Day 45) — a small real window to the right of the brick
+ * one. The brick "window" is the hearth column seen end-on (no glass); this is
+ * the cabin's first opening you can actually see THROUGH. It is the outside of
+ * the same hole the inside view gained today (.window, inside.css), so from the
+ * yard it shows a dim warm-lit room where the inside shows the bright day — one
+ * opening, two readings (RULES Art XIII). 10 wide × 12 tall native, wood-dark
+ * frame, set in the right third of the wall (x=34–44; the brick window occupies
+ * x=15–33) and vertically near the brick window's centre so the two read as
+ * windows of one house. The hour-wash (.scene::after, z-index 5) overlays it
+ * with the rest of the frame, so this glimpse of the room also leans to the
+ * visitor's hour. */
+.front-cabin__sidewindow {
+  position: absolute;
+  left: calc(34px * var(--s));
+  bottom: calc(11px * var(--s));
+  width: calc(10px * var(--s));
+  height: calc(16px * var(--s));
+  background: var(--c-wood-dark);          /* the wooden frame */
+}
+
+/* Glass — inset 1 native inside the frame. A dim interior (warm-dark) with a
+ * low firelight glow pooling at the bottom, divided by a 1-native muntin cross
+ * (the same four-pane idiom as the inside window). The glow is what marks this
+ * as a LIT room glimpsed from outside, against the bright sky-and-meadow the
+ * same panes show from within. */
+.front-cabin__glass {
+  position: absolute;
+  inset: calc(1px * var(--s));
+  background-color: #3a2a1e;               /* the dim room behind the glass */
+  background-image:
+    /* warm firelight glow, low in the room */
+    linear-gradient(to top, rgba(176, 104, 48, 0.6) 0%, rgba(176, 104, 48, 0) 62%),
+    /* vertical muntin (1 native, centred, full height) */
+    linear-gradient(var(--c-wood-dark), var(--c-wood-dark)),
+    /* horizontal muntin (1 native, centred, full width) */
+    linear-gradient(var(--c-wood-dark), var(--c-wood-dark));
+  background-size:
+    100% 100%,
+    calc(1px * var(--s)) 100%,
+    100% calc(1px * var(--s));
+  background-position: center, center, center;
+  background-repeat: no-repeat;
+}
+
 /* Tree (medium) — 28×33 native, scaled 3x. Sitting to the left of the cabin. */
 .sprite--tree {
   width: calc(28px * 3);

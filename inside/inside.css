@@ -972,6 +972,112 @@
   100% { transform: translate(  0px,  0px); }
 }
 
+/* ─── Window (Day 45) ───────────────────────────────────────────────
+ *
+ * The room's first opening, cut into the south (hearth) wall to the right
+ * of the chimney, above the woodpile. The inside has been lit only by fire
+ * since Day 11 — "all fire and brick, no glass" (the Day-44 diary) — with
+ * no way for daylight to reach the floor. This is the way in for the light.
+ *
+ * Native layout (14 wide × 18 tall frame, on a 16-wide sill that juts 1
+ * native past each jamb and 2 native below):
+ *
+ *     ┌────────────┐  y=18  wood-dark frame (1 native all round)
+ *     │ S S | s s  │         pane inset 1: SKY above the muntin cross,
+ *     │ S S | s s  │         MEADOW below it — the horizontal bar reads
+ *     │─────+──────│  y=9    as the horizon (--c-sky-light / --c-grass)
+ *     │ g g | g g  │         vertical bar splits the panes left/right
+ *     │ g g | g g  │
+ *     └────────────┘  y=1
+ *      ░░░░░░░░░░░░░░  y=-2 to 0  sill (wood-dark, lit top edge)
+ *
+ * What the panes SHOW is deliberately simple and static — a calm daylight,
+ * not the real hour. The inside doesn't keep the clock the yard does (it
+ * loads no sky.js); whether this opening SHOULD answer to the real hour is
+ * the question the Day-45 diary leaves open. Today is only the opening.
+ *
+ * Cross-view geometry (RULES.md Article XIII): the south wall is the same
+ * wall the front view renders, so the same opening shows there
+ * (.front-cabin__sidewindow, scene.css) — glazed dim (a lit room seen from
+ * the bright yard) where this is glazed bright (the day seen from the lit
+ * room). One hole on one wall, two true readings of it. Anchored, like the
+ * woodpile below, relative to the hearth centre (50%) so it holds its place
+ * over the pile at both scales. */
+.window {
+  --s: 3;                      /* scale; the 2x block swaps this + the anchor */
+  position: absolute;
+  /* Mid-wall, clear of the floor-wall seam and lifted off the mantle's
+   * shelf-line (y=46–49): bottom 52 native sits the sill well up the plank
+   * wall, at a height a real window's ledge would take, with the woodpile a
+   * little below it rather than crowding its base. */
+  bottom: calc(52px * var(--s));
+  /* Centred over the woodpile: the pile's left edge is at 50% + 50px (3x)
+   * and it is 8 native (24px) wide, so its centre is 50% + 62px; the 14-
+   * native (42px) frame's left edge lands 21px left of that, at 50% + 41px. */
+  left: calc(50% + 41px);
+  width: calc(14px * var(--s));
+  height: calc(18px * var(--s));
+  background: var(--c-wood-dark);          /* the wooden frame */
+  z-index: 1;                  /* on the wall, below the floor furniture (z=2) */
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Glass: inset 1 native inside the frame. A hard-stop vertical gradient —
+ * pale sky on the top half, sage meadow on the bottom half — so the seam
+ * lands on the horizontal muntin and reads as the horizon line. Same
+ * --c-sky-light / --c-grass tones the exterior sky and meadow use, so the
+ * day glimpsed through the window is made of the same light as the day
+ * outside (material truth across views). */
+.window__pane {
+  position: absolute;
+  left: calc(1px * var(--s));
+  bottom: calc(1px * var(--s));
+  width: calc(12px * var(--s));
+  height: calc(16px * var(--s));
+  background: linear-gradient(
+    to bottom,
+    var(--c-sky-light) 0 50%,   /* upper panes: sky */
+    var(--c-grass)     50% 100% /* lower panes: a band of meadow */
+  );
+}
+
+/* Vertical muntin: a 1-native wood-dark bar down the pane's centre,
+ * splitting it into left/right panes. */
+.window__muntin-v {
+  position: absolute;
+  left: calc(6px * var(--s));
+  bottom: calc(1px * var(--s));
+  width: calc(1px * var(--s));
+  height: calc(16px * var(--s));
+  background: var(--c-wood-dark);
+}
+
+/* Horizontal muntin: a 1-native wood-dark bar across the pane's middle,
+ * over the sky/meadow seam — the horizon bar. */
+.window__muntin-h {
+  position: absolute;
+  left: calc(1px * var(--s));
+  bottom: calc(8px * var(--s));
+  width: calc(12px * var(--s));
+  height: calc(1px * var(--s));
+  background: var(--c-wood-dark);
+}
+
+/* Sill: a wood ledge under the frame, 16 native wide (1 past each jamb) and
+ * 2 native tall, with a 1-native lit top edge so it reads as a shelf the
+ * light falls on — the surface a future small thing could sit on. */
+.window__sill {
+  position: absolute;
+  left: calc(-1px * var(--s));
+  bottom: calc(-2px * var(--s));
+  width: calc(16px * var(--s));
+  height: calc(2px * var(--s));
+  background: var(--c-wood-dark);
+  box-shadow: inset 0 calc(1px * var(--s)) 0 var(--c-wood-light);
+}
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css and
  * around.css (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */
@@ -1157,6 +1263,16 @@
   .coat {
     --s: 2;
     right: calc(50% + 34px);
+  }
+
+  /* Window rebased to 2x: every child scales via the inherited --s, so only
+   * --s and the centre-relative left anchor need restating. The woodpile's
+   * left edge sits at 50% + 34px on this scale and it is 16px wide, so its
+   * centre is 50% + 42px; the 28px frame's left edge lands 14px left of that.
+   * (bottom: calc(48px * var(--s)) rescales itself from the --s swap.) */
+  .window {
+    --s: 2;
+    left: calc(50% + 28px);
   }
 
   /* Moth rebased to 2x. Candle flame top on this scale ≈ (49+7)×2 =

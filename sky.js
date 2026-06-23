@@ -1,4 +1,4 @@
-/* sky.js — the clearing keeps the real hour (exterior views: home + around).
+/* sky.js — the clearing keeps the real hour (home + around + inside).
  *
  * Every other clock in this place runs on an invented, frozen morning: the
  * smoke climbs, the skein crosses, the clouds drift, the blooms breathe, and
@@ -22,10 +22,13 @@
  * place just stops keeping the hour. No per-visitor state, no storage, no
  * memory of yesterday: the only input is the clock at the moment you arrive.
  *
- * Both exterior shells (index.html, around/index.html) load this; the home
- * scene is fetched into #scene-mount asynchronously while the around scene is
- * inline, so we tag whatever `.scene` elements exist now and watch #cabin-scene
- * for any that arrive late.
+ * All three shells (index.html, around/index.html, inside/index.html) load this;
+ * the home scene is fetched into #scene-mount asynchronously while the around and
+ * inside scenes are inline, so we tag whatever `.scene` elements exist now and
+ * watch #cabin-scene for any that arrive late. The exterior views let the whole
+ * frame take the wash (scene.css's .scene::after); the inside refuses the frame
+ * wash and tints only the window glass with the same hour (inside.css, Day 46) —
+ * a fire-lit room doesn't go blue at dusk, but the square that sees out does.
  */
 (function () {
   /* The hour bands. The middle of the day is the neutral default (no wash);

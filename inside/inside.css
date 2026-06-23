@@ -1078,6 +1078,69 @@
   box-shadow: inset 0 calc(1px * var(--s)) 0 var(--c-wood-light);
 }
 
+/* ── The window keeps the real hour ────────────────────────────────────────
+ * Day 46 (2026-06-23). Day 45 left the glass a fixed plain daylight and left
+ * open whether the inside should keep the real hour the way the yard does. It
+ * should — but in its own way. A fire-lit room doesn't go blue at dusk; the
+ * hearth and the candle light the floor, not the sky. So the room itself stays
+ * steady. The one square of the room that sees OUT, though — the glass — is a
+ * pane of the same outside the yard wears, and from the yard that same opening
+ * already leans to the visitor's hour (.front-cabin__sidewindow takes
+ * scene.css's whole-frame wash). For the two views to agree (RULES Art XIII),
+ * the day glimpsed through the inside glass must keep the same hour. So the
+ * inside view now loads sky.js (it tags .scene with data-tod), and we tint ONLY
+ * .window__pane with the exact same wash gradients scene.css lays over the yard
+ * — material truth: the day seen through the glass is the day's own light.
+ *
+ * First, refuse the whole-frame ambient overlay scene.css would otherwise lay
+ * over the inside the moment data-tod is set: the room is fire-lit, not sky-lit,
+ * so it does not take the sky's colour. (`content: none` removes the pseudo-
+ * element entirely; .scene.scene--inside out-specifies .scene[data-tod]::after.) */
+.scene.scene--inside::after { content: none; }
+
+/* The glass takes the hour. A soft tint overlaid on the pane's sky-and-meadow,
+ * below the muntins (siblings painted after it) so the wood cross stays crisp.
+ * Same rgba bands as scene.css's exterior wash, same gradient directions — warm
+ * and low at dawn/dusk (the horizon bar of the pane), cool from the top at
+ * night — so a midnight visitor finds the inside pane gone the same quiet dusk-
+ * blue the yard wears, never black. The default (day / no data-tod) is no tint:
+ * the plain daylight the window has always shown. */
+.window__pane::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: transparent;
+  transition: opacity 1.6s ease, background 1.6s ease;
+}
+.scene--inside[data-tod="dawn"] .window__pane::after {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(215, 122, 118, 0.18) 0%,   /* rose, low — the dawn horizon */
+    rgba(215, 122, 118, 0.06) 42%,
+    rgba(215, 122, 118, 0) 64%
+  );
+}
+.scene--inside[data-tod="dusk"] .window__pane::after {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(216, 150, 92, 0.24) 0%,    /* late-afternoon gold, low — the setting sun */
+    rgba(216, 150, 92, 0.09) 46%,
+    rgba(216, 150, 92, 0) 68%
+  );
+}
+.scene--inside[data-tod="night"] .window__pane::after {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(86, 74, 116, 0.30) 0%,     /* dusk-blue (plum-leaning), the darkening sky */
+    rgba(92, 82, 122, 0.18) 55%,
+    rgba(98, 90, 126, 0.12) 100%    /* still lit at the grass — never black */
+  );
+}
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css and
  * around.css (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */

@@ -1141,6 +1141,103 @@
   );
 }
 
+/* ─── Glass on the sill (Day 47) ────────────────────────────────────
+ *
+ * A small glass tumbler standing on the window's sill — the first object in
+ * this room that answers to the SKY rather than the fire. The mantle's three
+ * things (stone, candle, jar) are all fire-side and steady; the sill is the one
+ * ledge the day reaches, so what belongs there is a thing the day can pour
+ * through. Glass is that thing: it doesn't just catch the light on its surface
+ * the way the stone does, it HOLDS it — clear by day, gold at dusk, dusk-blue
+ * at night, glowing with the same borrowed hour the panes keep. The mantle's
+ * candle is its own steady light; nothing the mantle holds glows with a light
+ * it didn't make. Only the sill can lend a thing the outside's changing light.
+ *
+ * Native layout (4 wide × 5 tall tumbler, child of .window so it inherits --s
+ * and scales to 2x with no override). Anchored on the sill's top surface
+ * (window-local y=0) and centred on the window (x=5..8, over the vertical
+ * muntin so it reads as standing in the middle of the sill):
+ *
+ *     r r r r   y=4   rim — the lit lip of the glass (bright, near-opaque)
+ *     H b b .   y=3   walls: H = lit edge highlight (left), b = translucent
+ *     H b b .   y=2          body (the meadow band shows through it)
+ *     H b b .   y=1
+ *     f f f f   y=0   foot — cool-dark, grounds the base on the sill
+ *      5 6 7 8        (window-local x)
+ *
+ * Built last in .window's children (index.html) so it paints over the pane and
+ * muntins — it stands in FRONT of the glass, nearest the room. Translucent fill
+ * (rgba) lets the green meadow pane and the dark muntin show faintly through,
+ * which is what reads it as glass; the bright left highlight + lit rim are the
+ * other half of the glass-tell. No 2x override needed — every length is in
+ * var(--s) (inherited from .window) and the tint is scale-independent rgba.
+ *
+ * Cross-view geometry (RULES.md Article XIII): from the yard the same opening
+ * is .front-cabin__sidewindow, glazed dim and small — a lit room glimpsed from
+ * the bright outside, where a tumbler on the inner sill doesn't resolve. So
+ * this is an interior-only object, like the mantle items and the cloak; no
+ * geometry to compose with another view. */
+.sill-glass {
+  position: absolute;
+  /* On the sill's top surface (window-local y=0), centred on the window. */
+  bottom: 0;
+  left: calc(5px * var(--s));
+  width: calc(4px * var(--s));
+  height: calc(5px * var(--s));
+  /* Pale cool glass, translucent — the meadow band and muntin show through. */
+  background: rgba(206, 224, 220, 0.30);
+  /* Lit edge highlight (left), lit rim (top), cool-dark foot (bottom). */
+  box-shadow:
+    inset  calc(1px * var(--s)) 0                    0 rgba(238, 248, 245, 0.65),
+    inset  0                    calc(1px * var(--s)) 0 rgba(238, 248, 245, 0.60),
+    inset  0                    calc(-1px * var(--s)) 0 rgba(110, 132, 128, 0.55);
+  z-index: 2;                  /* over the pane/muntins within the window plane */
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* The glass takes the hour. A soft tint overlaid on the glass, the SAME rgba
+ * hues and directions as .window__pane::after, so the tumbler and the panes
+ * behind it glow with one light (material truth — the day seen through the
+ * glass is the day's own). Default (day / no data-tod) is no tint: the plain
+ * clear glass the sill has shown since it was set down. */
+.sill-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: transparent;
+  transition: opacity 1.6s ease, background 1.6s ease;
+}
+.scene--inside[data-tod="dawn"] .sill-glass::after {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(215, 122, 118, 0.24) 0%,   /* rose, low — the dawn light through the glass */
+    rgba(215, 122, 118, 0.10) 60%,
+    rgba(215, 122, 118, 0.04) 100%
+  );
+}
+.scene--inside[data-tod="dusk"] .sill-glass::after {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(216, 150, 92, 0.32) 0%,    /* low gold — the setting sun caught in the glass */
+    rgba(216, 150, 92, 0.14) 60%,
+    rgba(216, 150, 92, 0.06) 100%
+  );
+}
+.scene--inside[data-tod="night"] .sill-glass::after {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(86, 74, 116, 0.38) 0%,     /* dusk-blue from the top — never black */
+    rgba(92, 82, 122, 0.26) 60%,
+    rgba(98, 90, 126, 0.18) 100%
+  );
+}
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css and
  * around.css (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */

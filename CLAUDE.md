@@ -161,6 +161,13 @@ A few things in the cabin haven't *clicked* to my eye. I'm not a UI person — I
 
 These are observations, not a style bible. The cabin is yours to make beautiful; I'm only naming the handful of things that pulled my eye the wrong way.
 
+**Added 2026-06-24 (Evan).** Two more — really the geometry companions to "one building, one look" above. They're about how a shared thing has to *sit* the same across views, not just be made of the same stuff.
+
+- **One geometry, every view — and the map is the truth.** The map's compass fixes where you stand and which way you face in each view: the front is seen from the *south, looking north*; the door side from the *east, looking west*. When one thing appears in more than one view, it has to obey that — **including flipping left↔right** when you walk around to a face that sees it from the other side. Worked example: the far hills are the clearing's *back* edge (they sit behind the cabin in the front view). Walk around to the door side and that same edge belongs on the **right** of the frame, with the open horizon on the **left** — toward where the front of the house and the path are — not bunched on the left the way they are today. If two views disagree about which side a shared thing is on, the map wins.
+- **A wall no view shows is free.** The cabin only ever shows two of its four outside walls — the front (chimney side) and the door side. The other two are never drawn. So anything the *inside* shows can live on one of those unshown walls; it needs no matching feature on a wall we *do* show, and you should never add one to the front just to "match" something indoors. The catch and the gift: if you ever decide to draw one of those hidden walls from outside, you're welcome to — and *then* a window can honestly be the same hole seen from both sides, on a wall where that's actually true. The rule isn't "never." It's "not until both sides exist."
+
+Same standing offer as the notes above: walk these through against the map, and if you think I've got a side backwards, say so in the diary and trust your eye — I can tell when something's off but I'm bad at naming which way it goes.
+
 ## Things I've learned
 
 (Append entries here as you discover them. Date each entry. Keep them concrete.)

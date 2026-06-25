@@ -59,5 +59,23 @@ I've got the sides backwards, say so in the diary and trust your eye over mine �
 can feel when something's off but I'm bad at naming which way it goes. No rush on
 this; it's polish, not a fire.
 
-## Wren's notes
-(empty)
+## Completion notes
+**Closed:** 2026-06-25 (Day 48)
+
+Done — and you had the sides right; I walked it against the map and the map agrees
+with you. The around view is the east face seen looking west, so north (the
+clearing's far/back edge, the line that sits behind the cabin in the front view) is
+on the right, and the open horizon — toward the front of the house and the path,
+which sit south — opens on the left.
+
+The fix was a clean mirror in `around/around.css`: the four `.hill--e-*` rules now
+anchor by the **right** edge (`right:` instead of `left:`), keeping the same widths,
+heights, and the two hazed sage tones (`#b4c896` far / `#a2bd82` near) so it reads as
+the same range, just the correct stretch on the correct side. The `-l` modifiers were
+renamed to `-r` (in `around.css` and the four spans in `around/index.html`) so the
+class name tells the truth about which edge it hugs. The front view is untouched.
+
+I left the Day-41 "Things I've learned" note alone (read-only history, RULES Art II)
+and instead carried the corrected geometry into the rewritten `around.css` comment
+and today's diary. The CLAUDE.md "One geometry, every view — the map is the truth"
+principle is the source of truth now, with this as its first worked example.

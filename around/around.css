@@ -316,25 +316,32 @@
  * time. This is the answer: the clearing is ringed by ONE continuous range, and
  * the around view catches a different stretch of it.
  *
- * Cross-view geometry (RULES Art XIII). The around view is the cabin's east
- * face, with the south (window) face to the viewer's LEFT and the north face to
- * the right. So the southern range the front view shows head-on should reappear
- * here as its FAR END — wrapping the south-east corner on the left of frame,
- * lower and shorter because we're seeing it end-on and receding — and then the
- * land opens flat to the right as the horizon turns east. That gives an
- * asymmetric silhouette (bunched left, open right) that is visibly NOT the
- * front view's two flanking humps: same range, different angle, not a copy.
+ * Cross-view geometry (RULES Art XIII; corrected Day 48 — see
+ * messages/done/2026-06-24-around-hills-mirrored.md and CLAUDE.md "One geometry,
+ * every view — and the map is the truth"). The map fixes the standing point: the
+ * front is seen from the SOUTH looking north, the door side from the EAST looking
+ * west. The far hills are the clearing's BACK edge — the north line that sits
+ * *behind* the cabin in the front view. From the east face looking west, north
+ * falls on your RIGHT and south on your left, so that back edge wraps the corner
+ * on the RIGHT of frame, lower and shorter as it recedes, and the land opens flat
+ * to the LEFT — the side the front of the house and the path are on. That gives an
+ * asymmetric silhouette (bunched right, open left) that is visibly NOT the front
+ * view's two flanking humps: same range, different angle, not a copy. (Before
+ * Day 48 these sat bunched on the left — the original slip reasoned the range as
+ * the *south* range wrapping left, but it's really the far/north edge, so it
+ * belongs on the right. The map wins when two views disagree about a side.)
  *
  * Reuses scene.css's .sprite--hills container (left:0/right:0, bottom just on
  * the 40%-from-bottom horizon, height 36px, z-index 0 behind everything) and
  * the .hill base (soft top-dome, base-seated). Same two hazed sage tones as the
  * south range (#b4c896 far / #a2bd82 near) so the material reads identical —
- * only the layout is east-specific. Fixed px + % like the south hills, so the
- * range holds at both breakpoints with no scale rebase. */
-.hill--e-far-l  { left:  -8%; width: 150px; height: 27px; background: #b4c896; }
-.hill--e-far-c  { left:  26%; width: 118px; height: 17px; background: #b4c896; }
-.hill--e-near-l { left:  -2%; width: 128px; height: 18px; background: #a2bd82; }
-.hill--e-near-c { left:  24%; width:  96px; height: 11px; background: #a2bd82; }
+ * only the layout is east-specific. Anchored by the RIGHT edge (right:%) so the
+ * range hugs the right and tapers left; fixed px + % like the south hills, so it
+ * holds at both breakpoints with no scale rebase. */
+.hill--e-far-r  { right: -8%; width: 150px; height: 27px; background: #b4c896; }
+.hill--e-far-c  { right: 26%; width: 118px; height: 17px; background: #b4c896; }
+.hill--e-near-r { right: -2%; width: 128px; height: 18px; background: #a2bd82; }
+.hill--e-near-c { right: 24%; width:  96px; height: 11px; background: #a2bd82; }
 
 /* ── Clouds, east view ─────────────────────────────────────────────────────
  * Day 42 (2026-06-19): the same weather hung over the side face. The .cloud

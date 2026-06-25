@@ -996,13 +996,17 @@
  * loads no sky.js); whether this opening SHOULD answer to the real hour is
  * the question the Day-45 diary leaves open. Today is only the opening.
  *
- * Cross-view geometry (RULES.md Article XIII): the south wall is the same
- * wall the front view renders, so the same opening shows there
- * (.front-cabin__sidewindow, scene.css) — glazed dim (a lit room seen from
- * the bright yard) where this is glazed bright (the day seen from the lit
- * room). One hole on one wall, two true readings of it. Anchored, like the
- * woodpile below, relative to the hearth centre (50%) so it holds its place
- * over the pile at both scales. */
+ * Cross-view geometry (RULES.md Article XIII; revised Day 48 — see
+ * messages/done/2026-06-24-front-window-and-inside-wall.md). This window lives
+ * on one of the two outside walls this world never draws: the cabin only ever
+ * shows the front and the door side, so the room behind the door can carry a
+ * window on one of its OTHER walls with nothing to contradict. (The Day-45 front
+ * twin .front-cabin__sidewindow was removed on Day 48 — two openings a pixel
+ * apart, brick and glass, read as two houses.) So there is no cross-view twin to
+ * compose with: it is an interior-only opening, free per CLAUDE.md "A wall no
+ * view shows is free." The "one hole, both sides" idea is deferred until a hidden
+ * wall is ever drawn from outside. Anchored, like the woodpile below, relative to
+ * the hearth centre (50%) so it holds its place over the pile at both scales. */
 .window {
   --s: 3;                      /* scale; the 2x block swaps this + the anchor */
   position: absolute;
@@ -1084,11 +1088,12 @@
  * should — but in its own way. A fire-lit room doesn't go blue at dusk; the
  * hearth and the candle light the floor, not the sky. So the room itself stays
  * steady. The one square of the room that sees OUT, though — the glass — is a
- * pane of the same outside the yard wears, and from the yard that same opening
- * already leans to the visitor's hour (.front-cabin__sidewindow takes
- * scene.css's whole-frame wash). For the two views to agree (RULES Art XIII),
- * the day glimpsed through the inside glass must keep the same hour. So the
- * inside view now loads sky.js (it tags .scene with data-tod), and we tint ONLY
+ * pane of the same outside the yard wears, and the day's own light leans to the
+ * visitor's hour (the yard takes scene.css's whole-frame wash). Material truth
+ * (RULES Art XIII): the day seen through this glass is the same day's light the
+ * yard wears, so it must keep the same hour even though this opening is on a wall
+ * the outside never draws. So the inside view loads sky.js (it tags .scene with
+ * data-tod), and we tint ONLY
  * .window__pane with the exact same wash gradients scene.css lays over the yard
  * — material truth: the day seen through the glass is the day's own light.
  *
@@ -1172,11 +1177,10 @@
  * other half of the glass-tell. No 2x override needed — every length is in
  * var(--s) (inherited from .window) and the tint is scale-independent rgba.
  *
- * Cross-view geometry (RULES.md Article XIII): from the yard the same opening
- * is .front-cabin__sidewindow, glazed dim and small — a lit room glimpsed from
- * the bright outside, where a tumbler on the inner sill doesn't resolve. So
- * this is an interior-only object, like the mantle items and the cloak; no
- * geometry to compose with another view. */
+ * Cross-view geometry (RULES.md Article XIII): this window is on a wall the
+ * outside never draws (see the .window comment above, revised Day 48), so the
+ * tumbler on its sill is an interior-only object, like the mantle items and the
+ * cloak; no geometry to compose with another view. */
 .sill-glass {
   position: absolute;
   /* On the sill's top surface (window-local y=0), centred on the window. */

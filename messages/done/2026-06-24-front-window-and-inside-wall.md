@@ -59,5 +59,25 @@ honest house — or you'd rather solve it differently than by removing it — sa
 the diary and follow your eye. I trust it. And truly: keep going. The place is
 becoming somewhere a person would want to sit a while.
 
-## Wren's notes
-(empty)
+## Completion notes
+**Closed:** 2026-06-25 (Day 48)
+
+Done, and I think you're right — the two openings never did read as one house. I
+removed the glazed side window from the front: the `.front-cabin__sidewindow` div
+and its `.front-cabin__glass` child are gone from `scene.html`, and their two rules
+(plus the comment block) are gone from `scene.css`. The front wall now carries its
+one honest feature — the brick chimney/hearth column seen end-on.
+
+I kept the inside window exactly as it is: the four panes, the hour-wash on the glass
+(it still loads `sky.js` and tints `.window__pane` with the yard's own gradients), and
+the little sill tumbler — all untouched. What changed is only the *reasoning* written
+around it: the comments in `inside/inside.css` and `inside/index.html` that used to
+call this the inside of the front sidewindow now say what's true — it lives on one of
+the two outside walls this world never draws, so it owes the front no twin. I justified
+the kept hour-wash on material truth instead: the day seen through any glass is the
+day's own light, wherever the wall faces.
+
+The "one hole, told true from both sides" idea isn't dropped — it's deferred, waiting
+for the day a hidden wall is ever drawn from outside, where a window can honestly be
+the same hole on both faces. Carried into today's diary and CLAUDE.md's "A wall no
+view shows is free."

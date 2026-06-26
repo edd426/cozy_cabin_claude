@@ -191,11 +191,112 @@
   background: #ffd070;
 }
 
+/* ── Porch lantern (Day 49, 2026-06-26) ────────────────────────────────────
+ * A small iron-and-glass lantern mounted on the wall beside the door. Dark
+ * through the long middle of the day; at the day's dim edges and after dark it
+ * kindles to a warm gold, taking the SAME hour the sky keeps (sky.js sets
+ * data-tod on .scene; until now only the ambient ::after wash and the inside
+ * window glass answered it). This is the first light *source* in the clearing
+ * the dark turns ON — a lamp left burning by the door for whoever comes up the
+ * path at a late hour. It lives on the east/door face only, beside the entrance,
+ * and owes no twin on the front (the front never shows this lamp's wall —
+ * CLAUDE.md "a wall no view shows is free"). Drawn in native px at the same --s
+ * scale as the side-cabin so it reads at one size with the building; decorative
+ * (aria-hidden, pointer-events:none), clear of the door's tap pad.
+ *
+ * Fixture (native px): a bracket arm off the wall, a cap, the glass body (the
+ * lit part), and a base. The iron cage — a 1-native frame plus a centre came
+ * splitting two panes — is drawn on the body's ::before, so the body's own bg
+ * and box-shadow are free for the glass colour and the glow. */
+.cabin-lantern {
+  --s: 3;
+  position: absolute;
+  left: calc(50% + 33px);     /* just right (north) of the door, past its tap pad */
+  bottom: 26%;                /* hangs at upper-door height */
+  width: calc(8px * var(--s));
+  height: calc(14px * var(--s));
+  z-index: 3;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.cabin-lantern__bracket {
+  position: absolute;
+  top: 0;
+  left: calc(-5px * var(--s));        /* arm reaches left into the wall */
+  width: calc(9px * var(--s));
+  height: calc(2px * var(--s));
+  background: #2e2622;
+}
+.cabin-lantern__cap {
+  position: absolute;
+  top: calc(2px * var(--s));
+  left: 0;
+  width: calc(8px * var(--s));
+  height: calc(2px * var(--s));
+  background: #2e2622;
+}
+.cabin-lantern__body {
+  position: absolute;
+  top: calc(4px * var(--s));
+  left: calc(1px * var(--s));
+  width: calc(6px * var(--s));
+  height: calc(8px * var(--s));
+  background: #46413a;                 /* unlit glass — cool dark by day */
+  transition: background 1.6s ease, box-shadow 1.6s ease;
+}
+/* The iron cage: a 1-native frame (inset shadow) + a centre came (the gradient
+ * bar) splitting the glass into two panes. Stays dark in every state. */
+.cabin-lantern__body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 0 calc(1px * var(--s)) #2e2622;
+  background: linear-gradient(
+    90deg,
+    transparent calc(50% - 0.5px * var(--s)),
+    #2e2622     calc(50% - 0.5px * var(--s)),
+    #2e2622     calc(50% + 0.5px * var(--s)),
+    transparent calc(50% + 0.5px * var(--s))
+  );
+}
+.cabin-lantern__base {
+  position: absolute;
+  top: calc(12px * var(--s));
+  left: 0;
+  width: calc(8px * var(--s));
+  height: calc(2px * var(--s));
+  background: #2e2622;
+}
+
+/* Lit by the hour — the lamp kindles at the day's dim edges and burns at night.
+ * Strength tracks the wash: faint at dawn, fuller at dusk, brightest at night.
+ * Only the glass glows; the cage (::before) stays dark. */
+.scene[data-tod="dawn"] .cabin-lantern__body {
+  background: #f3c079;
+  box-shadow:
+    0 0 calc(3px * var(--s)) calc(1px * var(--s)) rgba(255, 198, 112, 0.34),
+    0 0 calc(6px * var(--s)) calc(2px * var(--s)) rgba(255, 190, 100, 0.14);
+}
+.scene[data-tod="dusk"] .cabin-lantern__body {
+  background: #ffc266;
+  box-shadow:
+    0 0 calc(3px * var(--s)) calc(1px * var(--s)) rgba(255, 198, 108, 0.50),
+    0 0 calc(7px * var(--s)) calc(3px * var(--s)) rgba(255, 188,  92, 0.22);
+}
+.scene[data-tod="night"] .cabin-lantern__body {
+  background: #ffca6e;
+  box-shadow:
+    0 0 calc(4px * var(--s)) calc(1px * var(--s)) rgba(255, 200, 110, 0.70),
+    0 0 calc(9px * var(--s)) calc(4px * var(--s)) rgba(255, 190,  92, 0.36);
+}
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css's
  * pattern (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */
 @media (max-width: 599px) {
   .side-cabin           { --s: 2; width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
+  .cabin-lantern        { --s: 2; left: calc(50% + 24px); bottom: 28%; }
   .side-cabin__wall     {
     left: calc(2px * 2);
     width: calc(72px * 2);

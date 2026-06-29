@@ -1028,6 +1028,86 @@
   100% { transform: translate(-380px,   4px); }
 }
 
+/* ── Fireflies (Day 52, 2026-06-29) ────────────────────────────────────────
+ * The front face's own answer to the door side's lantern. The lantern is a
+ * MADE light, hung by the door, kindled FOR whoever comes up the path; these
+ * are a WILD light the clearing makes for no one. So the front keeps being the
+ * still, unattended face — it gets no lamp and no second pair of boots — and is
+ * only given the life a summer evening already has out over the grass.
+ *
+ * Hour-gated on the same data-tod the lantern and the wash use (sky.js). The
+ * default — no data-tod, or `day` — is NOTHING: the layer is fully transparent,
+ * so JS-off loses nothing and the daytime yard is untouched. The sparks belong
+ * only to the dim hours: a few faint at dusk, more and brighter after dark, the
+ * way fireflies actually come up as the light goes. The whole layer fades in/out
+ * with the hour (opacity transition, matched to the wash's 1.6s).
+ *
+ * A full-bleed layer (inset:0) at z-index 4 — in front of the cabin (z 2) and
+ * the yard sprites (z 3), reading as the nearest thing, like the bench. It sits
+ * BELOW the ambient hour-wash (.scene::after, z 5), same as the lantern: a
+ * spark's bright core + glow halo overpower the soft translucent wash, so it
+ * still reads as a light source rather than getting tinted out. Each firefly is
+ * %-positioned inside the layer, so — like the clouds — it needs no mobile px
+ * rebase; the layer scales with the frame at both breakpoints. Pointer-inert. */
+.sprite--fireflies {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+.scene[data-tod="dusk"] .sprite--fireflies { opacity: 0.7; }
+.scene[data-tod="night"] .sprite--fireflies { opacity: 1; }
+
+/* One spark: a 2px green-gold core with a soft halo (box-shadow) so it reads as
+ * a glow, not a dot, at phone size — the same "give it a halo to be legible"
+ * trick the lantern uses. Green-gold (#e7f0a0 core, sage-gold glow) sets it
+ * apart from the lantern's orange-gold: a meadow light, not a flame. Each blinks
+ * (its own opacity wink) and drifts (a slow bob) on a different duration + delay
+ * so the patch never pulses in sync. The blink's 0% frame is lit and the drift's
+ * 0% is mid-bob, so under prefers-reduced-motion (theme.css freezes all
+ * durations) every spark holds visible and placed rather than vanishing. */
+.firefly {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #f1f7b4;
+  box-shadow:
+    0 0 3px 1px rgba(216, 233, 138, 0.85),
+    0 0 7px 3px rgba(190, 212, 104, 0.40);
+  animation: firefly-blink 4s ease-in-out infinite, firefly-drift 9s ease-in-out infinite;
+}
+
+/* Low over the grass (the ground plane is the lower 40%, bottom 0–40%), spread
+ * across the clearing: a couple over the flowers (left), a couple mid and over
+ * the path (right), none crowding the cabin's lit doorway it doesn't have here.
+ * Staggered durations/delays keep the winks and bobs out of phase. */
+.firefly--1 { left: 16%; bottom: 16%; animation-duration: 3.6s, 8s;  animation-delay: 0s,    -1s; }
+.firefly--2 { left: 24%; bottom: 26%; animation-duration: 5s,   11s; animation-delay: -1.4s, -3s; }
+.firefly--3 { left: 38%; bottom: 11%; animation-duration: 4.3s, 9.5s;animation-delay: -2.7s, -5s; }
+.firefly--4 { left: 63%; bottom: 22%; animation-duration: 4.8s, 10s; animation-delay: -0.6s, -2s; }
+.firefly--5 { left: 74%; bottom: 13%; animation-duration: 3.9s, 8.5s;animation-delay: -3.1s, -6s; }
+.firefly--6 { left: 86%; bottom: 20%; animation-duration: 5.4s, 12s; animation-delay: -2s,   -4s; }
+
+/* The wink: each spark swells to full and fades almost out, never fully dark
+ * (a firefly pulses, it doesn't switch off mid-flight). */
+@keyframes firefly-blink {
+  0%, 100% { opacity: 0.9; }
+  35%      { opacity: 0.28; }
+  70%      { opacity: 1; }
+}
+
+/* The bob: a slow, small wander — up-and-over a few px, the way a firefly hangs
+ * and lifts over the grass. Integer px keeps the core crisp at each stop. */
+@keyframes firefly-drift {
+  0%, 100% { transform: translate(0,    0);   }
+  30%      { transform: translate(4px,  -5px); }
+  60%      { transform: translate(-3px, -8px); }
+  85%      { transform: translate(2px,  -3px); }
+}
+
 /* Phone-and-narrow: scale down to 2x below 600px viewports.
  *
  * Day 34 (2026-06-11): the threshold was 379px, which real phones MISS —

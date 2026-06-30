@@ -182,6 +182,34 @@
         <span class="around-path__stone around-path__stone--mid"></span>
         <span class="around-path__stone around-path__stone--back"></span>
       </div>
+
+      <!-- Stray fireflies on the door side (Day 53, 2026-06-30): the edge of the
+           FRONT yard's meadow reaching round the corner. Day 52 (diary 2026-06-29)
+           let fireflies up over the front clearing and asked whether the door side
+           should catch a stray spark or two of its own — not a feature, just the
+           same June dark continuing past the wall. The answer drawn here: a warm
+           June night fills with fireflies wherever there's grass, and the door side
+           is grass too, so the same evening honestly carries a couple of sparks
+           round the corner. But only a couple — two, not the front's six — kept low
+           over the grass on the LEFT, out where the path leans south toward the
+           front of the house, well clear of the door and the lantern's gold. The
+           asymmetry the night-arc has kept holds: the front's night-welcome is the
+           wild ownerless meadow-light it makes for no one; the door side's is the
+           MADE lamp someone hung and lit for you. These strays don't give the door
+           side a second meadow — they're the spillover of the front's own swarm, so
+           the lamp stays this face's real night-light. Reuses the shared
+           .sprite--fireflies layer and .firefly base from scene.css (loaded by this
+           page) UNCHANGED — same green-gold core + halo, same blink/drift, same
+           hour-gated fade (dusk 0.7 / night 1, nothing by day): one component, both
+           faces. Only the per-spark placement (.firefly--e-* below) is door-side
+           specific, a sparser left-leaning scatter so the two views read as one
+           clearing on one June night, not two yards that each happen to have bugs.
+           %-positioned in the full-bleed layer, so — like the front's — no mobile
+           px rebase. Pointer-inert (the layer carries pointer-events:none). -->
+      <div class="sprite sprite--fireflies" aria-hidden="true">
+        <span class="firefly firefly--e-1"></span>
+        <span class="firefly firefly--e-2"></span>
+      </div>
     </div>
   </main>
 

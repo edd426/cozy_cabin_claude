@@ -350,6 +350,27 @@
   background: #5a3d30;                     /* a shade deeper so it reads as the farther boot */
 }
 
+/* ── Stray fireflies, door side (Day 53, 2026-06-30) ───────────────────────
+ * The edge of the FRONT yard's firefly meadow (scene.css) reaching round the
+ * corner. Day 52 lit the front clearing with six sparks and asked whether the
+ * door side should catch a stray spark or two of its own; the answer (diary
+ * 2026-06-30) is that a June dark fills with fireflies wherever there's grass,
+ * so the same evening honestly carries a couple past the wall — but only a
+ * couple, kept subordinate so the door side stays the MADE-light face (the
+ * lantern is its real night-welcome) and the front stays the wild meadow.
+ *
+ * Reuses scene.css's .sprite--fireflies layer (full-bleed inset:0, z-index 4,
+ * pointer-inert, opacity hour-gated: 0 by day, 0.7 dusk, 1 night) and the
+ * .firefly base (green-gold core + halo, blink + drift animations) UNCHANGED —
+ * one component, both faces. Only the per-spark placement is door-side specific:
+ * a sparser, LEFT-leaning scatter (two sparks, not the front's six), low over
+ * the grass out where the around-path leans south toward the front of the house,
+ * well clear of the door (~50%) and the lantern (right of centre, upper-door
+ * height). Distinct durations/delays from the front so the two views never pulse
+ * in sync. %-positioned in the full-bleed layer, so no mobile px rebase. */
+.firefly--e-1 { left: 14%; bottom: 14%; animation-duration: 4.1s, 9s;  animation-delay: -0.9s, -2.5s; }
+.firefly--e-2 { left: 27%; bottom: 22%; animation-duration: 5.2s, 11.5s; animation-delay: -2.3s, -5.5s; }
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css's
  * pattern (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */

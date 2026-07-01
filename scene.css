@@ -1108,6 +1108,72 @@
   85%      { transform: translate(2px,  -3px); }
 }
 
+/* ── Dawn ground-mist (Day 54, 2026-07-01) ─────────────────────────────────
+ * The waking edge's own welcome — the morning's mirror of the evening
+ * fireflies. The fireflies are a wild LIGHT the clearing makes at dusk-and-
+ * after; this is the wild ATMOSPHERE it makes at first light: a low fog the
+ * cool grass lays down and the warming day burns off. The dawn gets its own
+ * greeting and it's still nothing LIT — no lamp, no someone — just the haze a
+ * summer sunup already has.
+ *
+ * Hour-gated on the same data-tod as the wash, lantern, and fireflies (sky.js),
+ * but the exact mirror of the fireflies' gate: nothing through the `day`,
+ * nothing at `dusk` or `night` — only at `dawn`. Default (no data-tod, or JS
+ * off) is fully transparent, so nothing is lost when the clock isn't kept; the
+ * haze only ever belongs to the one waking hour. The layer fades in/out with the
+ * hour on the same 1.6s the wash uses.
+ *
+ * z-index 1: behind the cabin (z 2) and BELOW the ambient hour-wash (::after,
+ * z 5) — the deliberate opposite of the fireflies, which sit at z 4 above the
+ * cabin and punch bright through the wash. A firefly is a light source and must
+ * overpower the tint; a fog is NOT a light — it's the low cool air, so it lies
+ * under the wash and takes the dawn's rose the same way the grass does. Sitting
+ * behind the cabin also puts the fog where morning fog belongs: out over the far
+ * meadow and the feet of the hills, with the near yard (the house) standing
+ * clear of it. Pointer-inert; %-positioned so no mobile px rebase. */
+.sprite--dawnmist {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+.scene[data-tod="dawn"] .sprite--dawnmist { opacity: 1; }
+
+/* One bank of haze: a long, low, soft-edged pale bar lying flat over the grass.
+ * A pale COOL near-white (cooler than the warm clouds' #fdf7e6) so it reads as
+ * cold morning air, not a low cloud — but it carries no colour of its own beyond
+ * that; the dawn wash overhead lends it the rose. `blur` softens the pill into a
+ * bank with no hard edge (fog has no outline), and a low alpha keeps it a
+ * whisper the grass still shows through. Each drifts slow and sideways (fog
+ * creeping before the sun lifts it), on its own duration/delay so the banks never
+ * slide in lockstep. The drift's 0% frame is placed, so prefers-reduced-motion
+ * (theme.css freezes durations) holds every bank visible and still. */
+.mist-wisp {
+  position: absolute;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(232, 237, 233, 0.55);
+  filter: blur(3px);
+  animation: mist-drift 40s ease-in-out infinite;
+}
+
+/* Low across the meadow, near and just under the 40%-from-bottom horizon, spread
+ * so the banks stagger in depth rather than stacking into one bar: a long low one
+ * far left, a shorter one nearer the middle, a third off to the right along the
+ * hills' feet. Widths in % so they scale with the frame at both breakpoints. */
+.mist-wisp--1 { left:  4%; bottom: 30%; width: 46%; animation-duration: 44s; animation-delay:  -6s; }
+.mist-wisp--2 { left: 34%; bottom: 37%; width: 34%; animation-duration: 52s; animation-delay: -22s; }
+.mist-wisp--3 { left: 58%; bottom: 33%; width: 40%; animation-duration: 48s; animation-delay: -13s; }
+
+/* The creep: a small, slow lateral drift — fog moving over the ground, not
+ * sailing like a cloud. There-and-back (a fog has no heading), integer px. */
+@keyframes mist-drift {
+  0%, 100% { transform: translateX(0);     }
+  50%      { transform: translateX(-10px); }
+}
+
 /* Phone-and-narrow: scale down to 2x below 600px viewports.
  *
  * Day 34 (2026-06-11): the threshold was 379px, which real phones MISS —

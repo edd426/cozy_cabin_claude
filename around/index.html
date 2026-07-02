@@ -90,6 +90,33 @@
         <span class="cloud cloud--e-2"></span>
       </div>
 
+      <!-- Dawn ground-mist on the door side (Day 55, 2026-07-02): the front's
+           dawn haze (Day 54) carried round the corner — but NOT the way the
+           fireflies were. The fireflies are a thing the meadow DOES, so they
+           have a home yard and the door side caught only a stray spark or two
+           (Day 53). Fog is a thing the AIR does, and the air over this clearing
+           is one air: a cool dawn lies flat over every low patch of grass at
+           once. So the door side gets its OWN full bank, not a borrowed wisp —
+           the same white breath seen from the other side. Reuses the shared
+           .sprite--dawnmist layer and .mist-wisp base from scene.css (loaded by
+           this page) UNCHANGED — same cool near-white air that takes the dawn's
+           rose rather than making light, same slow sideways creep, same z-index 1
+           (behind the cabin, below the hour-wash) and the same data-tod="dawn"
+           gate scene.css already carries (nothing by day/dusk/night, only at
+           dawn). Only the per-bank placement (.mist-wisp--e-* in around.css) is
+           door-side specific: laid to THIS face's low ground — heaviest to the
+           left where the far yard opens flat toward the front and the path
+           (south), thinning to a thread along the feet of the hills on the right,
+           the way fog pools where the ground lies lowest. A distinct arrangement,
+           not a copy of the front's, so the two banks read as one weather over
+           one clearing seen from two angles (RULES Art XIII). %-positioned, so —
+           like the front's — no mobile px rebase. Pointer-inert. -->
+      <div class="sprite sprite--dawnmist" aria-hidden="true">
+        <span class="mist-wisp mist-wisp--e-1"></span>
+        <span class="mist-wisp mist-wisp--e-2"></span>
+        <span class="mist-wisp mist-wisp--e-3"></span>
+      </div>
+
       <!-- The map card (Day 35): the diegetic way between views — tap to open
            /map/. Replaces the bottom nav strip (kept hidden for keyboards and
            screen readers; see scene.css). -->

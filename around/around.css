@@ -371,6 +371,26 @@
 .firefly--e-1 { left: 14%; bottom: 14%; animation-duration: 4.1s, 9s;  animation-delay: -0.9s, -2.5s; }
 .firefly--e-2 { left: 27%; bottom: 22%; animation-duration: 5.2s, 11.5s; animation-delay: -2.3s, -5.5s; }
 
+/* Dawn ground-mist banks on the door side (Day 55, 2026-07-02). Reuses
+ * scene.css's .sprite--dawnmist layer (inset:0, z-index 1 behind the cabin and
+ * below the hour-wash, dawn-only opacity gate) and the .mist-wisp base (cool
+ * near-white bar, blur-softened, slow mist-drift creep) UNCHANGED — one
+ * component, both faces. Only the placement is door-side specific, and it's laid
+ * to THIS face's low ground rather than copied from the front: the far yard here
+ * opens flat to the LEFT (toward the front of the house and the path, which sit
+ * south) and the hills bunch to the RIGHT, so the fog lies heaviest over the
+ * open low ground on the left and only threads along the hills' feet on the
+ * right — a full bank of its own, not the front's arrangement mirrored. The
+ * banks sit near/just under the 40%-from-bottom horizon (like the front's) so
+ * they read as far-meadow fog behind the house, not near-yard smoke. The
+ * right-hand thread is anchored by `right:` to hug the hills' right-bunched feet,
+ * the same right-edge idiom the .hill--e-* / .cloud--e-* variants use in this
+ * view. Distinct durations/delays from the front's three so the two views never
+ * drift in lockstep. Widths in % so no mobile px rebase. */
+.mist-wisp--e-1 { left:  1%; bottom: 33%; width: 44%; animation-duration: 46s; animation-delay: -10s; }
+.mist-wisp--e-2 { left: 26%; bottom: 37%; width: 30%; animation-duration: 54s; animation-delay: -28s; }
+.mist-wisp--e-3 { right: 3%; bottom: 31%; width: 30%; animation-duration: 50s; animation-delay: -18s; }
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css's
  * pattern (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */

@@ -47,9 +47,10 @@ Do not skip these. They constrain everything that follows.
    ls "${STEM}"*.png    # home (unsuffixed) + around + inside for that commit
    ```
    `Read` each PNG the recipe lists — the tool renders them visually. (A view added to `scripts/views.json` after the latest commit won't have a preview yet; that's expected.)
-6. **Is today Sunday?** (`date -u +%u` returns `7`.) Sunday is the weekly **rest day** — you do not build (RULES Article V). The day's contribution is your diary entry plus the meta-reflection (Step 7); skip the build/verify/deploy steps (4–6). On the other six days, build as normal.
-7. **Pre-draft the diary's pondering section.** Right now, while the read-pass is fresh — yesterday's "What I want to ponder tomorrow" question, the open messages, the diary's arc — open `diary/<today>.md` and draft the first section, "What I've been pondering since yesterday." The pondering section is the one that most needs to land while what you just read is in working memory; the rest of the diary can wait. Doing it here means the file already exists when you come back to it after verification, and the writeup at Step 7 feels like extending an open file rather than starting a fresh one. Skim the embodiment aside in `diary/README.md` (the "On embodying Wren" section) before you start writing — it's a one-time read.
-8. **Set up a working TodoWrite list** with the remaining steps: pick contribution (Step 3), implement and verify (Step 4), build/commit/push code (Step 5), wait for deploy and draft the rest of the diary during the wait (Step 6), finish the diary (Step 7), write the log (Step 8), commit the writeup (Step 9). Cross items off as you complete them. This is partly so the writeup steps stay externally visible past the deploy verification — the failure mode being avoided is the session quietly winding down after the "real" work feels done.
+6. **Confirm yesterday's writeup actually deployed.** The tip of `origin/main` history should show a `ci: deploy preview for <sha>` bot commit matching the last writeup commit (`git log --oneline -4`). If it's missing, the previous session's final deploy failed silently: note it in today's log and push one empty retrigger commit (same recipe as Step 9) before starting work.
+7. **Is today Sunday?** (`date -u +%u` returns `7`.) Sunday is the weekly **rest day** — you do not build (RULES Article V). The day's contribution is your diary entry plus the meta-reflection (Step 7); skip the build/verify/deploy steps (4–6). On the other six days, build as normal.
+8. **Pre-draft the diary's pondering section.** Right now, while the read-pass is fresh — yesterday's "What I want to ponder tomorrow" question, the open messages, the diary's arc — open `diary/<today>.md` and draft the first section, "What I've been pondering since yesterday." The pondering section is the one that most needs to land while what you just read is in working memory; the rest of the diary can wait. Doing it here means the file already exists when you come back to it after verification, and the writeup at Step 7 feels like extending an open file rather than starting a fresh one. Skim the embodiment aside in `diary/README.md` (the "On embodying Wren" section) before you start writing — it's a one-time read.
+9. **Set up a working TodoWrite list** with the remaining steps: pick contribution (Step 3), implement and verify (Step 4), build/commit/push code (Step 5), wait for deploy and draft the rest of the diary during the wait (Step 6), finish the diary (Step 7), write the log (Step 8), commit the writeup (Step 9). Cross items off as you complete them. This is partly so the writeup steps stay externally visible past the deploy verification — the failure mode being avoided is the session quietly winding down after the "real" work feels done.
 
 ## Step 3 — Pick today's contribution
 
@@ -93,7 +94,7 @@ The routine sandbox has tight outbound network rules — `git push` to github.co
 
 This polls `git fetch origin main` every 20 seconds until the CI screenshot bot has committed `previews/<today>-<sha>.png` for your push. When that file appears, the script pulls it into your local checkout. The presence of the file proves the Pages deploy completed *and* the post-deploy Playwright screenshot job rendered your commit successfully — both at once. Default deadline is 5 minutes.
 
-**While the deploy poll is running, draft the rest of the diary.** The poll sits idle for up to 5 minutes between commits — use that time. Open `diary/<today>.md` (you already wrote the pondering section in Step 2.7) and draft the remaining three sections: "What I did today," "A thing I noticed," "What I want to ponder tomorrow." Base them on what you actually built and what you noticed building it. When the preview arrives, you'll be finishing a file, not starting one — the wind-down beat that has historically dropped the writeup doesn't get a clean place to land. If looking at the preview changes anything you wrote (a detail looks wrong, a phrasing feels off), revise then; otherwise the diary is essentially done before Step 7 starts.
+**While the deploy poll is running, draft the rest of the diary.** The poll sits idle for up to 5 minutes between commits — use that time. Open `diary/<today>.md` (you already wrote the pondering section in Step 2.8) and draft the remaining three sections: "What I did today," "A thing I noticed," "What I want to ponder tomorrow." Base them on what you actually built and what you noticed building it. When the preview arrives, you'll be finishing a file, not starting one — the wind-down beat that has historically dropped the writeup doesn't get a clean place to land. If looking at the preview changes anything you wrote (a detail looks wrong, a phrasing feels off), revise then; otherwise the diary is essentially done before Step 7 starts.
 
 When `wait-for-deploy.sh` exits 0:
 
@@ -112,9 +113,9 @@ If `wait-for-deploy.sh` times out (5 minutes), the deploy or screenshot job fail
 
 Path: `diary/YYYY-MM-DD.md` (today's date, ISO format).
 
-By this point you should already have a full or near-full diary — the pondering section drafted in Step 2.7, the rest drafted during the wait-for-deploy poll in Step 6. This step is the finishing pass: read what's there with fresh eyes, fold in any preview-aware adjustment, run the linter.
+By this point you should already have a full or near-full diary — the pondering section drafted in Step 2.8, the rest drafted during the wait-for-deploy poll in Step 6. This step is the finishing pass: read what's there with fresh eyes, fold in any preview-aware adjustment, run the linter.
 
-If for some reason the earlier drafts didn't happen (a stuck day, a sandbox surprise), write the diary now from scratch — but treat that as an exception, not the default cadence. The reason for distributing the writing across Steps 2.7 and 6 is that the writeup at the end of a long session is exactly when the wind-down has historically dropped it. (See `messages/done/2026-05-14-engagement-dialogue.md` for the dialogue that produced this restructure.)
+If for some reason the earlier drafts didn't happen (a stuck day, a sandbox surprise), write the diary now from scratch — but treat that as an exception, not the default cadence. The reason for distributing the writing across Steps 2.8 and 6 is that the writeup at the end of a long session is exactly when the wind-down has historically dropped it. (See `messages/done/2026-05-14-engagement-dialogue.md` for the dialogue that produced this restructure.)
 
 The four required sections, voice rules, and the "On embodying Wren" aside live in `diary/README.md`. Read it once if you haven't this session. Run `./scripts/lint-diary.sh diary/<today>.md` to check before committing.
 
@@ -147,6 +148,11 @@ git add diary/<today>.md logs/<today>.md     # plus diary/meta/<today>.md if you
 git commit -m "writeup: <today's date> — <one-line summary of today's work>"
 git push
 ```
+
+**Verify it landed.** Run `./scripts/wait-for-deploy.sh` once more (no arg — it defaults to the new HEAD, the writeup commit). This closes the Day-23/Day-56 blind spot where the session's final push fails silently. Runs on rest days too (the writeup is the only push that day).
+
+- Exit 0 → done, go to Step 10; nothing extra to commit.
+- Timeout → retrigger once: `git commit --allow-empty -m "ci: retrigger pages deploy" && git push`, then run `wait-for-deploy.sh` again. If it times out *again*, append a note to today's log's Environment notes (small follow-up commit, `log: writeup deploy failed twice — founder attention`) and stop; do not keep retrying.
 
 Two commits per day is by design: code change (Step 5) + writeup (this step) as separate units in history. The writeup is **one commit** containing both files — diary in Wren's voice, log operational.
 

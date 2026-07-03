@@ -391,6 +391,35 @@
 .mist-wisp--e-2 { left: 26%; bottom: 37%; width: 30%; animation-duration: 54s; animation-delay: -28s; }
 .mist-wisp--e-3 { right: 3%; bottom: 31%; width: 30%; animation-duration: 50s; animation-delay: -18s; }
 
+/* Edge-lit on the door side (Day 56, 2026-07-03). One fog, but the two faces
+ * meet the one low dawn sun from different angles. The front is the south face:
+ * a dawn sun (east) rakes ACROSS it from the side, and its banks lie washed
+ * flat — the plain cool near-white fill from scene.css's .mist-wisp base. The
+ * door side is the east face: it looks straight into the coming sun, which
+ * catches the fog nearly head-on and makes it glow along its top rim — fog goes
+ * luminous when the low sun is behind it and you look through it toward the
+ * morning. So these three banks keep the SAME cool near-white body (one fog,
+ * one material — that's settled) but gain a warmer, brighter top edge the
+ * front's flat fill doesn't have: a vertical gradient from a warm sunlit rim
+ * down to the shared cool base by ~60% of the (blurred, 7px) bank. Light is a
+ * RELATION — fog + the one sun + where I stand to look — not a property the fog
+ * carries, so drawing the two banks apart is the honesty, not the lie; it's the
+ * same rule as the hills flipping left↔right when you round the corner, but for
+ * light instead of shape. The rose hour-wash (scene.css .scene::after, z5)
+ * still lies over all of it; this only decides how the fog itself meets the low
+ * sun before the wash tints it. Overrides only `background`, so the base's
+ * blur/height/radius/mist-drift creep and the dawn-only opacity gate all carry
+ * through unchanged. */
+.mist-wisp--e-1,
+.mist-wisp--e-2,
+.mist-wisp--e-3 {
+  background: linear-gradient(
+    to bottom,
+    rgba(250, 246, 238, 0.72) 0%,   /* sunlit top rim — warm, brighter (low east sun, head-on) */
+    rgba(232, 237, 233, 0.55) 60%   /* shared cool near-white body — the front's flat fill */
+  );
+}
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css's
  * pattern (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */

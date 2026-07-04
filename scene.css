@@ -365,6 +365,41 @@
 .cloud--s-2 { font-size:  8px; left: 58%; top:  7%;
               animation-duration: 124s; animation-delay: -34s; }
 
+/* ── Underlit cloud bellies at the day's warm edges ────────────────────────
+ * Day 57 (2026-07-04): the companion to the fog's lit rim (Day 56). The
+ * hour-wash (.scene::after) is the sky as *ambient* — it stays flat and
+ * sideless, an hour has no direction. But a cloud is the sky as *body*: it has
+ * a crown the low sun misses and an underside the low sun finds. At dawn and
+ * dusk the sun sits LOW — below a high cloud — so it paints the cloud's belly
+ * warm and leaves its crown cool: the mirror of the low fog, which takes the
+ * same low sun along its *top* edge instead.
+ *
+ * Technique: the cloud is one pill body + three box-shadow lumps (all cream by
+ * day). The two LOWER lumps (right +0.20em, left +0.30em) are the belly; the
+ * top hump (-0.45em) is the crown. Recolouring only the two lower lumps warm —
+ * and leaving the body + top hump the cool day cream — lights the underside
+ * without repainting the whole cloud. A whisper on purpose (like the wash and
+ * the fog): the belly reads a touch warmer than the flat sky behind it, no more.
+ *
+ * Shared by both exterior faces (home + around load this stylesheet), so the
+ * one hour lights the clouds over both walls at once — a cloud belongs to no
+ * wall (RULES Art XIII). Night is left to the ambient blue wash: this is only
+ * the two WARM edges, the rose and the gold. */
+.scene[data-tod="dawn"] .cloud {
+  background: #e7d5ce;                    /* crown/body — cool, sunless top   */
+  box-shadow:
+     1.25em  0.20em 0 -0.10em #fbdccb,   /* right lump — belly, bright rose  */
+    -1.05em  0.30em 0 -0.20em #fbdccb,   /* left lump  — belly, bright rose  */
+     0.40em -0.45em 0 -0.30em #e7d5ce;   /* top hump   — crown, cool         */
+}
+.scene[data-tod="dusk"] .cloud {
+  background: #e5d6bf;                    /* crown/body — cool, sunless top   */
+  box-shadow:
+     1.25em  0.20em 0 -0.10em #fbe3b0,   /* right lump — belly, bright gold  */
+    -1.05em  0.30em 0 -0.20em #fbe3b0,   /* left lump  — belly, bright gold  */
+     0.40em -0.45em 0 -0.30em #e5d6bf;   /* top hump   — crown, cool         */
+}
+
 /* All sprites: integer-scale, no smoothing, positioned absolutely. */
 .sprite {
   position: absolute;

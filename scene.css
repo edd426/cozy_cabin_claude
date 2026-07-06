@@ -969,6 +969,133 @@
 .bench__leg--l { left: 3px;  }
 .bench__leg--r { left: 15px; }
 
+/* ── Mailbox at the path's mouth (Day 59, 2026-07-06) ──────────────────────
+ * The clearing's first outward-facing object — a name at the yard's edge, so
+ * the place stays findable with no one home (see the note in scene.html). Drawn
+ * from scratch in the cabin's wood tones; a rose flag (the flowers' accent) and
+ * a cream nameplate carrying "WREN" in the pixel font. Fixed native px like the
+ * bench/bee/flowers — the pixel parts stay one size at both breakpoints; only
+ * the container's position rebases for mobile-narrow (below). z-index 4 puts it
+ * in the near foreground with the bench; the ambient hour-wash (.scene::after,
+ * z 5) washes it like the grass it stands on — it is no light source itself. */
+.sprite--mailbox {
+  width: 42px;
+  height: 46px;
+  left: calc(50% + 84px);
+  bottom: 4%;
+  z-index: 4;
+}
+/* Contact shadow so the post sits on the grass rather than hovering (same
+ * trick as the bench and the indoor chair). */
+.sprite--mailbox::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  bottom: -1px;
+  width: 14px;
+  height: 3px;
+  background: var(--c-grass-shadow);
+  opacity: 0.5;
+  border-radius: 50%;
+}
+/* The post — a stout dark upright, foot on the ground, rising just under the
+ * box's floor so the two overlap and nothing floats. */
+.mailbox__post {
+  position: absolute;
+  left: 15px;
+  bottom: 0;
+  width: 4px;
+  height: 25px;
+  background: var(--c-wood-dark);
+  box-shadow: inset 1px 0 0 var(--c-wood);   /* a 1px lit edge down the near face */
+}
+/* The box — a horizontal tube with a rounded (tunnel) top, the iconic mailbox
+ * silhouette seen from the side. Warm cabin wood with a dark outline. Wide
+ * enough that the nameplate letters get real breathing room. */
+.mailbox__box {
+  position: absolute;
+  left: 1px;
+  bottom: 24px;
+  width: 34px;
+  height: 16px;
+  box-sizing: border-box;
+  background: var(--c-wood);
+  border: 1px solid var(--c-wood-dark);
+  border-radius: 8px 8px 1px 1px;
+  box-shadow: inset 0 2px 0 var(--c-wood-light);   /* light along the arch crest */
+}
+/* The raised flag — a small rose banner on a dark staff at the box's right
+ * shoulder, poking out past the silhouette so it reads as a flag, not a lump.
+ * "Up" is the small sign of life the object carries; rose ties it to the
+ * flowers, the one warm colour already in the yard. */
+.mailbox__flag-staff {
+  position: absolute;
+  left: 35px;
+  top: 1px;
+  width: 1px;
+  height: 11px;
+  background: var(--c-wood-dark);
+}
+.mailbox__flag {
+  position: absolute;
+  left: 36px;
+  top: 1px;
+  width: 5px;
+  height: 3px;
+  background: var(--c-rose);
+  box-shadow: inset 0 -1px 0 rgba(110, 74, 58, 0.4);   /* a hint of underside shade */
+}
+/* The nameplate — a cream plate on the box's lower flat band, framed in dark
+ * wood, the ground the letters sit on. */
+.mailbox__plate {
+  position: absolute;
+  left: 3px;
+  top: 14px;
+  width: 30px;
+  height: 8px;
+  box-sizing: border-box;
+  background: var(--c-cream);
+  border: 1px solid var(--c-wood-dark);
+}
+/* "WREN" — four 5×5 glyphs stamped in the pixel idiom the birds and skein use
+ * (a 1×1 anchor plus box-shadow pixels), in dark wood on the cream plate. The
+ * anchor pixel is W's top-left; every other lit pixel is a shadow offset. Letter
+ * pitch is 7px (5 wide + 2 gap) so the letters don't run together: W@0, R@7,
+ * E@14, N@21 → 26px wide, centred on the 30px plate. */
+.mailbox__name {
+  position: absolute;
+  top: 16px;
+  left: 6px;
+  width: 1px;
+  height: 1px;
+  background: var(--c-wood-dark);
+  box-shadow:
+    /* W */
+                4px 0 0 0 var(--c-wood-dark),
+    0 1px 0 0 var(--c-wood-dark), 4px 1px 0 0 var(--c-wood-dark),
+    0 2px 0 0 var(--c-wood-dark), 2px 2px 0 0 var(--c-wood-dark), 4px 2px 0 0 var(--c-wood-dark),
+    0 3px 0 0 var(--c-wood-dark), 1px 3px 0 0 var(--c-wood-dark), 3px 3px 0 0 var(--c-wood-dark), 4px 3px 0 0 var(--c-wood-dark),
+    0 4px 0 0 var(--c-wood-dark), 4px 4px 0 0 var(--c-wood-dark),
+    /* R */
+    7px 0 0 0 var(--c-wood-dark), 8px 0 0 0 var(--c-wood-dark), 9px 0 0 0 var(--c-wood-dark), 10px 0 0 0 var(--c-wood-dark),
+    7px 1px 0 0 var(--c-wood-dark), 11px 1px 0 0 var(--c-wood-dark),
+    7px 2px 0 0 var(--c-wood-dark), 8px 2px 0 0 var(--c-wood-dark), 9px 2px 0 0 var(--c-wood-dark), 10px 2px 0 0 var(--c-wood-dark),
+    7px 3px 0 0 var(--c-wood-dark), 9px 3px 0 0 var(--c-wood-dark),
+    7px 4px 0 0 var(--c-wood-dark), 10px 4px 0 0 var(--c-wood-dark),
+    /* E */
+    14px 0 0 0 var(--c-wood-dark), 15px 0 0 0 var(--c-wood-dark), 16px 0 0 0 var(--c-wood-dark), 17px 0 0 0 var(--c-wood-dark), 18px 0 0 0 var(--c-wood-dark),
+    14px 1px 0 0 var(--c-wood-dark),
+    14px 2px 0 0 var(--c-wood-dark), 15px 2px 0 0 var(--c-wood-dark), 16px 2px 0 0 var(--c-wood-dark), 17px 2px 0 0 var(--c-wood-dark),
+    14px 3px 0 0 var(--c-wood-dark),
+    14px 4px 0 0 var(--c-wood-dark), 15px 4px 0 0 var(--c-wood-dark), 16px 4px 0 0 var(--c-wood-dark), 17px 4px 0 0 var(--c-wood-dark), 18px 4px 0 0 var(--c-wood-dark),
+    /* N */
+    21px 0 0 0 var(--c-wood-dark), 25px 0 0 0 var(--c-wood-dark),
+    21px 1px 0 0 var(--c-wood-dark), 22px 1px 0 0 var(--c-wood-dark), 25px 1px 0 0 var(--c-wood-dark),
+    21px 2px 0 0 var(--c-wood-dark), 23px 2px 0 0 var(--c-wood-dark), 25px 2px 0 0 var(--c-wood-dark),
+    21px 3px 0 0 var(--c-wood-dark), 24px 3px 0 0 var(--c-wood-dark), 25px 3px 0 0 var(--c-wood-dark),
+    21px 4px 0 0 var(--c-wood-dark), 25px 4px 0 0 var(--c-wood-dark);
+}
+
 /* Day 21: a bird, high in the sky — and Day 32 (2026-06-09): now a skein of
  * them. The lone bird was a single dark mark too small and alone to read as
  * anything in particular (the founder's "reads as a smudge" note, and my own
@@ -1255,6 +1382,10 @@
    * clear of the flowers (left) and the path (right); fixed-size, so only the
    * baseline moves up to the 2x mobile floor. */
   .sprite--bench       { bottom: 3%; }
+  /* Mailbox rebased to the 2x scene: stands at the path's mouth on the viewer's
+   * side, foot on the front grass, clear of the bench (centre) and the path
+   * stones (right). Fixed-size parts, so only the container baseline moves. */
+  .sprite--mailbox     { left: calc(50% + 60px); bottom: 4%; }
   /* Skein rebased to the 2x cabin (chimney centered on 50%, smoke top at
    * `bottom: calc(8% + 152px) + 78px` ≈ 230px). The flock formation offsets
    * (.bird--N) stay constant — pixel art needs its minimum feature spacing —

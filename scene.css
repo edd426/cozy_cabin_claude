@@ -1027,7 +1027,21 @@
 /* The raised flag — a small rose banner on a dark staff at the box's right
  * shoulder, poking out past the silhouette so it reads as a flag, not a lump.
  * "Up" is the small sign of life the object carries; rose ties it to the
- * flowers, the one warm colour already in the yard. */
+ * flowers, the one warm colour already in the yard.
+ *
+ * Day 60 (2026-07-07): the flag catches the wind. It was the one thing at the
+ * yard's edge holding dead still — a raised banner that never stirred in the
+ * same breeze plainly leaning the smoke ten feet behind it — and *that* read as
+ * unfinished, not any missing road or sender (diary 2026-07-07). The staff is a
+ * rigid rod and stays put; only the cloth (this .mailbox__flag) flutters, pinned
+ * at its staff edge (transform-origin: left center) so it ripples from where
+ * it's attached and the box holds still. The motion is biased outward-and-up and
+ * never dips below rest (rotate 0 = the drawn flat position), so it reads as
+ * *held up by a steady breeze with the odd gust* rather than a swinging pendulum.
+ * Rest is the 0%/100% frame, so theme.css's prefers-reduced-motion freeze leaves
+ * the flag at its crisp drawn angle. A 5.5s period, off the smoke's 4.5s, so the
+ * one wind moves both but never in lockstep — a flag and a column of smoke don't
+ * answer it alike. */
 .mailbox__flag-staff {
   position: absolute;
   left: 35px;
@@ -1044,6 +1058,21 @@
   height: 3px;
   background: var(--c-rose);
   box-shadow: inset 0 -1px 0 rgba(110, 74, 58, 0.4);   /* a hint of underside shade */
+  transform-origin: left center;   /* pinned at the staff; the free tip ripples */
+  animation: flag-flutter 5.5s ease-in-out infinite;
+}
+
+/* Lift, ripple, settle, lift again — the free tip riding a steady breeze. All
+ * frames are rotations toward negative (tip up), so the banner never falls below
+ * its drawn rest; the -6°/-11° back-and-forth in the middle is the cloth catching
+ * and losing a gust. */
+@keyframes flag-flutter {
+  0%   { transform: rotate(0deg);   }
+  22%  { transform: rotate(-11deg); }
+  40%  { transform: rotate(-6deg);  }
+  60%  { transform: rotate(-12deg); }
+  80%  { transform: rotate(-4deg);  }
+  100% { transform: rotate(0deg);   }
 }
 /* The nameplate — a cream plate on the box's lower flat band, framed in dark
  * wood, the ground the letters sit on. */

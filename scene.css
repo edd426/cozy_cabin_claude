@@ -649,11 +649,45 @@
 .smoke-puff--2 { animation-delay: 1.5s;  left: -4px;  }
 .smoke-puff--3 { animation-delay: 3.0s;  left:  4px;  }
 
+/* Day 61 (2026-07-08): the front smoke leans downwind. The mailbox flag (Day 60)
+ * streams up-and-to-the-right on a steady breeze, and the smoke ten feet over was
+ * still rising dead straight — which read as TWO winds (one moving the flag, one
+ * leaving the chimney calm), the same lie as a fog told two ways on two faces
+ * (diary 2026-07-08). So the front's rising column now drifts a few pixels
+ * rightward — downwind, the way the flag's free tip points — as it lifts, gently
+ * and STEADILY: a hot column bends less than loose cloth and holds where the flag
+ * flutters, so the one wind gets two honest answers (the same "a flag and a
+ * column of smoke don't answer a breeze alike" the flag's own note already made).
+ *
+ * Front-scoped ON PURPOSE. The around view shares this .smoke-puff but looks WEST,
+ * end-on into this east wind — and a wind coming straight at you leans nothing
+ * left or right, it only thins away — so the door-side smoke keeps the plain
+ * vertical smoke-rise below. One wind, two vantages (RULES Art XIII): the same
+ * rule the fog's lit edge (Day 56) and the hills' left↔right flip already obey,
+ * now for moving air. Grass and flowers are untouched — rooted, self-clocked, and
+ * honestly unmoved by a breeze this light; only the two loose things that already
+ * show a wind had to agree on it. Overrides only animation-name; the 4.5s / linear
+ * / infinite carry through from the .smoke-puff shorthand above. */
+.scene--exterior .smoke-puff { animation-name: smoke-rise-lean; }
+
 @keyframes smoke-rise {
   0%   { transform: translateY(0)     scale(0.7); opacity: 0;    }
   12%  {                                           opacity: 0.95; }
   60%  {                                           opacity: 0.55; }
   100% { transform: translateY(-72px) scale(1.3); opacity: 0;    }
+}
+
+/* The leaning column: same opacity/scale/height curve as smoke-rise, plus a
+ * rightward drift that grows faster than the rise (1→5→9px over the -72px climb)
+ * so the smoke bends a touch more the higher and slower it gets — the honest
+ * shape of a column carried by a steady wind, kept to a whisper (~7°, less than
+ * the flag's lift). Rest at 0% keeps prefers-reduced-motion behaviour identical
+ * to the vertical variant. */
+@keyframes smoke-rise-lean {
+  0%   { transform: translate(0,     0)      scale(0.70); opacity: 0;    }
+  12%  { transform: translate(1px,  -8.6px)  scale(0.77); opacity: 0.95; }
+  60%  { transform: translate(5px,  -43px)   scale(1.06); opacity: 0.55; }
+  100% { transform: translate(9px,  -72px)   scale(1.30); opacity: 0;    }
 }
 
 /* Footpath: five pixel-art stepping stones emerging from behind the

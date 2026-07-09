@@ -358,6 +358,49 @@
   50%      { transform: translateX(15px); }
 }
 
+/* Day 62 (2026-07-09): the front clouds drift DOWNWIND, and only downwind.
+ * When these clouds were hung (Day 42) the note above defended their there-and-
+ * back sway on the grounds that "a cloud has no pointing direction ... it's just
+ * air moving." That was true of a sky with no wind in it. But the flag (Day 60)
+ * and the smoke (Day 61) have since named a steady breeze on this face — both
+ * lean rightward, one wind — and a cloud is a thing the air ALONE carries, the
+ * same as loose cloth and a soft column of smoke. So it can't sway back against
+ * that wind: it must go the one way the wind goes. The old sway read fine on its
+ * own but no longer answered the world the flag and smoke now assert (diary
+ * 2026-07-09) — the same lie, and the same fix, the geese already got on Day 38,
+ * when the skein stopped floating back and started crossing one way and gone.
+ *
+ * A cloud can't cleanly exit and re-enter from a fixed left:% the way the centre-
+ * anchored skein does, so instead of teleporting back (a visible jump) it rides
+ * downwind, thins away as it goes, and re-forms upwind while invisible — the
+ * reset is masked by opacity, never seen. Net read: clouds moving downwind and
+ * passing, which is what clouds do, not one cloud sloshing in place. Kept a
+ * whisper (~30px over the long period, linear = a steady wind holds its speed);
+ * the 0% frame is the placed, opaque rest state, so prefers-reduced-motion
+ * (theme.css freezes durations) holds each cloud where it's drawn.
+ *
+ * Front-scoped ON PURPOSE (.scene--exterior = home only; the door side is
+ * .scene--around), exactly as the Day-61 smoke lean is. The around view looks
+ * WEST, end-on into this east wind, and a wind coming straight at you carries a
+ * cloud toward or away from you, not across the frame — so the door-side clouds
+ * keep the shared, headless cloud-drift above (their tiny sway reads as far
+ * clouds just hanging, no lateral wind visible from a face that looks down it).
+ * One wind, two vantages — the fog's lit edge, the hills' flip, the smoke's lean
+ * (RULES Art XIII), now the clouds too. Overrides name + timing only; each
+ * cloud's own duration/delay (below) carry through. */
+.scene--exterior .cloud {
+  animation-name: cloud-drift-wind;
+  animation-timing-function: linear;
+}
+
+@keyframes cloud-drift-wind {
+  0%,   8% { transform: translateX(0);    opacity: 1; }   /* formed, upwind */
+  82%      { transform: translateX(26px); opacity: 1; }   /* ridden downwind */
+  92%      { transform: translateX(34px); opacity: 0; }   /* thinned away downwind */
+  92.01%   { transform: translateX(0);    opacity: 0; }   /* silent reset upwind */
+  100%     { transform: translateX(0);    opacity: 1; }   /* re-formed, loops into 0% */
+}
+
 /* Home (south) view's pair: one larger cloud high on the left, a smaller one
  * higher and right-of-centre — clear of the map card (far top-right) and the
  * central smoke. Different sizes/speeds so they don't pulse together. */

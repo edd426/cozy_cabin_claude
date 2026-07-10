@@ -646,6 +646,65 @@
   bottom: 18%;
 }
 
+/* ── The trees bend in the wind ────────────────────────────────────────────
+ * Day 63 (2026-07-10): the two trees give the same breeze the flag (Day 60),
+ * smoke (Day 61), and clouds (Day 62) already answer. They were hung on Day 0,
+ * long before there was any wind on this face, so — unlike the cloud, which
+ * carried a written note ("a cloud has no heading") that curdled the day the
+ * flag flew — nothing was ever written to defend their stillness; they simply
+ * stood, and standing still stopped being honest once the yard had a wind
+ * (diary 2026-07-10). They are the biggest things in the front yard holding
+ * dead still among a flag that streams, a smoke that leans, and clouds that
+ * ride — all one wind, one way — so they had to lean the one way too.
+ *
+ * BUT a tree is not the flag and not the flowers; it's both my earlier rules at
+ * once. The flowers stay rooted (a breeze that lifts cloth barely bends a stiff
+ * low stem — Day 61's note), and a tree's TRUNK is rooted just so. But a tree's
+ * CROWN is a high loose mass of leaves in the moving air, and leaves rustle in a
+ * lighter wind than cloth ever caught. So the honest tree is pinned at the foot
+ * and gives at the top: a skewX about `transform-origin: bottom center` leaves
+ * the base planted and grows the lean with height, so the trunk barely stirs and
+ * the crown deflects most — a bend, not a rigid tilt (which a rotate would give).
+ *
+ * DOWNWIND = rightward, the way the flag's tip, the smoke, and the clouds all
+ * point: negative skewX leans the crown right about a bottom origin. The lean
+ * never crosses to upwind (0deg = the drawn rest, the low end of every frame),
+ * the way the flag never dips below its rest — a steady breeze holds a thing out,
+ * it doesn't rock it both ways. And a tree is the STIFFEST loose thing out here,
+ * heavier than cloth or smoke or cloud, so it leans the LEAST (~1.2°, a pixel or
+ * two of crown travel) and the SLOWEST (8–9s, off the flag's 5.5s and the smoke's
+ * 4.5s), with the two trees on different periods so they never sway in lockstep
+ * (the clouds and blooms stagger the same way). Rest is the 0%/100% frame, so
+ * theme.css's reduced-motion freeze holds each tree at its crisp drawn upright.
+ *
+ * Front-view-only by nature: the trees live only in scene.html (the home/south
+ * face). That face looks north and sees this east wind BROADSIDE, so the crown
+ * leans across the frame here — the same reason the front smoke leans and the
+ * front clouds travel, while the door side (which looks end-on up the wind) shows
+ * neither (RULES Art XIII). One wind, told true on every loose thing the face
+ * that meets it broadside can show. */
+.sprite--tree,
+.sprite--tree-small {
+  transform-origin: bottom center;
+  animation: tree-sway 8.5s ease-in-out infinite;
+}
+/* The larger left tree carries a heavier crown, so it leans a hair more and on
+ * its own slower clock; the small right tree gives a touch less, off-phase, so
+ * the pair never bend together. */
+.sprite--tree-left  { animation-duration: 9s;   animation-delay: 0s;    }
+.sprite--tree-right { animation-duration: 7.5s; animation-delay: -3s; }
+
+/* Bend downwind and ease back, never crossing upwind of rest. The crown rides
+ * out to its lean, gives a little at the far end (the leaves catching and losing
+ * the gust the way the flag's cloth does, only far gentler), and settles. */
+@keyframes tree-sway {
+  0%   { transform: skewX(0deg);     }
+  35%  { transform: skewX(-1.2deg);  }
+  55%  { transform: skewX(-0.8deg);  }
+  75%  { transform: skewX(-1.3deg);  }
+  100% { transform: skewX(0deg);     }
+}
+
 /* Bush — 32×28 native, scaled 2.5x. Front-right corner. */
 .sprite--bush {
   width: calc(32px * 2.5);

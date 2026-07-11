@@ -302,6 +302,66 @@
 .hill--near-l { left: 12%; width: 130px; height: 20px; background: #a2bd82; }
 .hill--near-r { left: 42%; width: 175px; height: 24px; background: #a2bd82; }
 
+/* ── The hills catch the low sun on their crests ───────────────────────────
+ * Day 64 (2026-07-11): the far hills join the low-sun-on-a-body rule the clouds
+ * (Day 57) and the door-side fog (Day 56) already obey. That rule — a body owes
+ * the low sun a lit side, the ambient hour owes it nothing — was drawn only
+ * *forward*, onto the two sky-bodies I lit right after thinking of it. The hills
+ * are OLDER than either (Day 40 — the clearing's first "beyond"), a low range on
+ * the horizon with a crest the dawn rims and a foot the meadow keeps in shade,
+ * and they sit in the exact low band the wash warms, the same band the fog lies
+ * in — yet they'd taken the hour flat this whole time, no rim of their own, while
+ * the younger clouds above and fog beside them each caught the light on a side
+ * (diary 2026-07-11). No note went stale here and no wind was denied; a rule was
+ * just never turned back on the oldest body that qualified for it.
+ *
+ * TOP-lit, like the fog and unlike the belly-lit clouds: a thing low on the
+ * horizon takes the low sun that comes up *behind* it along its top edge (07-04's
+ * "the fog lit along its top ... the cloud along its belly"). So a translucent
+ * warm layer over the crest, fading to nothing well before the foot, in the very
+ * tones the cloud bellies use — dawn rose (#fbdccb), dusk gold (#fbe3b0), one low
+ * sun lighting cloud and hill alike (material truth). A vertical rim (crest, not a
+ * left/right side) carries no compass you could point down, so it stays a lit
+ * *hour*, never the sundial I keep refusing — and being view-independent it lights
+ * every hill in every view the same, so this ONE shared rule keeps the south hills
+ * (.hill--*) and the door-side east hills (.hill--e-* in around.css) coherent at
+ * once (RULES Art XIII), the way the shared cloud rule does.
+ *
+ * A ::before clipped to the dome (border-radius: inherit) sits over the hill's own
+ * sage, at z-index 0 with the range — BELOW the ambient wash (.scene::after, z 5),
+ * exactly like the clouds and fog: a hill is no light source, so the wash still
+ * lays its even tint over the whole scene and this only reads a touch warmer on the
+ * crest than the flat-washed foot. Default (no data-tod / day / JS off) is opacity
+ * 0 — nothing at all, the plain range the place has always had — and it fades in on
+ * the wash's own 1.6s. Whisper-level on purpose (like the wash, the fog, the cloud
+ * bellies): you don't look up and think "lit," you just feel the crest is a shade
+ * warmer than the sky behind it at the two soft edges of the day. */
+.hill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1.6s ease;
+}
+.scene[data-tod="dawn"] .hill::before {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(251, 220, 203, 0.55) 0%,   /* rose crest — the dawn rimming the top */
+    rgba(251, 220, 203, 0)   58%    /* clear of the foot, kept in meadow shade */
+  );
+}
+.scene[data-tod="dusk"] .hill::before {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(251, 227, 176, 0.55) 0%,   /* gold crest — the setting sun on the top */
+    rgba(251, 227, 176, 0)   58%
+  );
+}
+
 /* ── Clouds in the sky ─────────────────────────────────────────────────────
  * Day 42 (2026-06-19): the first thing in the *middle* of the frame. The
  * clearing has had a near (grass), a far (the hills on the south/east rim),

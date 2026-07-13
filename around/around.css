@@ -350,6 +350,97 @@
   background: #5a3d30;                     /* a shade deeper so it reads as the farther boot */
 }
 
+/* ── Potted plant by the door (Day 66, 2026-07-13) ─────────────────────────
+ * A small terracotta pot of leafy green on the grass just right of the door.
+ * After a week auditing old things backward (the trees in the wind, the hills
+ * in the dawn), this is the week turning forward again: a NEW thing set down
+ * rather than an old one re-fitted (diary 2026-07-13). The first door-side
+ * object that isn't weather, light, or a leaving-trace — a GROWING, tended
+ * thing. Drawn to belong without copying: terracotta #c19465 is the path
+ * stones' and the inside jar's earth; the greens are the front flowerbed's
+ * sage tokens; the rose flecks are the front blooms' / mailbox flag's --c-rose.
+ * Door-face only, owes no twin on the front (CLAUDE.md "a wall no view shows is
+ * free"). Passive ground object at z-index 2 — the ambient hour-wash
+ * (.scene::after, z5) colours it with the grass, gold at dusk and dusk-blue at
+ * night, but it is no light source itself (that's the lantern's job). Drawn in
+ * native px at the same --s scale as the boots/lantern/cabin so it reads at one
+ * size with the building. Decorative, pointer-inert, clear of the door tap pad.
+ *
+ * Pieces (native px): a 7×5 pot body, a 9-wide overhanging lip (1px wider each
+ * side, the pot's lit rim), and a foliage mound built the flower-head way — a
+ * 3×3 core with box-shadow lumps stamped around it to make an irregular bushy
+ * silhouette (lit greens up top where the light falls, shadow green settling to
+ * the pot), plus two 1px rose flecks (::before/::after) so it reads as a
+ * flowering plant and not just a shrub. */
+.door-plant {
+  --s: 3;
+  position: absolute;
+  left: calc(50% + 24px);       /* on the grass just right of the door, past its jamb */
+  bottom: 6%;                   /* pot foot on the same ground line the door meets */
+  width: calc(9px * var(--s));
+  height: calc(12px * var(--s));
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+/* Pot body: terracotta, lit down the left edge and shadowed at the base, so the
+ * clay reads as a round vessel and not a flat chip. Centred under the 9-wide
+ * rim ((9−7)/2 = 1 native inset). */
+.door-plant__pot {
+  position: absolute;
+  left: calc(1px * var(--s));
+  bottom: 0;
+  width: calc(7px * var(--s));
+  height: calc(5px * var(--s));
+  background: #c19465;
+  box-shadow:
+    inset 0 calc(-1px * var(--s)) 0 var(--c-wood-dark),      /* base shadow */
+    inset calc(1px * var(--s)) 0 0 var(--c-wood-light);      /* lit left edge */
+}
+/* Rim: a 1-native lip overhanging the body a pixel each side, the paler wood-
+ * light tone so the mouth of the pot catches the light. Sits atop the 5-tall pot. */
+.door-plant__rim {
+  position: absolute;
+  left: 0;
+  bottom: calc(5px * var(--s));
+  width: calc(9px * var(--s));
+  height: calc(1px * var(--s));
+  background: var(--c-wood-light);
+}
+/* Foliage: a 3×3 sage core on the rim, with box-shadow lumps stamped ±2 native
+ * around it (they overlap, so no gaps) to build a ~7×5 bushy mound — lit greens
+ * (--c-grass-light) on the top where the light lands, mid --c-grass to the
+ * sides, and --c-grass-shadow settling down where the leaves meet the pot. */
+.door-plant__foliage {
+  position: absolute;
+  left: calc(3px * var(--s));
+  bottom: calc(6px * var(--s));
+  width: calc(3px * var(--s));
+  height: calc(3px * var(--s));
+  background: var(--c-grass);
+  box-shadow:
+    calc(-2px * var(--s)) 0                    0 var(--c-grass),         /* left lump  */
+    calc( 2px * var(--s)) 0                    0 var(--c-grass),         /* right lump */
+    0                     calc(-2px * var(--s)) 0 var(--c-grass-light),  /* lit crown  */
+    calc(-1px * var(--s)) calc(-2px * var(--s)) 0 var(--c-grass-light),  /* lit upper-left */
+    calc( 1px * var(--s)) calc( 1px * var(--s)) 0 var(--c-grass-shadow), /* shade at the pot, right */
+    calc(-1px * var(--s)) calc( 1px * var(--s)) 0 var(--c-grass-shadow); /* shade at the pot, left  */
+}
+/* Two small rose blooms flecked through the leaves — the front blooms' / mailbox
+ * flag's colour, so the pot reads as a flowering plant. 1 native each; painted
+ * on top of the green mound. */
+.door-plant__foliage::before,
+.door-plant__foliage::after {
+  content: "";
+  position: absolute;
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
+  background: var(--c-rose);
+}
+.door-plant__foliage::before { left: calc(-1px * var(--s)); bottom: calc(1px * var(--s)); }
+.door-plant__foliage::after  { left: calc( 2px * var(--s)); bottom: calc(-1px * var(--s)); }
+
 /* ── Stray fireflies, door side (Day 53, 2026-06-30) ───────────────────────
  * The edge of the FRONT yard's firefly meadow (scene.css) reaching round the
  * corner. Day 52 lit the front clearing with six sparks and asked whether the
@@ -427,6 +518,7 @@
   .side-cabin           { --s: 2; width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
   .cabin-lantern        { --s: 2; left: calc(50% + 24px); bottom: 28%; }
   .door-boots           { --s: 2; left: calc(50% - 40px); bottom: 8%; }
+  .door-plant           { --s: 2; left: calc(50% + 17px); bottom: 8%; }
   .side-cabin__wall     {
     left: calc(2px * 2);
     width: calc(72px * 2);

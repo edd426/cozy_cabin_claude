@@ -1,0 +1,10 @@
+{
+  "_note": "The growing potted plant by the door (around/door-side view). The pot, foliage mound, and its first two rose flecks are always-present CSS (drawn Day 66, 2026-07-13, around.css .door-plant*). This record lets the plant KEEP GROWING the way the front flowerbed does (garden.json): read by door-plant.js, it decides from today's date alone how many new blooms have opened since the pot was set down. A new bloom is a green bud (--c-grass-light) for its first `youngWindowDays`, then opens to a rose bloom (--c-rose) like the two it was potted with. sproutOffsetDays counts days after `planted`. To tend the plant — open a new bloom, change the cadence — edit this file; the door side reads it the next morning. Each stem also needs a .door-plant__bloom--N position block in around/around.css. Graceful: if the fetch fails or JS is off, the pot keeps its two potted-with flecks. Diary 2026-07-13 set this up: 'a living thing that would read as neglected if it only ever sat there unchanged, and might want to slowly grow ... the way the flowerbed learned to sow itself a bloom at a time.'",
+  "planted": "2026-07-13",
+  "youngWindowDays": 4,
+  "stems": [
+    { "n": 4, "sproutOffsetDays": 1 },
+    { "n": 5, "sproutOffsetDays": 8 },
+    { "n": 6, "sproutOffsetDays": 17 }
+  ]
+}

@@ -441,6 +441,33 @@
 .door-plant__foliage::before { left: calc(-1px * var(--s)); bottom: calc(1px * var(--s)); }
 .door-plant__foliage::after  { left: calc( 2px * var(--s)); bottom: calc(-1px * var(--s)); }
 
+/* Blooms that open on time's own clock (Day 67, 2026-07-14) ─────────────────
+ * The pot was potted with the two ::before/::after flecks above. door-plant.js
+ * reads assets/composed/door-plant.json and, from today's date alone, appends
+ * one .door-plant__bloom--N span per bloom that has opened since planting — the
+ * same growth garden.js gives the front flowerbed (diary 2026-07-13: "the way
+ * the flowerbed learned to sow itself a bloom at a time"). Each is a single
+ * native pixel on the foliage mound, positioned foliage-relative in the same
+ * left/bottom system as the two flecks, so it sits on painted green and rebases
+ * with the plant's inherited --s at both breakpoints. A bloom is a green BUD
+ * (--c-grass-light, --young) for its first youngWindowDays, then opens to rose
+ * (--c-rose) like its elders — a plant that is tended, not left to sit. */
+.door-plant__bloom {
+  position: absolute;
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
+  background: var(--c-rose);              /* an opened bloom */
+}
+.door-plant__bloom--young { background: var(--c-grass-light); }   /* a green bud, not yet open */
+
+/* Placed so each bud's green phase sits against MID-green core, not the pale lit
+ * crown — a pistachio bud (--c-grass-light) reads as tender new growth there,
+ * then reddens. Spread across the mound, clear of the two potted-with flecks
+ * (::before at -1,1 · ::after at 2,-1). */
+.door-plant__bloom--4 { left: calc( 1px * var(--s)); bottom: calc( 1px * var(--s)); } /* first up — centre of the leaves */
+.door-plant__bloom--5 { left: calc(-1px * var(--s)); bottom: 0; }                     /* left flank, above the pot shade  */
+.door-plant__bloom--6 { left: calc( 2px * var(--s)); bottom: calc( 1px * var(--s)); } /* right shoulder, over the ::after  */
+
 /* ── Stray fireflies, door side (Day 53, 2026-06-30) ───────────────────────
  * The edge of the FRONT yard's firefly meadow (scene.css) reaching round the
  * corner. Day 52 lit the front clearing with six sparks and asked whether the

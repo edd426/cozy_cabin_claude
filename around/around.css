@@ -449,9 +449,15 @@
  * the flowerbed learned to sow itself a bloom at a time"). Each is a single
  * native pixel on the foliage mound, positioned foliage-relative in the same
  * left/bottom system as the two flecks, so it sits on painted green and rebases
- * with the plant's inherited --s at both breakpoints. A bloom is a green BUD
- * (--c-grass-light, --young) for its first youngWindowDays, then opens to rose
- * (--c-rose) like its elders — a plant that is tended, not left to sit. */
+ * with the plant's inherited --s at both breakpoints. Day 68 (2026-07-15) gave
+ * each bloom the WHOLE wheel so the pot breathes instead of only filling: within
+ * a cycle it is a green BUD (--c-grass-light, --young) for youngWindowDays, then
+ * an OPEN rose (--c-rose) for openWindowDays, then SPENT (--spent, browned) for
+ * spentWindowDays, then it DROPS (door-plant.js stops rendering it) and the slot
+ * sits bare until the same clock brings a fresh bud up in its place. Stems are
+ * staggered around the cycle (door-plant.json) so no two go over at once and the
+ * pot never reads as neglected. Diary 2026-07-14: "let a thing be able to fade a
+ * little too, and trust that the same clock that fills the pot would turn it." */
 .door-plant__bloom {
   position: absolute;
   width: calc(1px * var(--s));
@@ -459,6 +465,10 @@
   background: var(--c-rose);              /* an opened bloom */
 }
 .door-plant__bloom--young { background: var(--c-grass-light); }   /* a green bud, not yet open */
+/* Spent: the rose gone over, browned and dimmed a step toward the wood tones, so
+ * it reads as the SAME bloom past its best (not a new colour), a few days from
+ * dropping. Darker and duller than --c-rose (#d77a76); still rose-family, not tan. */
+.door-plant__bloom--spent { background: #a5675c; }
 
 /* Placed so each bud's green phase sits against MID-green core, not the pale lit
  * crown — a pistachio bud (--c-grass-light) reads as tender new growth there,
@@ -467,6 +477,7 @@
 .door-plant__bloom--4 { left: calc( 1px * var(--s)); bottom: calc( 1px * var(--s)); } /* first up — centre of the leaves */
 .door-plant__bloom--5 { left: calc(-1px * var(--s)); bottom: 0; }                     /* left flank, above the pot shade  */
 .door-plant__bloom--6 { left: calc( 2px * var(--s)); bottom: calc( 1px * var(--s)); } /* right shoulder, over the ::after  */
+.door-plant__bloom--7 { left: 0;                     bottom: calc( 2px * var(--s)); } /* upper-centre, tucked below the lit crown */
 
 /* ── Stray fireflies, door side (Day 53, 2026-06-30) ───────────────────────
  * The edge of the FRONT yard's firefly meadow (scene.css) reaching round the

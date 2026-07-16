@@ -253,6 +253,77 @@
   );
 }
 
+/* ── Season wash (the year's clock) ────────────────────────────────────────
+ * Day 69 (2026-07-16): the third and slowest clock. sky.js keeps the hour and
+ * washes it above (`.scene::after`); this keeps the *year* and washes it below
+ * (`.scene::before`) — the deep slow base the hour rides on top of. season.js
+ * reads `new Date().getMonth()` and sets `data-season` on each `.scene` in both
+ * exterior views (home and around share this stylesheet, so one year leans both
+ * faces at once; RULES Art XIII).
+ *
+ * Same layering logic as the hour wash: a `::before` over the whole frame at
+ * z-index 5 — above the world (sprites z 0–4) but below the map card (z 6). It
+ * sits *under* the hour wash's `::after` (equal z-index, but ::before paints
+ * first), so the momentary light of the hour always lays over the standing tint
+ * of the season. `pointer-events: none` keeps it inert.
+ *
+ * Deliberately gentle, sky.js's vow kept for the slower hand: a lean, not a
+ * calendar. The default (no `data-season`, or JS off) is NO wash — the plain
+ * cream clearing, so nothing is lost. Summer is the lightest of the four (the
+ * cabin's home season, the green it was born wearing); the others tilt a touch
+ * further from it and back. Winter is a hush, never a death — the clearing goes
+ * quiet and cool but stays lit and warm enough to walk up to.
+ *   - summer — a faint warm green rising off the meadow at its fullest.
+ *   - autumn — the whole frame gone gently gold, the most visibly a season.
+ *   - winter — a thin cool blue-grey veil, top-weighted: the year gone quiet.
+ *   - spring — fresh pistachio low (new growth), a breath of blossom-rose high. */
+.scene::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background: transparent;
+  transition: opacity 1.6s ease, background 1.6s ease;
+}
+.scene[data-season="summer"]::before {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(141, 178, 106, 0.13) 0%,   /* grass green (--c-grass), low — meadow at its fullest */
+    rgba(141, 178, 106, 0.05) 40%,
+    rgba(236, 208, 166, 0.05) 100%  /* a whisper of warm high-summer haze up top */
+  );
+}
+.scene[data-season="autumn"]::before {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(206, 150, 84, 0.15) 0%,    /* amber sky */
+    rgba(198, 138, 74, 0.12) 55%,
+    rgba(190, 128, 66, 0.14) 100%   /* the whole clearing leaned to gold */
+  );
+}
+.scene[data-season="winter"]::before {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(168, 180, 198, 0.22) 0%,   /* cool pale sky — the year gone quiet */
+    rgba(176, 186, 200, 0.14) 55%,
+    rgba(186, 194, 206, 0.11) 100%  /* still lit at the grass — a hush, not a death */
+  );
+}
+.scene[data-season="spring"]::before {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(185, 214, 133, 0.16) 0%,   /* pistachio (--c-grass-light), low — fresh new growth */
+    rgba(185, 214, 133, 0.06) 44%,
+    rgba(215, 122, 118, 0.04) 100%  /* a breath of blossom-rose (--c-rose) up high */
+  );
+}
+
 /* ── Distant hills on the southern horizon ─────────────────────────────────
  * Day 40 (2026-06-17): the view yesterday's bench was built to face. A low,
  * hazy range far beyond the meadow's edge — the clearing's first *beyond*.

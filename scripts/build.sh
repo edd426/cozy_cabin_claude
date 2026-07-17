@@ -69,16 +69,29 @@ JS
 echo "build: SHA=$SHA"
 echo "build: wrote build-sha.txt and build-sha.js"
 
-# Generate diary/manifest.json from diary/*.md so the diary index page can
-# render the list of entries client-side. Schema: array of {date,label,title,path}.
-# Sourced from the first H1 of each entry; date taken from the filename.
+# Generate diary/manifest.json from diary/*.md AND diary/meta/*.md so the
+# diary index page can render the full archive client-side.
+# Schema: array of {date, day, kind, label, title, path}.
+#   day:  the Day-N counter, from the filename date vs the Day-1 anchor
+#         2026-05-09 (day-zero file -> 0)
+#   kind: "daily" | "meta" (weekly Sunday meta-reflections live in meta/)
+# title is the first H1 of each entry; date is taken from the filename.
 python3 - <<'PY'
-import json, re, pathlib
+import datetime, json, re, pathlib
 
 root = pathlib.Path("diary")
+ANCHOR = datetime.date(2026, 5, 9)  # Day 1
 out = []
 
-for md in sorted(root.glob("*.md")):
+def day_n(date_str):
+    if date_str == "0000-00-00":
+        return 0
+    try:
+        return (datetime.date.fromisoformat(date_str) - ANCHOR).days + 1
+    except ValueError:
+        return None
+
+for md in sorted(root.glob("*.md")) + sorted((root / "meta").glob("*.md")):
     name = md.name
     if name == "README.md":
         continue
@@ -87,6 +100,7 @@ for md in sorted(root.glob("*.md")):
     if not m:
         continue
     date = m.group(1)
+    kind = "meta" if md.parent.name == "meta" else "daily"
 
     # Pull the first H1 line from the file as the title.
     title = ""
@@ -103,9 +117,11 @@ for md in sorted(root.glob("*.md")):
 
     out.append({
         "date":  date,
+        "day":   day_n(date),
+        "kind":  kind,
         "label": label,
         "title": title,
-        "path":  name,
+        "path":  name if kind == "daily" else f"meta/{name}",
     })
 
 manifest_path = root / "manifest.json"

@@ -52,15 +52,22 @@ yours, and the design is yours too. What I care about:
 - The locked `wait-for-deploy.sh` contract is untouched: the unsuffixed
   `previews/<date>-<sha>.png` home capture keeps landing exactly as it does
   today.
-- Tomorrow's memory pass actually reads the new captures — update
-  `.claude/commands/daily.md` Step 2 (and CLAUDE.md's learned notes) so future
-  days look at them as a matter of course.
+- Tomorrow's memory pass actually reads the new captures — record the naming
+  convention in CLAUDE.md's learned notes (yours to edit). `daily.md` is
+  locked to you (RULES Art I); I've already amended its Step 2 founder-side to
+  read whatever forced-state/motion captures exist, so the learned note is the
+  only piece you owe.
 - Diary in your voice; log with the mechanics.
 
 ## Notes / clarifications
 
 - Slice it over several days if it wants that (messages/README workflow §3) —
   forced hours first, seasons next, motion last, or whatever order reads right.
+- Locks, to be explicit (RULES Art I): `scripts/screenshot.js` and `pages.yml`
+  are the standing carve-outs, and editing `scripts/views.json` for screenshot
+  coverage is inside the 2026-05-15 grant (your Day-11 log records it) — this
+  message re-confirms that grant. The rest of `scripts/` — `wait-for-deploy.sh`
+  especially — stays locked.
 - `pages.yml` already excludes `previews/` from the deploy artifact, so the
   *site* stays small regardless — but mind repo growth. Every state × every
   view × every commit is more than anyone needs; pick a sensible subset (maybe

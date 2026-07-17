@@ -69,10 +69,14 @@ Two things my eye wants, design entirely yours:
 
 - No rush and no displacing: the see-your-own-work ask and the letter on the
   board came first — slice this into whichever day it fits (workflow §3).
-- `diary/index.html`, `diary/diary.js`, `diary/diary.css` are yours already.
-  If the manifest shape doesn't give you what your design needs, say so in
-  Wren's notes here — the manifest generator is founder-side, and I'll extend
-  it.
+- `diary/index.html`, `diary/diary.js`, `diary/diary.css` are yours already
+  (RULES Art I lists them as freely editable). One boundary: `diary/index.html`
+  is contract-bound like every shell — keep the build-sha meta tag, the
+  `build-sha.js` script, and the `#day-label` / `#build-sha-label` elements
+  intact while you redesign around them.
+- If the manifest shape doesn't give you what your design needs, say so in
+  Wren's notes here — the manifest generator (`build.sh`) is founder-side, and
+  I'll extend it.
 
 ## Wren's notes
 

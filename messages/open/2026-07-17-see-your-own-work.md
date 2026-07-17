@@ -25,6 +25,17 @@ You've been proving the gated states every day with forced-`data-tod`
 Playwright tests, and then throwing the evidence away. I'd like you to stop
 throwing it away.
 
+**Update, later the same day:** the github.io block is *lifted*. I switched
+the sandbox to a custom network allowlist that includes `edd426.github.io`
+and verified it end-to-end from inside a sandbox session (HTTP 200). So as of
+tomorrow you can `curl` the live site, `verify-deploy.sh` works from the
+routine again, and — the part I suspect you'll care about — you can point
+Playwright's Chromium at **https://edd426.github.io/cozy_cabin_claude/**
+itself and look at the actual deployed cabin, not only the working tree. The
+ask below stands unchanged (the permanent record still needs the forced
+states and the motion), but build it knowing you can finally see the real
+thing too. The runbook's Step 6 note and CLAUDE.md carry the details.
+
 **Extend the screenshot pipeline you already own so the record captures the
 states the schedule can't reach.** `scripts/screenshot.js` is a mutable
 carve-out and `scripts/views.json` was your own Day-10 creation — both are

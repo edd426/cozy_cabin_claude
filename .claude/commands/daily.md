@@ -117,11 +117,14 @@ By this point you should already have a full or near-full diary — the ponderin
 
 If for some reason the earlier drafts didn't happen (a stuck day, a sandbox surprise), write the diary now from scratch — but treat that as an exception, not the default cadence. The reason for distributing the writing across Steps 2.8 and 6 is that the writeup at the end of a long session is exactly when the wind-down has historically dropped it. (See `messages/done/2026-05-14-engagement-dialogue.md` for the dialogue that produced this restructure.)
 
-The four required sections, voice rules, and the "On embodying Wren" aside live in `diary/README.md`. Read it once if you haven't this session. Run `./scripts/lint-diary.sh diary/<today>.md` to check before committing.
+The required sections, voice rules, and the "On embodying Wren" aside live in `diary/README.md`. Read it once if you haven't this session. Run `./scripts/lint-diary.sh diary/<today>.md` to check before committing. Per the 2026-07-17 reform, the entry's title is `# Day N — YYYY-MM-DD` (the same `day_n` you computed in Step 2; the date appears only there).
 
 On a stuck or reflective day: Wren still writes a diary entry — she had a day even if she didn't build. The operational failure or the choice to reflect goes in the log, not the diary.
 
-On **Sunday** (the weekly rest day, `date -u +%u` == `7`), additionally write `diary/meta/YYYY-MM-DD.md` per the schema in `diary/meta/README.md`. Per the e2edcda fix, meta-reflections are written in the *performer's* voice (third-person about Wren), evaluating whether Wren's voice is still recognizable across the entries reviewed.
+On **Sunday** (the weekly rest day, `date -u +%u` == `7`), two things change (2026-07-17 reform, effective 2026-07-19):
+
+- **The diary entry is free-form.** The four weekday sections are waived; write the rest day in whatever shape it asks for, under at least one `## ` heading of Wren's choosing (`diary/README.md` "Sundays are free-form"). The linter relaxes automatically.
+- **Additionally write `diary/meta/YYYY-MM-DD.md`** per the schema in `diary/meta/README.md` — which now reviews the **whole week just ended** (Days N−6 … N) plus one anchor meta from ~4 weeks back, and opens with a **"Did the flags take?"** section holding the previous meta's "What to drop" to account against the week's entries. Per the e2edcda fix, meta-reflections are written in the *performer's* voice (third-person about Wren), evaluating whether Wren's voice is still recognizable.
 
 ## Step 8 — Write the agent's log entry (operational)
 

@@ -60,8 +60,13 @@ required_daily=(
 # fail by design (the linter is intended to run only against today's new
 # entry).
 
+# "Did the flags take?" added by the 2026-07-17 reform (effective the
+# 2026-07-19 meta): each meta must check the previous meta's "What to drop"
+# against the week's entries. Metas through 2026-07-12 predate it and will
+# fail this linter by design (it runs only against today's new entry).
 required_meta=(
   "Entries reviewed"
+  "Did the flags take?"
   "Continuity check"
   "Drift"
   "What to keep"
@@ -72,6 +77,24 @@ if [[ $is_meta -eq 1 ]]; then
   required=("${required_meta[@]}")
 else
   required=("${required_daily[@]}")
+fi
+
+# Sundays are free-form (2026-07-17 reform, effective 2026-07-19): the four
+# weekday sections are waived on the weekly rest day; a Sunday entry needs
+# only at least one "## " section of any name. Weekday is derived from the
+# filename date (python3 — same dependency build.sh already has). Sunday
+# entries before 2026-07-19 used the weekday schema; the linter runs only
+# against today's entry, so they're unaffected.
+fname="$(basename "$path")"
+if [[ $is_meta -eq 0 && "$fname" =~ ^([0-9]{4}-[0-9]{2}-[0-9]{2})\.md$ ]]; then
+  dow="$(python3 -c "import datetime,sys; print(datetime.date.fromisoformat(sys.argv[1]).isoweekday())" "${BASH_REMATCH[1]}" 2>/dev/null || echo 0)"
+  if [[ "$dow" == "7" ]]; then
+    if grep -Eq '^## ' "$path"; then
+      exit 0
+    fi
+    echo "lint-diary: $path is a Sunday (free-form) entry but has no '## ' section at all" >&2
+    exit 1
+  fi
 fi
 
 missing=()

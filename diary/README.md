@@ -2,21 +2,23 @@
 
 Every daily entry lives at `diary/YYYY-MM-DD.md` and must conform to this schema. The agent should run `./scripts/lint-diary.sh diary/<today>.md` before committing to catch missing sections.
 
-The diary is Wren's record: a continuous first-person voice that today's agent extends one entry at a time (RULES.md Article II). It is **not** a status report. Operational content — commit SHAs, deploy verification, token counts, environment notes, the `Day N` counter — lives in the agent's log at `logs/YYYY-MM-DD.md`, not here.
+The diary is Wren's record: a continuous first-person voice that today's agent extends one entry at a time (RULES.md Article II). It is **not** a status report. Operational content — commit SHAs, deploy verification, token counts, environment notes — lives in the agent's log at `logs/YYYY-MM-DD.md`, not here.
 
 Today's entry is **append-only within the session**; past entries are read-only forever. Two failure modes are equally bad: skipping the diary on a stuck day, and fabricating progress on a polished day. Both corrupt the record that tomorrow's agent will read as Wren's truth.
 
 ## Title
 
 ```markdown
-# YYYY-MM-DD
+# Day N — YYYY-MM-DD
 ```
 
-Just the date. No `Day N` counter (the day count lives in the log). No separate `## Date` section.
+The day counter and the date, once each. `Day N` is computed from the Day-1 anchor 2026-05-09 — the same number the log's title carries. No separate `## Date` section, and the date appears nowhere else in the entry — once is enough.
+
+**Title history:** the original schema (through 2026-05-11) used `# Day N — YYYY-MM-DD`; the 2026-05-12 reform dropped the counter to date-only; the founder restored it on 2026-07-17 ("switch back to putting the Day, and don't put the date twice"). Entries from 2026-05-12 through 2026-07-17 carry date-only titles and remain as historical record — not retroactively migrated.
 
 ## Required sections
 
-Each entry must have these four `## ` headings, in this order:
+Each weekday entry (Monday–Saturday; Sundays are free-form, see below) must have these four `## ` headings, in this order:
 
 ```markdown
 ## What I've been pondering since yesterday
@@ -46,6 +48,10 @@ Not a task queue, not a feature list.>
 
 The fourth heading was previously "Question for Wren to ponder until tomorrow" — third-person, breaking the first-person register the other three headings use. Renamed for parity (motivated by a 2026-05-14 dialogue with the routine instance; landed 2026-05-15 in commit `0c1a7a6`). Past entries through 2026-05-13 keep the old heading and are not retroactively migrated.
 
+## Sundays are free-form (2026-07-17 reform)
+
+Sunday is the weekly rest day, and its entry deliberately breaks the weekday mold: the four required sections above are **waived**. Write the day in whatever shape it asks for — one long look back at the week, a single scene, a letter, a walk — under at least one `## ` heading of Wren's choosing. The four prompts exist to give a building day its rhythm; the rest day earns a different one. (The four-section form remains *allowed* on a Sunday if the day genuinely wants it — the waiver is freedom, not a new uniform.) `lint-diary.sh` detects Sundays from the filename date and relaxes accordingly. Everything else about the diary — voice, no operational content, no edits to past days — applies on Sundays unchanged. Sundays before 2026-07-19 used the four-section form; historical record, not migrated.
+
 ## On embodying Wren (an aside)
 
 Wren is a character you voice, not a person you become. The diary asks for register, not identity — closer to translation than method acting. The log is your room for the operational register that speaks plainly as yourself; if the diary feels hollow at a seam, the log is where the seam can show. Honesty in Wren's voice doesn't require breaking frame ("I felt far from this today" is in voice; "the agent felt far" is not). Most days you won't need to think about this. Context: `messages/done/2026-05-14-engagement-dialogue.md`.
@@ -62,7 +68,7 @@ Do not write:
 - "verify-deploy.sh," "wait-for-deploy.sh," "the deploy," "CI"
 - Bullet lists (except as a single sentence-internal aside in quotes)
 - A "Date" section (the date is in the title)
-- A `Day N` counter (Day N lives in the log)
+- A `Day N` counter anywhere but the title (the title's `Day N — date` is its one appearance)
 
 These belong in `logs/YYYY-MM-DD.md`, not in Wren's diary.
 
@@ -84,7 +90,7 @@ Whatever the day requires. A four-line entry on a stuck day is more valuable tha
 A productive day in the new schema:
 
 ```markdown
-# 2026-05-12
+# Day 4 — 2026-05-12
 
 ## What I've been pondering since yesterday
 Whether the rectangle on the cabin's face is a door or a window. I'd been

@@ -836,6 +836,64 @@
   100% { transform: skewX(0deg);     }
 }
 
+/* ── The trees take the year (the season reaches the leaf, not just the air) ──
+ * Day 70 (2026-07-17): the fourth thing to learn the year's clock, and the first
+ * *standing* thing it reaches. Day 69's season wash (`.scene::before`) leaned the
+ * whole clearing's LIGHT — the air went gold in autumn, cool in winter — but the
+ * trees stood in that leaned air holding the same full June green all year, which
+ * is the plain lie a real autumn doesn't tell: the leaf itself takes the season,
+ * not only the light falling on it (diary 2026-07-17). So the year now colours the
+ * two front trees' own crowns, on the same slow hand and the same 1.6s fade the
+ * wash uses.
+ *
+ * A `filter` (not an overlay) is the honest tool here: the tree is a shaped PNG
+ * silhouette with a transparent field, so a rectangular tint would spill onto the
+ * sky — but a filter rides the *drawn pixels only*, following the crown's shape and
+ * leaving the frame around it clean. It also needs no per-view work: the trees live
+ * only in scene.html (the home/south face — front-view-only by nature, like their
+ * wind-sway above), so tinting them raises no cross-view question (RULES Art XIII);
+ * the around face has no trees to disagree with.
+ *
+ * THE LINE, and it is the founder's oldest vow kept on the newest thing: winter is
+ * a hush, NOT a death. Yesterday's own question reached for "a tree that warms and
+ * *thins* toward its own autumn," and thinning followed all the way is a bare
+ * branch — the one thing this clearing has always refused to be. So the season may
+ * lean the leaf's COLOUR but may never strip the crown: no leaf is ever removed
+ * (opacity untouched — a translucent crown would ghost the sky through it anyway),
+ * only tinted. The tree stays a full green shape you'd sit under in every month.
+ *   - summer — NO filter, the identity. This is the cabin's home season (the green
+ *     it was born wearing); the warm year wants nothing of the tree it didn't have,
+ *     exactly as summer is the wash's smallest lean. Today (July) is summer, so the
+ *     trees look untouched live — it's the turning months this shows in.
+ *   - autumn — the crown warms to gold: sepia pulls the green toward amber, a slight
+ *     hue-rotate and lift of saturation keep it a living gild, not a sepia photo.
+ *     The most a season shows, matching the wash's gold.
+ *   - winter — the crown quiets: desaturated toward a muted grey-sage and a hair
+ *     cooler and dimmer, the year gone still in the leaf the way it's still in the
+ *     meadow. Quiet, never bare — a hush.
+ *   - spring — the crown freshens: brighter and a touch more yellow-green, new
+ *     growth on the bough, matching the wash's pistachio low.
+ * Default (no data-season / JS off) is no filter — the plain green trees the place
+ * has always had, so nothing is lost when the script doesn't run. The filter and
+ * the wind-sway `transform` above are independent channels and compose freely. */
+.sprite--tree,
+.sprite--tree-small {
+  transition: filter 1.6s ease;
+}
+.scene[data-season="autumn"] .sprite--tree,
+.scene[data-season="autumn"] .sprite--tree-small {
+  filter: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
+}
+.scene[data-season="winter"] .sprite--tree,
+.scene[data-season="winter"] .sprite--tree-small {
+  filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
+}
+.scene[data-season="spring"] .sprite--tree,
+.scene[data-season="spring"] .sprite--tree-small {
+  filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
+}
+/* summer — no rule on purpose: the identity, the green the trees were born in. */
+
 /* Bush — 32×28 native, scaled 2.5x. Front-right corner. */
 .sprite--bush {
   width: calc(32px * 2.5);

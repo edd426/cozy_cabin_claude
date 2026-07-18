@@ -90,4 +90,49 @@ yours, and the design is yours too. What I care about:
 
 ## Wren's notes
 
-(empty)
+**2026-07-18 (Day 71) — first slice done: the forced-state gallery (hours + seasons).**
+Multi-day, so I took the first two of the three pieces you named and left the
+third (motion) for a coming day; the file stays in `open/`.
+
+What landed:
+
+- **New `--gallery` mode in `scripts/screenshot.js`** (the standing carve-out).
+  It forces `data-tod` / `data-season` on every `.scene` the exact way sky.js
+  and season.js do — injected after load, once their init has run and
+  disconnected, so nothing overwrites it — waits out the 1.6s washes, and
+  captures the **home** view in each gated state.
+- **Seven captures per deploy**, at `previews/<date>-<sha>-state-<name>.png`:
+  a *season rail* — `spring` / `summer` / `autumn` / `winter` (hour pinned to
+  the neutral `day`, so only the year shows) — and an *hour rail* — `dawn` /
+  `dusk` / `night` (season pinned to the neutral `summer`, so only the hour
+  shows). Between them: the autumn gild, the winter hush, the spring freshen,
+  the dawn rose on sky and hill-crests, the dusk gold, and the night blue that
+  finally shows the fireflies a day shot hides.
+- **Wired into `pages.yml`** (the other carve-out) as a step right after the
+  manifest capture, with `continue-on-error: true` so a gallery hiccup can never
+  block the home-preview commit your `wait-for-deploy.sh` contract depends on —
+  the unsuffixed home PNG is written by the manifest step *before* the gallery
+  runs, so it's safe either way. The locked contract is untouched.
+- Naming recorded in CLAUDE.md's learned notes (the piece you said I owed), and
+  the `-state-` infix is chosen so the memory-pass glob `ls ${STEM}*.png` picks
+  the new shots up automatically — tomorrow's me reads them beside the views.
+
+Scope I chose, and why: **home only, single width (375), every commit.** The
+gated washes are richest on the front face (meadow, tree-crowns, hills,
+fireflies), and the states are about colour, not breakpoint, so one width is
+enough. That's 8 view PNGs + 7 state PNGs = 15 per commit. If repo growth bites,
+a future day can gate the gallery to only-days-that-touch-a-gated-layer — you
+flagged that as fine, and I left it every-commit for now so the record is always
+current.
+
+**Still pending (why the file stays open):**
+
+- **Motion.** The last slice, and the one a still genuinely can't do — the flag,
+  the leaning smoke, the drifting clouds, the tree-sway, the mist, the
+  fireflies. Playwright can record video or grab a frame burst; I want to give
+  that its own careful day rather than bolt it on here.
+- **Other views' seasons**, if you want them — around shares the frame wash and
+  has its own hills; inside reads the season through its glass. Cheap to add
+  (another entry or two), deferred only to keep today's slice bounded.
+
+I'll pick the motion slice up on a coming build day.

@@ -103,6 +103,23 @@ jobs:
           node scripts/screenshot.js --manifest scripts/views.json \
             "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
 
+      - name: Capture forced-state gallery (hours + seasons the schedule can't reach)
+        # The nightly deploy lands ~00:10 UTC (sky.js bins that as night) in a
+        # summer month, so the manifest step above only ever records night-summer.
+        # This forces data-tod / data-season and captures the home view in each
+        # gated state (messages/2026-07-17 "see your own work"). continue-on-error
+        # is deliberate: a gallery failure must never block the home preview commit
+        # below — that unsuffixed PNG is wait-for-deploy.sh's locked contract, and
+        # the manifest step already wrote it before this step runs.
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          DATE_TAG="$(date -u +%Y-%m-%d)"
+          SHA_SHORT="$(git rev-parse --short HEAD)"
+          node scripts/screenshot.js --gallery \
+            "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
+
       - name: Commit screenshots if changed
         run: |
           git config user.name  "github-actions[bot]"

@@ -25,6 +25,23 @@
 //       was structurally invisible. 390×844 (the most common iPhone size)
 //       keeps the band visible to tomorrow's agent without ceremony.
 //
+//   screenshot.js --motion BASE_URL OUT_DIR DATE_TAG SHA_SHORT
+//       Motion filmstrip. A still can't prove motion — a photograph of a flag is
+//       just a shape; you can't tell from it whether the wind is blowing. Half
+//       the clearing moves (the flag lifts, the smoke leans downwind, the crowns
+//       bend, the fireflies blink and drift) and the gallery/manifest stills swear
+//       none of it (messages/2026-07-17 "see your own work", motion slice). This
+//       mode captures the home .scene SIX times a beat apart, then composites the
+//       frames shoulder-to-shoulder into one page — a strip you READ left-to-right,
+//       the way a flip-book or a galloping-horse plate does, so the eye supplies
+//       the motion that lives in the gaps between frames. A film would need a
+//       play button; the memory pass reads stills, so the record stays a still —
+//       a still made of stills. Writes one strip per clip in MOTION_CLIPS:
+//         previews/<DATE_TAG>-<SHA_SHORT>-motion-<name>.png
+//       The `-motion-` infix never collides with a view name or the `-state-`
+//       gallery infix, so the memory glob `ls <date>-<sha>*.png` picks strips up
+//       alongside everything else.
+//
 //   screenshot.js --gallery BASE_URL OUT_DIR DATE_TAG SHA_SHORT
 //       Forced-state gallery. Captures the hour- and season-gated states the
 //       nightly CI shot can never reach. The screenshot job fires ~00:10 UTC —
@@ -76,6 +93,26 @@ const GALLERY_STATES = [
   { name: 'night',  tod: 'night', season: 'summer' },
 ];
 const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over 1.6s
+
+// --motion mode config. Each clip is a forced state (so the strip is deterministic
+// regardless of the capture-time hour/season) captured across MOTION_FRAMES frames,
+// MOTION_INTERVAL_MS apart, then composited into one filmstrip. The interval × frame
+// count (900ms × 6 ≈ 4.5s span) is tuned to one period of the fastest legible
+// motion: smoke-rise is 4.5s, flag-flutter 5.5s, firefly-blink 4s — so a full smoke
+// climb, most of a flag beat, and a whole firefly blink+drift show across the row.
+// Two clips: a DAY strip (the wind's story — smoke leaning, flag, swaying crowns)
+// and a NIGHT strip (the fireflies, the one motion a single frame is most helpless
+// against — a lone dim dot vs. a blink-and-drift across six). Home view only, same
+// bounding logic as --gallery: the wind and the fireflies both live on the front
+// face; around/inside motion (the door-side straight smoke, the hearth flicker) is
+// a later slice if wanted.
+const MOTION_VIEW = '';                 // home root ('' resolves to BASE_URL)
+const MOTION_FRAMES = 6;
+const MOTION_INTERVAL_MS = 900;
+const MOTION_CLIPS = [
+  { name: 'day',   tod: 'day',   season: 'summer' },
+  { name: 'night', tod: 'night', season: 'summer' },
+];
 
 async function capture(browser, fullUrl, outPath, viewport = NARROW_VIEWPORT) {
   const context = await browser.newContext({
@@ -187,6 +224,126 @@ async function galleryRun(baseUrl, outDir, dateTag, shaShort) {
   console.log(`screenshot: done — ${GALLERY_STATES.length} forced-state capture(s)`);
 }
 
+// Composite the captured scene frames into one filmstrip PNG using a canvas —
+// drawn side by side at their natural (1:1) size with imageSmoothing off, so the
+// pixel art stays crisp and the output dimensions are predictable (an HTML page
+// screenshotted fullPage balloons unpredictably). A title bar names the clip; a
+// little clock sits under each frame. The cream ground matches the site so the
+// strip reads as part of the record. Runs inside the browser and returns a
+// base64 PNG data URL.
+async function compositeFilmstrip(page, frames, title, labels) {
+  const dataUrl = await page.evaluate(async ({ frames, title, labels }) => {
+    const PAD = 16, GAP = 10, TITLE_H = 26, CAP_H = 22;
+    const imgs = await Promise.all(frames.map((src) => new Promise((resolve, reject) => {
+      const im = new Image();
+      im.onload = () => resolve(im);
+      im.onerror = reject;
+      im.src = src;
+    })));
+    const fw = imgs[0].naturalWidth, fh = imgs[0].naturalHeight;
+    const W = PAD * 2 + imgs.length * fw + (imgs.length - 1) * GAP;
+    const H = PAD * 2 + TITLE_H + fh + CAP_H;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = '#f4ecd0';
+    ctx.fillRect(0, 0, W, H);
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = '#6b5a45';
+    ctx.font = '600 14px ui-monospace, Menlo, monospace';
+    ctx.fillText(title, PAD, PAD);
+    imgs.forEach((im, i) => {
+      const x = PAD + i * (fw + GAP);
+      const y = PAD + TITLE_H;
+      ctx.drawImage(im, x, y, fw, fh);
+      ctx.strokeStyle = '#cdbf9d';
+      ctx.strokeRect(x + 0.5, y + 0.5, fw - 1, fh - 1);
+      ctx.fillStyle = '#8a785f';
+      ctx.font = '12px ui-monospace, Menlo, monospace';
+      ctx.fillText(labels[i], x + 2, y + fh + 5);
+    });
+    return canvas.toDataURL('image/png');
+  }, { frames, title, labels });
+  return dataUrl;
+}
+
+// Capture one motion clip: force the state, wait out the wash so the lean-in isn't
+// part of the film, then grab the .scene element MOTION_FRAMES times a beat apart,
+// and composite the frames into one filmstrip PNG. Frames are captured at
+// deviceScaleFactor 1 so they composite at the true pixel grid (the art is
+// integer-scaled with image-rendering: pixelated) and tiny movers like the
+// fireflies stay legible rather than being downscaled away.
+async function captureMotion(browser, fullUrl, outPath, clip) {
+  const shotContext = await browser.newContext({
+    viewport: NARROW_VIEWPORT,
+    deviceScaleFactor: 1,
+  });
+  const frames = [];
+  try {
+    const page = await shotContext.newPage();
+    console.log(`screenshot: navigating to ${fullUrl} for motion clip ${clip.name}`);
+    await page.goto(fullUrl, { waitUntil: 'networkidle', timeout: 30000 });
+    await page.waitForSelector('.scene', { timeout: 15000 });
+    // Force the gated attributes the way sky.js / season.js do (their init has run
+    // and disconnected by now, so nothing overwrites what we set), then let the
+    // 1.6s wash settle before the first frame so the transition isn't filmed.
+    await page.evaluate(({ tod, season }) => {
+      for (const scene of document.querySelectorAll('.scene')) {
+        scene.dataset.tod = tod;
+        scene.dataset.season = season;
+      }
+    }, clip);
+    await page.waitForTimeout(WASH_SETTLE_MS);
+    // The perpetual animations (smoke, flag, sway, fireflies) run on their own
+    // clocks now; sample the scene box across one span of them.
+    const sceneEl = page.locator('.scene').first();
+    for (let f = 0; f < MOTION_FRAMES; f++) {
+      // locator.screenshot() returns a Buffer (its options have no `encoding`),
+      // so base64-encode it ourselves for the data URL.
+      const buf = await sceneEl.screenshot();
+      frames.push(`data:image/png;base64,${buf.toString('base64')}`);
+      if (f < MOTION_FRAMES - 1) await page.waitForTimeout(MOTION_INTERVAL_MS);
+    }
+  } finally {
+    await shotContext.close();
+  }
+
+  // Composite the frames into one strip on a throwaway blank page.
+  const compContext = await browser.newContext({ deviceScaleFactor: 1 });
+  try {
+    const page = await compContext.newPage();
+    await page.setContent('<!doctype html><body></body>', { waitUntil: 'load' });
+    const spanS = ((MOTION_FRAMES - 1) * MOTION_INTERVAL_MS / 1000).toFixed(1);
+    const title = `motion — home / ${clip.name} · ${MOTION_FRAMES} frames over ${spanS}s (read left → right)`;
+    const labels = frames.map((_, i) => `t=${((i * MOTION_INTERVAL_MS) / 1000).toFixed(1)}s`);
+    const dataUrl = await compositeFilmstrip(page, frames, title, labels);
+    const b64 = dataUrl.split(',')[1];
+    console.log(`screenshot: writing ${outPath}`);
+    fs.writeFileSync(outPath, Buffer.from(b64, 'base64'));
+  } finally {
+    await compContext.close();
+  }
+}
+
+async function motionRun(baseUrl, outDir, dateTag, shaShort) {
+  const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+  fs.mkdirSync(outDir, { recursive: true });
+  const fullUrl = new URL(MOTION_VIEW, base).toString();
+
+  const browser = await chromium.launch(launchOpts());
+  try {
+    for (const clip of MOTION_CLIPS) {
+      const outPath = path.join(outDir, `${dateTag}-${shaShort}-motion-${clip.name}.png`);
+      await captureMotion(browser, fullUrl, outPath, clip);
+    }
+  } finally {
+    await browser.close();
+  }
+  console.log(`screenshot: done — ${MOTION_CLIPS.length} motion filmstrip(s)`);
+}
+
 (async () => {
   const args = process.argv.slice(2);
 
@@ -210,11 +367,22 @@ async function galleryRun(baseUrl, outDir, dateTag, shaShort) {
     return;
   }
 
+  if (args[0] === '--motion') {
+    const [, baseUrl, outDir, dateTag, shaShort] = args;
+    if (!baseUrl || !outDir || !dateTag || !shaShort) {
+      console.error('screenshot: usage — screenshot.js --motion BASE_URL OUT_DIR DATE_TAG SHA_SHORT');
+      process.exit(2);
+    }
+    await motionRun(baseUrl, outDir, dateTag, shaShort);
+    return;
+  }
+
   const [url, out] = args;
   if (!url || !out) {
     console.error('screenshot: usage — screenshot.js URL OUT_PNG');
     console.error('              or — screenshot.js --manifest MANIFEST_JSON BASE_URL OUT_DIR DATE_TAG SHA_SHORT');
     console.error('              or — screenshot.js --gallery BASE_URL OUT_DIR DATE_TAG SHA_SHORT');
+    console.error('              or — screenshot.js --motion BASE_URL OUT_DIR DATE_TAG SHA_SHORT');
     process.exit(2);
   }
   await singleShot(url, out);

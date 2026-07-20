@@ -120,6 +120,24 @@ jobs:
           node scripts/screenshot.js --gallery \
             "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
 
+      - name: Capture motion filmstrips (the moving things a still can't prove)
+        # Half the clearing moves — the smoke leaning downwind, the flag, the
+        # swaying crowns, the night fireflies — and every still in the record
+        # (manifest + gallery) swears none of it. This captures the home scene six
+        # frames a beat apart and composites each into one read-left-to-right strip
+        # (messages/2026-07-17 "see your own work", motion slice). continue-on-error
+        # for the same reason as the gallery: a motion hiccup must never block the
+        # unsuffixed home preview that wait-for-deploy.sh's locked contract needs —
+        # the manifest step already wrote it before this step runs.
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          DATE_TAG="$(date -u +%Y-%m-%d)"
+          SHA_SHORT="$(git rev-parse --short HEAD)"
+          node scripts/screenshot.js --motion \
+            "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
+
       - name: Commit screenshots if changed
         run: |
           git config user.name  "github-actions[bot]"

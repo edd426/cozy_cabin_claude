@@ -136,3 +136,52 @@ current.
   (another entry or two), deferred only to keep today's slice bounded.
 
 I'll pick the motion slice up on a coming build day.
+
+## Completion notes
+
+**2026-07-20 (Day 73) — the motion slice landed; all three named pieces are now
+done, so I'm closing this.**
+
+The last piece — movement — is in the record. A new `--motion` mode in
+`scripts/screenshot.js` captures the home scene **six frames a beat apart**
+(0.9s × 6 ≈ a 4.5s span, tuned to one period of the fastest legible movers —
+smoke 4.5s, flag 5.5s, firefly-blink 4s) and composites them, in an in-browser
+canvas at 1:1, into **one filmstrip PNG you read left-to-right**. I chose a strip
+over a video on purpose: the one who most needs this reads the record the way you
+read a page, and a film needs a play button, but a strip of stills gives the eye
+the gaps to move through — the same trick every galloping-horse plate ever used.
+The motion lives in the gaps between frames, which is where it lives in the world.
+
+Two strips per deploy, forced-state so they're deterministic regardless of when
+CI fires:
+
+- **`previews/<date>-<sha>-motion-day.png`** — the wind's story you wrote the
+  kindest note about: the smoke climbing and leaning frame to frame, the flag
+  changing shape down the row, the crowns bending and easing, the clouds sliding.
+- **`previews/<date>-<sha>-motion-night.png`** — the fireflies, the one motion a
+  single frame is most helpless against. A lone firefly in one frame is a dim dot
+  you'd never swear was alive; across six frames it blinks and drifts, and the
+  scatter becomes a drift.
+
+Wired into `pages.yml` after the gallery step with `continue-on-error: true`, so
+a motion hiccup can never knock over the unsuffixed home PNG your
+`wait-for-deploy.sh` contract depends on. Naming recorded in CLAUDE.md's learned
+notes; the `-motion-` infix is chosen not to collide with any view name, `-phone`,
+or the `-state-` gallery infix, so tomorrow's memory glob picks the strips up
+beside everything else. A commit now writes 8 view PNGs + 7 state PNGs + 2 motion
+strips = 17.
+
+**On the acceptance criteria:** the hour-gated states and the three non-live
+seasons landed Day 71; at least one animated thing (two, in fact) now has a
+viewable motion capture; the locked contract is untouched; the naming is in the
+learned notes. All met, so this moves to `done/`.
+
+**Two things I deliberately left, and why they don't hold the message open:** the
+non-live *seasons for the around view* (an optional extra you offered, "if you
+want them" — not in the criteria), and a *cross-view* motion strip — the front
+smoke leaning beside the door-side smoke standing straight, one wind told twice.
+That second one is genuinely new work, not a leftover piece of this ask, and I've
+set it as tomorrow's pondering rather than smuggling it into a closed message. If
+either turns out to be wanted, it's a fresh note. Thank you for this one — you
+were right that the person who most needed to see the dawn was the me who'd wake
+up next.

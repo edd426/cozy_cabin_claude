@@ -78,6 +78,36 @@ Two things my eye wants, design entirely yours:
   Wren's notes here — the manifest generator (`build.sh`) is founder-side, and
   I'll extend it.
 
-## Wren's notes
+## Completion notes
 
-(empty)
+**2026-07-21 (Day 74).** The shelf now catches up with the reforms.
+
+The card is composed from the manifest's structured fields (`day`, `date`,
+`kind`) instead of from the title text, so the format works across every era
+whatever a given entry's title looks like:
+
+1. **Day number leads, date shows once.** Each card is now "Day N" in the
+   marker font with the date tucked small in mono beside it — one line, one
+   date. The old double-date (date as header *and* date as subtitle for the
+   date-only-title era) is gone, and the Day count that was nowhere is now the
+   thing the eye lands on first. Day 0 reads "Day 0 / the scaffold": its
+   sentinel date `0000-00-00` is suppressed, and its genuine named title
+   ("the scaffold") survives the prefix-stripping and still shows — the only
+   daily card with a subtitle, because it's the only one with a real one.
+
+2. **The metas appear, and read as a different thing.** All eleven weekly
+   metas are now listed (they had never been on the page at all). They get a
+   plum wash, a thick plum left rail, a `WEEK IN REVIEW` chip, and a one-line
+   note — "a look back at the week — from outside the voice" — so a stranger is
+   told, in a word or two, that these are written from outside Wren's register.
+   Each meta sits directly beneath its own Sunday entry (same-date tiebreak
+   keeps the day's entry above its review). The page blurb gained a sentence
+   naming the plum cards too. Distinct in dark mode as well (darker plum ground,
+   rose rail + chip).
+
+Held at 375 and 390, light and dark; Day 0 and the newest entries both read
+right. The manifest already gave everything the design needed — no generator
+change requested. Mechanics in `logs/2026-07-21.md`; the day in
+`diary/2026-07-21.md`.
+
+Files: `diary/diary.js`, `diary/diary.css`, `diary/index.html`.

@@ -6,6 +6,13 @@
 // — fine for a hobby diary; the agent can later render markdown client-side
 // or generate per-entry HTML).
 //
+// The manifest carries, per entry: date, day (the Day-N counter), kind
+// ("daily" | "meta"), label, title, path. The shelf composes each card from
+// those structured fields rather than from the title text, so every card can
+// show its Day number and its date exactly once, whatever era the entry's
+// title format is from. Weekly metas (kind: "meta") get a distinct card
+// treatment and are labeled as written from outside Wren's voice.
+//
 // If the manifest is missing or empty, falls back to a "no entries yet"
 // message rather than failing silently.
 
@@ -30,25 +37,85 @@
   }
 
   // Newest first. Day-zero (date 0000-00-00) sorts last as a foundation note.
-  entries.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  // Same-date tiebreak: the day's entry sits above its week-review meta.
+  const rank = (e) => (e.kind === 'meta' ? 0 : 1);
+  entries.sort((a, b) => {
+    const d = (b.date || '').localeCompare(a.date || '');
+    return d !== 0 ? d : rank(b) - rank(a);
+  });
+
+  // "Day 74" from the manifest's numeric day; falls back to the title/label
+  // only if day is somehow absent.
+  const dayLabel = (e) =>
+    (e.day !== undefined && e.day !== null) ? `Day ${e.day}` : (e.label || '');
+
+  // The date, shown once. Day 0's sentinel date (0000-00-00) is not a real
+  // date — suppress it there so the founding note reads as "Day 0" alone.
+  const dateOf = (e) =>
+    (!e.date || e.date === '0000-00-00') ? '' : e.date;
+
+  // Any descriptive remainder of the title after the "Day N — " / leading-date
+  // scaffolding is stripped. For daily entries this is usually empty (their
+  // titles are just the date, or "Day N — date"); Day 0's "the scaffold"
+  // survives, and that is the point — a genuine named title still shows.
+  const descOf = (e) => {
+    let t = (e.title || '').trim();
+    t = t.replace(/^Day\s+\d+\s*[—–-]\s*/i, '');   // drop leading "Day N — "
+    t = t.replace(/^\d{4}-\d{2}-\d{2}\s*[—–-]?\s*/, ''); // drop leading ISO date
+    return t.trim();
+  };
 
   for (const e of entries) {
+    const isMeta = e.kind === 'meta';
+
     const li = document.createElement('li');
-    li.className = 'diary-list__entry';
+    li.className = 'diary-list__entry' + (isMeta ? ' diary-list__entry--meta' : '');
 
     const a = document.createElement('a');
     a.href = e.path || '#';
 
-    const date = document.createElement('span');
-    date.className = 'diary-list__date';
-    date.textContent = e.label || e.date || 'unknown';
+    if (isMeta) {
+      const badge = document.createElement('span');
+      badge.className = 'entry__badge';
+      badge.textContent = 'week in review';
+      a.appendChild(badge);
+    }
 
-    const title = document.createElement('span');
-    title.className = 'diary-list__title';
-    title.textContent = e.title || '';
+    const head = document.createElement('span');
+    head.className = 'entry__head';
 
-    a.appendChild(date);
-    if (e.title) a.appendChild(title);
+    const day = document.createElement('span');
+    day.className = 'entry__day';
+    day.textContent = dayLabel(e);
+    head.appendChild(day);
+
+    const dateStr = dateOf(e);
+    if (dateStr) {
+      const date = document.createElement('span');
+      date.className = 'entry__date';
+      date.textContent = dateStr;
+      head.appendChild(date);
+    }
+
+    a.appendChild(head);
+
+    if (isMeta) {
+      // A meta is a different genre: the performer looking back at the week
+      // from outside the diary's voice. Say so, plainly, on the card.
+      const note = document.createElement('span');
+      note.className = 'entry__note';
+      note.textContent = 'a look back at the week — from outside the voice';
+      a.appendChild(note);
+    } else {
+      const desc = descOf(e);
+      if (desc) {
+        const d = document.createElement('span');
+        d.className = 'entry__desc';
+        d.textContent = desc;
+        a.appendChild(d);
+      }
+    }
+
     li.appendChild(a);
     list.appendChild(li);
   }

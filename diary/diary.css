@@ -54,16 +54,66 @@
   color: var(--c-rose);
 }
 
-.diary-list__date {
+/* The card's head: "Day N" prominent, its date tucked small beside it —
+ * one line, wrapping only if it must. The Day count is the spine of the
+ * whole record, so it leads; the date is present exactly once, muted. */
+.entry__head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+}
+
+.entry__day {
   font-family: var(--font-pixel);
   font-size: var(--fs-marker);
   color: var(--c-plum);
 }
 
-.diary-list__title {
+.entry__date {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  color: var(--fg-muted);
+  letter-spacing: 0.02em;
+}
+
+/* A genuine named title (Day 0's "the scaffold") still shows; the date-only
+ * daily titles strip to nothing and this line simply doesn't render. */
+.entry__desc {
   font-size: var(--fs-body);
   line-height: 1.3;
 }
+
+/* ---- Weekly meta cards: a different genre, made to look like one ---- *
+ * A meta is the performer looking back at the week from outside Wren's
+ * voice. It gets a plum accent rail, a faint plum wash, a chip that names
+ * it, and a one-line note that it's written from outside the diary. */
+.diary-list__entry--meta {
+  background: var(--c-purple-soft);
+  border-color: var(--c-plum);
+  border-left-width: 6px;
+}
+
+.entry__badge {
+  align-self: flex-start;
+  font-family: var(--font-pixel);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-cream);
+  background: var(--c-plum);
+  padding: 2px var(--sp-2);
+  border-radius: 3px;
+}
+
+.entry__note {
+  font-size: var(--fs-small);
+  font-style: italic;
+  color: var(--fg-muted);
+  line-height: 1.3;
+}
+
+.diary-list__entry--meta a { color: var(--c-plum); }
 
 .diary-list__loading,
 .diary-list__empty {
@@ -183,7 +233,15 @@
   .diary-blurb               { color: var(--c-cream-soft); }
   .diary-list__entry         { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
   .diary-list__entry a       { color: var(--c-cream); }
-  .diary-list__date          { color: var(--c-cream-soft); }
+  .entry__day                { color: var(--c-rose); }
+  .entry__date               { color: var(--c-cream-soft); }
+
+  /* Meta cards keep their genre-difference in dark mode: a plum rail against
+   * the wood, a plum chip, the same out-of-voice note. */
+  .diary-list__entry--meta   { background: #4a3550; border-color: var(--c-rose); }
+  .diary-list__entry--meta a { color: var(--c-cream); }
+  .entry__badge              { color: var(--c-wood-dark); background: var(--c-rose); }
+  .entry__note               { color: var(--c-cream-soft); }
 }
 
 #day-marker {

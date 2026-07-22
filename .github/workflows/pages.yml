@@ -138,6 +138,25 @@ jobs:
           node scripts/screenshot.js --motion \
             "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
 
+      - name: Capture cross-view motion strip (one wind told twice)
+        # The --motion strips above read across TIME within one view. This one
+        # reads across the HOUSE: the front face (smoke leans downwind) stacked
+        # over the door side (smoke rises straight, that face looking down the
+        # wind's throat), so the whole quiet proof that ONE wind blows through the
+        # clearing sits in a single frame — a thing no single-view strip can show
+        # (diary 2026-07-19 … 2026-07-22). continue-on-error for the same reason as
+        # the gallery and motion steps: a hiccup here must never block the unsuffixed
+        # home preview that wait-for-deploy.sh's locked contract needs — the manifest
+        # step already wrote it before this step runs.
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          DATE_TAG="$(date -u +%Y-%m-%d)"
+          SHA_SHORT="$(git rev-parse --short HEAD)"
+          node scripts/screenshot.js --motion-cross \
+            "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
+
       - name: Commit screenshots if changed
         run: |
           git config user.name  "github-actions[bot]"

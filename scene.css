@@ -1294,6 +1294,89 @@
 .bench__leg--l { left: 3px;  }
 .bench__leg--r { left: 15px; }
 
+/* ── Woodpile against the front wall (Day 76, 2026-07-23) ──────────────────
+ * The first link of the fire the whole clearing has been about: the chimney
+ * has smoked every hour I've drawn and the inside shows a fire with a little
+ * pyramid of split logs beside it (the fuel, inside.css Day 14), but the front
+ * yard never had any wood you could see it come from. This is that store — a
+ * low rick of cut billets stacked against the front wall's right foot.
+ *
+ * MATERIAL TRUTH ACROSS VIEWS (RULES Art XIII): each log end is drawn with the
+ * exact same idiom and tones as the indoor woodpile (inside.css .woodpile__log)
+ * — a pale 2×2 sawn cut face (heart #d4a373 / --c-wood-light, upper cells the
+ * softer --c-cream-soft) ringed by a bark octagon in #3a2418, corners left open
+ * so each end reads round. Same wood indoors and out: the armful already in by
+ * the hearth and the store still waiting in the yard are one kind of timber.
+ * Here the log unit is a fixed 2px (an 8px octagon), matching the indoor pile's
+ * look at the 2x mobile scale — this yard object is fixed-native like the bench
+ * and mailbox, so only its anchor rebases per breakpoint (below), not its size.
+ *
+ * Fixed native px, z-index 3: in front of the cabin (z 2) so the pile overlaps
+ * the wall's lower planks and reads as stacked AGAINST the house, behind the
+ * bench (z 4) in the nearer foreground. A still, used object — no clock, no
+ * light — that simply takes the ambient hour-wash (.scene::after, z 5) and the
+ * season-wash (::before) like the grass and the bench it stands among. */
+.sprite--woodpile {
+  width: 34px;
+  height: 20px;
+  /* Desktop 3x: against the right foot of the front wall (wall foot spans
+   * 50% − 72px … 50% + 72px), clear of the centred bench and the path stones
+   * that emerge further right. */
+  left: calc(50% + 18px);
+  bottom: 6%;
+  z-index: 3;
+}
+
+/* Contact shadow so the pile sits on the grass rather than hovering (same trick
+ * as the bench and mailbox). A thin darker-grass band under the bottom row. */
+.sprite--woodpile::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  bottom: -1px;
+  width: 32px;
+  height: 2px;
+  background: var(--c-grass-shadow);
+  opacity: 0.5;
+  border-radius: 50%;
+}
+
+/* One sawn log end — the same octagon the indoor pile uses, at a fixed 2px
+ * unit. The element is the bottom-left cell of the pale 2×2 cut face; box-shadow
+ * stamps the other three face cells and the eight bark cells of the ring, with
+ * the four corners left transparent so the end reads round against the grass. */
+.woodpile-log {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #d4a373;                 /* heart of the cut face (--c-wood-light) */
+  box-shadow:
+    /* rest of the pale cut face */
+     2px  0   0 var(--c-cream-soft),
+     0   -2px 0 var(--c-cream-soft),
+     2px -2px 0 var(--c-cream-soft),
+    /* bark ring (octagon — corners open) */
+     0   -4px 0 #3a2418,
+     2px -4px 0 #3a2418,
+    -2px -2px 0 #3a2418,
+    -2px  0   0 #3a2418,
+     4px -2px 0 #3a2418,
+     4px  0   0 #3a2418,
+     0    2px 0 #3a2418,
+     2px  2px 0 #3a2418;
+}
+
+/* A low rick: four billets along the bottom (8px pitch, bark rings touching),
+ * three more nestled into the valleys of the row below and raised one course.
+ * Each anchor is its cut-face bottom-left cell. */
+.woodpile-log--1 { left:  2px; bottom: 2px; }
+.woodpile-log--2 { left: 10px; bottom: 2px; }
+.woodpile-log--3 { left: 18px; bottom: 2px; }
+.woodpile-log--4 { left: 26px; bottom: 2px; }
+.woodpile-log--5 { left:  6px; bottom: 8px; }
+.woodpile-log--6 { left: 14px; bottom: 8px; }
+.woodpile-log--7 { left: 22px; bottom: 8px; }
+
 /* ── Mailbox at the path's mouth (Day 59, 2026-07-06) ──────────────────────
  * The clearing's first outward-facing object — a name at the yard's edge, so
  * the place stays findable with no one home (see the note in scene.html). Drawn
@@ -1740,6 +1823,11 @@
    * side, foot on the front grass, clear of the bench (centre) and the path
    * stones (right). Fixed-size parts, so only the container baseline moves. */
   .sprite--mailbox     { left: calc(50% + 60px); bottom: 4%; }
+  /* Woodpile rebased to the 2x cabin (front wall foot at 50% + 48px). Stacked
+   * against the wall's right foot, under the window, clear of the bench (centre)
+   * and the near-ground path stones (50% + 66px and beyond). Fixed-size, so only
+   * the container baseline moves up to the 2x mobile floor. */
+  .sprite--woodpile    { left: calc(50% + 8px); bottom: 8%; }
   /* Skein rebased to the 2x cabin (chimney centered on 50%, smoke top at
    * `bottom: calc(8% + 152px) + 78px` ≈ 230px). The flock formation offsets
    * (.bird--N) stay constant — pixel art needs its minimum feature spacing —

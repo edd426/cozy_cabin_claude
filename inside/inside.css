@@ -383,43 +383,71 @@
     calc(2px * var(--s))  calc(1px * var(--s))  0 #6e4a3a;
 }
 
-/* Candle body: 3w × 6h native, cream wax. A 1-native-px darker band
- * along the bottom suggests a base shadow against the mantle. */
+/* Candle body: 3w native, cream wax, --candle-h native tall. A
+ * 1-native-px darker band along the bottom suggests a base shadow
+ * against the mantle.
+ *
+ * Day 77 (2026-07-24): the candle now BURNS. `--candle-h` is the wax
+ * height in native px; the body height, the wick's seat, and the
+ * flame's seat all derive from it, so lowering the one variable drops
+ * the whole lit tip together. The full candle is 6 native; the
+ * time-of-day rules below spend it down through the evening (dusk 4,
+ * night 3) and let it stand full again at dawn — the clearing's first
+ * thing that wears, but wear that the day's turn gives back, never a
+ * loss (see diary 2026-07-24). The whole candle is rebased to
+ * var(--s) from .hearth (like the stone), so it needs no separate 2x
+ * override — the old mobile candle block is gone. The 1.4s
+ * height/bottom transitions ease the wax down if the hour flips live;
+ * CSS never fires them on first paint, so the load state is silent. */
 .mantle-item--candle {
-  left: calc(10px * 3);
-  bottom: calc(49px * 3);
-  width: calc(3px * 3);
-  height: calc(6px * 3);
+  --candle-h: 6;
+  left: calc(10px * var(--s));
+  bottom: calc(49px * var(--s));
+  width: calc(3px * var(--s));
+  height: calc(var(--candle-h) * 1px * var(--s));
   background: var(--c-cream);
   /* Inset 1-native-px on the right gives the candle a soft warm
    * shadow side, so it reads as a 3D cylinder rather than a flat
    * rectangle. */
-  box-shadow: inset calc(-1px * 3) 0 0 var(--c-cream-soft);
+  box-shadow: inset calc(-1px * var(--s)) 0 0 var(--c-cream-soft);
+  transition: height 1.4s ease;
 }
 
-/* Wick: 1×1 native, dark, sitting on top centre of the wax body. */
+/* Wick: 1×1 native, dark, sitting on top centre of the wax body — its
+ * seat rides --candle-h so it drops with the wax. */
 .candle__wick {
   position: absolute;
-  left: calc(1px * 3);
-  bottom: calc(6px * 3);
-  width: calc(1px * 3);
-  height: calc(1px * 3);
+  left: calc(1px * var(--s));
+  bottom: calc(var(--candle-h) * 1px * var(--s));
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
   background: var(--c-ink);
+  transition: bottom 1.4s ease;
 }
 
-/* Candle flame: 1w × 2h native, warm yellow, just above the wick.
+/* Candle flame: 1w × 2h native, warm yellow, one native above the wick
+ * (--candle-h + 1), so it too rides the shrinking wax down.
  * Flickers on its own period (1.7s) — distinct from the fire's
  * 1.2 / 0.9 / 0.7s rhythms so the eye doesn't lock the two together. */
 .candle__flame {
   position: absolute;
-  left: calc(1px * 3);
-  bottom: calc(7px * 3);
-  width: calc(1px * 3);
-  height: calc(2px * 3);
+  left: calc(1px * var(--s));
+  bottom: calc((var(--candle-h) + 1) * 1px * var(--s));
+  width: calc(1px * var(--s));
+  height: calc(2px * var(--s));
   background: #ffd070; /* matches the fire's tip — same lit-thing register */
   animation: candle-flicker 1.7s ease-in-out infinite alternate;
   transform-origin: center bottom;
+  transition: bottom 1.4s ease;
 }
+
+/* The wax spends through the evening and stands full again at dawn.
+ * Only dusk and night override the full-6 default; dawn and day (and
+ * the no-data-tod default) keep the fresh candle. Setting --candle-h
+ * on the candle element cascades to the wick and flame, which inherit
+ * it, so the lit tip drops as one piece. */
+.scene--inside[data-tod="dusk"] .mantle-item--candle { --candle-h: 4; }
+.scene--inside[data-tod="night"] .mantle-item--candle { --candle-h: 3; }
 
 @keyframes candle-flicker {
   0%   { opacity: 0.78; transform: scaleY(0.85); }
@@ -1326,27 +1354,10 @@
     height: calc(3px * 2);
   }
 
-  /* Mantle objects rebased to the 2x scale. (The stone needs no
-   * override — it scales via var(--s) from .hearth.) */
-  .mantle-item--candle {
-    left: calc(10px * 2);
-    bottom: calc(49px * 2);
-    width: calc(3px * 2);
-    height: calc(6px * 2);
-    box-shadow: inset calc(-1px * 2) 0 0 var(--c-cream-soft);
-  }
-  .candle__wick {
-    left: calc(1px * 2);
-    bottom: calc(6px * 2);
-    width: calc(1px * 2);
-    height: calc(1px * 2);
-  }
-  .candle__flame {
-    left: calc(1px * 2);
-    bottom: calc(7px * 2);
-    width: calc(1px * 2);
-    height: calc(2px * 2);
-  }
+  /* Mantle objects rebased to the 2x scale. (The stone and the candle
+   * need no override — both scale via var(--s) from .hearth. The
+   * candle was rebased to var(--s) on Day 77 when it learned to burn;
+   * its old 2x block lived here and is now gone.) */
   .mantle-item--jar {
     left: calc(20px * 2);
     bottom: calc(49px * 2);

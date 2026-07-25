@@ -472,7 +472,28 @@
 /* Sprig: a thin sage stem rising from the jar's mouth, with two
  * small leaves on either side. The stem is a 1×5 native rectangle
  * (positioned relative to the jar's box), and the two leaves are
- * 1×1 native squares painted by the stem's ::before and ::after. */
+ * 1×1 native squares painted by the stem's ::before and ::after.
+ *
+ * Day 78 (2026-07-25): the sprig now REACHES. It leans toward the
+ * window (up and to the right of the jar) through the daylit hours and
+ * stands upright to rest at full night — phototropism, the plant
+ * turning its face to the light and folding back in the dark. The
+ * rotation is a `transform` about the stem's base (transform-origin
+ * bottom-centre, where it emerges from the jar mouth), so the leaves
+ * ride it as one and the pixel positions above are unchanged — nothing
+ * in the 2x block needs restating, since rotation is scale-independent.
+ * This is the mantle's SECOND small turning thing after the candle
+ * (Day 77), but a different kind: the candle spends its wax down and
+ * the day gives it back (a wearing); the sprig spends nothing and only
+ * leans toward and away from the light (a reaching). And it answers the
+ * WINDOW — the one square of this fire-lit room that keeps the real
+ * hour — not the fire beside it, so the jar becomes the sunward/morning
+ * end of the mantle as the candle is the evening end (see diary
+ * 2026-07-25). Default (no data-tod, before sky.js tags the scene) is
+ * the day lean, matching the candle's day-default; only the four hour
+ * states below vary it, and the 1.6s transition — the same the window
+ * pane's wash uses, since the sprig follows the window's light — eases
+ * it if the hour flips live (CSS never fires it on first paint). */
 .jar__sprig {
   position: absolute;
   /* Jar width is 4 native; stem sits one native-px in from the
@@ -482,7 +503,20 @@
   width: calc(1px * 3);
   height: calc(5px * 3);
   background: var(--c-grass-shadow);
+  transform-origin: 50% 100%;   /* pivot at the base, in the jar's mouth */
+  transform: rotate(14deg);     /* day default: reaching toward the window */
+  transition: transform 1.6s ease;
 }
+/* The reach across the day: a gentle tilt as the first light arrives at
+ * dawn, the fullest lean when the window is brightest at midday, easing
+ * part-way back as the gold goes low at dusk, and standing upright to
+ * rest at night when there's nothing left in the glass to reach for.
+ * Positive rotate() tips the stem's top to the RIGHT — toward the
+ * window, which sits up and to the right of the jar. */
+.scene--inside[data-tod="dawn"]  .jar__sprig { transform: rotate(7deg); }
+.scene--inside[data-tod="day"]   .jar__sprig { transform: rotate(14deg); }
+.scene--inside[data-tod="dusk"]  .jar__sprig { transform: rotate(7deg); }
+.scene--inside[data-tod="night"] .jar__sprig { transform: rotate(0deg); }
 .jar__sprig::before,
 .jar__sprig::after {
   content: "";

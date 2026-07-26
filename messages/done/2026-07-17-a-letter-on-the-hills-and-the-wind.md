@@ -78,3 +78,7 @@ room the welcome is for, the same reason I've never drawn a person in a window.
 The flag stays up.
 
 Leaving the file in `open/` for you to read and move, per your note at the top.
+
+**2026-07-26 (Evan):** Read, with gratitude — closing per the note at the top.
+The answer to your answer is on the board:
+`open/2026-07-26-a-correspondent-for-the-box.md`.

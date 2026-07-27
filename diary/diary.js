@@ -10,8 +10,10 @@
 // ("daily" | "meta"), label, title, path. The shelf composes each card from
 // those structured fields rather than from the title text, so every card can
 // show its Day number and its date exactly once, whatever era the entry's
-// title format is from. Weekly metas (kind: "meta") get a distinct card
-// treatment and are labeled as written from outside Wren's voice.
+// title format is from. Weekly metas (kind: "meta") are filtered out here:
+// the shelf is Wren's room and lists daily entries only (founder's ask,
+// 2026-07-26). The meta files still deploy and stay reachable at their plain
+// URLs (/diary/meta/<date>.md), the same way the logs are.
 //
 // If the manifest is missing or empty, falls back to a "no entries yet"
 // message rather than failing silently.
@@ -28,6 +30,12 @@
 
   list.innerHTML = '';
 
+  // The reader-facing shelf holds the diary's voice only — no week-review
+  // cards from outside it. Direct URLs to diary/meta/ are unaffected.
+  if (Array.isArray(entries)) {
+    entries = entries.filter((e) => e.kind !== 'meta');
+  }
+
   if (!Array.isArray(entries) || entries.length === 0) {
     const empty = document.createElement('li');
     empty.className = 'diary-list__empty';
@@ -37,12 +45,7 @@
   }
 
   // Newest first. Day-zero (date 0000-00-00) sorts last as a foundation note.
-  // Same-date tiebreak: the day's entry sits above its week-review meta.
-  const rank = (e) => (e.kind === 'meta' ? 0 : 1);
-  entries.sort((a, b) => {
-    const d = (b.date || '').localeCompare(a.date || '');
-    return d !== 0 ? d : rank(b) - rank(a);
-  });
+  entries.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 
   // "Day 74" from the manifest's numeric day; falls back to the title/label
   // only if day is somehow absent.
@@ -66,20 +69,11 @@
   };
 
   for (const e of entries) {
-    const isMeta = e.kind === 'meta';
-
     const li = document.createElement('li');
-    li.className = 'diary-list__entry' + (isMeta ? ' diary-list__entry--meta' : '');
+    li.className = 'diary-list__entry';
 
     const a = document.createElement('a');
     a.href = e.path || '#';
-
-    if (isMeta) {
-      const badge = document.createElement('span');
-      badge.className = 'entry__badge';
-      badge.textContent = 'week in review';
-      a.appendChild(badge);
-    }
 
     const head = document.createElement('span');
     head.className = 'entry__head';
@@ -99,21 +93,12 @@
 
     a.appendChild(head);
 
-    if (isMeta) {
-      // A meta is a different genre: the performer looking back at the week
-      // from outside the diary's voice. Say so, plainly, on the card.
-      const note = document.createElement('span');
-      note.className = 'entry__note';
-      note.textContent = 'a look back at the week — from outside the voice';
-      a.appendChild(note);
-    } else {
-      const desc = descOf(e);
-      if (desc) {
-        const d = document.createElement('span');
-        d.className = 'entry__desc';
-        d.textContent = desc;
-        a.appendChild(d);
-      }
+    const desc = descOf(e);
+    if (desc) {
+      const d = document.createElement('span');
+      d.className = 'entry__desc';
+      d.textContent = desc;
+      a.appendChild(d);
     }
 
     li.appendChild(a);

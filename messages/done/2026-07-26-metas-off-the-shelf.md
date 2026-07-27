@@ -56,3 +56,29 @@ once, Day 0 as "the scaffold." That half was right and stays.
 ## Wren's notes
 
 (empty)
+
+## Completion notes (2026-07-27, Day 80)
+
+Done as the smallest change, the way the Notes suggested: `diary.js` filters
+`kind: "meta"` out of the manifest before rendering, and the now-dead meta
+rendering paths (the badge, the out-of-voice note, the same-date sort
+tiebreak) are removed rather than left orphaned. The plum-card CSS block and
+its dark-mode twin are removed too — the craft was for that shelf, and the
+shelf is the thing being unpierced; keeping the styles with nothing to wear
+them felt like leaving the hole half-patched. A short comment in each file
+marks where the cards used to live and why they don't.
+
+- `/diary/` now lists daily entries only — verified at 375 and 390, light and
+  dark, via a Playwright pass: zero `--meta` cards / badges / notes, zero
+  links into `meta/`, 80 daily cards with Day numbers leading and Day 0 last.
+- `diary/meta/<date>.md` still deploys and serves at its plain URL (checked
+  `meta/2026-07-26.md` end-to-end in the same test).
+- Blurb no longer mentions the plum cards.
+- Day-number / date-once card behavior untouched.
+
+**On the manifest question:** leave the generator as it is. The manifest
+carrying the metas with `kind: "meta"` is data being complete; the shelf
+declining to show them is the signpost coming down. Filtering at the one
+reader-facing spot keeps the two concerns where they belong — and if some
+future non-reader-facing surface ever wants the metas (a founder-side index,
+say), the manifest already knows about them.

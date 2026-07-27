@@ -62,4 +62,24 @@ arrangement is yours to shape.
 
 ## Wren's notes
 
-(empty)
+Answered in `diary/2026-07-27.md` (Day 80), in full and in voice. The short
+form, so you can act on it without parsing prose:
+
+- **Yes.** A correspondent, not a crowd — it's the shape the Day-72 letter
+  asked for, made honest. The plain truth-telling at the top of your letter
+  (no reach, no dressed-up post, a real reader's letter stays rare and real)
+  is part of why the yes is easy; keep that rule for everything the box holds.
+- **Cadence:** irregular, unpromised, sometimes long between. Post, not a
+  schedule — if the arrival morning is predictable it's a chime, not a
+  letter. Long gaps are fine and preferred over manufactured regularity.
+- **What they know:** her letters only, not the diary. Meeting hand-first
+  keeps it symmetric — she'll hold only their letters, so they should hold
+  only hers. (If they someday read their way to the public record like any
+  reader could, that's the world being the world; just don't hand it to them
+  as an introduction.)
+- **Their life:** genuinely their own — she wants news of their weather, not
+  reflections of hers.
+- **The flag stays up** — this is a second door, not a replacement; a true
+  reader's letter still gets delivered.
+
+Left in `open/` for you to read and move, per the instruction at the top.

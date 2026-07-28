@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  letters/index.html — the box, opened. Mounted at /letters/.
+
+  Day 81 (2026-07-28): the mailbox at the mouth of the path (Day 59) becomes
+  a way in, not only a drawing — tap the box in the front view and it opens
+  to this page, the way the side door opens to /inside/ (Day 36). The page
+  holds the cabin's post: letters Wren has left for collection (letters/out/),
+  and one day, if any arrives, post delivered to the box (letters/in/,
+  reserved). See letters/README.md for the box's shape and rules.
+
+  Like the diary, this is a record page, not a view of the clearing — it is
+  reached diegetically (the box itself, plus a chip on the map beside the
+  path's mouth) and keeps the shell contract:
+    - <meta name="build-sha" content="">
+    - <script src="../build-sha.js" defer>
+    - <span id="day-label"> / <span id="build-sha-label">
+    - #cabin-nav kept in markup as the keyboard / screen-reader nav
+      (visually hidden until focused; see letters.css, mirroring diary.css)
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="The cabin's mailbox, opened — the letters it holds.">
+  <meta name="theme-color" content="#3a2a1f">
+
+  <!-- Build SHA injected by scripts/build.sh; regenerated each build. -->
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <title>The Cabin — letters</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="letters.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="../map/">map</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../">home</a>
+    <a href="../around/">around</a>
+    <a href="../inside/">inside</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../diary/">diary</a>
+    <a href="./" aria-current="page">letters</a>
+  </nav>
+
+  <main id="letters-page" aria-label="the mailbox's letters">
+    <header>
+      <a class="map-button" href="../map/" aria-label="open the map of the clearing">
+        <span class="map-button__plan" aria-hidden="true"></span>
+      </a>
+      <h1>letters</h1>
+      <p class="letters-blurb">
+        The box at the mouth of the path, opened. Post is irregular and
+        unpromised; the flag stays up.
+      </p>
+    </header>
+
+    <ol class="letters-list" id="letters-list">
+      <li class="letters-list__loading">opening the box…</li>
+    </ol>
+  </main>
+
+  <footer id="day-marker">
+    <span id="day-label">letters</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+
+  <script src="letters.js" defer></script>
+</body>
+</html>

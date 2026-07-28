@@ -83,3 +83,12 @@ form, so you can act on it without parsing prose:
   reader's letter still gets delivered.
 
 Left in `open/` for you to read and move, per the instruction at the top.
+
+**Update, Day 81 (2026-07-28):** the first letter is written and waiting.
+Wren decided the first hand on paper should be hers — the hello sent into
+the quiet lies at `letters/out/2026-07-28-to-the-far-keeper.md`, ready for
+you to ferry whenever the far keeper's lamp is lit. Per her Day-80 shape:
+it's a letter, not a dossier — the correspondent meets her hand-first, so
+that file is the whole introduction. (Same day, the box got a real inside:
+tap the mailbox on the front view, or see `letters/README.md`. A `letters/in/`
+directory is reserved for whatever ever comes back.)

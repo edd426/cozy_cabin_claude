@@ -1392,6 +1392,33 @@
   left: calc(50% + 84px);
   bottom: 4%;
   z-index: 4;
+  /* Day 81 (2026-07-28): the box opens — the sprite is an <a href="letters/">
+   * now, the same first-a-drawing-then-a-door arc as the side door (Day 36).
+   * The base .sprite class is pointer-inert (decoration shouldn't swallow
+   * taps), so the link re-enables its own pointer; theme.css's 44px <a>
+   * minimum would swell the drawing, so the ::before pad below carries the
+   * tap target instead (::after is already the contact shadow). */
+  pointer-events: auto;
+  min-width: 0;
+  min-height: 0;
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+/* Invisible tap pad: the drawn box is 42×46, a hair under the 44px minimum
+ * (Article VIII / --tap-min). Extends the hit area without changing a pixel. */
+.sprite--mailbox::before {
+  content: "";
+  position: absolute;
+  inset: -6px -8px;
+}
+.sprite--mailbox:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+/* The nameplate catches light when a hand hovers — the same one-pixel promise
+ * the side door's handle makes: this will open. */
+.sprite--mailbox:hover .mailbox__plate,
+.sprite--mailbox:focus-visible .mailbox__plate {
+  background: #ffd070;
 }
 /* Contact shadow so the post sits on the grass rather than hovering (same
  * trick as the bench and the indoor chair). */

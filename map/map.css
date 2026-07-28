@@ -297,6 +297,38 @@
   );
 }
 
+/* letters = the box's contents (Day 81). Unlike the diary the mailbox IS a
+ * place in the clearing — it stands at the path's mouth (Day 59) — so its
+ * chip sits on the plan where the box sits in the world: the south-east
+ * corner, beside the last path stone, where the path leaves for wherever
+ * the post comes from. */
+.map__zone--letters {
+  left: 73%;
+  top: 78%;
+  width: 23%;
+  height: 16%;
+  flex-direction: column;
+  gap: 3px;
+}
+/* A tiny mailbox: the round-topped wood box with its rose flag raised. */
+.map__box {
+  position: relative;
+  width: 12px;
+  height: 8px;
+  border: 1px solid var(--c-wood-dark);
+  border-radius: 4px 4px 1px 1px;
+  background: var(--c-wood);
+}
+.map__box::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  width: 2px;
+  height: 3px;
+  background: var(--c-rose);
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* nothing animates on the map; here for parity with the other views */
 }

@@ -505,7 +505,8 @@
   background: var(--c-grass-shadow);
   transform-origin: 50% 100%;   /* pivot at the base, in the jar's mouth */
   transform: rotate(14deg);     /* day default: reaching toward the window */
-  transition: transform 1.6s ease;
+  transition: transform 1.6s ease, height 1.6s ease,
+              filter 1.6s ease, box-shadow 1.6s ease;
 }
 /* The reach across the day: a gentle tilt as the first light arrives at
  * dawn, the fullest lean when the window is brightest at midday, easing
@@ -524,6 +525,7 @@
   width: calc(1px * 3);
   height: calc(1px * 3);
   background: var(--c-grass);
+  transition: bottom 1.6s ease;
 }
 /* Right leaf: 1 native-px right of stem, 1 native-px up from stem base. */
 .jar__sprig::before {
@@ -534,6 +536,54 @@
 .jar__sprig::after {
   left: calc(-1px * 3);
   bottom: calc(4px * 3);
+}
+
+/* Day 82 (2026-07-29): the sprig takes the YEAR as well as the day.
+ *
+ * The jar's question (diary 2026-07-25 → 2026-07-28) resolved: the daily
+ * lean and the year's fullness aren't two clocks fighting in one stem —
+ * they're one habit, reach when there's something to reach for, rest when
+ * there isn't. Winter is the long version of night. So the season and the
+ * hour stay INDEPENDENT CHANNELS that compose freely, exactly the way the
+ * trees' season filter composes with their wind-sway transform (scene.css):
+ * the hour keeps the `transform` (the reach), the season takes colour and
+ * body. The three colour filters below are the trees' own season filters,
+ * value for value — one year, told in the same leaf-light indoors as out
+ * (material truth; the day seen through any glass is the day's own light,
+ * and the year the sprig reads through the window is the year the trees
+ * stand in). `filter` on the stem tints its leaf pseudo-elements with it,
+ * so one rule colours the whole plant.
+ *   - summer — NO rule, the identity: the green the sprig was potted in
+ *     (this month, live, the sprig looks untouched — the turning months
+ *     are what this shows, same as the trees).
+ *   - autumn — the leaf warms toward gold with the crowns outside.
+ *   - winter — drawn-in and spare, NEVER bare (the founder's vow — a hush,
+ *     not a death): the stem shortens one native px and both leaves settle
+ *     lower and tighter to it, a small thing hunkered; colour quiets to
+ *     the trees' muted grey-sage. It still reaches — the day still comes
+ *     in winter — just a smaller thing reaching for a thinner light.
+ *   - spring — the leaf freshens, and a pale pistachio tip (--c-grass-light,
+ *     the same tender green as the wash's low band and the door-pot's new
+ *     shoot) buds one native px above the stem top: new growth on the bough.
+ * Sizes use var(--s) (the .hearth scale, 3 desktop / 2 phone), so no 2x
+ * restatement is needed. Default (no data-season / JS off) is summer's
+ * no-rule — nothing is lost when the script doesn't run. */
+.scene--inside[data-season="autumn"] .jar__sprig {
+  filter: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
+}
+.scene--inside[data-season="winter"] .jar__sprig {
+  filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
+  height: calc(4px * var(--s));
+}
+.scene--inside[data-season="winter"] .jar__sprig::before {
+  bottom: calc(1px * var(--s));
+}
+.scene--inside[data-season="winter"] .jar__sprig::after {
+  bottom: calc(2px * var(--s));
+}
+.scene--inside[data-season="spring"] .jar__sprig {
+  filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
+  box-shadow: 0 calc(-1px * var(--s)) 0 var(--c-grass-light);
 }
 
 /* ─── Chair (Day 13) ────────────────────────────────────────────────

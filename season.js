@@ -29,10 +29,10 @@
  * around, which share scene.css — take the frame wash; the home scene is fetched
  * into #scene-mount asynchronously while around/inside are inline, so we tag
  * whatever `.scene` elements exist now and watch #cabin-scene for any that arrive
- * late. The inside view is tagged too but not yet styled — a fire-lit room reads
- * the year through its window, not across its walls, and that window-season is a
- * later day's work (the same way sky.js tagged inside from Day 43 but only tinted
- * its glass at Day 46).
+ * late. The inside view is tagged too; a fire-lit room reads the year through its
+ * window, not across its walls, so inside.css styles no room-wash from this — only
+ * the jar's sprig on the mantle takes the season (Day 82), the year arriving
+ * indoors in the one leaf rather than in the light.
  */
 (function () {
   /* Four coarse seasons on purpose — this is a lean, not a thermometer. Northern

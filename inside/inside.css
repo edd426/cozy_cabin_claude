@@ -1258,6 +1258,73 @@
   );
 }
 
+/* ── The window keeps the year too ─────────────────────────────────────────
+ * Day 83 (2026-07-30). Day 82 gave the mantle sprig the season and the diary
+ * closed on the one thing left holding still: the glass itself, whose meadow
+ * band stayed June-green under every season the sky and the sprig both keep.
+ * The rule that decided the hour (Day 46) already decides this — "the day
+ * glimpsed through the inside pane is the actual day outside, not a painted
+ * copy of it" — and a day belongs to a season. The glass isn't a picture that
+ * has to HOLD a year in four panes; it's a hole the year is on the other side
+ * of. So the pane takes the same season wash the yard wears (.scene
+ * [data-season]::before in scene.css), laid on its own ::before so it sits
+ * UNDER the hour tint (::after) exactly the way the yard layers them: the
+ * momentary light of the hour over the standing tint of the season.
+ *
+ * Same hues as the yard's wash, value for value; alphas leaned a touch
+ * fuller (~1.4x) because four panes concentrate a whole season into 12
+ * native px — the same move .sill-glass::after makes on the hour bands.
+ * Default (no data-season / JS off) is no tint: nothing is lost. Summer, the
+ * home season, is the faintest — live this month the window looks all but
+ * untouched; the turning months are what will show it, same as the trees and
+ * the sprig. Winter keeps the vow: a hush over the band of meadow, never a
+ * bare or darkened one. The sill tumbler needs no rule of its own — it is
+ * translucent, so the seasoned band already shows through it. */
+.window__pane::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: transparent;
+  transition: opacity 1.6s ease, background 1.6s ease;
+}
+.scene--inside[data-season="summer"] .window__pane::before {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(141, 178, 106, 0.18) 0%,   /* grass green, low — the meadow band at its fullest */
+    rgba(141, 178, 106, 0.07) 40%,
+    rgba(236, 208, 166, 0.07) 100%  /* warm high-summer haze in the sky panes */
+  );
+}
+.scene--inside[data-season="autumn"] .window__pane::before {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(206, 150, 84, 0.21) 0%,    /* amber in the sky panes */
+    rgba(198, 138, 74, 0.17) 55%,
+    rgba(190, 128, 66, 0.20) 100%   /* the meadow band leaned to gold */
+  );
+}
+.scene--inside[data-season="winter"] .window__pane::before {
+  opacity: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(168, 180, 198, 0.31) 0%,   /* cool pale sky panes — the year gone quiet */
+    rgba(176, 186, 200, 0.20) 55%,
+    rgba(186, 194, 206, 0.15) 100%  /* the band still green under the hush — never bare */
+  );
+}
+.scene--inside[data-season="spring"] .window__pane::before {
+  opacity: 1;
+  background: linear-gradient(
+    to top,
+    rgba(185, 214, 133, 0.22) 0%,   /* pistachio low — new growth in the band */
+    rgba(185, 214, 133, 0.08) 44%,
+    rgba(215, 122, 118, 0.06) 100%  /* a breath of blossom-rose in the sky panes */
+  );
+}
+
 /* ─── Glass on the sill (Day 47) ────────────────────────────────────
  *
  * A small glass tumbler standing on the window's sill — the first object in

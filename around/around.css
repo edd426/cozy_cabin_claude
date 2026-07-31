@@ -500,6 +500,25 @@
 .firefly--e-1 { left: 14%; bottom: 14%; animation-duration: 4.1s, 9s;  animation-delay: -0.9s, -2.5s; }
 .firefly--e-2 { left: 27%; bottom: 22%; animation-duration: 5.2s, 11.5s; animation-delay: -2.3s, -5.5s; }
 
+/* Winter stars on the door side (Day 84, 2026-07-31). Reuses scene.css's
+ * .sprite--winterstars layer (full-bleed, z 0 before the clouds, winter-only
+ * dusk/night opacity gate) and the .star base (cool-white core + cold halo,
+ * twinkle) UNCHANGED — one component, both faces, the clouds' pattern. Only
+ * the placement is door-side specific: a different stretch of the one winter
+ * sky, six stars to the front's eight, with this face's bright star hanging
+ * over the open land to the LEFT (south, toward the front of the house) and
+ * the scatter thinning toward the hills that bunch on the right — so the two
+ * views read as one sky, not a copied one. None below the hills' crests.
+ * Distinct durations/delays from the front so the faces never twinkle in
+ * sync. %-positioned; no mobile px rebase. */
+.star--e-1 { left:  6%; bottom: 62%; animation-duration: 5.1s; animation-delay: -2.6s; }
+.star--e-2 { left: 13%; bottom: 84%; animation-duration: 4.5s; animation-delay: -0.8s; }
+.star--e-3 { left: 22%; bottom: 70%; animation-duration: 6.8s; animation-delay: -3.7s; }
+.star--e-4 { left: 38%; bottom: 92%; animation-duration: 4.9s; animation-delay: -1.9s; }
+.star--e-5 { left: 55%; bottom: 63%; animation-duration: 5.6s; animation-delay: -4.2s; }
+.star--e-6 { left: 90%; bottom: 52%; animation-duration: 6.2s; animation-delay: -1.3s; }
+.star--e-7 { left: 30%; bottom: 82%; animation-duration: 5.4s; animation-delay: -2.1s; }
+
 /* Dawn ground-mist banks on the door side (Day 55, 2026-07-02). Reuses
  * scene.css's .sprite--dawnmist layer (inset:0, z-index 1 behind the cabin and
  * below the hour-wash, dawn-only opacity gate) and the .mist-wisp base (cool

@@ -68,9 +68,11 @@
 //       the home view in each, writing:
 //         previews/<DATE_TAG>-<SHA_SHORT>-state-<name>.png   (375×800)
 //       one per entry in GALLERY_STATES below. A season rail (all four years at
-//       the neutral day hour) and an hour rail (dawn/dusk/night at the neutral
-//       summer season) let a future agent SEE the clocks turn instead of trusting
-//       a filter string quoted in a log. (messages/2026-07-17 "see your own work".)
+//       the neutral day hour), an hour rail (dawn/dusk/night at the neutral
+//       summer season), and one cross state (winter-night, the season-gated dark
+//       neither rail reaches — Day 84) let a future agent SEE the clocks turn
+//       instead of trusting a filter string quoted in a log.
+//       (messages/2026-07-17 "see your own work".)
 //       The `-state-` infix never collides with a view name, so the memory-pass
 //       glob `ls <date>-<sha>*.png` picks these up alongside the view previews.
 //
@@ -106,6 +108,13 @@ const GALLERY_STATES = [
   { name: 'dawn',   tod: 'dawn',  season: 'summer' },
   { name: 'dusk',   tod: 'dusk',  season: 'summer' },
   { name: 'night',  tod: 'night', season: 'summer' },
+  // cross state (Day 84, 2026-07-31): the one gated pair neither rail reaches —
+  // the season rail pins the hour to `day`, the hour rail pins the season to
+  // `summer`, so winter-after-dark existed nowhere in the record. It matters now:
+  // the fireflies are season-gated to summer and the winter night has its own
+  // welcome (the .sprite--winterstars layer), both only visible in exactly this
+  // combination. One combined capture keeps the new pair provable.
+  { name: 'winter-night', tod: 'night', season: 'winter' },
 ];
 const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over 1.6s
 

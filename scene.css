@@ -1313,9 +1313,11 @@
  *
  * Fixed native px, z-index 3: in front of the cabin (z 2) so the pile overlaps
  * the wall's lower planks and reads as stacked AGAINST the house, behind the
- * bench (z 4) in the nearer foreground. A still, used object — no clock, no
- * light — that simply takes the ambient hour-wash (.scene::after, z 5) and the
- * season-wash (::before) like the grass and the bench it stands among. */
+ * bench (z 4) in the nearer foreground. A still, used object — no hour clock,
+ * no light — that takes the ambient hour-wash (.scene::after, z 5) and the
+ * season-wash (::before) like the grass and the bench it stands among. Since
+ * Day 85 its LEVEL keeps the year's clock (see the season block below the log
+ * placements): full by autumn, spent through winter, thinnest in spring. */
 .sprite--woodpile {
   width: 34px;
   height: 20px;
@@ -1376,6 +1378,31 @@
 .woodpile-log--5 { left:  6px; bottom: 8px; }
 .woodpile-log--6 { left: 14px; bottom: 8px; }
 .woodpile-log--7 { left: 22px; bottom: 8px; }
+
+/* The pile takes the year (Day 85, 2026-08-01). The candle spends an evening
+ * and the dawn gives it back; the pile spends a WINTER and the year gives it
+ * back — the same turn, one wheel out (nothing is lost, the Day-77 rule). Its
+ * level rides the same data-season the washes/trees/fireflies use:
+ *   autumn = 9  (laid in full — a crown course of two, logs 8–9, nestled in
+ *                the middle row's valleys at the third course)
+ *   winter = 6  (being spent — log 7, the middle row's right end, is gone
+ *                first: picked from the side the door is on)
+ *   spring = 4  (spent low — bottom course only)
+ *   summer = 7  (restacked to the born 4+3 look; the home season asks nothing,
+ *                so the live August scene is unchanged)
+ * No data-season / JS off = the born 7, like every other season gate here.
+ * The pile stays a still object — no hour clock, no light; one level per
+ * season, the spending read across the gallery's season rail rather than
+ * animated. Chronologically (summer -> autumn -> winter -> spring) the store
+ * climbs, fills, burns down, bottoms out — and is given back. */
+.woodpile-log--8 { left: 10px; bottom: 14px; display: none; }
+.woodpile-log--9 { left: 18px; bottom: 14px; display: none; }
+.scene[data-season="autumn"] .woodpile-log--8,
+.scene[data-season="autumn"] .woodpile-log--9 { display: block; }
+.scene[data-season="winter"] .woodpile-log--7 { display: none; }
+.scene[data-season="spring"] .woodpile-log--5,
+.scene[data-season="spring"] .woodpile-log--6,
+.scene[data-season="spring"] .woodpile-log--7 { display: none; }
 
 /* ── Mailbox at the path's mouth (Day 59, 2026-07-06) ──────────────────────
  * The clearing's first outward-facing object — a name at the yard's edge, so

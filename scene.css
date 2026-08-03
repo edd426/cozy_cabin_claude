@@ -928,6 +928,12 @@
   opacity: 0;
   bottom: 0;
   left: 0;
+  /* The breath's fullness, season-tunable (Day 87 block below): how bright a
+   * puff holds at its peak and mid-climb, and how wide it has spread by the
+   * top. The born values are the thin summer thread. */
+  --puff-peak: 0.95;
+  --puff-mid:  0.55;
+  --puff-end:  1.3;
   /* Pixel-art cluster: the puff plus three neighbouring pixel blocks
    * make a chunky 12x12 cloud while keeping integer pixel edges. */
   box-shadow:
@@ -939,6 +945,37 @@
 .smoke-puff--1 { animation-delay: 0s;    left:  0px;  }
 .smoke-puff--2 { animation-delay: 1.5s;  left: -4px;  }
 .smoke-puff--3 { animation-delay: 3.0s;  left:  4px;  }
+/* The winter puff (Day 87): hidden except in the cold, when the column
+ * carries four puffs instead of three. Its 2.25s delay lands it between
+ * puffs 2 and 3, so the winter column reads denser without the cadence
+ * turning metronomic. */
+.smoke-puff--4 { animation-delay: 2.25s; left: -2px; display: none; }
+
+/* Day 87 (2026-08-03): the chimney's breath takes the year. The woodpile
+ * (Day 85) now spends through the winter and restacks by summer — and the
+ * smoke is where the spent logs GO, so the far end of the same fire has to
+ * live in the same year: a winter fire you heat a house with is fed harder
+ * than a summer fire banked low, and a harder-fed fire breathes deeper.
+ * Winter gets the full breath (a fourth puff in the air, brighter and
+ * wider-spreading); autumn and spring get a touch more than the thread
+ * (first fires / last fires); summer keeps the born values above — no rule
+ * on purpose, same as the trees: the thin thread IS the home season's smoke.
+ * The house's standing claim survives untouched — the smoke never stops at
+ * any season, only its size leans — and the wind vantage rules (Day 61)
+ * carry through unchanged: these vars tune fullness only, so the front
+ * column still leans downwind and the door-side column still rises straight,
+ * both faces deepening together because they are one stack on one fire. */
+.scene[data-season="autumn"] .smoke-puff,
+.scene[data-season="spring"] .smoke-puff {
+  --puff-mid: 0.64;
+  --puff-end: 1.42;
+}
+.scene[data-season="winter"] .smoke-puff {
+  --puff-peak: 1;
+  --puff-mid:  0.75;
+  --puff-end:  1.55;
+}
+.scene[data-season="winter"] .smoke-puff--4 { display: block; }
 
 /* Day 61 (2026-07-08): the front smoke leans downwind. The mailbox flag (Day 60)
  * streams up-and-to-the-right on a steady breeze, and the smoke ten feet over was
@@ -962,10 +999,10 @@
 .scene--exterior .smoke-puff { animation-name: smoke-rise-lean; }
 
 @keyframes smoke-rise {
-  0%   { transform: translateY(0)     scale(0.7); opacity: 0;    }
-  12%  {                                           opacity: 0.95; }
-  60%  {                                           opacity: 0.55; }
-  100% { transform: translateY(-72px) scale(1.3); opacity: 0;    }
+  0%   { transform: translateY(0)     scale(0.7);              opacity: 0;                }
+  12%  {                                                        opacity: var(--puff-peak); }
+  60%  {                                                        opacity: var(--puff-mid);  }
+  100% { transform: translateY(-72px) scale(var(--puff-end));  opacity: 0;                }
 }
 
 /* The leaning column: same opacity/scale/height curve as smoke-rise, plus a
@@ -975,10 +1012,10 @@
  * the flag's lift). Rest at 0% keeps prefers-reduced-motion behaviour identical
  * to the vertical variant. */
 @keyframes smoke-rise-lean {
-  0%   { transform: translate(0,     0)      scale(0.70); opacity: 0;    }
-  12%  { transform: translate(1px,  -8.6px)  scale(0.77); opacity: 0.95; }
-  60%  { transform: translate(5px,  -43px)   scale(1.06); opacity: 0.55; }
-  100% { transform: translate(9px,  -72px)   scale(1.30); opacity: 0;    }
+  0%   { transform: translate(0,     0)      scale(0.70);             opacity: 0;                }
+  12%  { transform: translate(1px,  -8.6px)  scale(0.77);             opacity: var(--puff-peak); }
+  60%  { transform: translate(5px,  -43px)   scale(1.06);             opacity: var(--puff-mid);  }
+  100% { transform: translate(9px,  -72px)   scale(var(--puff-end));  opacity: 0;                }
 }
 
 /* Footpath: five pixel-art stepping stones emerging from behind the

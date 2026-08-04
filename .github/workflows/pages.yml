@@ -63,8 +63,17 @@ jobs:
   screenshot:
     needs: deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 5   # if Playwright/Chromium install hangs, fail fast
-                         # to avoid blocking the concurrency: pages group
+    # Was 5 ("fail fast to avoid blocking the concurrency: pages group").
+    # Right instinct, wrong variable: the cap bounded the symptom while the
+    # cause — a ~21 MB apt font fetch on every run — kept racing it. On
+    # 2026-08-04 the identical config in the far-keeper tower lost that race:
+    # the job was cancelled mid-download and that day's previews are gone for
+    # good. Cabin's screenshot jobs were running 2m14s–2m31s against this 5m
+    # cap while doing strictly more work (gallery + two motion steps), so it
+    # had less headroom than far-keeper, not more. The install below no longer
+    # touches apt; 10 is a backstop now, still bounded so a hung job holds the
+    # pages lane for at most 10 minutes.
+    timeout-minutes: 10
     permissions:
       contents: write
     steps:
@@ -80,11 +89,27 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Cache Chromium
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-chromium-1.49.0-${{ runner.os }}
+
       - name: Install Playwright
         run: |
           npm init -y >/dev/null
           npm install --no-save playwright@1.49.0
-          npx playwright install --with-deps chromium
+          # Deliberately NOT --with-deps. That flag apt-fetches ~21 MB of CJK,
+          # Thai and Unifont packages every run; ubuntu-latest already carries
+          # Chromium's shared libraries, and the cabin renders its own scene
+          # from CSS and composed assets, not from system fonts.
+          npx playwright install chromium
+          # Don't take that on faith — prove Chromium launches on the bare
+          # runner, and only pay for system deps on a run that needs them.
+          if ! node -e "require('playwright').chromium.launch().then(b => b.close())"; then
+            echo "chromium did not launch bare; installing system deps"
+            npx playwright install-deps chromium
+          fi
 
       - name: Wait for Pages to settle
         run: sleep 25

@@ -380,6 +380,106 @@
 }
 .scene--inside[data-season="winter"] .hearth__embers { --ember-glow: #e46a20; }
 
+/* ─── Hearth-light on the boards (Day 89, 2026-08-05) ───────────────
+ *
+ * The pool of warm light the fire throws onto the floor around its foot.
+ *
+ * Why now: Day 88 let the hearth fire burn deeper in the cold — and the room
+ * it lights did not change by a pixel. A fire that grows and lights nothing
+ * more is the same shape of lie the whole fire-chain kept turning up (the
+ * smoke standing straight beside a streaming flag; a pile that spends into a
+ * flame that never grew). Light is what a fire is FOR, so if the fire leans
+ * with the year, its light has to lean with it too.
+ *
+ * It is also the honest answer to the question Day 88 left: whether the
+ * room's FURNITURE is owed the season (a chair drawn nearer the fire in
+ * January). It isn't — a chair only moves if a hand moves it, and the hand
+ * belongs to the person this place has promised never to draw. But the fire's
+ * own reach across the boards is nobody's doing. The chair doesn't cross the
+ * floor to the fire; in the cold the firelight crosses the floor to the chair.
+ *
+ * Geometry: an ellipse centred on the firebox floor (y=11 native — where the
+ * fire actually sits), so the brightest core lands BEHIND the opaque brick
+ * column (z=2) and what you see is the spill around and in front of it: the
+ * boards below the hearth's foot lit hardest, the floor to either side of the
+ * column washed softer. Sized in native px * --s, so one block covers both
+ * scales; only --s is restated in the 2x media query.
+ *
+ *   season   width   height   strength     reach (half-width, 2x)
+ *   summer     52      36       .72        52px — just covers the two standing
+ *                                                 things and stops
+ *   aut/spr    64      40       .86        64px — a stride past them
+ *   winter     78      44      1.00        78px — half again as far, out into
+ *                                                 the boards past both
+ *
+ * (Chair spans 34–46px left of centre at 2x; woodpile 34–50px right of it. Even
+ * the summer fire lights the pair beside it — what the year changes is how far
+ * PAST them the light gets, and how much of it there is. It stays a pool: at its
+ * winter widest it is still well under two-thirds of the floor's width.)
+ *
+ * Strength lives on the element and the gradient on its ::before, so the
+ * season can set opacity without fighting the breathe animation — nested
+ * opacities multiply. The breathe is a whisper on its own clock (2.1s, prime
+ * to the fire's 1.2 / 0.9 / 0.7s) so the pool swells with the flame instead
+ * of strobing in step with any one layer of it. Its 0% frame is lit, so under
+ * prefers-reduced-motion (theme.css freezes durations) the pool holds visible.
+ *
+ * Summer keeps the born values and gets no rule of its own — the same way the
+ * trees, the woodpile, the chimney's breath and the fire itself are all left
+ * alone in the home season. */
+.hearth-light {
+  --s: 3;
+  --light-w: 52px;
+  --light-h: 36px;
+  position: absolute;
+  left: 50%;
+  bottom: calc(11px * var(--s));     /* the firebox floor — where the fire sits */
+  width: calc(var(--light-w) * var(--s));
+  height: calc(var(--light-h) * var(--s));
+  transform: translate(-50%, 50%);   /* centre the ellipse ON that floor line */
+  opacity: 0.72;
+  z-index: 1;                        /* over the boards, under chair/pile/hearth */
+  pointer-events: none;
+}
+
+.hearth-light::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* `closest-side` matters: the default (farthest-corner) puts the 100% stop
+   * out at the box's corners, so the gradient is still faintly lit where it
+   * meets the box's edge midpoints and cuts off there in a visible straight
+   * line. closest-side makes the ellipse's radii exactly the box's half-width
+   * and half-height, so the pool fades to nothing at its own edge. */
+  background: radial-gradient(
+    ellipse closest-side at 50% 50%,
+    rgba(255, 172, 90, 0.54) 0%,
+    rgba(255, 160, 74, 0.46) 25%,
+    rgba(255, 142, 56, 0.31) 50%,
+    rgba(248, 130, 46, 0.15) 75%,
+    rgba(240, 122, 40, 0.00) 100%
+  );
+  animation: hearth-light-breathe 2.1s ease-in-out infinite alternate;
+}
+
+/* The pool swells and settles with the fire — a whisper, not a pulse. */
+@keyframes hearth-light-breathe {
+  0%   { opacity: 1.00; }
+  100% { opacity: 0.84; }
+}
+
+.scene--inside[data-season="autumn"] .hearth-light,
+.scene--inside[data-season="spring"] .hearth-light {
+  --light-w: 64px;
+  --light-h: 40px;
+  opacity: 0.86;
+}
+.scene--inside[data-season="winter"] .hearth-light {
+  --light-w: 78px;
+  --light-h: 44px;
+  opacity: 1;
+}
+
 /* ─── Mantle objects (Day 12) ───────────────────────────────────────
  *
  * Three small things sitting on top of the mantle. The mantle's top
@@ -1554,6 +1654,12 @@
       inset -2px 0 0 var(--c-wood-dark),
       inset 0  2px 0 var(--c-wood-dark);
   }
+  /* Hearth-light rebased to 2x. Everything about the pool is native px * --s
+   * (width, height, the floor-line anchor), so the scale swap is the whole
+   * override — and the three season rules above fall out at both scales from
+   * that one block, the same way the Day-88 fire's do. */
+  .hearth-light { --s: 2; }
+
   /* The ember bed, the log and the three fire layers need no override here:
    * Day 88 rebased all five to var(--s) (the same move Day 77 made for the
    * candle), so the 2x swap on .hearth above carries them — and the season

@@ -65,13 +65,14 @@
 //       shots. The dawn rim, the dusk gold, the autumn gild, the winter hush,
 //       the fireflies — none of it was in the permanent record. This mode forces
 //       `data-tod` / `data-season` the way sky.js / season.js do and captures
-//       the home view in each, writing:
+//       each state's view, writing:
 //         previews/<DATE_TAG>-<SHA_SHORT>-state-<name>.png   (375×800)
 //       one per entry in GALLERY_STATES below. A season rail (all four years at
 //       the neutral day hour), an hour rail (dawn/dusk/night at the neutral
-//       summer season), and one cross state (winter-night, the season-gated dark
-//       neither rail reaches — Day 84) let a future agent SEE the clocks turn
-//       instead of trusting a filter string quoted in a log.
+//       summer season), one cross state (winter-night, the season-gated dark
+//       neither rail reaches — Day 84), and an INSIDE season rail
+//       (`-state-inside-<season>`, Day 89) let a future agent SEE the clocks
+//       turn instead of trusting a filter string quoted in a log.
 //       (messages/2026-07-17 "see your own work".)
 //       The `-state-` infix never collides with a view name, so the memory-pass
 //       glob `ls <date>-<sha>*.png` picks these up alongside the view previews.
@@ -90,14 +91,25 @@ const path = require('path');
 const NARROW_VIEWPORT = { width: 375, height: 800 };
 const PHONE_VIEWPORT  = { width: 390, height: 844 };
 
-// --gallery mode config. Home view only for now — the exterior frame wash, the
-// meadow, the seasonal tree-crowns and the night fireflies all live on the front
-// face; around/inside are a later slice (see the message's "slice it over several
-// days"). Each state forces both gated attributes so the OTHER clock is pinned to
-// its neutral value and only the axis under test shows: the season rail holds the
-// hour at `day` (sky.js's no-wash middle), the hour rail holds the season at
-// `summer` (season.js's no-wash home season).
+// --gallery mode config. Each state forces both gated attributes so the OTHER
+// clock is pinned to its neutral value and only the axis under test shows: the
+// season rail holds the hour at `day` (sky.js's no-wash middle), the hour rail
+// holds the season at `summer` (season.js's no-wash home season).
+//
+// A state may name a `view` (a path relative to BASE_URL); it defaults to
+// GALLERY_VIEW, the home root. Day 89 (2026-08-05) adds an INSIDE season rail:
+// the room has quietly grown four season-leaning things — the sprig that draws
+// in for winter (Day 82), the window's meadow band (Day 83), the hearth fire
+// that burns deeper in the cold (Day 88) and the pool of firelight it throws on
+// the boards (Day 89) — and NONE of them were anywhere in the permanent record,
+// because every gallery frame was the front yard. The room needed its own rail
+// for the same reason the yard needed one: a clock nobody ever sees turn is a
+// claim, not a clock. Only the season rail, and only four frames: the inside is
+// deliberately exempt from the hour (Day 46's wash and Day 88's season wash are
+// both turned back at the door), so an indoor HOUR rail would be four identical
+// pictures — the room answers the year and the fire, not the sky.
 const GALLERY_VIEW = '';               // home root ('' resolves to BASE_URL)
+const GALLERY_INSIDE_VIEW = 'inside/';
 const GALLERY_STATES = [
   // season rail — the year turning at a fixed neutral hour
   { name: 'spring', tod: 'day', season: 'spring' },
@@ -115,6 +127,14 @@ const GALLERY_STATES = [
   // welcome (the .sprite--winterstars layer), both only visible in exactly this
   // combination. One combined capture keeps the new pair provable.
   { name: 'winter-night', tod: 'night', season: 'winter' },
+  // inside season rail (Day 89, 2026-08-05) — the room's own year, four frames.
+  // The hour is pinned to `day` throughout, exactly as the home season rail
+  // pins it; indoors that pin is a formality (the room turns the hour back at
+  // the door) but it keeps the two rails' method identical.
+  { name: 'inside-spring', tod: 'day', season: 'spring', view: GALLERY_INSIDE_VIEW },
+  { name: 'inside-summer', tod: 'day', season: 'summer', view: GALLERY_INSIDE_VIEW },
+  { name: 'inside-autumn', tod: 'day', season: 'autumn', view: GALLERY_INSIDE_VIEW },
+  { name: 'inside-winter', tod: 'day', season: 'winter', view: GALLERY_INSIDE_VIEW },
 ];
 const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over 1.6s
 
@@ -259,11 +279,12 @@ async function captureState(browser, fullUrl, outPath, state) {
 async function galleryRun(baseUrl, outDir, dateTag, shaShort) {
   const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
   fs.mkdirSync(outDir, { recursive: true });
-  const fullUrl = new URL(GALLERY_VIEW, base).toString();
 
   const browser = await chromium.launch(launchOpts());
   try {
     for (const state of GALLERY_STATES) {
+      // A state may name its own view; the default is the home root.
+      const fullUrl = new URL(state.view ?? GALLERY_VIEW, base).toString();
       const outPath = path.join(outDir, `${dateTag}-${shaShort}-state-${state.name}.png`);
       await captureState(browser, fullUrl, outPath, state);
     }

@@ -480,6 +480,104 @@
   opacity: 1;
 }
 
+/* ─── Cast shadows on the boards (Day 90, 2026-08-06) ───────────────
+ *
+ * The two things standing on the floor finally block the light standing
+ * between them. Until today the chair and the woodpile each wore only a
+ * CONTACT band (their ::after — one native row of floor-joint ink under the
+ * feet, holding them to the boards at their depth). Contact is not a cast:
+ * it points nowhere and says nothing about where the light is.
+ *
+ * Outdoors the refusal against cast shadows still holds and always will —
+ * the sun is offstage there, so lighting a near thing on one side would be
+ * inventing a position for a light no frame shows and asking the yard to
+ * agree with it (see diary 2026-07-05, and the "sun-with-an-address" thread
+ * from 2026-07-03 onward). Indoors the light is DRAWN. The fire is in the
+ * opening, low and near the middle of the frame, so a shadow here doesn't
+ * invent a place for a light — it obeys one already visible.
+ *
+ * Direction is therefore not a choice: away from the fire. The chair stands
+ * left of the hearth so its shadow runs LEFT; the woodpile stands right of it
+ * so its shadow runs RIGHT. That divergence is the tell that this is the
+ * hearth and not a smuggled sun — a distant sun lays every shadow down
+ * parallel, one direction you could follow; a small near light throws each
+ * object its own way, radiating from a point you can see.
+ *
+ * Length rides the season with the pool that makes it, because a shadow can
+ * only be as long as the light it interrupts:
+ *
+ *   season      pool half-width     cast length     depth
+ *   summer            52                 8           .75
+ *   aut/spring        64                11           .88
+ *   winter            78                15          1.00
+ *
+ * (Native px; the pool's own reach is in the .hearth-light table above.) Each
+ * smear starts at the object's away-side edge, occupies the contact band's row
+ * plus one native row nearer the viewer — the fire sits 3 native BEHIND the
+ * objects' feet, so what it throws falls a touch forward as well as out — and
+ * fades to nothing at its far end.
+ *
+ * Sized in native px * --s like everything else here, so this one block covers
+ * both scales (the chair was rebased to --s today for exactly that). Painted
+ * inside each object's own stacking context (z-index 2), so it lies over the
+ * hearth-light pool at z-index 1 and darkens lit floor rather than bare boards.
+ * Summer keeps the born values and gets no rule of its own, the same way the
+ * trees, the pile, the chimney's breath and the fire itself do. */
+.chair,
+.woodpile {
+  --cast: 8px;                  /* native length of the smear, away from the fire */
+  --cast-o: 0.75;               /* how much of it there is */
+}
+
+.chair::before,
+.woodpile::before {
+  content: "";
+  position: absolute;
+  bottom: calc(-2px * var(--s));
+  width: calc(var(--cast) * var(--s));
+  height: calc(2px * var(--s));
+  opacity: var(--cast-o);
+  pointer-events: none;
+}
+
+/* Chair: thrown left, off its own left edge. */
+.chair::before {
+  right: 100%;
+  background: linear-gradient(
+    to left,
+    rgba(74, 51, 37, 0.46) 0%,
+    rgba(74, 51, 37, 0.24) 45%,
+    rgba(74, 51, 37, 0.00) 100%
+  );
+}
+
+/* Woodpile: thrown right, off its own right edge. Same light, opposite way.
+ * Anchored at x=7 rather than 100% (x=8): the log ends are octagons with their
+ * corners left open, so the pile's box is a native pixel wider than the bark
+ * that actually meets the floor, and starting at 100% left a visible gap. */
+.woodpile::before {
+  left: calc(7px * var(--s));
+  background: linear-gradient(
+    to right,
+    rgba(74, 51, 37, 0.46) 0%,
+    rgba(74, 51, 37, 0.24) 45%,
+    rgba(74, 51, 37, 0.00) 100%
+  );
+}
+
+.scene--inside[data-season="autumn"] .chair,
+.scene--inside[data-season="autumn"] .woodpile,
+.scene--inside[data-season="spring"] .chair,
+.scene--inside[data-season="spring"] .woodpile {
+  --cast: 11px;
+  --cast-o: 0.88;
+}
+.scene--inside[data-season="winter"] .chair,
+.scene--inside[data-season="winter"] .woodpile {
+  --cast: 15px;
+  --cast-o: 1;
+}
+
 /* ─── Mantle objects (Day 12) ───────────────────────────────────────
  *
  * Three small things sitting on top of the mantle. The mantle's top
@@ -784,6 +882,7 @@
  * the hearth, not the scene edge.
  */
 .chair {
+  --s: 3;                     /* scale; the 2x media block only swaps this + the anchor */
   position: absolute;
   /* Day 38 (2026-06-15): re-seated onto the floor PLANE. The chair had sat at
    * bottom:0 — glued to the very bottom edge of the frame, which read as
@@ -794,13 +893,13 @@
    * floor with a little board showing in front of them. The ::after band below
    * is the contact shadow that grounds it at that depth, the same way the
    * woodpile's does. */
-  bottom: calc(8px * 3);
+  bottom: calc(8px * var(--s));
   /* Right edge of chair = 50% − 50px (= 14px gap left of hearth's
    * left edge at 50% − 36px). With width 18px (= 6px × 3), the
    * chair's left edge lands at 50% − 68px. */
   right: calc(50% + 50px);
-  width: calc(6px * 3);
-  height: calc(14px * 3);
+  width: calc(6px * var(--s));
+  height: calc(14px * var(--s));
   z-index: 2;
   pointer-events: none;
   image-rendering: pixelated;
@@ -815,9 +914,9 @@
   content: "";
   position: absolute;
   left: 0;
-  bottom: calc(-1px * 3);
-  width: calc(6px * 3);
-  height: calc(1px * 3);
+  bottom: calc(-1px * var(--s));
+  width: calc(6px * var(--s));
+  height: calc(1px * var(--s));
   background: #4a3325;
 }
 
@@ -828,8 +927,8 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: calc(1px * 3);
-  height: calc(14px * 3);
+  width: calc(1px * var(--s));
+  height: calc(14px * var(--s));
   background: var(--c-wood-dark);
 }
 
@@ -838,19 +937,19 @@
 .chair__front-leg {
   position: absolute;
   bottom: 0;
-  left: calc(5px * 3);
-  width: calc(1px * 3);
-  height: calc(6px * 3);
+  left: calc(5px * var(--s));
+  width: calc(1px * var(--s));
+  height: calc(6px * var(--s));
   background: var(--c-wood-dark);
 }
 
 /* Seat: 6 native wide × 1 native tall, at y=6. Spans both legs. */
 .chair__seat {
   position: absolute;
-  bottom: calc(6px * 3);
+  bottom: calc(6px * var(--s));
   left: 0;
-  width: calc(6px * 3);
-  height: calc(1px * 3);
+  width: calc(6px * var(--s));
+  height: calc(1px * var(--s));
   background: var(--c-wood-dark);
 }
 
@@ -860,10 +959,10 @@
  * scale. */
 .chair__finial {
   position: absolute;
-  bottom: calc(13px * 3);
+  bottom: calc(13px * var(--s));
   left: 0;
-  width: calc(2px * 3);
-  height: calc(1px * 3);
+  width: calc(2px * var(--s));
+  height: calc(1px * var(--s));
   background: var(--c-wood-dark);
 }
 
@@ -1702,35 +1801,13 @@
    * scales to ~10px on mobile-narrow so the relative spacing reads
    * the same; chair right edge sits at 50% − 34px (hearth's left
    * edge at the 2x scale is 50% − 24px). */
+  /* Day 90 (2026-08-06): rebased to var(--s) like the woodpile beside it (and
+   * the Day-77 candle / Day-88 fire before them), so the whole 2x override is
+   * the scale swap plus the centre-relative anchor — and the cast shadow's
+   * season lengths fall out at both scales from their one block. */
   .chair {
+    --s: 2;
     right: calc(50% + 34px);
-    bottom: calc(8px * 2);       /* woodpile depth at 2x — re-seated off the frame edge */
-    width: calc(6px * 2);
-    height: calc(14px * 2);
-  }
-  .chair::after {
-    bottom: calc(-1px * 2);
-    width: calc(6px * 2);
-    height: calc(1px * 2);
-  }
-  .chair__back-stile {
-    width: calc(1px * 2);
-    height: calc(14px * 2);
-  }
-  .chair__front-leg {
-    left: calc(5px * 2);
-    width: calc(1px * 2);
-    height: calc(6px * 2);
-  }
-  .chair__seat {
-    bottom: calc(6px * 2);
-    width: calc(6px * 2);
-    height: calc(1px * 2);
-  }
-  .chair__finial {
-    bottom: calc(13px * 2);
-    width: calc(2px * 2);
-    height: calc(1px * 2);
   }
 
   /* Woodpile rebased to 2x: everything scales via --s; only the anchor

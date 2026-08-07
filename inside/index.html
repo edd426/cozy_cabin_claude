@@ -153,6 +153,36 @@
   pool that casts them, because a shadow can only be as long as the light it
   interrupts (inside.css, "Cast shadows on the boards").
 
+  Day 91 (2026-08-07) gives the MANTLE its one light. Day 90's question was
+  whether the candle owes the shelf shadows the way the fire owes them to the
+  floor, and the answer is no — but not for the reason it looked like. A low
+  near light throws LONG, not short: carried out, the stone's shadow would run
+  off the end of the shelf. It has nowhere to land. The floor is a plane this
+  view looks across, with depth to set things back into; the mantle is a shelf
+  the view looks AT, edge-on, its top a single line with no width for a shadow
+  to lie along. So the shelf takes the other half of what a drawn light gives:
+  the light itself, and lit sides on what stands in it.
+    - .candle-light — a small warm glow on the brick behind the flame, the
+      mantle-scale twin of the floor's hearth-light pool (Day 89). It answers
+      the HOUR, not the year: nothing feeds a candle, so it never grows or
+      shrinks — it simply SINKS with the wax, keyed to --candle-h (hoisted from
+      the candle element up to .hearth so the glow can read it too). 30 native
+      wide, which is very nearly the mantle: it reaches the stone at one end
+      and the jar at the other and dies before the cloak on its peg.
+    - The stone and the jar now take a lit face FROM that flame, on facing
+      sides — the stone lit on its right, the jar on its left, both turned
+      inward toward the candle standing between them. Day 90's floor shadows
+      diverge away from the fire; these converge toward the flame. Both are the
+      same tell: a distant light turns every object the same way, a near drawn
+      one arranges them around itself. Only the lit side is drawn, never a
+      shaded one — --c-wood is the plank wall's own colour, so a shaded away
+      flank on a 4-or-5-wide object dissolves into the boards behind it.
+    - The candle itself LOST its shading. It had worn a soft band down its
+      right edge since Day 12 — the cylinder trick, which says a brighter thing
+      stands off to the left, and nothing does. A light source has no shadowed
+      side. The band moved to the bottom row, where a real candle's wax does go
+      dull away from its own flame (see diary 2026-08-07).
+
   Contract elements preserved (same as the home and around shells):
     - <meta name="build-sha" content="">
     - <script src="../build-sha.js" defer>
@@ -221,7 +251,7 @@
       </a>
 
       <div class="hearth" role="img"
-           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from a low foot on the floor up and off the top of the frame as the chimney passes through the ceiling, with a fire opening down near the middle of the floor where a small fire rests on a glowing bed of coals, and a dark wood mantle higher up the column holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right. The fire lays a soft pool of warm light on the floorboards around the hearth's foot — small in summer, reaching as far as the chair and the woodpile in the cold months.">
+           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from a low foot on the floor up and off the top of the frame as the chimney passes through the ceiling, with a fire opening down near the middle of the floor where a small fire rests on a glowing bed of coals, and a dark wood mantle higher up the column holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right. The fire lays a soft pool of warm light on the floorboards around the hearth's foot — small in summer, reaching as far as the chair and the woodpile in the cold months. The candle lays a smaller glow of its own on the brick behind it, about the width of the shelf, sinking down the wall as the wax spends through the evening; the stone and the jar each catch that light on the side facing it, the stone lit along its right flank and the jar along its left.">
         <div class="hearth__column">
           <!-- Brick body: running-bond courses (4 native each), the same
                .brick-course / .brick-course--b rows the front-view window uses
@@ -280,6 +310,13 @@
             <div class="brick-course brick-course--b"></div>
           </div>
         </div>
+        <!-- Day 91 (2026-08-07): the candle's own light on the brick behind
+             it — the mantle-scale answer to the fire's floor pool. Painted
+             before the mantle and its things so the shelf and the objects
+             standing on it sit in front of the glow. Decorative; the hearth's
+             label below names it. -->
+        <div class="candle-light" aria-hidden="true"></div>
+
         <div class="hearth__mantle"></div>
         <div class="hearth__opening"></div>
         <div class="hearth__embers"></div>

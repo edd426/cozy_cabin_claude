@@ -70,9 +70,9 @@
 //       one per entry in GALLERY_STATES below. A season rail (all four years at
 //       the neutral day hour), an hour rail (dawn/dusk/night at the neutral
 //       summer season), one cross state (winter-night, the season-gated dark
-//       neither rail reaches — Day 84), and an INSIDE season rail
-//       (`-state-inside-<season>`, Day 89) let a future agent SEE the clocks
-//       turn instead of trusting a filter string quoted in a log.
+//       neither rail reaches — Day 84), and INSIDE season and hour rails
+//       (`-state-inside-<season|hour>`, Days 89 and 91) let a future agent SEE
+//       the clocks turn instead of trusting a filter string quoted in a log.
 //       (messages/2026-07-17 "see your own work".)
 //       The `-state-` infix never collides with a view name, so the memory-pass
 //       glob `ls <date>-<sha>*.png` picks these up alongside the view previews.
@@ -104,10 +104,21 @@ const PHONE_VIEWPORT  = { width: 390, height: 844 };
 // the boards (Day 89) — and NONE of them were anywhere in the permanent record,
 // because every gallery frame was the front yard. The room needed its own rail
 // for the same reason the yard needed one: a clock nobody ever sees turn is a
-// claim, not a clock. Only the season rail, and only four frames: the inside is
-// deliberately exempt from the hour (Day 46's wash and Day 88's season wash are
-// both turned back at the door), so an indoor HOUR rail would be four identical
-// pictures — the room answers the year and the fire, not the sky.
+// claim, not a clock.
+//
+// Day 91 (2026-08-07) adds the INSIDE HOUR rail that Day 89 argued against. The
+// argument was that "an indoor hour rail would be four identical pictures,
+// because the room turns the hour back at its door" — and the WASHES are indeed
+// turned back there (Day 46's hour wash, Day 88's season wash). But three things
+// in that room have been keyed to data-tod the whole time, and the pinned-to-day
+// season rail is blind to every one of them: the candle spends its wax down
+// through the evening and stands full at dawn (Day 77), the sprig leans toward
+// the window at midday and stands upright to rest at night (Day 78), and the
+// window's own glass takes the hour's colour (Day 46) — plus, from today, the
+// candle's glow on the brick, which sinks down the wall with the wax. The room
+// is exempt from the hour's WASH, not from the hour. Three frames (dawn / dusk /
+// night); the fourth, plain `day`, is already the `-state-inside-summer` frame,
+// so it isn't captured twice.
 const GALLERY_VIEW = '';               // home root ('' resolves to BASE_URL)
 const GALLERY_INSIDE_VIEW = 'inside/';
 const GALLERY_STATES = [
@@ -135,6 +146,17 @@ const GALLERY_STATES = [
   { name: 'inside-summer', tod: 'day', season: 'summer', view: GALLERY_INSIDE_VIEW },
   { name: 'inside-autumn', tod: 'day', season: 'autumn', view: GALLERY_INSIDE_VIEW },
   { name: 'inside-winter', tod: 'day', season: 'winter', view: GALLERY_INSIDE_VIEW },
+  // inside hour rail (Day 91, 2026-08-07) — the room's own day, three frames.
+  // `day` is omitted on purpose: it is exactly the `-state-inside-summer` frame
+  // above (tod day / season summer), so capturing it again would only duplicate
+  // a PNG. The season is pinned to `summer` throughout, mirroring the home hour
+  // rail's method. What these three hold that nothing else does: the candle
+  // full / two-thirds / half with its glow riding down the brick behind it, the
+  // sprig at its fullest lean and then upright at rest, and the window's glass
+  // going rose, gold and dusk-blue.
+  { name: 'inside-dawn',   tod: 'dawn',  season: 'summer', view: GALLERY_INSIDE_VIEW },
+  { name: 'inside-dusk',   tod: 'dusk',  season: 'summer', view: GALLERY_INSIDE_VIEW },
+  { name: 'inside-night',  tod: 'night', season: 'summer', view: GALLERY_INSIDE_VIEW },
 ];
 const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over 1.6s
 

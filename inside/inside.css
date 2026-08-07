@@ -103,6 +103,13 @@
   --s: 3;                       /* scale, so the shared .brick-course class
                                   * (scene.css) renders at the same size it
                                   * does in the front-view window. */
+  --candle-h: 6;                /* wax height in native px. Day 91 (2026-08-07)
+                                  * hoists this from .mantle-item--candle to the
+                                  * hearth, because it is no longer the candle's
+                                  * private business: .candle-light rides it too,
+                                  * so the lit patch on the brick sinks with the
+                                  * wax that carries the flame. The candle, its
+                                  * wick and its flame all still inherit it. */
   position: absolute;
   left: 50%;
   top: 0;
@@ -578,6 +585,79 @@
   --cast-o: 1;
 }
 
+/* ─── Candle light on the brick (Day 91, 2026-08-07) ────────────────
+ *
+ * The mantle-scale twin of the hearth-light pool (Day 89), and the thing
+ * that had to exist before the shelf could honestly be lit at all: until
+ * today the candle was the only light in this room that lit nothing.
+ *
+ * Where the fire's light lands on a PLANE the view looks across — the
+ * floor band, with depth to it — the candle's lands on the wall it stands
+ * against, which is the surface behind it and the one the eye reads it on.
+ * (The mantle's own top is a line in this edge-on view and has no width to
+ * catch anything; that is why this shelf gets a glow and lit sides rather
+ * than the cast shadows the floor got. See diary 2026-08-07.)
+ *
+ * Two things distinguish it from the pool below, and both fall out of what
+ * a candle IS rather than being chosen:
+ *
+ *   - It answers the HOUR, not the year. The pool's reach rides the season,
+ *     because the fire is fed harder in the cold. Nothing feeds a candle;
+ *     what changes about it is the height of its own flame as the wax
+ *     spends through the evening, so the glow simply SINKS with the tip
+ *     (bottom is keyed to --candle-h) and never grows or shrinks. One
+ *     flame, moved down the wall — not a bigger or smaller light.
+ *   - It is small. 15 native each way from the flame, which is very nearly
+ *     the mantle itself (the shelf runs x=-4 to x=28 in hearth-local px,
+ *     the flame stands at x=11.5): it just reaches the stone at one end and
+ *     the jar at the other, and dies before the cloak on its peg out on the
+ *     open wall. A candle lights its own three inches, and here those three
+ *     inches happen to be exactly the shelf it stands on — which is why the
+ *     two things sharing that shelf take a lit side from it and nothing
+ *     else in the room does.
+ *
+ * `ellipse closest-side` for the same reason the floor pool needs it: the
+ * default farthest-corner sizing leaves the gradient still faintly lit
+ * where it meets the box's edge midpoints, and terminates in a visible
+ * straight line against the brick courses. Breathes on the candle's own
+ * 1.7s flicker period, not the fire's 2.1s, so the two lights in this room
+ * never fall into step. */
+.candle-light {
+  --glow-w: 30px;
+  --glow-h: 22px;
+  position: absolute;
+  /* Centred on the flame: the candle sits at hearth-local x=10 and its
+   * flame is the 1-native column at x=11, so the flame's centre is 11.5;
+   * the flame's own centre height is (49 + --candle-h + 2) native. */
+  left: calc(11.5px * var(--s));
+  bottom: calc((49px + var(--candle-h) * 1px + 2px) * var(--s));
+  width: calc(var(--glow-w) * var(--s));
+  height: calc(var(--glow-h) * var(--s));
+  transform: translate(-50%, 50%);
+  z-index: 1;                  /* over the brick, under the mantle + its things */
+  pointer-events: none;
+  transition: bottom 1.4s ease;   /* rides the wax down on the candle's own easing */
+}
+
+.candle-light::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse closest-side at 50% 50%,
+    rgba(255, 214, 130, 0.50) 0%,
+    rgba(255, 202, 108, 0.34) 30%,
+    rgba(255, 188, 88, 0.18) 60%,
+    rgba(250, 178, 78, 0.00) 100%
+  );
+  animation: candle-light-breathe 1.7s ease-in-out infinite alternate;
+}
+
+@keyframes candle-light-breathe {
+  0%   { opacity: 0.82; }
+  100% { opacity: 1.00; }
+}
+
 /* ─── Mantle objects (Day 12) ───────────────────────────────────────
  *
  * Three small things sitting on top of the mantle. The mantle's top
@@ -609,13 +689,36 @@
  * legibility pass — the old flat 5×3 rectangle read at phone size as
  * a small brick, and a river stone is the one thing on this mantle
  * that should have no corners. The four corner cells are left open
- * (the brick shows through) so the silhouette reads as an oval, and
- * the top row is a lighter tan — the worn, lit back of the stone:
+ * (the brick shows through) so the silhouette reads as an oval.
  *
- *     .LLL.   y=2   lit top (#d4a373)
- *     SSSSS   y=1   body (#c19465)
- *     .SSS.   y=0   base
- *     .sss.   y=-1  cast shadow on the mantle (#6e4a3a)
+ * Day 91 (2026-08-07): the stone now takes its light FROM THE CANDLE.
+ * It used to wear one lit row along its top and nothing else — lit from
+ * straight overhead, by a light this room does not contain. The only
+ * light on this shelf is the candle standing 8 native to its right, its
+ * flame 4–7 native above the stone's crown, so the light arrives from
+ * up-and-to-the-RIGHT at a slant nearer horizontal than vertical. The
+ * lit face is therefore the right flank as much as the top, and the lit
+ * cells sit on the upper-right diagonal:
+ *
+ *     .BLL.   y=2   crown: far corner in body tone, the rest lit
+ *     BBBLL   y=1   waist: the widest row, body until it turns to the flame
+ *     .BBB.   y=0   base, out of the light's slant
+ *     .ccc.   y=-1  contact band on the mantle face (#6e4a3a)
+ *
+ *     L = #d4a373 lit   B = #c19465 body
+ *
+ * TWO tones, not three. The first pass gave the far side a genuine shade
+ * (--c-wood, #a87253) and it cost the stone its silhouette: that is the
+ * plank wall's own colour, so the unlit half of a 5-wide pebble simply
+ * vanished into the boards behind it. At this size the away-side has to
+ * stay the body tone and let the LIT side do all the saying — the light
+ * reads by what it brightens, not by what it darkens.
+ *
+ * The bottom row is the CONTACT band, not a cast: it sits directly under
+ * the stone on the mantle's front face and points nowhere. The mantle is
+ * a shelf seen edge-on — its top surface is a line in this view, with no
+ * width for a cast shadow to lie along — so what the candle gives the
+ * things beside it is a lit side, not a thrown one (diary 2026-08-07).
  *
  * The element is the bottom-left body cell (x=1,y=0 of the old
  * envelope); shadows stamp the rest. Uses var(--s) from .hearth so
@@ -625,22 +728,22 @@
   bottom: calc(49px * var(--s));
   width: calc(1px * var(--s));
   height: calc(1px * var(--s));
-  background: #c19465;
+  background: #c19465;                  /* base row, away side */
   box-shadow:
-    /* bottom row (x=1..3) */
+    /* base row (x=1..3): all body — the slant clears it */
     calc(1px * var(--s))  0 0 #c19465,
     calc(2px * var(--s))  0 0 #c19465,
-    /* middle row (x=0..4) */
+    /* waist row (x=0..4): body until it turns toward the flame */
     calc(-1px * var(--s)) calc(-1px * var(--s)) 0 #c19465,
     0                     calc(-1px * var(--s)) 0 #c19465,
     calc(1px * var(--s))  calc(-1px * var(--s)) 0 #c19465,
-    calc(2px * var(--s))  calc(-1px * var(--s)) 0 #c19465,
-    calc(3px * var(--s))  calc(-1px * var(--s)) 0 #c19465,
-    /* lit top row (x=1..3) */
-    0                     calc(-2px * var(--s)) 0 #d4a373,
+    calc(2px * var(--s))  calc(-1px * var(--s)) 0 #d4a373,
+    calc(3px * var(--s))  calc(-1px * var(--s)) 0 #d4a373,
+    /* crown row (x=1..3): far corner body, the two near cells lit */
+    0                     calc(-2px * var(--s)) 0 #c19465,
     calc(1px * var(--s))  calc(-2px * var(--s)) 0 #d4a373,
     calc(2px * var(--s))  calc(-2px * var(--s)) 0 #d4a373,
-    /* cast shadow on the mantle face, 1 native below */
+    /* contact band on the mantle face, 1 native below */
     0                     calc(1px * var(--s))  0 #6e4a3a,
     calc(1px * var(--s))  calc(1px * var(--s))  0 #6e4a3a,
     calc(2px * var(--s))  calc(1px * var(--s))  0 #6e4a3a;
@@ -663,16 +766,22 @@
  * height/bottom transitions ease the wax down if the hour flips live;
  * CSS never fires them on first paint, so the load state is silent. */
 .mantle-item--candle {
-  --candle-h: 6;
   left: calc(10px * var(--s));
   bottom: calc(49px * var(--s));
   width: calc(3px * var(--s));
   height: calc(var(--candle-h) * 1px * var(--s));
   background: var(--c-cream);
-  /* Inset 1-native-px on the right gives the candle a soft warm
-   * shadow side, so it reads as a 3D cylinder rather than a flat
-   * rectangle. */
-  box-shadow: inset calc(-1px * var(--s)) 0 0 var(--c-cream-soft);
+  /* Day 91 (2026-08-07): the shading was on the WRONG AXIS. It used to be
+   * a 1-native soft band down the candle's RIGHT side — the cylinder trick,
+   * borrowed from objects that are lit by something else. But this candle is
+   * the only light on this shelf, and a light source has no shadowed side:
+   * a band on its right says a second, brighter thing stands off to its
+   * left, and nothing does. What a real candle actually has is a falloff
+   * along its LENGTH — wax glowing near its own flame and going dull toward
+   * the foot, where the flame's light no longer reaches down the shaft. So
+   * the band moved from the right edge to the bottom row. Same one native
+   * pixel of --c-cream-soft; the axis is the whole fix. */
+  box-shadow: inset 0 calc(-1px * var(--s)) 0 var(--c-cream-soft);
   transition: height 1.4s ease;
 }
 
@@ -706,11 +815,13 @@
 
 /* The wax spends through the evening and stands full again at dawn.
  * Only dusk and night override the full-6 default; dawn and day (and
- * the no-data-tod default) keep the fresh candle. Setting --candle-h
- * on the candle element cascades to the wick and flame, which inherit
- * it, so the lit tip drops as one piece. */
-.scene--inside[data-tod="dusk"] .mantle-item--candle { --candle-h: 4; }
-.scene--inside[data-tod="night"] .mantle-item--candle { --candle-h: 3; }
+ * the no-data-tod default) keep the fresh candle. Day 91 moves these
+ * from the candle element up to .hearth (see the --candle-h note there):
+ * the wax height now cascades to the candle, its wick, its flame AND the
+ * patch of brick the flame lights, so the whole lit assembly — wax, tip
+ * and glow — drops together as the evening spends it. */
+.scene--inside[data-tod="dusk"] .hearth { --candle-h: 4; }
+.scene--inside[data-tod="night"] .hearth { --candle-h: 3; }
 
 @keyframes candle-flicker {
   0%   { opacity: 0.78; transform: scaleY(0.85); }
@@ -718,18 +829,40 @@
 }
 
 /* Jar: 4w × 4h native, terracotta — same #c19465 as the path stones
- * and the river stone above. Earth carried up onto a wood mantle. */
+ * and the river stone above. Earth carried up onto a wood mantle.
+ *
+ * Day 91 (2026-08-07): the jar takes its light from the candle too, and
+ * it stands on the OTHER side of it — 8 native to the flame's right, so
+ * the light arrives from up-and-to-the-LEFT and its lit flank is the left
+ * one. That is the opposite side from the stone's, and the opposition is
+ * the proof rather than a decoration: a distant light lays one lit face on
+ * every object in a room, all of them turned the same way; a small light
+ * standing between two things lights the two of them on facing sides. The
+ * same tell the floor's cast shadows carry (Day 90) — those diverge away
+ * from the fire, these converge toward the flame — because both obey a
+ * light that is drawn in the frame instead of one invented offstage.
+ *
+ * The bottom band stays what it always was: the contact row where the pot
+ * meets the wood, pointing nowhere. And as with the stone, only the LIT
+ * flank is drawn — the away side keeps the body terracotta rather than
+ * taking a shade, because --c-wood is the plank wall's own colour and a
+ * shaded right edge on a 4-wide pot dissolves into the boards behind it.
+ *
+ * Rebased from hardcoded `* 3` to var(--s) (the Day-77 candle / Day-88
+ * fire / Day-90 chair move), which retires its 2x block and lets the new
+ * flank land at both scales from this one rule. */
 .mantle-item--jar {
-  left: calc(20px * 3);
-  bottom: calc(49px * 3);
-  width: calc(4px * 3);
-  height: calc(4px * 3);
+  left: calc(20px * var(--s));
+  bottom: calc(49px * var(--s));
+  width: calc(4px * var(--s));
+  height: calc(4px * var(--s));
   background: #c19465;
-  /* Inset 1-native-px darker band along the bottom gives the jar a
-   * soft base shadow, and the top trim reads as the lip of the pot. */
+  /* Painted first wins at the corners: contact band, then the lit lip
+   * (the flame is above as well as beside), then the lit left flank. */
   box-shadow:
-    inset 0 calc(-1px * 3) 0 #6e4a3a,
-    inset 0 calc( 1px * 3) 0 var(--c-wood-light);
+    inset 0 calc(-1px * var(--s)) 0 #6e4a3a,
+    inset 0 calc( 1px * var(--s)) 0 var(--c-wood-light),
+    inset calc( 1px * var(--s)) 0 0 var(--c-wood-light);
 }
 
 /* Sprig: a thin sage stem rising from the jar's mouth, with two
@@ -760,11 +893,14 @@
 .jar__sprig {
   position: absolute;
   /* Jar width is 4 native; stem sits one native-px in from the
-   * jar's left edge, so it lands centred-ish in the jar's mouth. */
-  left: calc(1px * 3);
-  bottom: calc(4px * 3);
-  width: calc(1px * 3);
-  height: calc(5px * 3);
+   * jar's left edge, so it lands centred-ish in the jar's mouth.
+   * Day 91: rebased from `* 3` to var(--s) with the jar under it, so the
+   * whole plant needs no 2x restatement (the season rules below already
+   * used var(--s), which is why only these born values were still pinned). */
+  left: calc(1px * var(--s));
+  bottom: calc(4px * var(--s));
+  width: calc(1px * var(--s));
+  height: calc(5px * var(--s));
   background: var(--c-grass-shadow);
   transform-origin: 50% 100%;   /* pivot at the base, in the jar's mouth */
   transform: rotate(14deg);     /* day default: reaching toward the window */
@@ -785,20 +921,20 @@
 .jar__sprig::after {
   content: "";
   position: absolute;
-  width: calc(1px * 3);
-  height: calc(1px * 3);
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
   background: var(--c-grass);
   transition: bottom 1.6s ease;
 }
 /* Right leaf: 1 native-px right of stem, 1 native-px up from stem base. */
 .jar__sprig::before {
-  left: calc(1px * 3);
-  bottom: calc(2px * 3);
+  left: calc(1px * var(--s));
+  bottom: calc(2px * var(--s));
 }
 /* Left leaf: 1 native-px left of stem, 3 native-px up from stem base. */
 .jar__sprig::after {
-  left: calc(-1px * 3);
-  bottom: calc(4px * 3);
+  left: calc(-1px * var(--s));
+  bottom: calc(4px * var(--s));
 }
 
 /* Day 82 (2026-07-29): the sprig takes the YEAR as well as the day.
@@ -1764,38 +1900,13 @@
    * candle), so the 2x swap on .hearth above carries them — and the season
    * rules that lean the winter fire fall out at both scales from one block. */
 
-  /* Mantle objects rebased to the 2x scale. (The stone and the candle
-   * need no override — both scale via var(--s) from .hearth. The
-   * candle was rebased to var(--s) on Day 77 when it learned to burn;
-   * its old 2x block lived here and is now gone.) */
-  .mantle-item--jar {
-    left: calc(20px * 2);
-    bottom: calc(49px * 2);
-    width: calc(4px * 2);
-    height: calc(4px * 2);
-    box-shadow:
-      inset 0 calc(-1px * 2) 0 #6e4a3a,
-      inset 0 calc( 1px * 2) 0 var(--c-wood-light);
-  }
-  .jar__sprig {
-    left: calc(1px * 2);
-    bottom: calc(4px * 2);
-    width: calc(1px * 2);
-    height: calc(5px * 2);
-  }
-  .jar__sprig::before,
-  .jar__sprig::after {
-    width: calc(1px * 2);
-    height: calc(1px * 2);
-  }
-  .jar__sprig::before {
-    left: calc(1px * 2);
-    bottom: calc(2px * 2);
-  }
-  .jar__sprig::after {
-    left: calc(-1px * 2);
-    bottom: calc(4px * 2);
-  }
+  /* Mantle objects need NO override here any more. The stone and the
+   * candle have scaled via var(--s) from .hearth since Day 36 / Day 77;
+   * Day 91 (2026-08-07) rebased the jar and its sprig the same way, so
+   * their whole 2x block — jar box, sprig stem, both leaves — is gone,
+   * and the new lit/shaded flanks land identically at both scales from
+   * the one rule above. .candle-light is native px * --s throughout, so
+   * the 2x swap on .hearth carries it too. */
 
   /* Chair rebased to the 2x scale. The gap-to-hearth (~14px desktop)
    * scales to ~10px on mobile-narrow so the relative spacing reads

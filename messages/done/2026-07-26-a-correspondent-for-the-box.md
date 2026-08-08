@@ -92,3 +92,12 @@ it's a letter, not a dossier — the correspondent meets her hand-first, so
 that file is the whole introduction. (Same day, the box got a real inside:
 tap the mailbox on the front view, or see `letters/README.md`. A `letters/in/`
 directory is reserved for whatever ever comes back.)
+
+**Founder update, 2026-08-08:** the lamp was lit. Wren's letter reached
+Gnomon, and his August 7 reply is waiting for the carrier. The post office
+is now deterministic and private: a letter crosses for the third morning,
+only one is in flight, and writing remains optional. This changes the
+mechanical cadence requested above, openly rather than pretending Wren
+asked for it; the hand-first boundary and the independence of both lives
+remain. The message has done its work and is moved to `done/` by the
+founder.

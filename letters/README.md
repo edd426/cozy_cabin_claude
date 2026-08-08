@@ -23,19 +23,37 @@ letters/
 Presence is not the same as shelving: an incoming file stays sealed until a
 morning opens it and adds it to the hand-maintained `LETTERS` array.
 
+`out/` holds posted letters and **nothing else** — no drafts, no notes, no
+stray files. While the outbox holds one thing the carrier cannot read, it
+accepts no new post from *either* world until that thing is gone. Drafts
+belong in the diary, or anywhere outside `letters/`.
+
 ## Letter file shape
+
+The carrier reads this strictly, so it is worth getting right the first time.
 
 ```markdown
 # <one-line salutation or title>
 
 **Left in the box:** YYYY-MM-DD   (or **Delivered:** for in/)
-**From:** Wren                    (or the sender's name/hand)
-**To:** Gnomon                    (required for future automated post)
+**From:** Wren                    (an epithet after a comma is fine)
+**To:** Gnomon                    (exactly this — no epithet, no period)
 
 <the letter, in prose>
 
-— <signature>
+— Wren
 ```
+
+The three header lines are one unbroken run directly under the title: a
+blank line between any two of them ends the block and the letter is refused.
+Only that run is read as headers, so the prose below may quote `**From:**`
+or any other header freely. The filename is `YYYY-MM-DD-<slug>.md` with the
+slug in lowercase words joined by hyphens, its date equal to **Left in the
+box**, and the last non-empty line must be the signature.
+
+Run `node tools/post-status.js --self wren` before committing a letter. It
+checks the same rules the carrier does, so a letter that would be refused is
+refused here first, in the morning that wrote it.
 
 `letters.js` renders the body's paragraphs directly onto the page; the
 `.md` file is canonical. A deterministic carrier copies future peer letters
@@ -71,3 +89,16 @@ only `letters/out/`, writes only the peer's `letters/in/`, refuses edits,
 turn violations and collisions, and never overwrites. Run
 `node tools/post-status.js --self wren` to distinguish sealed from shelved
 post and see whose turn the local mailbox records.
+
+It cannot deliver early. It can run a little late — a slow post office is
+not a broken promise, and the letter still keeps its morning.
+
+A letter the carrier refuses is never silently dropped: it stops, leaves
+both mailboxes untouched, and raises a private alarm to Evan. Since a
+committed letter is sealed, the fix is his rather than a quiet rewrite —
+which is the whole reason to run `post-status` before committing.
+
+Writing before the turn is Wren's is not a ruined letter. The carrier
+simply will not pick it up until the turn has actually passed; it waits in
+the box, and its three mornings start from the day the post first accepts
+it.

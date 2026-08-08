@@ -585,6 +585,176 @@
   --cast-o: 1;
 }
 
+/* ─── Firelight on the wall, and the shelf's shadow (Day 92, 2026-08-08) ──
+ *
+ * Day 91 ended on the observation that the mantle is by a long way the biggest
+ * blocking thing in this room — a 32-native plank laid flat across the fire's
+ * upward light — and that every small shadow in here had been drawn and never
+ * the big one: "the wall above the shelf ought to be darker for it, the way the
+ * boards behind the chair are."
+ *
+ * The catch is in that comparison. The boards behind the chair are darker
+ * because the Day-89 POOL lights them and the chair interrupts it — Day 90's
+ * rule, "a shadow can only be as long as the light it interrupts." The wall
+ * had no such light. The fire had been lighting the floor (Day 89) and the
+ * candle had been lighting the brick above the shelf (Day 91), and the great
+ * vertical face directly behind and above the fire — the chimney breast, the
+ * plank wall to either side of it — was still the flat colour of unlit brick.
+ * Shade laid on an unlit surface is not a shadow, it's a stain. So this is one
+ * change in two halves: the light first, then the thing that stops it.
+ *
+ * HALF ONE — .fire-wall-light. The same fire that pools on the boards climbs
+ * the wall it stands in. An ellipse centred on the fire itself (hearth-local
+ * x=12, y=20), taller than it is wide because the source sits at the foot of
+ * the surface it lights and the breast runs straight up from it. It is clipped
+ * flat on BOTH edges, and each cut is a real thing in the room:
+ *
+ *   - below y=26, the firebox lintel. Under that line is either the dark
+ *     cavity — which must stay dark, it is the back of the opening — or the
+ *     floor, which has had its own pool since Day 89. Nothing is drawn twice.
+ *   - above y=46, the mantle's underside. This is the whole point. The shelf
+ *     is the ceiling of the fire's light on this wall; the light does not
+ *     thin out as it nears the plank, it STOPS at it. Clipping rather than
+ *     fading is what puts a hard line at the shelf, which is what a shadow
+ *     cast by a hard straight edge a hand's-width from the wall looks like.
+ *
+ * It breathes on the pool's OWN 2.1s clock and not a new one, because it is
+ * not a new light: one fire, one breath, told on two surfaces.
+ *
+ * HALF TWO — .mantle-shadow. Above the shelf, the plank blocks not just the
+ * climb of light on this wall but the room's whole fire-lit air, so the brick
+ * up there sits below the tone the rest of the room is carrying. Direction
+ * needs no choosing, the same way the floor's two casts didn't: the light is
+ * below, so what the shelf throws goes up. It is UNIFORM across the shelf's
+ * width and fades with height — not radial from the middle, which was the
+ * first try and was wrong twice over: it put the deepest shade exactly where
+ * the candle's glow is brightest (the two cancelled and you saw neither), and
+ * a plank lit from below by a source directly under its centre shades its
+ * whole length about alike. The mask softens only the last few native at each
+ * end, where the penumbra genuinely opens up.
+ *
+ * The rise clears the candle's glow (which reaches ~19 native above the shelf)
+ * on purpose, so that glow reads as a lit pocket the candle carves out of a
+ * shaded breast rather than as a patch on plain brick.
+ *
+ * Both halves ride the season, on the same wheel as the pool and the casts
+ * below (Day 89 / Day 90) — a fire fed harder in the cold climbs further up
+ * the breast and burns brighter against the underside of the shelf, and the
+ * shadow it is blocked into deepens and rises with it:
+ *
+ *   season      glow (w × h)   strength   lit at shelf   shadow rise   depth
+ *   summer         56 × 80        .62         .35 peak         20        .58
+ *   aut/spring     66 × 92        .78         .43 peak         24        .78
+ *   winter         76 × 104       .95         .50 peak         28       1.00
+ *
+ * (Native px, hearth-local. "Lit at shelf" is the fraction of the ellipse's
+ * peak still standing at y=46, where it is cut — the winter fire arrives at
+ * the plank half as bright as its own core, the summer fire a third.)
+ *
+ * Painting order at z-index 1 is the whole argument and is set by DOM order in
+ * index.html: glow, then shadow over it, then .candle-light over that (the
+ * candle's small light falls ON the shaded brick — that is why it reads at
+ * all), then .hearth__mantle last of the four, so the shelf itself stays flat
+ * dark wood in front of everything it blocks. The mantle items (z=2) and the
+ * fire (z=4) are untouched above all of it.
+ *
+ * Sized in native px * --s throughout, so the 2x swap on .hearth carries both
+ * halves and the season table falls out at both scales from one block. Summer
+ * keeps the born values and gets no rule of its own, the same as the trees,
+ * the pile, the chimney's breath, the fire, the pool and the casts. */
+.fire-wall-light {
+  --wl-w: 56px;                 /* native full width of the ellipse */
+  --wl-h: 80px;                 /* native full height */
+  position: absolute;
+  left: calc(12px * var(--s));       /* the fire's own centre in the column */
+  bottom: calc(20px * var(--s));     /* the fire's own height */
+  width: calc(var(--wl-w) * var(--s));
+  height: calc(var(--wl-h) * var(--s));
+  transform: translate(-50%, 50%);   /* centre the ellipse ON the fire */
+  /* Cut at the firebox lintel (y=26) below and the mantle's underside (y=46)
+   * above. The box runs y = 20 ± (--wl-h / 2), so the bottom inset is
+   * (--wl-h / 2 + 6) and the top inset is (--wl-h / 2 − 26). */
+  clip-path: inset(
+    calc((var(--wl-h) / 2 - 26px) * var(--s))
+    0
+    calc((var(--wl-h) / 2 + 6px) * var(--s))
+    0
+  );
+  opacity: 0.66;
+  z-index: 1;                        /* over the brick + wall, under the mantle */
+  pointer-events: none;
+}
+
+.fire-wall-light::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* `closest-side` for the same reason the pool needs it (Day 89): the default
+   * farthest-corner sizing leaves the gradient still faintly lit at the box's
+   * edge midpoints and terminates in a visible straight line across the brick
+   * courses. Weaker at its core than the floor pool — a wall standing beside a
+   * fire catches less of it than the boards lying under one. */
+  background: radial-gradient(
+    ellipse closest-side at 50% 50%,
+    rgba(255, 168, 86, 0.46) 0%,
+    rgba(255, 156, 72, 0.36) 30%,
+    rgba(255, 140, 54, 0.20) 60%,
+    rgba(244, 128, 44, 0.00) 100%
+  );
+  /* The pool's clock, not a new one: one fire breathing on two surfaces. */
+  animation: hearth-light-breathe 2.1s ease-in-out infinite alternate;
+}
+
+.mantle-shadow {
+  --ms-h: 20px;                 /* native rise above the shelf */
+  position: absolute;
+  left: calc(-4px * var(--s));       /* the mantle's own left edge */
+  bottom: calc(49px * var(--s));     /* the mantle's top surface */
+  width: calc(32px * var(--s));      /* the mantle's own width */
+  height: calc(var(--ms-h) * var(--s));
+  /* Deepest right against the plank and thinning as it climbs — the same ink
+   * (#4a3325) the floor casts and the contact bands are drawn in, so all the
+   * shade in this room is one colour. Held still on purpose: the Day-90 casts
+   * on the boards don't breathe either. */
+  background: linear-gradient(
+    to top,
+    rgba(74, 51, 37, 0.52) 0%,
+    rgba(74, 51, 37, 0.31) 40%,
+    rgba(74, 51, 37, 0.11) 75%,
+    rgba(74, 51, 37, 0.00) 100%
+  );
+  /* Full strength along the shelf, opening to penumbra at its two ends. */
+  -webkit-mask-image: linear-gradient(
+    to right, rgba(0,0,0,0) 0%, #000 14%, #000 86%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(
+    to right, rgba(0,0,0,0) 0%, #000 14%, #000 86%, rgba(0,0,0,0) 100%);
+  opacity: 0.58;
+  z-index: 1;                        /* over the glow, under the candle's light */
+  pointer-events: none;
+}
+
+.scene--inside[data-season="autumn"] .fire-wall-light,
+.scene--inside[data-season="spring"] .fire-wall-light {
+  --wl-w: 66px;
+  --wl-h: 92px;
+  opacity: 0.83;
+}
+.scene--inside[data-season="winter"] .fire-wall-light {
+  --wl-w: 76px;
+  --wl-h: 104px;
+  opacity: 1;
+}
+
+.scene--inside[data-season="autumn"] .mantle-shadow,
+.scene--inside[data-season="spring"] .mantle-shadow {
+  --ms-h: 24px;
+  opacity: 0.78;
+}
+.scene--inside[data-season="winter"] .mantle-shadow {
+  --ms-h: 28px;
+  opacity: 1;
+}
+
 /* ─── Candle light on the brick (Day 91, 2026-08-07) ────────────────
  *
  * The mantle-scale twin of the hearth-light pool (Day 89), and the thing

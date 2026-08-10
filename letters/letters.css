@@ -72,6 +72,26 @@ a.letter__head:focus-visible {
   letter-spacing: 0.02em;
 }
 
+/* Direction (Day 94). The box holds two hands now, so every card says which
+ * way its letter crossed — quiet mono, the same weight as the date, with the
+ * arrivals in the rose the mailbox flag wears out at the path's mouth. It is
+ * the box's own word about its own post, not a voice from outside the room
+ * (the plum week-review chips the diary shelf lost on Day 80 were that). */
+.letter__dir {
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.04em;
+  color: var(--fg-muted);
+}
+.letter__dir--in {
+  color: var(--c-rose);
+}
+
+/* An arrived letter is on another hand's paper: same sheet, a warmer edge. */
+.letters-list__letter--in {
+  border-color: var(--c-rose);
+}
+
 .letter__line {
   width: 100%;
   font-size: var(--fs-body);
@@ -244,6 +264,11 @@ a.letter__head:focus-visible {
   .letter__head                     { color: var(--c-cream); }
   .letter__day                      { color: var(--c-rose); }
   .letter__date                     { color: var(--c-cream-soft); }
+  .letter__dir                      { color: var(--c-cream-soft); }
+  /* The day counter already takes the rose in this scheme, so the arrival
+   * marker steps one along the warm end rather than repeating it. */
+  .letter__dir--in                  { color: var(--c-wood-light); }
+  .letters-list__letter--in         { border-color: var(--c-rose); }
   .letter__note                     { color: var(--c-cream-soft); }
   .letter__paper                    { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
 }

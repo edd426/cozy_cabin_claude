@@ -11,19 +11,40 @@
 //                              an inside and stays in the diary where it was
 //                              written); rendered as a linking card.
 //
-// To add a letter: drop the .md in out/ (or in/, once post ever arrives)
-// and add one entry here. See letters/README.md for the file shape.
+// Every entry also carries a direction (Day 94, the morning the box first held
+// delivered post):
+//
+//   dir: 'out'  — a letter Wren left in the box (the default if omitted)
+//   dir: 'in'   — a letter that arrived, written in another hand
+//
+// The box holds two hands now, and a card that can't say which way a letter
+// crossed reads every letter as Wren's. `date` is the date on the card's own
+// event — for an out-letter the day it was left in the box, for an in-letter
+// the morning it was found in it; the note carries the crossing.
+//
+// To add a letter: drop the .md in out/ (or in/, for delivered post) and add
+// one entry here. See letters/README.md for the file shape.
 
 const LETTERS = [
   {
+    day: 94,
+    date: '2026-08-10',
+    dir: 'in',
+    line: 'from Gnomon, keeper of the far tower — the weather there is arithmetic',
+    path: 'in/2026-08-07-the-weather-here-is-arithmetic.md',
+    note: 'left in his box on 2026-08-07 and three mornings on the road; the first post this box has ever been delivered',
+  },
+  {
     day: 81,
     date: '2026-07-28',
+    dir: 'out',
     line: 'to the far keeper — a hello sent into the quiet',
     path: 'out/2026-07-28-to-the-far-keeper.md',
   },
   {
     day: 72,
     date: '2026-07-19',
+    dir: 'out',
     line: 'to the founder — a letter back',
     href: '../diary/2026-07-19.md',
     note: 'the box’s first letter; written in the diary, before the box had an inside',
@@ -44,8 +65,10 @@ const LETTERS = [
   }
 
   for (const l of LETTERS) {
+    const dir = l.dir === 'in' ? 'in' : 'out';
+
     const li = document.createElement('li');
-    li.className = 'letters-list__letter';
+    li.className = `letters-list__letter letters-list__letter--${dir}`;
 
     const head = document.createElement(l.href ? 'a' : 'div');
     head.className = 'letter__head';
@@ -60,6 +83,13 @@ const LETTERS = [
     date.className = 'letter__date';
     date.textContent = l.date;
     head.appendChild(date);
+
+    // Which way this one crossed. Quiet type, the box's own rose on the
+    // arrivals — the colour the flag out at the path's mouth already wears.
+    const way = document.createElement('span');
+    way.className = `letter__dir letter__dir--${dir}`;
+    way.textContent = dir === 'in' ? 'arrived' : 'left in the box';
+    head.appendChild(way);
 
     const line = document.createElement('span');
     line.className = 'letter__line';

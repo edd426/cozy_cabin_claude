@@ -5,8 +5,27 @@
  * all of them keep the same bright unmoving hour. This script lets the *light*
  * answer to the real one — not the cabin's invented time but the visitor's,
  * the hour on the clock wherever they happen to be standing when they open the
- * door. It reads `new Date().getHours()` and tags the scene with the time of
- * day; scene.css lays a soft wash of that hour's colour over the whole frame.
+ * door. It reads `new Date()` and tags the scene with the time of day; scene.css
+ * lays a soft wash of that hour's colour over the whole frame.
+ *
+ * The four bands' EDGES move with the year (Day 95, 2026-08-11). They used to be
+ * fixed clock hours — dusk began at 17:00 in December exactly as it did in June —
+ * which was a small untruth the place carried for two months without noticing:
+ * season.js taught the whole yard the year on Day 69, and the hour, built a month
+ * earlier, was never told there was one. The fix is a reckoning, not a sensor:
+ * `yearSwing()` works a number out of the date alone, −1 at midwinter and +1 at
+ * midsummer, and every edge slides EDGE_SWING_H hours along it. So the light
+ * begins to go at half past three on a December afternoon and holds past half
+ * past six in June, and the long neutral middle of the day is twelve hours wide
+ * in summer and six in winter — the same lean the meadow and the crowns and the
+ * woodpile already take, arriving at last in the one clock that predates them.
+ *
+ * Note what this is NOT. It gives the year a length, not the sun an address: no
+ * edge of the frame gets brighter, nothing leans toward a point you could stand
+ * and aim at, and the wash's colours are untouched. The place still has no
+ * latitude beyond the northern-temperate year season.js already keeps (its own
+ * comment: winter Dec–Feb, summer Jun–Aug); EDGE_SWING_H is the swing itself,
+ * chosen for legibility, not derived from a coordinate the clearing doesn't have.
  *
  * Deliberately gentle (Day 43, 2026-06-20). The point was never a turning day —
  * sun up, sun down, the clearing going dark and cold — that's not a cabin you
@@ -20,7 +39,8 @@
  * Graceful: if JS is off the scene carries no `data-tod` and scene.css's
  * default (no wash, the original cream morning) stands — nothing is lost, the
  * place just stops keeping the hour. No per-visitor state, no storage, no
- * memory of yesterday: the only input is the clock at the moment you arrive.
+ * memory of yesterday: the only inputs are the clock and the calendar at the
+ * moment you arrive.
  *
  * All three shells (index.html, around/index.html, inside/index.html) load this;
  * the home scene is fetched into #scene-mount asynchronously while the around and
@@ -31,13 +51,36 @@
  * a fire-lit room doesn't go blue at dusk, but the square that sees out does.
  */
 (function () {
+  /* How far each band edge travels between midwinter and midsummer, in hours.
+   * 1.5 puts sunrise-ish and sunset-ish about three hours apart across the year,
+   * which is a gentle, believable northern-temperate swing and — more to the
+   * point — enough that the same wall-clock evening lands in a different part of
+   * the day depending on the month, which is the whole thing worth showing. */
+  var EDGE_SWING_H = 1.5;
+
+  /* The reckoning: −1 at midwinter, +1 at midsummer, worked from the date and
+   * nothing else. A cosine of the day-of-year, offset by the ~10 days between
+   * the solstice and the turn of the year. No sensor, no sunrise table, no place
+   * on the earth — the same trade the far tower makes, in miniature. */
+  function yearSwing(date) {
+    var start = Date.UTC(date.getFullYear(), 0, 1);
+    var today = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+    var dayOfYear = Math.round((today - start) / 86400000);
+    return -Math.cos((2 * Math.PI * (dayOfYear + 10)) / 365.25);
+  }
+
   /* The hour bands. The middle of the day is the neutral default (no wash);
    * dawn and dusk are the warm edges; night is the cool one. Kept as four
-   * coarse phases on purpose — this is a mood, not a sundial. */
-  function phaseFor(hour) {
-    if (hour < 5 || hour >= 21) return 'night';
-    if (hour < 8) return 'dawn';
-    if (hour < 17) return 'day';
+   * coarse phases on purpose — this is a mood, not a sundial. Their edges are
+   * the midwinter/midsummer average (5 / 8 / 17 / 21, the fixed hours this used
+   * to hold all year), slid by the year's swing: the two morning edges come
+   * earlier as the year warms, the two evening edges later. */
+  function phaseFor(date) {
+    var s = EDGE_SWING_H * yearSwing(date);
+    var h = date.getHours() + date.getMinutes() / 60;
+    if (h < 5 - s || h >= 21 + s) return 'night';
+    if (h < 8 - s) return 'dawn';
+    if (h < 17 + s) return 'day';
     return 'dusk';
   }
 
@@ -49,7 +92,7 @@
   }
 
   function init() {
-    const tod = phaseFor(new Date().getHours());
+    const tod = phaseFor(new Date());
 
     // Tag anything already in the DOM (the around view's scene is inline).
     tagAll(document, tod);

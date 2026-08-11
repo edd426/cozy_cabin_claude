@@ -74,6 +74,12 @@
 //       (`-state-inside-<season|hour>`, Days 89 and 91) let a future agent SEE
 //       the clocks turn instead of trusting a filter string quoted in a log.
 //       (messages/2026-07-17 "see your own work".)
+//       A state may carry `clock` instead of `tod`/`season` (Day 95): the browser
+//       clock is pinned to that instant before load and NOTHING is forced, so the
+//       scripts reckon the tags themselves. That is the only way to photograph
+//       *when* a band begins — the `evening-midsummer` / `evening-midwinter` pair
+//       is one wall-clock hour on the two solstices, gold on one and dark on the
+//       other, which forcing an attribute by hand can never show.
 //       The `-state-` infix never collides with a view name, so the memory-pass
 //       glob `ls <date>-<sha>*.png` picks these up alongside the view previews.
 //
@@ -157,6 +163,23 @@ const GALLERY_STATES = [
   { name: 'inside-dawn',   tod: 'dawn',  season: 'summer', view: GALLERY_INSIDE_VIEW },
   { name: 'inside-dusk',   tod: 'dusk',  season: 'summer', view: GALLERY_INSIDE_VIEW },
   { name: 'inside-night',  tod: 'night', season: 'summer', view: GALLERY_INSIDE_VIEW },
+  // the evening pair (Day 95, 2026-08-11) — the one thing FORCING can't show.
+  // Every state above pins `data-tod` and `data-season` by hand, which is exactly
+  // the right tool for "what does dusk look like" and exactly the wrong one for
+  // "WHEN is it dusk". Day 95 slid the four bands' edges along the year (sky.js's
+  // yearSwing), so the answer to *when* now depends on the date — and a frame that
+  // sets the answer by hand can never show that. These two instead pin the browser
+  // CLOCK (`clock`, below) and let sky.js and season.js reckon the tags themselves,
+  // exactly as they would for a visitor standing there on that evening.
+  //
+  // Both are 20:00 — the same minute of the same wall clock — on the two
+  // solstices. Midsummer is still in the gold; midwinter has been dark for half an
+  // hour, fireflies gone and the winter stars out. Two frames, one hour, opposite
+  // ends of the day: that IS the proof, and no third frame adds to it (the two
+  // equinoxes sit at swing ≈ 0, i.e. the old fixed edges, and would only show the
+  // un-news). The year is arbitrary — the reckoning reads day-of-year alone.
+  { name: 'evening-midsummer', clock: '2026-06-21T20:00:00' },
+  { name: 'evening-midwinter', clock: '2026-12-21T20:00:00' },
 ];
 const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over 1.6s
 
@@ -272,26 +295,53 @@ async function manifestRun(manifestPath, baseUrl, outDir, dateTag, shaShort) {
   console.log(`screenshot: done — ${views.length} view(s) captured at 2 widths each`);
 }
 
+// Freeze the page's clock at a fixed instant, BEFORE any of its own scripts run,
+// so sky.js / season.js / garden.js / door-plant.js each read that instant as
+// "now" and reckon their own state from it. `new Date(iso)` with no zone is
+// parsed as local time and the runner is UTC, so the frame is deterministic.
+// This is the opposite tool to forcing the attributes: forcing answers "what does
+// dusk look like", pinning the clock answers "when is it dusk" (Day 95).
+async function freezeClock(page, iso) {
+  await page.addInitScript((fixedIso) => {
+    const fixed = new Date(fixedIso).getTime();
+    const Real = Date;
+    function Fake(...args) {
+      if (!(this instanceof Fake)) return new Real(fixed).toString();
+      return args.length === 0 ? new Real(fixed) : new Real(...args);
+    }
+    Fake.prototype = Real.prototype;
+    Fake.now = () => fixed;
+    Fake.parse = Real.parse;
+    Fake.UTC = Real.UTC;
+    window.Date = Fake;
+  }, iso);
+}
+
 // Capture one forced-state shot: load the view, force the gated attributes onto
 // every .scene the way sky.js / season.js do, wait out the washes, screenshot.
+// A state carrying `clock` instead does the reverse — it pins the browser clock
+// before load and forces nothing, letting the scripts decide the tags.
 async function captureState(browser, fullUrl, outPath, state) {
   const context = await browser.newContext({
     viewport: NARROW_VIEWPORT,
     deviceScaleFactor: 2,
   });
   const page = await context.newPage();
+  if (state.clock) await freezeClock(page, state.clock);
   console.log(`screenshot: navigating to ${fullUrl} for state ${state.name}`);
   await page.goto(fullUrl, { waitUntil: 'networkidle', timeout: 30000 });
   // The home scene is fetched into #scene-mount after load; wait for it to
   // exist before forcing. sky.js / season.js have already run their init and
   // disconnected their observers by now, so nothing overwrites what we set.
   await page.waitForSelector('.scene', { timeout: 15000 });
-  await page.evaluate(({ tod, season }) => {
-    for (const scene of document.querySelectorAll('.scene')) {
-      scene.dataset.tod = tod;
-      scene.dataset.season = season;
-    }
-  }, state);
+  if (!state.clock) {
+    await page.evaluate(({ tod, season }) => {
+      for (const scene of document.querySelectorAll('.scene')) {
+        scene.dataset.tod = tod;
+        scene.dataset.season = season;
+      }
+    }, state);
+  }
   await page.waitForTimeout(WASH_SETTLE_MS);
   console.log(`screenshot: writing ${outPath}`);
   await page.screenshot({ path: outPath, fullPage: true });

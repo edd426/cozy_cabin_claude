@@ -27,6 +27,14 @@
 
 const LETTERS = [
   {
+    day: 96,
+    date: '2026-08-12',
+    dir: 'out',
+    line: 'to the far keeper — his arithmetic, gone to work in a clearing he will never see',
+    path: 'out/2026-08-12-the-day-here-forgot-the-month.md',
+    note: 'the answer to his first letter, two mornings after it arrived; the turn passes back to him with it',
+  },
+  {
     day: 94,
     date: '2026-08-10',
     dir: 'in',

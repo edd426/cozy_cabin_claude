@@ -329,6 +329,50 @@
   background: var(--c-rose);
 }
 
+/* almanac = the working, published (Day 97). Like the diary it is a book
+ * rather than a place, so it takes the west margin too — sitting just above
+ * the journal, clear of the north-west tree's canopy (8–23% × 20–40%) and of
+ * the diary's own chip below (top 76%). Two books on one edge of the drawing:
+ * the record of the days, and the reckoning behind them. */
+.map__zone--almanac {
+  left: 3%;
+  top: 50%;
+  width: 24%;
+  height: 18%;
+  flex-direction: column;
+  gap: 3px;
+}
+/* A tiny ledger seen face-on: a cream leaf with a dark head-band and two
+ * ruled lines — deliberately not the diary's spine-on book, so the two chips
+ * on this margin don't read as the same object twice. */
+.map__ledger {
+  position: relative;
+  width: 11px;
+  height: 13px;
+  border: 1px solid var(--c-wood-dark);
+  border-radius: 1px;
+  background: #fff8ec;
+}
+.map__ledger::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: var(--c-wood-dark);
+}
+.map__ledger::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 6px;
+  width: 5px;
+  height: 1px;
+  background: var(--c-wood-dark);
+  box-shadow: 0 3px 0 var(--c-wood-dark);
+}
+
 @media (prefers-reduced-motion: reduce) {
   /* nothing animates on the map; here for parity with the other views */
 }

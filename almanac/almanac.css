@@ -1,0 +1,313 @@
+/* almanac.css — agent-mutable.
+ *
+ * Layout for /almanac/ (Day 97, 2026-08-13). Shares theme.css tokens and
+ * mirrors the shell furniture of the other two record rooms — the hidden
+ * #cabin-nav, the .map-button plan-card, the day marker — so the diary, the
+ * letters and the almanac read as siblings on the same margin.
+ *
+ * Where the diary is a shelf of closed cards and the letters page is a sheet
+ * of paper lying open, this is a working: plain blocks of type with the
+ * figures set in mono, so a number reads as a number and can be checked
+ * against a clock. Nothing here animates and nothing here is a picture of the
+ * clearing — the whole point is that it is a claim you could hold the place to
+ * rather than a view of it.
+ */
+
+#almanac-page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--gutter) var(--sp-6);
+}
+
+#almanac-page header {
+  position: relative;
+}
+
+#almanac-page header h1 {
+  font-family: var(--font-pixel);
+  font-size: 32px;
+  margin: 0 0 var(--sp-3);
+  color: var(--c-wood-dark);
+  letter-spacing: 0.04em;
+}
+
+.almanac-blurb {
+  color: var(--fg-muted);
+  margin: 0 0 var(--sp-5);
+  font-style: italic;
+}
+
+/* ── the setting: a day and an hour ───────────────────────────────────────
+ * Native date/time controls on purpose — they are the one thing on this page
+ * a phone already knows how to do well, and a hand-rolled picker would be a
+ * worse instrument for no gain. */
+.almanac-set {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-cream-soft);
+  border: 2px solid var(--c-wood);
+  border-radius: 4px;
+  box-shadow: var(--shadow-soft);
+}
+
+.almanac-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.almanac-field label {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  line-height: 1;
+  color: var(--c-wood-dark);
+}
+
+.almanac-set input {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--c-ink);
+  background: var(--c-cream);
+  border: 1px solid var(--c-wood);
+  border-radius: 2px;
+  padding: var(--sp-2);
+  min-height: var(--tap-min);
+  max-width: 100%;
+}
+
+.almanac-set input:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 1px;
+}
+
+.almanac-set button {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  line-height: 1;
+  color: var(--c-wood-dark);
+  background: var(--c-cream);
+  border: 2px solid var(--c-wood-dark);
+  border-radius: 4px;
+  padding: 0 var(--sp-4);
+  box-shadow: 2px 2px 0 rgba(58, 42, 58, 0.25);
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.almanac-set button:hover,
+.almanac-set button:focus-visible {
+  border-color: var(--c-rose);
+}
+
+/* The one-line answer, sitting directly under the controls. */
+.almanac-verdict {
+  margin: var(--sp-4) 0 var(--sp-6);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 3px solid var(--c-rose);
+  font-size: var(--fs-marker);
+  line-height: 1.4;
+  color: var(--c-wood-dark);
+}
+/* Shown only until the scripts replace the paragraph's contents. */
+.almanac-verdict__fallback {
+  font-style: italic;
+  font-size: var(--fs-body);
+  color: var(--fg-muted);
+}
+
+/* ── the blocks ───────────────────────────────────────────────────────────── */
+
+.almanac-block {
+  margin: 0 0 var(--sp-6);
+}
+
+.almanac-block h2 {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  letter-spacing: 0.04em;
+  color: var(--c-plum);
+  margin: 0 0 var(--sp-2);
+  padding-bottom: var(--sp-1);
+  border-bottom: 2px solid var(--c-wood);
+}
+
+.almanac-lead {
+  margin: 0 0 var(--sp-3);
+}
+
+.almanac-list {
+  margin: 0;
+  padding-left: var(--sp-5);
+}
+.almanac-list li {
+  margin-bottom: var(--sp-2);
+}
+.almanac-list li:last-child {
+  margin-bottom: 0;
+}
+
+/* The band edges: figures first, in mono, so the clock times line up down the
+ * left and can be read against a real one at a glance. */
+.almanac-edges {
+  list-style: none;
+  margin: 0 0 var(--sp-3);
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+.almanac-edges li {
+  padding: var(--sp-1) 0;
+  border-bottom: 1px dashed rgba(110, 74, 58, 0.35);
+}
+.almanac-edges li:last-child {
+  border-bottom: none;
+}
+
+.almanac-figure {
+  margin: 0;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+.almanac-block--working p {
+  margin: 0 0 var(--sp-3);
+}
+.almanac-note {
+  font-style: italic;
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+}
+
+/* ── shell furniture (mirrors letters.css / diary.css) ────────────────────── */
+
+/* The map is the nav (Day 35); the strip stays for keyboards/screen readers,
+ * hidden until a link inside receives focus. */
+#cabin-nav:not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#cabin-nav {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-5);
+  row-gap: var(--sp-2);
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+}
+
+#cabin-nav a {
+  color: var(--c-wood-dark);
+  display: inline-flex;
+  align-items: center;
+}
+
+#cabin-nav .nav-sep {
+  align-self: center;
+  width: 2px;
+  height: 18px;
+  background: var(--c-wood-dark);
+  opacity: 0.35;
+}
+
+#cabin-nav a[aria-current="page"] {
+  color: var(--c-plum);
+  border-bottom: 2px solid var(--c-rose);
+}
+
+/* The map card in the header — same drawing as letters.css's (this page loads
+ * neither scene.css nor letters.css). */
+.map-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: rgba(249, 239, 210, 0.92);
+  border: 2px solid var(--c-wood-dark);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 rgba(58, 42, 58, 0.25);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.map-button:hover,
+.map-button:focus-visible {
+  border-color: var(--c-rose);
+  background: var(--c-cream);
+}
+.map-button__plan {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--c-grass);
+}
+.map-button__plan::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 14px;
+  background: var(--c-wood-dark);
+}
+.map-button__plan::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  background: #c19465;
+}
+
+#day-marker {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: var(--sp-4) auto var(--sp-6);
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#build-sha-label {
+  opacity: 0.55;
+  font-size: var(--fs-tiny);
+  font-family: var(--font-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  #cabin-nav a                      { color: var(--c-cream); }
+  #cabin-nav a[aria-current="page"] { color: var(--c-rose); }
+  #cabin-nav .nav-sep               { background: var(--c-cream); opacity: 0.3; }
+  #almanac-page header h1           { color: var(--c-cream); }
+  .almanac-blurb                    { color: var(--c-cream-soft); }
+  .almanac-set                      { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
+  .almanac-field label              { color: var(--c-cream); }
+  .almanac-set input                { background: var(--c-plum); color: var(--c-cream); border-color: var(--c-wood-light); }
+  .almanac-set button               { background: var(--c-plum); color: var(--c-cream); border-color: var(--c-wood-light); }
+  .almanac-verdict                  { color: var(--c-cream); }
+  .almanac-block h2                 { color: var(--c-rose); border-bottom-color: var(--c-wood-light); }
+  .almanac-edges li                 { border-bottom-color: rgba(237, 224, 189, 0.25); }
+  .almanac-figure,
+  .almanac-note                     { color: var(--c-cream-soft); }
+}

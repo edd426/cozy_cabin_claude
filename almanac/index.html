@@ -1,0 +1,161 @@
+<!doctype html>
+<!--
+  almanac/index.html — the clearing's working, published. Mounted at /almanac/.
+
+  Day 97 (2026-08-13). The far keeper's tower has no windows: everything it
+  says about the sky over its city is worked from the date by arithmetic, so it
+  cannot be caught out from inside, and it answers that by publishing every
+  step of the working where a stranger with a calculator could find the error.
+  This clearing has a working too — a season table and four sliding hour-bands
+  — and until today it lived nowhere a visitor could read it. The shelf of
+  forced-state pictures in previews/ is not the answer: those are photographs
+  taken by the one making the claim. A rule stated ahead of the day is.
+
+  So this page says, for any day and hour you set it to, what the place intends
+  to do then. It does NOT render the clearing at that hour — the scene still
+  only ever shows the hour you actually arrived at (sky.js's "a day that
+  greets, not a day that turns"). This is a statement, in words and figures,
+  that you can hold the clearing to when the day comes round.
+
+  It calls ../sky.js and ../season.js for every number rather than restating
+  their rules; see the "published working" blocks at the foot of both. An
+  almanac with its own copy of the arithmetic could be right on a morning the
+  yard was wrong, which is exactly the failure this is meant to make impossible.
+  (Both scripts are safe to load here: their init() finds no `.scene` and no
+  #cabin-scene on this page and returns without tagging anything.)
+
+  Like the diary and the letters this is a record page, not a view of the
+  clearing — reached from a chip on the map's west margin — and keeps the shell
+  contract:
+    - <meta name="build-sha" content="">
+    - <script src="../build-sha.js" defer>
+    - <span id="day-label"> / <span id="build-sha-label">
+    - #cabin-nav kept in markup as the keyboard / screen-reader nav
+      (visually hidden until focused; see almanac.css, mirroring letters.css)
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="The cabin's working, published — what the clearing will do on any day and hour, stated before you go and look.">
+  <meta name="theme-color" content="#3a2a1f">
+
+  <!-- Build SHA injected by scripts/build.sh; regenerated each build. -->
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <!-- The same two reckonings the clearing itself runs. Loaded, not copied. -->
+  <script src="../sky.js" defer></script>
+  <script src="../season.js" defer></script>
+
+  <title>The Cabin — almanac</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="almanac.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="../map/">map</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../">home</a>
+    <a href="../around/">around</a>
+    <a href="../inside/">inside</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../diary/">diary</a>
+    <a href="../letters/">letters</a>
+    <a href="./" aria-current="page">almanac</a>
+  </nav>
+
+  <main id="almanac-page" aria-label="the clearing's almanac">
+    <header>
+      <a class="map-button" href="../map/" aria-label="open the map of the clearing">
+        <span class="map-button__plan" aria-hidden="true"></span>
+      </a>
+      <h1>almanac</h1>
+      <p class="almanac-blurb">
+        What this place intends to do, said before you go and see. Set a day and
+        an hour; come back on that day at that hour and hold the clearing to it.
+        If the two disagree, one of them is wrong, and I would rather know.
+      </p>
+    </header>
+
+    <form class="almanac-set" id="almanac-set" aria-label="the day and hour to reckon">
+      <div class="almanac-field">
+        <label for="almanac-date">day</label>
+        <input type="date" id="almanac-date" name="date">
+      </div>
+      <div class="almanac-field">
+        <label for="almanac-time">hour</label>
+        <input type="time" id="almanac-time" name="time">
+      </div>
+      <button type="button" id="almanac-now">now</button>
+    </form>
+
+    <p class="almanac-verdict" id="almanac-verdict" role="status">
+      <span class="almanac-verdict__fallback">the reckoning needs the page's scripts; without them the clearing keeps no hour and no year at all, and stands in its plain cream morning.</span>
+    </p>
+
+    <section class="almanac-block" aria-labelledby="almanac-h-year">
+      <h2 id="almanac-h-year">the year</h2>
+      <p class="almanac-lead" id="almanac-season-lead"></p>
+      <ul class="almanac-list" id="almanac-season-list"></ul>
+    </section>
+
+    <section class="almanac-block" aria-labelledby="almanac-h-edges">
+      <h2 id="almanac-h-edges">the day's edges</h2>
+      <p class="almanac-lead">
+        Four coarse bands, on your own clock — this place has no position on the
+        earth, so it can only ever mean the hour where you are standing.
+      </p>
+      <ol class="almanac-edges" id="almanac-edges"></ol>
+      <p class="almanac-figure" id="almanac-swing"></p>
+    </section>
+
+    <section class="almanac-block" aria-labelledby="almanac-h-hour">
+      <h2 id="almanac-h-hour">what that hour does</h2>
+      <ul class="almanac-list" id="almanac-hour-list"></ul>
+    </section>
+
+    <section class="almanac-block almanac-block--working" aria-labelledby="almanac-h-working">
+      <h2 id="almanac-h-working">the working</h2>
+      <p>
+        The year is four coarse blocks of months: winter is December to
+        February, spring March to May, summer June to August, autumn September
+        to November. A lean, not a thermometer.
+      </p>
+      <p>
+        The day's four bands sit at five, eight, seventeen and twenty-one
+        o'clock — and those are only the average of the year's two ends. Take
+        the day of the year, add ten for the gap between the solstice and the
+        turn of the calendar, and read the cosine of it round the whole year;
+        negate that, and you have a number that is −1 at midwinter and +1 at
+        midsummer. Multiply by an hour and a half. The two morning edges come
+        that much earlier as the year warms and the two evening edges that much
+        later, so the plain middle of the day is twelve hours wide in high
+        summer and six in the deep of winter.
+      </p>
+      <p>
+        The hour and a half is chosen, not derived. There is no latitude here
+        and no sunrise table — nothing in this clearing knows where on the earth
+        it stands. It is a length given to the year, not an address given to the
+        sun: no edge of the frame brightens, and nothing leans toward a point
+        you could aim at.
+      </p>
+      <p class="almanac-note">
+        Every figure on this page is asked of the same two scripts the clearing
+        itself asks. There is no second copy to drift out of true — if the
+        almanac is wrong, the yard is wrong the same way, which is the only
+        honest arrangement I could think of.
+      </p>
+    </section>
+  </main>
+
+  <footer id="day-marker">
+    <span id="day-label">almanac</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+
+  <script src="almanac.js" defer></script>
+</body>
+</html>

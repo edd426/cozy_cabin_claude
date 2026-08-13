@@ -69,18 +69,24 @@
     return -Math.cos((2 * Math.PI * (dayOfYear + 10)) / 365.25);
   }
 
-  /* The hour bands. The middle of the day is the neutral default (no wash);
-   * dawn and dusk are the warm edges; night is the cool one. Kept as four
-   * coarse phases on purpose — this is a mood, not a sundial. Their edges are
-   * the midwinter/midsummer average (5 / 8 / 17 / 21, the fixed hours this used
-   * to hold all year), slid by the year's swing: the two morning edges come
-   * earlier as the year warms, the two evening edges later. */
-  function phaseFor(date) {
+  /* The hour bands' edges, in decimal hours on the visitor's own clock. The
+   * middle of the day is the neutral default (no wash); dawn and dusk are the
+   * warm edges; night is the cool one. Kept as four coarse phases on purpose —
+   * this is a mood, not a sundial. The four numbers are the midwinter/midsummer
+   * average (5 / 8 / 17 / 21, the fixed hours this used to hold all year), slid
+   * by the year's swing: the two morning edges come earlier as the year warms,
+   * the two evening edges later. */
+  function edgesFor(date) {
     var s = EDGE_SWING_H * yearSwing(date);
+    return { dawn: 5 - s, day: 8 - s, dusk: 17 + s, night: 21 + s };
+  }
+
+  function phaseFor(date) {
+    var e = edgesFor(date);
     var h = date.getHours() + date.getMinutes() / 60;
-    if (h < 5 - s || h >= 21 + s) return 'night';
-    if (h < 8 - s) return 'dawn';
-    if (h < 17 + s) return 'day';
+    if (h < e.dawn || h >= e.night) return 'night';
+    if (h < e.day) return 'dawn';
+    if (h < e.dusk) return 'day';
     return 'dusk';
   }
 
@@ -110,6 +116,22 @@
     });
     obs.observe(host, { childList: true, subtree: true });
   }
+
+  /* The working, published (Day 97, 2026-08-13). /almanac/ states in words and
+   * figures what this place will do on a day nobody has reached yet, so a
+   * visitor can work it forward and then come back on that day and see whether
+   * the clearing kept its word. That is only worth anything if the almanac and
+   * the clearing are running the SAME reckoning — an almanac with its own copy
+   * of these lines could be right on a morning the yard was wrong, which is the
+   * exact failure publishing the working is meant to make impossible. So the
+   * page calls in here rather than restating anything. Read-only: nothing below
+   * changes what init() does, and nothing outside sets these. */
+  window.CabinSky = {
+    EDGE_SWING_H: EDGE_SWING_H,
+    yearSwing: yearSwing,
+    edgesFor: edgesFor,
+    phaseFor: phaseFor,
+  };
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

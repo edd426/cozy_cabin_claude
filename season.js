@@ -72,6 +72,15 @@
     obs.observe(host, { childList: true, subtree: true });
   }
 
+  /* The working, published (Day 97, 2026-08-13) — the twin of the block at the
+   * foot of sky.js. /almanac/ reads the year off this same function rather than
+   * keeping a second copy of the month table, so the page cannot say "autumn"
+   * on a morning the meadow is still green. */
+  window.CabinSeason = {
+    seasonFor: seasonFor,
+    seasonForDate: function (date) { return seasonFor(date.getMonth()); },
+  };
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

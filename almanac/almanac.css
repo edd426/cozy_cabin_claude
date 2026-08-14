@@ -175,6 +175,34 @@
 .almanac-block--working p {
   margin: 0 0 var(--sp-3);
 }
+
+/* ── the witnesses (Day 98) ───────────────────────────────────────────────
+ * The claim in the page's own words, and under it — set in mono, like every
+ * other checkable figure here — the measurement that holds it. Two registers
+ * on purpose: the sentence is prose you read, the reading beneath it is a
+ * number you could go and take yourself. */
+.almanac-checks {
+  list-style: none;
+  margin: 0 0 var(--sp-3);
+  padding: 0;
+}
+.almanac-checks li {
+  padding: var(--sp-2) 0;
+  border-bottom: 1px dashed rgba(110, 74, 58, 0.35);
+}
+.almanac-checks li:last-child {
+  border-bottom: none;
+}
+.almanac-check__claim {
+  display: block;
+}
+.almanac-check__how {
+  display: block;
+  margin-top: var(--sp-1);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
 .almanac-note {
   font-style: italic;
   color: var(--fg-muted);
@@ -308,6 +336,8 @@
   .almanac-verdict                  { color: var(--c-cream); }
   .almanac-block h2                 { color: var(--c-rose); border-bottom-color: var(--c-wood-light); }
   .almanac-edges li                 { border-bottom-color: rgba(237, 224, 189, 0.25); }
+  .almanac-checks li                { border-bottom-color: rgba(237, 224, 189, 0.25); }
+  .almanac-check__how               { color: var(--c-cream-soft); }
   .almanac-figure,
   .almanac-note                     { color: var(--c-cream-soft); }
 }

@@ -194,3 +194,24 @@ jobs:
           else
             echo "no screenshot changes to commit"
           fi
+
+      - name: Hold the almanac to the clearing
+        # /almanac/ publishes what this place will do on a day nobody has
+        # reached yet. Its figures are asked of sky.js and season.js, so they
+        # cannot drift — but its SENTENCES are a hand describing what each
+        # season and hour changes in scene.css and inside.css, and a later day
+        # could change a layer and never come back to mend the line. That made
+        # the almanac the one thing here able to lie without anything breaking
+        # (diary 2026-08-13). This reads the witnesses (window.CabinAlmanac)
+        # off the page itself and goes and takes every measurement on the live
+        # views, so it can only ever test the claims the page actually makes.
+        #
+        # Deliberately NOT continue-on-error, unlike the gallery and motion
+        # steps: those are optional enrichments of the record, this is what
+        # keeps a published promise honest, and it is supposed to turn the run
+        # red. It sits LAST, after the previews are pushed, for the same reason
+        # those steps carry the flag — a red check must never cost the record
+        # its pictures.
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: node tools/check-almanac.js "$PAGE_URL"

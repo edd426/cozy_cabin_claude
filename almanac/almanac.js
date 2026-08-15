@@ -29,6 +29,16 @@
  * are read by eye, not counted — so the check is a floor under the prose, never
  * a proof of all of it. Add a witness whenever a claim becomes countable.
  *
+ * Day 99 (2026-08-15): the witnesses reached only the countable, and the things
+ * this place actually promises are not countable in that way — winter is a hush
+ * and not a death, nothing here is ever lost, the light never gets an address
+ * (diary 2026-08-14). VOWS below holds those three, and the answer to "what
+ * number says a hush" turned out to be none: a promise is a refusal, and a
+ * refusal wants a FLOOR asked of every state on the wheel rather than a reading
+ * taken at one. Hence the new `floor` + `over` check kind. The third vow has no
+ * witness at all and the page says so in its own words — the list would be worth
+ * less if it read as complete.
+ *
  * Note what the page is not: it does not render the clearing at the hour you
  * set. The scene still only ever shows the hour you actually arrived at — a
  * day that greets, not a day that turns. This is a statement you can hold the
@@ -205,6 +215,18 @@
       selector: '.jar__sprig',
       reads: 'how tall the sprig stands in the mantle jar',
     },
+    /* The `reads` line has the view appended to it when the page sets it out,
+     * so it names the measurement only and never where it is taken. */
+    'tree-crowns': {
+      view: 'home', kind: 'visible-count',
+      selector: '.sprite--tree, .sprite--tree-small',
+      reads: 'how many tree crowns are still standing',
+    },
+    'tree-crown-fade': {
+      view: 'home', kind: 'opacity',
+      selector: '.sprite--tree',
+      reads: 'how solidly the larger crown is drawn',
+    },
     'candle-wax': {
       view: 'inside', kind: 'height',
       selector: '.mantle-item--candle',
@@ -212,13 +234,61 @@
     },
   };
 
+  /* ── the vows (Day 99) ──────────────────────────────────────────────────
+   *
+   * The sentences above describe what a named state LOOKS like. These three are
+   * a different animal: they are what this place will never do, on any day, in
+   * any state — the oldest things kept here and the ones nothing had ever been
+   * asked to hold (diary 2026-08-14).
+   *
+   * A description wants a reading: go to autumn, count the logs. A refusal wants
+   * a FLOOR: go to every state on the wheel and check nothing has gone under.
+   * That is why the vow checks below carry `floor` + `over` rather than `expect`,
+   * and why `over` is always the whole round rather than the states some sentence
+   * happens to name — a promise that only holds in the months you looked at is
+   * not a promise. The other half of "nothing is lost" is the return leg, which
+   * needs no new machinery: `rising` on the pair where the wheel comes back up.
+   *
+   * `unwitnessed` is not an apology, it is the point. The third vow has no
+   * witness and says so on the page in its own words; a guard that quietly
+   * covered two of three and let the page read as watched would be exactly the
+   * failure the whole almanac exists to refuse. */
+  var VOWS = [
+    {
+      key: 'hush',
+      says: 'Winter is a hush, not a death. The year may lean the colour of a thing; it may never strip it. Nothing in this clearing goes bare, and nothing goes black.',
+    },
+    {
+      key: 'kept',
+      says: 'Nothing here is ever lost. What spends is given back — the wheel turns down and then it turns up again — and no reading anywhere on it is ever nothing.',
+    },
+    {
+      key: 'nowhere',
+      says: 'The light never gets an address. There is no place in any frame where you could stand and point and say the sun is there: the hour has a length and a colour, and no direction at all.',
+      unwitnessed:
+        'This one has no witness, and I would rather say so than let the list read as complete. ' +
+        'A wash is even edge to edge, and evenness is the thing a measurement is worst at — what would ' +
+        'actually catch a lean is a pair of eyes on the frame. Two rules stand behind it and neither is ' +
+        'a check: the near ground takes the hour flat, so only the far bodies (the hills’ crests, the ' +
+        'clouds’ bellies, the door side’s fog) ever wear a lit rim; and indoors, every cast shadow is ' +
+        'thrown away from a fire that is drawn in the picture, which is why they fan apart instead of ' +
+        'lying parallel. This vow is kept by hand.',
+    },
+  ];
+
   /* A check is one sentence of the prose above, held to one probe.
    *
    * `axis` is the clock it varies — 'season' or 'tod' — and `at` pins the other
-   * one, because most of these gates are read off both. Then either:
+   * one, because most of these gates are read off both. Then one of:
    *   expect — the exact reading in each state, for the scale-free probes
    *   rising / falling — the states in the order the readings must run,
    *     strictly, for the probes whose absolute size depends on the breakpoint
+   *   floor + over — the reading must never fall below `floor` in any state in
+   *     `over`. A floor of 1 on a laid-out size is a PRESENCE floor, not a size
+   *     claim, so it stays honest at both breakpoints the way the note above
+   *     requires; counts and opacities are scale-free anyway.
+   * `vow` marks a check as holding one of VOWS rather than a line of the season
+   * or hour prose; those render in their own block on the page.
    * `guards` names, in the almanac's own words, which claim would break. */
   var CHECKS = [
     {
@@ -270,6 +340,63 @@
       probe: 'candle-wax', axis: 'tod', at: { season: 'summer' },
       falling: ['dawn', 'dusk', 'night'],
       guards: '“the candle … standing full again as though a hand replaced it in the dark”, “spent down to four of its six”, then “down to three, a low stub”',
+    },
+
+    /* ── the vows' witnesses (Day 99) ────────────────────────────────────
+     * Every one of these walks the whole wheel, not the states some sentence
+     * points at. None of them says what a thing is; each says what it never
+     * becomes. They are meant to stay green through any amount of honest
+     * redrawing above — change the pile's counts and you mend `expect`; the
+     * floor only ever goes red if the pile actually empties. */
+    {
+      probe: 'tree-crowns', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      floor: 2, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'both crowns still standing in every month of the year — “never a bare branch”',
+    },
+    {
+      probe: 'tree-crown-fade', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the crown drawn solid in every season — the year tints the leaf and never thins it away',
+    },
+    {
+      probe: 'sprig-stem', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the sprig still drawn in the jar in every season — it draws in for the cold and is never gone',
+    },
+    {
+      probe: 'woodpile-logs', axis: 'season', at: { tod: 'day' }, vow: 'kept',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the store never running out — the pile is spent through the winter and is never empty',
+    },
+    {
+      probe: 'woodpile-logs', axis: 'season', at: { tod: 'day' }, vow: 'kept',
+      rising: ['spring', 'summer', 'autumn'],
+      guards: 'the pile climbing back from its spring thinnest — the far half of the year’s wheel, the spending given back',
+    },
+    {
+      probe: 'candle-wax', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the candle never guttering out — a low stub at midnight, never a cold saucer',
+    },
+    {
+      probe: 'candle-wax', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      rising: ['night', 'dawn'],
+      guards: 'the candle standing full again at dawn after the evening spends it — the far half of the day’s wheel',
+    },
+    {
+      probe: 'fire-flame', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the hearth lit at every hour — you come in cold at any of them and stop being cold',
+    },
+    {
+      probe: 'fire-flame', axis: 'season', at: { tod: 'day' }, vow: 'kept',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the hearth lit in every season as well — it deepens in the cold, and it is never out',
+    },
+    {
+      probe: 'smoke-puffs', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the chimney breathing at every hour — “someone’s always home, the fire never quite goes out”',
     },
   ];
 
@@ -360,40 +487,87 @@
     inside: 'the room',
   };
 
+  /* The reading a check demands, in the compact mono form the page sets under
+   * each claim: "summer 7 · autumn 9", or "spring < summer < autumn", or
+   * "summer, autumn, winter, spring — never below 1". */
+  function readingOf(check) {
+    var states, parts = [], j;
+
+    if (check.expect) {
+      states = Object.keys(check.expect);
+      for (j = 0; j < states.length; j++) {
+        parts.push(states[j] + ' ' + check.expect[states[j]]);
+      }
+      return parts.join(' · ');
+    }
+    if (check.floor !== undefined) {
+      return check.over.join(', ') + ' — never below ' + check.floor;
+    }
+    states = check.rising || check.falling;
+    return states.join(check.rising ? ' < ' : ' > ');
+  }
+
+  function checkItem(check) {
+    var probe = PROBES[check.probe];
+    var li = document.createElement('li');
+
+    var claim = document.createElement('span');
+    claim.className = 'almanac-check__claim';
+    claim.textContent = check.guards;
+    li.appendChild(claim);
+
+    var how = document.createElement('span');
+    how.className = 'almanac-check__how';
+    how.textContent =
+      probe.reads + ', in ' + VIEW_NAME[probe.view] + ' — ' + readingOf(check);
+    li.appendChild(how);
+
+    return li;
+  }
+
   /* The witnesses, set out in words. Rendered once — they don't depend on the
-   * day or hour you set, which is rather the point of them. */
+   * day or hour you set, which is rather the point of them. The vow checks are
+   * held back for their own block below. */
   function renderChecks() {
     var list = el('almanac-checks');
     if (!list) return;
     list.textContent = '';
 
     for (var i = 0; i < CHECKS.length; i++) {
-      var check = CHECKS[i];
-      var probe = PROBES[check.probe];
-      var states, j, parts = [];
+      if (!CHECKS[i].vow) list.appendChild(checkItem(CHECKS[i]));
+    }
+  }
 
-      if (check.expect) {
-        states = Object.keys(check.expect);
-        for (j = 0; j < states.length; j++) {
-          parts.push(states[j] + ' ' + check.expect[states[j]]);
-        }
-      } else {
-        states = check.rising || check.falling;
-        parts.push(states.join(check.rising ? ' < ' : ' > '));
-      }
+  /* The vows, each followed by whatever holds it — or, for the one that nothing
+   * holds, by the plain reason nothing does. */
+  function renderVows() {
+    var list = el('almanac-vows');
+    if (!list) return;
+    list.textContent = '';
 
+    for (var i = 0; i < VOWS.length; i++) {
+      var vow = VOWS[i];
       var li = document.createElement('li');
 
-      var claim = document.createElement('span');
-      claim.className = 'almanac-check__claim';
-      claim.textContent = check.guards;
-      li.appendChild(claim);
+      var says = document.createElement('p');
+      says.className = 'almanac-vow__says';
+      says.textContent = vow.says;
+      li.appendChild(says);
 
-      var how = document.createElement('span');
-      how.className = 'almanac-check__how';
-      how.textContent =
-        probe.reads + ', in ' + VIEW_NAME[probe.view] + ' — ' + parts.join(' · ');
-      li.appendChild(how);
+      var held = document.createElement('ul');
+      held.className = 'almanac-checks';
+      for (var j = 0; j < CHECKS.length; j++) {
+        if (CHECKS[j].vow === vow.key) held.appendChild(checkItem(CHECKS[j]));
+      }
+
+      if (held.children.length) {
+        li.appendChild(held);
+      } else {
+        var none = document.createElement('p');
+        none.className = 'almanac-vow__unwitnessed';
+        none.textContent = vow.unwitnessed || 'Nothing holds this one.';
+        li.appendChild(none);
+      }
 
       list.appendChild(li);
     }
@@ -419,6 +593,7 @@
     setNow();
     update();
     renderChecks();
+    renderVows();
 
     dateInput.addEventListener('change', update);
     timeInput.addEventListener('change', update);
@@ -439,6 +614,7 @@
   window.CabinAlmanac = {
     PROBES: PROBES,
     CHECKS: CHECKS,
+    VOWS: VOWS,
   };
 
   if (document.readyState === 'loading') {

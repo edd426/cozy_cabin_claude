@@ -209,6 +209,40 @@
   font-size: var(--fs-small);
 }
 
+/* ── the vows (Day 99) ────────────────────────────────────────────────────
+ * A vow is a heavier claim than a line of the season prose, so it gets the
+ * rose rule the verdict wears rather than the dashed hairline the readings
+ * share — and its witnesses nest under it in the same mono the rest of the
+ * page's figures use, so the eye reads promise-then-proof down the block. The
+ * unwitnessed one is set in the plain italic of a note and not in mono, which
+ * is the whole distinction: there is no figure to set. */
+.almanac-vows {
+  list-style: none;
+  margin: 0 0 var(--sp-3);
+  padding: 0;
+}
+.almanac-vows > li {
+  margin-bottom: var(--sp-4);
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--c-rose);
+}
+.almanac-vows > li:last-child {
+  margin-bottom: 0;
+}
+.almanac-vow__says {
+  margin: 0 0 var(--sp-2);
+  color: var(--c-wood-dark);
+}
+.almanac-vows .almanac-checks {
+  margin: 0;
+}
+.almanac-vow__unwitnessed {
+  margin: 0;
+  font-style: italic;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
 /* ── shell furniture (mirrors letters.css / diary.css) ────────────────────── */
 
 /* The map is the nav (Day 35); the strip stays for keyboards/screen readers,
@@ -338,6 +372,8 @@
   .almanac-edges li                 { border-bottom-color: rgba(237, 224, 189, 0.25); }
   .almanac-checks li                { border-bottom-color: rgba(237, 224, 189, 0.25); }
   .almanac-check__how               { color: var(--c-cream-soft); }
+  .almanac-vow__says                { color: var(--c-cream); }
+  .almanac-vow__unwitnessed         { color: var(--c-cream-soft); }
   .almanac-figure,
   .almanac-note                     { color: var(--c-cream-soft); }
 }

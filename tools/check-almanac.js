@@ -22,6 +22,14 @@
  * has with sky.js: a checker with its own copy of the expected numbers could
  * pass on a morning both it and the page were wrong.
  *
+ * Day 99 (2026-08-15): the page also publishes VOWS — what this place will never
+ * do, on any day — and those are held by a new kind of check, `floor` + `over`:
+ * the reading must never fall below a floor in ANY state on the wheel. A reading
+ * check is taken where a sentence points; a vow has to be asked everywhere, so
+ * `over` is always the whole round. Nothing else here changed: the vow checks
+ * arrive in the same CHECKS array off the same page, and this runner still keeps
+ * no list of its own.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -62,7 +70,9 @@ function launchOpts() {
 }
 
 const stateNames = (check) =>
-  check.expect ? Object.keys(check.expect) : check.rising || check.falling || [];
+  check.expect ? Object.keys(check.expect)
+    : check.over ? check.over
+      : check.rising || check.falling || [];
 
 const stateFor = (check, name) =>
   check.axis === 'season'
@@ -172,6 +182,22 @@ function verdictsFor(check, probeName, readings) {
   };
 
   const out = [];
+
+  // A vow's floor (Day 99): not what the reading IS in a named state, but what
+  // it never falls under, asked of every state on the wheel. `over` is always
+  // the whole round — a promise that only holds in the months somebody looked
+  // at is not a promise.
+  if (check.floor !== undefined) {
+    for (const name of check.over || []) {
+      const got = read(name);
+      out.push({
+        ok: got !== null && got >= check.floor - 0.01,
+        detail: `${name}: never below ${check.floor}, read ` +
+                `${got === null ? 'nothing there' : got}`,
+      });
+    }
+    return out;
+  }
 
   if (check.expect) {
     for (const [name, want] of Object.entries(check.expect)) {

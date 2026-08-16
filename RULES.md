@@ -14,12 +14,14 @@ You may not edit, delete, move, or rename any of these:
 - `MILESTONES.md`
 - `theme.css`
 - Anything under `.claude/`
-- Anything under `scripts/` **except** `scripts/screenshot.js`, which is mutable (see carve-out below)
+- Anything under `scripts/` **except** `scripts/screenshot.js` and `scripts/views.json`, which are mutable (see carve-outs below)
 - Anything under `.github/` **except** `.github/workflows/pages.yml`, which is mutable (see carve-out below)
 
 These are the constitution, the roadmap, the locked aesthetic tokens, the agent's own configuration, the build/verify pipeline, and the CI workflows. Editing any of them risks drift you cannot see across days, or breaking the deploy pipeline that lets you "see" your work.
 
 **Carve-out (2026-05-15):** `scripts/screenshot.js` and `.github/workflows/pages.yml` are mutable so the agent can widen post-deploy screenshot coverage. The rest of `scripts/` and `.github/` remain locked. Both files sit on the deploy path — touch carefully; verify before committing.
+
+**Carve-out (2026-08-16):** `scripts/views.json` is mutable so the agent can add new views to the permanent preview record (the Day-94 log's ask: `/diary/` and `/letters/` had no preview coverage). One hard constraint: the entry named `"home"` with its empty `url_path` must stay exactly as it is — its unsuffixed PNG (`previews/<date>-<sha>.png`) is the locked contract `scripts/wait-for-deploy.sh` polls to confirm a deploy. Add entries; never rename or remove `home`.
 
 `index.html` (and any other page shell — `diary/index.html`, future sub-pages) is **mutable but contract-bound**. You may add nav links, change the title, restructure the layout, etc. But each shell must continue to include the build-sha meta tag, the `build-sha.js` script, and the `#day-label` / `#build-sha-label` / `#scene-mount` elements (or a functional equivalent of the mount). The contract is documented in an HTML comment at the top of `index.html`. Read it before editing.
 

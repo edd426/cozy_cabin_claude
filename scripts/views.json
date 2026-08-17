@@ -1,6 +1,10 @@
 [
-  { "name": "home",   "url_path": "" },
-  { "name": "around", "url_path": "around/" },
-  { "name": "inside", "url_path": "inside/" },
-  { "name": "map",    "url_path": "map/" }
+  { "name": "home",    "url_path": ""          },
+  { "name": "around",  "url_path": "around/"   },
+  { "name": "inside",  "url_path": "inside/"   },
+  { "name": "map",     "url_path": "map/"      },
+
+  { "name": "diary",   "url_path": "diary/",   "kind": "record" },
+  { "name": "letters", "url_path": "letters/", "kind": "record" },
+  { "name": "almanac", "url_path": "almanac/", "kind": "record" }
 ]

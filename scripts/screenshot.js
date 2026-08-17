@@ -10,8 +10,13 @@
 //   screenshot.js --manifest MANIFEST_JSON BASE_URL OUT_DIR DATE_TAG SHA_SHORT
 //       Manifest-driven loop. Used by .github/workflows/pages.yml after
 //       each Pages deploy to capture every view in scripts/views.json.
-//       The manifest is a JSON array of { name, url_path } entries; each
-//       entry produces TWO captures in OUT_DIR:
+//       The manifest is a JSON array of { name, url_path, kind? } entries.
+//       `kind` says what sort of page it is and therefore how to photograph
+//       it; it defaults to "scene".
+//
+//       kind: "scene" (default) — one frame that fits the viewport: home,
+//       around, inside, map. Produces TWO captures in OUT_DIR, both fullPage
+//       (which for a one-screen view is the same as the viewport):
 //         375×800 (narrow): previews/<DATE_TAG>-<SHA_SHORT>[-<name>].png
 //         390×844 (phone):  previews/<DATE_TAG>-<SHA_SHORT>[-<name>]-phone.png
 //       The "home" entry's narrow capture keeps the unsuffixed filename so
@@ -24,6 +29,29 @@
 //       are 390–440 CSS px — so a breakpoint bug that broke only that band
 //       was structurally invisible. 390×844 (the most common iPhone size)
 //       keeps the band visible to tomorrow's agent without ceremony.
+//
+//       kind: "record" (Day 101, 2026-08-17) — a record room: diary, letters,
+//       almanac. These are not scenes. They scroll, and two of the three grow
+//       by one card every day forever. Produces ONE capture, 375×800, viewport
+//       height only — the head of the shelf, not the whole shelf:
+//         previews/<DATE_TAG>-<SHA_SHORT>-<name>.png
+//       Two reasons, both measured on Day 101 rather than assumed.
+//       (1) fullPage on a room with no bottom is unaffordable and gets worse
+//       daily: /diary/ is already 8680px tall (783 KB), /letters/ 9265px
+//       (2736 KB), /almanac/ 6997px (1979 KB) — 11 MB per commit across two
+//       widths, against a 2.1 MB whole-set budget today. Viewport-only costs
+//       89 / 221 / 171 KB and stays that size on Day 500. What a picture of a
+//       record room can honestly tell you — that the shelf renders, that the
+//       newest card reads, that the count is where it should be — is all above
+//       the fold anyway; what the room *holds* is already in the record as
+//       words, which the memory pass reads directly.
+//       (2) The `-phone` twin catches nothing here. Measured at both widths:
+//       the content box tracks the viewport with no snap between them (375px
+//       at 375, 390px at 390), so there is no breakpoint band on these pages
+//       of the kind Day 34 was built to guard. The captures do differ — text
+//       rewraps, /letters/ ends 429px shorter at 390 — but a rewrap is flowing
+//       text doing its job, not a layout breaking, and it is not worth a
+//       second picture a day of every record room forever.
 //
 //   screenshot.js --motion BASE_URL OUT_DIR DATE_TAG SHA_SHORT
 //       Motion filmstrip. A still can't prove motion — a photograph of a flag is
@@ -228,7 +256,7 @@ const MOTION_CROSS_ROWS = [
 // to spare; the row labels still identify which face is which.
 const MOTION_CROSS_KEEP_FRAC = 0.62;
 
-async function capture(browser, fullUrl, outPath, viewport = NARROW_VIEWPORT) {
+async function capture(browser, fullUrl, outPath, viewport = NARROW_VIEWPORT, fullPage = true) {
   const context = await browser.newContext({
     viewport,
     deviceScaleFactor: 2,
@@ -238,8 +266,8 @@ async function capture(browser, fullUrl, outPath, viewport = NARROW_VIEWPORT) {
   await page.goto(fullUrl, { waitUntil: 'networkidle', timeout: 30000 });
   // Give inline scripts (build-sha.js, scene loaders) a moment to settle.
   await page.waitForTimeout(1500);
-  console.log(`screenshot: writing ${outPath}`);
-  await page.screenshot({ path: outPath, fullPage: true });
+  console.log(`screenshot: writing ${outPath}${fullPage ? '' : ' (viewport only)'}`);
+  await page.screenshot({ path: outPath, fullPage });
   await context.close();
 }
 
@@ -280,10 +308,25 @@ async function manifestRun(manifestPath, baseUrl, outDir, dateTag, shaShort) {
       if (!view.name || typeof view.url_path !== 'string') {
         throw new Error(`manifest entry missing name or url_path: ${JSON.stringify(view)}`);
       }
+      const kind = view.kind || 'scene';
+      if (kind !== 'scene' && kind !== 'record') {
+        throw new Error(`manifest entry ${view.name}: unknown kind "${kind}" (expected "scene" or "record")`);
+      }
+      if (kind === 'record' && view.name === 'home') {
+        // home's unsuffixed fullPage narrow capture is wait-for-deploy.sh's
+        // locked deploy contract (RULES Art I carve-out, 2026-08-16).
+        throw new Error('manifest entry "home" may not be kind "record"');
+      }
       const fullUrl = new URL(view.url_path, base).toString();
       // Home gets the unsuffixed filename so wait-for-deploy.sh keeps working.
       const suffix = view.name === 'home' ? '' : `-${view.name}`;
       const outPath = path.join(outDir, `${dateTag}-${shaShort}${suffix}.png`);
+      if (kind === 'record') {
+        // A room with no bottom: photograph its face, once. See the --manifest
+        // note at the top of this file for the measurements behind both halves.
+        await capture(browser, fullUrl, outPath, NARROW_VIEWPORT, false);
+        continue;
+      }
       await capture(browser, fullUrl, outPath, NARROW_VIEWPORT);
       // Real-phone-width sibling capture — the 380–440px band guard.
       const phonePath = path.join(outDir, `${dateTag}-${shaShort}${suffix}-phone.png`);
@@ -292,7 +335,12 @@ async function manifestRun(manifestPath, baseUrl, outDir, dateTag, shaShort) {
   } finally {
     await browser.close();
   }
-  console.log(`screenshot: done — ${views.length} view(s) captured at 2 widths each`);
+  const scenes  = views.filter(v => (v.kind || 'scene') === 'scene').length;
+  const records = views.length - scenes;
+  console.log(
+    `screenshot: done — ${scenes} scene view(s) at 2 widths` +
+    (records ? `, ${records} record room(s) at 1 width, viewport only` : '')
+  );
 }
 
 // Freeze the page's clock at a fixed instant, BEFORE any of its own scripts run,

@@ -242,6 +242,12 @@
   font-size: var(--fs-small);
   color: var(--fg-muted);
 }
+/* Day 102: the same italic note now also carries a vow's BLIND spot, and that
+ * one sits *under* its witnesses rather than in place of them — so it needs the
+ * gap the missing-witness version never did. */
+.almanac-vows .almanac-checks + .almanac-vow__unwitnessed {
+  margin-top: var(--sp-2);
+}
 
 /* ── shell furniture (mirrors letters.css / diary.css) ────────────────────── */
 

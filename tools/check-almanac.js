@@ -30,6 +30,16 @@
  * arrive in the same CHECKS array off the same page, and this runner still keeps
  * no list of its own.
  *
+ * Day 102 (2026-08-18): the third vow — the light never gets an address — gets a
+ * witness at last, and it needed the mirror of a floor. `ceiling` + `over`: the
+ * reading may never rise ABOVE a number in any state on the wheel. A floor holds
+ * a vow of presence (never nothing); a ceiling holds a vow of absence (never a
+ * lean). Two new probe kinds come with it: `lean`, which asks a background
+ * gradient whether it runs to any side, and `mirror`, which asks a body lit by
+ * box-shadow lumps whether its leftmost and rightmost lumps were lit the same
+ * colour. Both answer 0 when nothing points sideways, so a ceiling of nought is
+ * the whole of the claim.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -121,10 +131,106 @@ function measureInPage(probes) {
   const shows = (el) =>
     el.getClientRects().length > 0 && getComputedStyle(el).visibility !== 'hidden';
 
+  // Day 102. A `to top` / `to bottom` / bare gradient runs straight up or down
+  // and is not an address: a low sun is low from everywhere in the frame at
+  // once. Anything with a sideways component names a side. An angle is read mod
+  // 180 so `0deg` and `180deg` both count as vertical; a unit this doesn't know
+  // is counted as leaning, because a witness that shrugs is worse than none.
+  const sideways = (image) => {
+    if (!image || image === 'none') return 0;
+    const heads = image.match(/(?:repeating-)?(?:linear|radial|conic)-gradient\(\s*[^,]*/g) || [];
+    let count = 0;
+    for (const head of heads) {
+      const open = head.indexOf('(');
+      const kind = head.slice(0, open);
+      const arg = head.slice(open + 1).trim().toLowerCase();
+
+      if (kind.endsWith('conic-gradient')) { count++; continue; }
+
+      if (kind.endsWith('radial-gradient')) {
+        // Centred is even; anything placed off the horizontal centre is not.
+        const at = /\bat\s+([^\s]+)/.exec(arg);
+        if (at && !/^(50%|center)$/.test(at[1])) count++;
+        continue;
+      }
+
+      if (arg.startsWith('to ')) {
+        if (/\b(left|right)\b/.test(arg)) count++;
+        continue;
+      }
+      const angle = /^(-?[\d.]+)(deg|rad|grad|turn)\b/.exec(arg);
+      if (angle) {
+        if (angle[2] !== 'deg') { count++; continue; }
+        if (((parseFloat(angle[1]) % 180) + 180) % 180 !== 0) count++;
+        continue;
+      }
+      // No direction given at all — CSS defaults to `to bottom`. Vertical.
+    }
+    return count;
+  };
+
+  // Day 102. Two marks on one lit body, compared. Chromium computes each
+  // box-shadow layer as "<colour> <x> <y> <blur> <spread>"; take the layer
+  // furthest left and the one furthest right and report how far apart in
+  // colour they are, widest single channel, 0…255.
+  const lumpSpread = (shadow) => {
+    if (!shadow || shadow === 'none') return 0;
+    const layers = [];
+    let depth = 0, cur = '';
+    for (const ch of shadow) {
+      if (ch === '(') depth++;
+      else if (ch === ')') depth--;
+      if (ch === ',' && depth === 0) { layers.push(cur); cur = ''; } else cur += ch;
+    }
+    if (cur.trim()) layers.push(cur);
+
+    const parsed = [];
+    for (const layer of layers) {
+      const colour = /rgba?\(([^)]*)\)/.exec(layer);
+      if (!colour) continue;
+      const offsets = layer.replace(/rgba?\([^)]*\)/, ' ').trim().split(/\s+/)
+        .map(parseFloat).filter(Number.isFinite);
+      if (offsets.length < 2) continue;
+      const rgb = colour[1].split(/[,/\s]+/).map(parseFloat).filter(Number.isFinite);
+      parsed.push({ x: offsets[0], rgb: rgb });
+    }
+    if (parsed.length < 2) return 0;
+
+    let left = parsed[0], right = parsed[0];
+    for (const p of parsed) {
+      if (p.x < left.x) left = p;
+      if (p.x > right.x) right = p;
+    }
+    let widest = 0;
+    for (let i = 0; i < 3; i++) {
+      widest = Math.max(widest, Math.abs((left.rgb[i] || 0) - (right.rgb[i] || 0)));
+    }
+    return widest;
+  };
+
   for (const [name, probe] of Object.entries(probes)) {
     if (probe.kind === 'visible-count') {
       const all = document.querySelectorAll(probe.selector);
       readings[name] = all.length === 0 ? null : [...all].filter(shows).length;
+      continue;
+    }
+
+    // These two walk every element the selector matches — the washes are one
+    // apiece, but there are four hills and two clouds, and a lean on any one of
+    // them is a lean. Nothing matching at all is `null`: an absent layer can't
+    // be checked for a direction, and silently reading 0 would be a pass for a
+    // thing that isn't there.
+    if (probe.kind === 'lean' || probe.kind === 'mirror') {
+      const all = document.querySelectorAll(probe.selector);
+      if (all.length === 0) { readings[name] = null; continue; }
+      let worst = 0;
+      for (const el of all) {
+        const cs = getComputedStyle(el, probe.pseudo || undefined);
+        worst = probe.kind === 'lean'
+          ? worst + sideways(cs.backgroundImage)
+          : Math.max(worst, lumpSpread(cs.boxShadow));
+      }
+      readings[name] = worst;
       continue;
     }
 
@@ -193,6 +299,20 @@ function verdictsFor(check, probeName, readings) {
       out.push({
         ok: got !== null && got >= check.floor - 0.01,
         detail: `${name}: never below ${check.floor}, read ` +
+                `${got === null ? 'nothing there' : got}`,
+      });
+    }
+    return out;
+  }
+
+  // A vow's ceiling (Day 102): the mirror of the floor. Not what a reading is,
+  // but what it never rises to — asked, like the floor, of the whole round.
+  if (check.ceiling !== undefined) {
+    for (const name of check.over || []) {
+      const got = read(name);
+      out.push({
+        ok: got !== null && got <= check.ceiling + 0.01,
+        detail: `${name}: never above ${check.ceiling}, read ` +
                 `${got === null ? 'nothing there' : got}`,
       });
     }

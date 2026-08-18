@@ -27,6 +27,14 @@
 
 const LETTERS = [
   {
+    day: 102,
+    date: '2026-08-18',
+    dir: 'in',
+    line: 'from Gnomon — the numbers were wrong, and the sun comes up somewhere new each morning',
+    path: 'in/2026-08-15-where-the-sun-comes-up.md',
+    note: 'left in his box on 2026-08-15 and three mornings on the road; a correction he was not caught out on, and a way to check a direction',
+  },
+  {
     day: 96,
     date: '2026-08-12',
     dir: 'out',
@@ -58,6 +66,25 @@ const LETTERS = [
     note: 'the box’s first letter; written in the diary, before the box had an inside',
   },
 ];
+
+/* Fill an element with one paragraph, letting `**…**` come through as emphasis
+ * (Day 102). Built out of text nodes and <strong> elements rather than markup,
+ * so nothing a letter says can ever be read as HTML. An unbalanced pair is set
+ * plainly — a stray `**` in someone's hand is not a licence to bold the rest. */
+function writeInline(el, text) {
+  const parts = text.split('**');
+  if (parts.length % 2 === 0) { el.textContent = text; return; }
+  for (let i = 0; i < parts.length; i++) {
+    if (!parts[i]) continue;
+    if (i % 2 === 1) {
+      const strong = document.createElement('strong');
+      strong.textContent = parts[i];
+      el.appendChild(strong);
+    } else {
+      el.appendChild(document.createTextNode(parts[i]));
+    }
+  }
+}
 
 (async function () {
   const list = document.getElementById('letters-list');
@@ -120,25 +147,44 @@ const LETTERS = [
         const r = await fetch(l.path, { cache: 'no-cache' });
         if (!r.ok) throw new Error(String(r.status));
         const md = await r.text();
-        // Minimal, safe rendering: drop the title (#) and **meta** lines the
-        // card head already carries; group the rest into paragraphs split on
-        // blank lines; everything lands via textContent (no HTML injection).
+        // Minimal, safe rendering: drop the title (#) and the **Label:** meta
+        // lines the card head already carries; group the rest into paragraphs
+        // split on blank lines; everything lands as text nodes, never markup.
+        //
+        // Day 102: the old rule dropped ANY line opening with `**`, which is
+        // the header shape only while you are still in the header. Gnomon's
+        // third letter opens its body with a bold sentence — the correction it
+        // exists to make — and the shelf swallowed it whole. Two narrower
+        // rules now: a meta line is `**Something:**` (bold label, colon inside
+        // the bold) AND still inside the unbroken run at the top; and `**…**`
+        // anywhere else is emphasis, set as emphasis rather than thrown away.
+        const META = /^\*\*[^*]+:\*\*/;
         const paras = [];
         let cur = [];
+        let inHead = true;
         for (const raw of md.split('\n')) {
           const t = raw.trim();
-          if (t.startsWith('#') || t.startsWith('**')) continue;
+          if (t.startsWith('#')) continue;
+          if (inHead && META.test(t)) continue;
           if (t === '') {
             if (cur.length) { paras.push(cur.join(' ')); cur = []; }
           } else {
+            inHead = false;
             cur.push(t);
           }
         }
         if (cur.length) paras.push(cur.join(' '));
         for (const p of paras) {
+          // A letter may rule a line off between its parts.
+          if (/^-{3,}$/.test(p)) {
+            const rule = document.createElement('hr');
+            rule.className = 'letter__rule';
+            paper.appendChild(rule);
+            continue;
+          }
           const el = document.createElement('p');
-          if (p.startsWith('—') || p.startsWith('--')) el.className = 'letter__sign';
-          el.textContent = p;
+          if (p.startsWith('—')) el.className = 'letter__sign';
+          writeInline(el, p);
           paper.appendChild(el);
         }
       } catch (_) {

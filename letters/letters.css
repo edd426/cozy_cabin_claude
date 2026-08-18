@@ -130,6 +130,18 @@ a.letter__head:focus-visible {
   font-style: italic;
 }
 
+/* Day 102: a letter may rule a line off between its parts — Gnomon's third
+ * sets the correction apart from the weather that way. A hairline in the wood
+ * of the card's own border, short of the full width so it reads as a pause in
+ * the writing and not as a second sheet. */
+.letter__rule {
+  width: 40%;
+  margin: var(--sp-4) auto;
+  border: 0;
+  border-top: 1px solid var(--c-wood);
+  opacity: 0.5;
+}
+
 .letters-list__loading,
 .letters-list__empty {
   color: var(--fg-muted);
@@ -271,4 +283,5 @@ a.letter__head:focus-visible {
   .letters-list__letter--in         { border-color: var(--c-rose); }
   .letter__note                     { color: var(--c-cream-soft); }
   .letter__paper                    { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
+  .letter__rule                     { border-top-color: var(--c-cream-soft); }
 }

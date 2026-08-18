@@ -39,6 +39,23 @@
  * witness at all and the page says so in its own words — the list would be worth
  * less if it read as complete.
  *
+ * Day 102 (2026-08-18): the third vow gets one. A floor catches a thing going to
+ * nothing; the light never going to a SIDE wanted the mirror of that — a CEILING,
+ * a reading that may never rise above zero anywhere on the wheel — and two probes
+ * that come back with a number when a frame leans. `lean` asks a gradient which
+ * way it runs (this place's light is allowed to be weighted low, because low is
+ * everywhere at once; it is not allowed to be weighted left or right, because
+ * that names a side you could stand and face). `mirror` asks a body lit on two
+ * sides whether its two sides were lit alike. Both are pointed only at what is
+ * *light* — the two whole-frame washes, the far hills' crests, the clouds'
+ * bellies. Structural gradients (brick joints, the bee's stripes, the lantern's
+ * came) are horizontal on purpose and are none of this vow's business.
+ *
+ * What they cannot see is written on the page beside them, in the vow's own
+ * `blind` line, and that is not modesty — it is the whole lesson of the morning's
+ * post. A witness answers the question it was pointed at and says nothing
+ * whatever about the question standing next to it.
+ *
  * Note what the page is not: it does not render the clearing at the hour you
  * set. The scene still only ever shows the hour you actually arrived at — a
  * day that greets, not a day that turns. This is a statement you can hold the
@@ -163,6 +180,16 @@
    *                   colour out of the stylesheet into here
    *   width, height — the computed size in px of one element (or of its
    *                   `pseudo`, for the cast shadows, which are ::before)
+   *   lean          — how many of the matched elements carry a background
+   *                   gradient with any sideways component at all. Straight up
+   *                   or straight down reads 0; a `to right`, a `to left`, or
+   *                   any angle off the vertical reads 1 apiece. Nothing there
+   *                   reads 0 — an absent wash cannot lean, and whether it ought
+   *                   to exist is another vow's business.
+   *   mirror        — for a body lit by box-shadow lumps: how far apart, in
+   *                   colour, the leftmost lump and the rightmost lump are
+   *                   (0…255, the widest single channel). Two marks on one
+   *                   thing, compared — 0 means the two sides were lit alike.
    *
    * Sizes are in laid-out px, so they scale with the breakpoint (--s is 3 on
    * desktop, 2 on a phone). That is exactly why no check below states an
@@ -232,6 +259,35 @@
       selector: '.mantle-item--candle',
       reads: 'how much wax is left on the candle',
     },
+
+    /* Day 102 — the four places the light of this clearing actually lives.
+     * The two washes are the hour and the year as *ambient*; the hills' crests
+     * and the clouds' bellies are the only bodies allowed a lit rim at all. */
+    'hour-wash-lean': {
+      view: 'home', kind: 'lean', pseudo: '::after',
+      selector: '.scene',
+      reads: 'whether the hour’s wash over the whole frame runs to any side',
+    },
+    'year-wash-lean': {
+      view: 'home', kind: 'lean', pseudo: '::before',
+      selector: '.scene',
+      reads: 'whether the year’s wash under it runs to any side',
+    },
+    'door-wash-lean': {
+      view: 'around', kind: 'lean', pseudo: '::after',
+      selector: '.scene',
+      reads: 'whether the hour’s wash runs to any side on the other face of the house',
+    },
+    'hill-rim-lean': {
+      view: 'home', kind: 'lean', pseudo: '::before',
+      selector: '.hill',
+      reads: 'how many far crests are lit from a side rather than along the top',
+    },
+    'cloud-belly-tilt': {
+      view: 'home', kind: 'mirror',
+      selector: '.cloud',
+      reads: 'how far apart in colour a cloud’s left and right underlit lumps are',
+    },
   };
 
   /* ── the vows (Day 99) ──────────────────────────────────────────────────
@@ -249,10 +305,14 @@
    * not a promise. The other half of "nothing is lost" is the return leg, which
    * needs no new machinery: `rising` on the pair where the wheel comes back up.
    *
-   * `unwitnessed` is not an apology, it is the point. The third vow has no
-   * witness and says so on the page in its own words; a guard that quietly
-   * covered two of three and let the page read as watched would be exactly the
-   * failure the whole almanac exists to refuse. */
+   * `unwitnessed` is not an apology, it is the point: a vow nothing holds says so
+   * on the page in its own words, because a guard that quietly covered two of
+   * three and let the page read as watched would be exactly the failure the whole
+   * almanac exists to refuse. Day 102 emptied that field — all three carry
+   * witnesses now — and put `blind` in its place, which is the same honesty one
+   * turn further on. A witness is not coverage. It answers the question it was
+   * pointed at, and the sentence standing next to that question, carrying the
+   * identical fault, gets nothing at all unless somebody says so out loud. */
   var VOWS = [
     {
       key: 'hush',
@@ -265,14 +325,15 @@
     {
       key: 'nowhere',
       says: 'The light never gets an address. There is no place in any frame where you could stand and point and say the sun is there: the hour has a length and a colour, and no direction at all.',
-      unwitnessed:
-        'This one has no witness, and I would rather say so than let the list read as complete. ' +
-        'A wash is even edge to edge, and evenness is the thing a measurement is worst at — what would ' +
-        'actually catch a lean is a pair of eyes on the frame. Two rules stand behind it and neither is ' +
-        'a check: the near ground takes the hour flat, so only the far bodies (the hills’ crests, the ' +
-        'clouds’ bellies, the door side’s fog) ever wear a lit rim; and indoors, every cast shadow is ' +
-        'thrown away from a fire that is drawn in the picture, which is why they fan apart instead of ' +
-        'lying parallel. This vow is kept by hand.',
+      blind:
+        'What these witnesses cannot see. They are pointed at the places this clearing keeps its light — ' +
+        'the two washes laid over the whole frame, the far crests, the clouds’ bellies — and they ask ' +
+        'those places one question apiece: does the gradient run to a side, and were the two sides of ' +
+        'the lit body lit alike. A lean built some other way would walk straight past them: a sprite ' +
+        'redrawn brighter down one edge, an overlay covering half a frame, a second cloud rule for the ' +
+        'left of the sky. Nor do they say a word about indoors, where the shadows fan apart from a fire ' +
+        'that is drawn in the picture and so are allowed their directions. Green here means nothing ' +
+        'points sideways in the four places I went and looked. It does not mean nothing points sideways.',
     },
   ];
 
@@ -287,6 +348,9 @@
    *     `over`. A floor of 1 on a laid-out size is a PRESENCE floor, not a size
    *     claim, so it stays honest at both breakpoints the way the note above
    *     requires; counts and opacities are scale-free anyway.
+   *   ceiling + over — the mirror of it (Day 102): the reading must never rise
+   *     above `ceiling` in any state in `over`. A floor holds a vow of presence
+   *     — never nothing. A ceiling holds a vow of absence — never a lean.
    * `vow` marks a check as holding one of VOWS rather than a line of the season
    * or hour prose; those render in their own block on the page.
    * `guards` names, in the almanac's own words, which claim would break. */
@@ -398,6 +462,37 @@
       floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
       guards: 'the chimney breathing at every hour — “someone’s always home, the fire never quite goes out”',
     },
+
+    /* ── the third vow's witnesses (Day 102) ─────────────────────────────
+     * A ceiling of nought, asked of the whole round. The hour's wash may be
+     * weighted low and the year's may be weighted high — up and down are not
+     * addresses, a low sun is low from everywhere in the frame at once — but
+     * neither may run to a side, and no far body may be lit on one. */
+    {
+      probe: 'hour-wash-lean', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the hour’s wash weighted low or high and never to a side — “no lit side to it, the same tint edge to edge”',
+    },
+    {
+      probe: 'year-wash-lean', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the year’s wash under it the same, in all four seasons — the slow hand gets a colour, never a compass',
+    },
+    {
+      probe: 'door-wash-lean', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the other face of the house telling the same — the vow is “no place in any frame”, so one frame is not enough to ask',
+    },
+    {
+      probe: 'hill-rim-lean', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the far crests warmed along the top and never down one flank — a rim you cannot point a direction along',
+    },
+    {
+      probe: 'cloud-belly-tilt', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'a cloud’s two underlit lumps the same colour as each other at dawn and at dusk — one low sun under it, not off to one side of it',
+    },
   ];
 
   /* Named for the verdict line, which sets them out as a list after a colon —
@@ -503,6 +598,9 @@
     if (check.floor !== undefined) {
       return check.over.join(', ') + ' — never below ' + check.floor;
     }
+    if (check.ceiling !== undefined) {
+      return check.over.join(', ') + ' — never above ' + check.ceiling;
+    }
     states = check.rising || check.falling;
     return states.join(check.rising ? ' < ' : ' > ');
   }
@@ -567,6 +665,16 @@
         none.className = 'almanac-vow__unwitnessed';
         none.textContent = vow.unwitnessed || 'Nothing holds this one.';
         li.appendChild(none);
+      }
+
+      /* A witness's own blind spot, said out loud beneath it (Day 102). This
+       * renders whether or not anything holds the vow, because a list of what
+       * a check covers is worth much less than a list of what it doesn't. */
+      if (vow.blind) {
+        var blind = document.createElement('p');
+        blind.className = 'almanac-vow__unwitnessed';
+        blind.textContent = vow.blind;
+        li.appendChild(blind);
       }
 
       list.appendChild(li);

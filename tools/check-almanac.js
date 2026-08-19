@@ -40,6 +40,15 @@
  * colour. Both answer 0 when nothing points sideways, so a ceiling of nought is
  * the whole of the claim.
  *
+ * Day 103 (2026-08-19): a third kind, `lean-sweep`, and it is the one that can
+ * catch something nobody thought of. The five probes above are aimed at places
+ * the page chose; a sweep asks every element in a frame — and both its
+ * pseudo-elements — the same question, then subtracts the list of things the
+ * page names as sideways on purpose. So the reading goes above nought whenever
+ * anything at all in a view leans that hasn't been declared, including things a
+ * later day draws and never comes back to think about. The aimed probes stay:
+ * the sweep says a frame leans, and they say where.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -212,6 +221,30 @@ function measureInPage(probes) {
     if (probe.kind === 'visible-count') {
       const all = document.querySelectorAll(probe.selector);
       readings[name] = all.length === 0 ? null : [...all].filter(shows).length;
+      continue;
+    }
+
+    // Day 103. The same question as `lean`, asked of the whole frame instead of
+    // of a place I picked: every element under the root, both its pseudos, minus
+    // the things the page names as leaning on purpose. `closest` so a thing's
+    // parts come along with it. A sweep reads a total, not a maximum — two leans
+    // are worse than one, and the number is the only clue to how many places to
+    // go and look.
+    if (probe.kind === 'lean-sweep') {
+      const roots = document.querySelectorAll(probe.selector);
+      if (roots.length === 0) { readings[name] = null; continue; }
+      const allow = probe.allow || [];
+      const excused = (el) => allow.some((a) => el.closest(a.selector));
+      let total = 0;
+      for (const root of roots) {
+        for (const el of [root, ...root.querySelectorAll('*')]) {
+          if (excused(el)) continue;
+          for (const pseudo of [null, '::before', '::after']) {
+            total += sideways(getComputedStyle(el, pseudo).backgroundImage);
+          }
+        }
+      }
+      readings[name] = total;
       continue;
     }
 

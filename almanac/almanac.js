@@ -56,6 +56,22 @@
  * post. A witness answers the question it was pointed at and says nothing
  * whatever about the question standing next to it.
  *
+ * Day 103 (2026-08-19): writing the edge down did not move it. Those five probes
+ * are pointed at five places I chose, so they can only ever catch the leans I had
+ * already thought of — the same way the far keeper drew his box around the fault
+ * that had been caught and left its identical twin standing outside for no reason
+ * at all. So the third vow's guard is turned round to face the other way. The
+ * `lean-sweep` probe asks the WHOLE frame — every element in the scene and both
+ * its pseudo-elements, on all three views, across both wheels — and subtracts
+ * LEAN_ALLOWED, the named list of things in this place that are sideways on
+ * purpose. The five aimed probes stay: a sweep says *something leans* and the
+ * aimed ones say *which*, and a guard that can only tell you the yard is wrong
+ * without telling you where is a guard you learn to skip past.
+ *
+ * The cost of the turn is the point of it. Every exception now has to be written
+ * out and reasoned for, on the page, where it can be argued with — so what used
+ * to be the leans I forgot is now the list of leans I claimed.
+ *
  * Note what the page is not: it does not render the clearing at the hour you
  * set. The scene still only ever shows the hour you actually arrived at — a
  * day that greets, not a day that turns. This is a statement you can hold the
@@ -196,6 +212,52 @@
    * expected WIDTH: sizes are only ever compared against each other, which is
    * all the prose ever claims about them anyway ("a stride further", "half
    * again as long"). Counts and opacities are scale-free and stated outright. */
+  /* ── what is allowed to lean (Day 103) ─────────────────────────────────
+   *
+   * The whole-frame sweep below counts every sideways gradient in a view and
+   * takes this list off the total. Each entry is therefore a claim in its own
+   * right — *this thing runs to a side, on purpose, and here is why it is not a
+   * light* — and it is published under the vow for the same reason the rest of
+   * the working is: an exception nobody can read is just a hole with a name.
+   *
+   * `selector` is matched with `closest`, so a thing's own parts come along with
+   * it (the bee's wings with the bee). Keep the selectors as narrow as the thing
+   * they excuse: a wide one silently exempts whatever a later day hangs inside
+   * it. If you add a sideways gradient anywhere in this clearing, the sweep will
+   * go red until you either take it out or come here and say what it is. */
+  var LEAN_ALLOWED = [
+    {
+      selector: '.brick-course',
+      what: 'the brick’s upright joints — the chimney, the front window, the hearth inside',
+      why: 'a running bond is a pattern the wall is made of rather than a light laid on it, and a pattern repeats, which is the opposite of an address',
+    },
+    {
+      selector: '.cabin-lantern__body',
+      what: 'the came dividing the lantern’s glass',
+      why: 'a bar of iron across a pane, drawn on the lamp itself; the light it holds is the halo around it, and that is even',
+    },
+    {
+      selector: '.sprite--bee',
+      what: 'the bee’s stripes and the pale bar of its wings',
+      why: 'markings on a body, the same from whichever side the day comes at it',
+    },
+    {
+      selector: '.bench__back',
+      what: 'the gaps between the bench’s back slats',
+      why: 'the boards themselves, and the meadow showing through between them',
+    },
+    {
+      selector: '.scene--inside .chair',
+      what: 'the shadow the chair throws indoors, running left',
+      why: 'it points away from a fire that is drawn in the picture — a light you can see is allowed a direction, and the proof it is no smuggled sun is that the woodpile’s shadow points the other way (2026-08-06)',
+    },
+    {
+      selector: '.scene--inside .woodpile',
+      what: 'the shadow the woodpile throws indoors, running right',
+      why: 'the other half of the same pair, cast by the same drawn fire standing between them',
+    },
+  ];
+
   var PROBES = {
     'woodpile-logs': {
       view: 'home', kind: 'visible-count',
@@ -288,6 +350,22 @@
       selector: '.cloud',
       reads: 'how far apart in colour a cloud’s left and right underlit lumps are',
     },
+
+    /* Day 103 — the same question asked of everything instead of of five places.
+     * `selector` is the root to sweep (the scene itself); every element under it
+     * is read, and both its pseudo-elements with it. */
+    'home-lean-sweep': {
+      view: 'home', kind: 'lean-sweep', selector: '.scene', allow: LEAN_ALLOWED,
+      reads: 'how many things in the whole frame run to a side that are not on the list of things allowed to',
+    },
+    'door-lean-sweep': {
+      view: 'around', kind: 'lean-sweep', selector: '.scene', allow: LEAN_ALLOWED,
+      reads: 'the same sweep of every element in the frame',
+    },
+    'room-lean-sweep': {
+      view: 'inside', kind: 'lean-sweep', selector: '.scene', allow: LEAN_ALLOWED,
+      reads: 'the same sweep of every element in the frame, the two drawn shadows being named exceptions',
+    },
   };
 
   /* ── the vows (Day 99) ──────────────────────────────────────────────────
@@ -325,15 +403,17 @@
     {
       key: 'nowhere',
       says: 'The light never gets an address. There is no place in any frame where you could stand and point and say the sun is there: the hour has a length and a colour, and no direction at all.',
+      allowed: LEAN_ALLOWED,
       blind:
-        'What these witnesses cannot see. They are pointed at the places this clearing keeps its light — ' +
-        'the two washes laid over the whole frame, the far crests, the clouds’ bellies — and they ask ' +
-        'those places one question apiece: does the gradient run to a side, and were the two sides of ' +
-        'the lit body lit alike. A lean built some other way would walk straight past them: a sprite ' +
-        'redrawn brighter down one edge, an overlay covering half a frame, a second cloud rule for the ' +
-        'left of the sky. Nor do they say a word about indoors, where the shadows fan apart from a fire ' +
-        'that is drawn in the picture and so are allowed their directions. Green here means nothing ' +
-        'points sideways in the four places I went and looked. It does not mean nothing points sideways.',
+        'What these witnesses cannot see. The sweep no longer stops at the places I thought to name — it ' +
+        'reads every element in every frame, on all three views and round both wheels, and subtracts only ' +
+        'the six things listed above. So what bounds it now is not where it looks but what it can read: it ' +
+        'asks a background gradient which way it runs, and a lit body whether its two sides were lit ' +
+        'alike. A lean drawn some other way still walks straight past — a sprite whose own pixels are ' +
+        'brighter down one edge, a shadow cast by an off-centre box-shadow on anything but a cloud, a flat ' +
+        'overlay covering half a frame, or a whole layer added and then hidden behind an hour I did not ' +
+        'sweep. Green here means nothing draws a sideways gradient anywhere I can see one, in the states ' +
+        'on the wheel, at the width I stood at. It does not mean nothing points sideways.',
     },
   ];
 
@@ -492,6 +572,43 @@
       probe: 'cloud-belly-tilt', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
       ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
       guards: 'a cloud’s two underlit lumps the same colour as each other at dawn and at dusk — one low sun under it, not off to one side of it',
+    },
+
+    /* ── the same vow, asked of everything (Day 103) ─────────────────────
+     * Six of these because the vow's words are "no place in any frame": three
+     * views, and each of them swept round both wheels, since a lean could be
+     * gated on either clock. They cost almost nothing to add — the states are
+     * ones other checks already open — and they are the only witnesses here
+     * that can catch a lean I never thought to go and look for. */
+    {
+      probe: 'home-lean-sweep', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'nothing anywhere in the front yard leaning sideways at any hour, but the named few that lean on purpose',
+    },
+    {
+      probe: 'home-lean-sweep', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same of the front yard in all four seasons — a lean could be gated on either clock',
+    },
+    {
+      probe: 'door-lean-sweep', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'nothing anywhere on the door side leaning sideways at any hour',
+    },
+    {
+      probe: 'door-lean-sweep', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same of the door side in all four seasons',
+    },
+    {
+      probe: 'room-lean-sweep', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'nothing in the room leaning sideways at any hour beyond the two shadows the drawn fire is allowed to throw',
+    },
+    {
+      probe: 'room-lean-sweep', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same of the room in all four seasons',
     },
   ];
 
@@ -665,6 +782,39 @@
         none.className = 'almanac-vow__unwitnessed';
         none.textContent = vow.unwitnessed || 'Nothing holds this one.';
         li.appendChild(none);
+      }
+
+      /* The exceptions the sweep subtracts (Day 103), each with the reason it
+       * is not a light. A guard that says "everything, minus some things" is
+       * only as honest as its list of some things, so the list is the claim. */
+      if (vow.allowed && vow.allowed.length) {
+        var intro = document.createElement('p');
+        intro.className = 'almanac-vow__unwitnessed';
+        intro.textContent =
+          'The last three of those sweep every element of a frame and subtract ' +
+          'these — the things in this clearing that run to a side on purpose, ' +
+          'each one a claim you can argue with:';
+        li.appendChild(intro);
+
+        var allowed = document.createElement('ul');
+        allowed.className = 'almanac-checks almanac-allowed';
+        for (var k = 0; k < vow.allowed.length; k++) {
+          var item = vow.allowed[k];
+          var row = document.createElement('li');
+
+          var what = document.createElement('span');
+          what.className = 'almanac-check__claim';
+          what.textContent = item.what + ' — ' + item.why;
+          row.appendChild(what);
+
+          var sel = document.createElement('span');
+          sel.className = 'almanac-check__how';
+          sel.textContent = item.selector;
+          row.appendChild(sel);
+
+          allowed.appendChild(row);
+        }
+        li.appendChild(allowed);
       }
 
       /* A witness's own blind spot, said out loud beneath it (Day 102). This

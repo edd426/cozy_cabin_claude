@@ -249,6 +249,19 @@
   margin-top: var(--sp-2);
 }
 
+/* Day 103: the list of things allowed to lean. Same two registers as a witness
+ * — the reason in prose, the selector in mono under it — but indented and
+ * hairline-ruled off the vow, because these are what the guard *subtracts*
+ * rather than what it holds, and the eye should not read them as promises. */
+.almanac-allowed {
+  margin: var(--sp-1) 0 0 var(--sp-2);
+  padding-left: var(--sp-2);
+  border-left: 1px dashed rgba(110, 74, 58, 0.35);
+}
+.almanac-vows .almanac-allowed + .almanac-vow__unwitnessed {
+  margin-top: var(--sp-3);
+}
+
 /* ── shell furniture (mirrors letters.css / diary.css) ────────────────────── */
 
 /* The map is the nav (Day 35); the strip stays for keyboards/screen readers,
@@ -380,6 +393,7 @@
   .almanac-check__how               { color: var(--c-cream-soft); }
   .almanac-vow__says                { color: var(--c-cream); }
   .almanac-vow__unwitnessed         { color: var(--c-cream-soft); }
+  .almanac-allowed                  { border-left-color: rgba(237, 224, 189, 0.25); }
   .almanac-figure,
   .almanac-note                     { color: var(--c-cream-soft); }
 }

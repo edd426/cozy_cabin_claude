@@ -366,6 +366,22 @@
       view: 'inside', kind: 'lean-sweep', selector: '.scene', allow: LEAN_ALLOWED,
       reads: 'the same sweep of every element in the frame, the two drawn shadows being named exceptions',
     },
+
+    /* Day 104 — the picture, weighed, instead of the instructions, read.
+     * `frame-balance` screenshots the frame with the wash on and again with it
+     * off and weighs the difference — the light alone — left half against right.
+     * It shares no code with the leans above: they parse the gradient that drew
+     * a wash; this reads the wash as it actually came out, so it catches a lean
+     * however it was painted, but sees only the wash, not a sprite lit down one
+     * edge. It is measured Node-side (two screenshots), so it carries no pseudo. */
+    'frame-light-balance': {
+      view: 'home', kind: 'frame-balance', selector: '.scene',
+      reads: 'whether the light the washes lay over the whole frame is weighed evenly left and right, read off the rendered picture and not the gradient that drew it',
+    },
+    'door-frame-light-balance': {
+      view: 'around', kind: 'frame-balance', selector: '.scene',
+      reads: 'the same weighing, read off the other face’s own picture',
+    },
   };
 
   /* ── the vows (Day 99) ──────────────────────────────────────────────────
@@ -405,15 +421,18 @@
       says: 'The light never gets an address. There is no place in any frame where you could stand and point and say the sun is there: the hour has a length and a colour, and no direction at all.',
       allowed: LEAN_ALLOWED,
       blind:
-        'What these witnesses cannot see. The sweep no longer stops at the places I thought to name — it ' +
-        'reads every element in every frame, on all three views and round both wheels, and subtracts only ' +
-        'the six things listed above. So what bounds it now is not where it looks but what it can read: it ' +
-        'asks a background gradient which way it runs, and a lit body whether its two sides were lit ' +
-        'alike. A lean drawn some other way still walks straight past — a sprite whose own pixels are ' +
-        'brighter down one edge, a shadow cast by an off-centre box-shadow on anything but a cloud, a flat ' +
-        'overlay covering half a frame, or a whole layer added and then hidden behind an hour I did not ' +
-        'sweep. Green here means nothing draws a sideways gradient anywhere I can see one, in the states ' +
-        'on the wheel, at the width I stood at. It does not mean nothing points sideways.',
+        'What these witnesses cannot see. Most of them read the instructions — they ask a background ' +
+        'gradient which way it runs, and a lit body whether its two sides were lit alike — so a lean drawn ' +
+        'some other way used to walk straight past them: a mask or a filter or an off-centre stack the ' +
+        'reader parses as even. The last kind, added later, reads the rendered picture instead: it weighs ' +
+        'the wash off the frame, left half against right, and so catches a wash that leans however it was ' +
+        'painted, the far keeper’s second method that shares no code with the first. But to weigh the ' +
+        'light it has to lift the wash off the furniture — the frame was never even to begin with — so it ' +
+        'sees only the wash. A sprite whose own pixels are brighter down one edge stands the same with the ' +
+        'wash on or off and cancels clean out of the weighing, invisible to the picture-reader as surely ' +
+        'as to the gradient-reader. Green here means no wash draws or renders a sideways lean anywhere I ' +
+        'can see one, in the states on the wheel, at the width I stood at. It does not mean nothing points ' +
+        'sideways.',
     },
   ];
 
@@ -610,6 +629,33 @@
       ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the same of the room in all four seasons',
     },
+
+    /* ── the vow, weighed off the picture (Day 104) ──────────────────────
+     * The same ceiling of nought, but reached by the second method: not the
+     * gradient read but the frame weighed. These share no code with the leans
+     * above, which is the whole of their worth — the morning the two disagree
+     * is the morning one of them was wrong. A wash that leans however it was
+     * drawn pulls the weight off centre; an even one sits dead centre at ~0. */
+    {
+      probe: 'frame-light-balance', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the front yard’s light weighed off the picture itself and even left to right at every hour — a witness that reads what the frame shows, not how the wash was written',
+    },
+    {
+      probe: 'frame-light-balance', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same, weighed off the picture, through all four seasons of the year’s wash',
+    },
+    {
+      probe: 'door-frame-light-balance', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the door side weighed off its own picture and even at every hour — the vow is “no place in any frame”, so the second method owes both faces too',
+    },
+    {
+      probe: 'door-frame-light-balance', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the door side weighed off the picture in all four seasons',
+    },
   ];
 
   /* Named for the verdict line, which sets them out as a list after a colon —
@@ -791,9 +837,10 @@
         var intro = document.createElement('p');
         intro.className = 'almanac-vow__unwitnessed';
         intro.textContent =
-          'The last three of those sweep every element of a frame and subtract ' +
-          'these — the things in this clearing that run to a side on purpose, ' +
-          'each one a claim you can argue with:';
+          'Three of those are sweeps — they walk every element of a frame ' +
+          'rather than a place I named — and they subtract these, the things ' +
+          'in this clearing that run to a side on purpose, each one a claim ' +
+          'you can argue with:';
         li.appendChild(intro);
 
         var allowed = document.createElement('ul');

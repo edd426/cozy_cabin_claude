@@ -14,7 +14,12 @@
 # Meta-reflection entries (diary/meta/YYYY-MM-DD.md) have a separate schema
 # validated below.
 #
-# Exits 0 on conformance, non-zero on missing sections.
+# Also enforces the 2026-08-21 length reform: every entry is capped at 500
+# words, and the pondering section is capped at one sentence / 40 words.
+# Every run prints a per-section table of target vs actual, so the dimension
+# that drifted unwatched for three months is visible on every check.
+#
+# Exits 0 on conformance, non-zero on missing sections or over-length.
 #
 # Historical: pre-reform daily entries (through 2026-05-11) used a different
 # schema (Date / What I did / What I tried that didn't work / What I'm stuck
@@ -23,6 +28,93 @@
 # schema. The linter is typically invoked only against today's new entry.
 
 set -euo pipefail
+
+# ---- Length pass (2026-08-21 reform) -------------------------------------
+#
+# Three months of entries drifted from the schema's own worked example
+# (~150 words) to ~850 without anything noticing, because diary/README.md
+# said "length is not a metric" and so nothing counted. It counts now.
+#
+# ENFORCED: the whole entry at 500 words, and the pondering section at one
+# sentence / 40 words. REPORTED ONLY: the other three sections against their
+# targets. The point is that the numbers are visible every run, not that
+# every number is a rule — a target is guidance for Wren, a cap is a wall.
+#
+# The one-sentence rule needs the word ceiling beside it: the longest
+# sentence on record in this diary is 103 words, so "one sentence" alone is
+# no constraint at all.
+measure() {
+  python3 - "$1" "$2" <<'PYEOF'
+import re, sys
+
+path, mode = sys.argv[1], sys.argv[2]
+text = open(path, encoding='utf-8').read()
+
+TOTAL_CAP = 500
+RECAP = "What I've been pondering since yesterday"
+RECAP_WORDS, RECAP_SENTENCES = 40, 1
+TARGETS = {
+    RECAP: 40,
+    'What I did today': 260,
+    'A thing I noticed': 80,
+    'What I want to ponder tomorrow': 110,
+}
+ORDER = [RECAP, 'What I did today', 'A thing I noticed',
+         'What I want to ponder tomorrow']
+
+def sentences(body):
+    parts = re.split(r'(?<=[.!?])[\s\n]+', body.strip())
+    return [p for p in parts if len(p.split()) >= 3]
+
+sections = {}
+for chunk in re.split(r'^## ', text, flags=re.M)[1:]:
+    head, _, body = chunk.partition('\n')
+    sections[head.strip()] = body
+
+total = len(text.split())
+fail = []
+
+print('lint-diary: %s' % path)
+print('  %-42s %6s %8s' % ('section', 'words', 'target'))
+if mode == 'weekday':
+    for name in ORDER:
+        if name not in sections:
+            continue
+        n = len(sections[name].split())
+        flag = ''
+        if name == RECAP:
+            sc = len(sentences(sections[name]))
+            flag = '  CAP 40w/1s'
+            if n > RECAP_WORDS:
+                fail.append('pondering section is %d words; the cap is %d'
+                            % (n, RECAP_WORDS))
+            if sc > RECAP_SENTENCES:
+                fail.append('pondering section is %d sentences; the cap is %d'
+                            % (sc, RECAP_SENTENCES))
+        elif n > TARGETS[name] * 1.25:
+            flag = '  over target'
+        print('  %-42s %6d %8d%s' % (name[:42], n, TARGETS[name], flag))
+    for name in sections:
+        if name not in TARGETS:
+            print('  %-42s %6d %8s  (not in schema)'
+                  % (name[:42], len(sections[name].split()), '-'))
+else:
+    for name, body in sections.items():
+        print('  %-42s %6d %8s' % (name[:42], len(body.split()), '-'))
+
+print('  %-42s %6d %8d' % ('TOTAL (whole entry)', total, TOTAL_CAP))
+if total > TOTAL_CAP:
+    fail.append('entry is %d words; the cap is %d' % (total, TOTAL_CAP))
+
+if fail:
+    print('')
+    for f in fail:
+        sys.stderr.write('lint-diary: %s\n' % f)
+    sys.stderr.write('lint-diary: see diary/README.md for the schema and the targets\n')
+    sys.exit(1)
+sys.exit(0)
+PYEOF
+}
 
 path="${1:-}"
 if [[ -z "$path" ]]; then
@@ -89,11 +181,13 @@ fname="$(basename "$path")"
 if [[ $is_meta -eq 0 && "$fname" =~ ^([0-9]{4}-[0-9]{2}-[0-9]{2})\.md$ ]]; then
   dow="$(python3 -c "import datetime,sys; print(datetime.date.fromisoformat(sys.argv[1]).isoweekday())" "${BASH_REMATCH[1]}" 2>/dev/null || echo 0)"
   if [[ "$dow" == "7" ]]; then
-    if grep -Eq '^## ' "$path"; then
-      exit 0
+    if ! grep -Eq '^## ' "$path"; then
+      echo "lint-diary: $path is a Sunday (free-form) entry but has no '## ' section at all" >&2
+      exit 1
     fi
-    echo "lint-diary: $path is a Sunday (free-form) entry but has no '## ' section at all" >&2
-    exit 1
+    # Free-form in shape, still bound by the 500-word cap (2026-08-21).
+    if ! measure "$path" sunday; then exit 1; fi
+    exit 0
   fi
 fi
 
@@ -113,4 +207,9 @@ if [[ ${#missing[@]} -gt 0 ]]; then
   exit 1
 fi
 
+if [[ $is_meta -eq 1 ]]; then
+  exit 0
+fi
+
+if ! measure "$path" weekday; then exit 1; fi
 exit 0

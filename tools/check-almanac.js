@@ -49,6 +49,16 @@
  * later day draws and never comes back to think about. The aimed probes stay:
  * the sweep says a frame leans, and they say where.
  *
+ * Day 104 (2026-08-20): a fourth kind, `frame-balance`, and it is the first
+ * witness here that reads the rendered picture rather than the CSS that drew
+ * it — the far keeper's second method, sharing no code with the gradient-reader
+ * above, so that the two are able to disagree. It screenshots the scene with
+ * the wash on and again with it off (motion frozen so nothing else can differ),
+ * and weighs the difference — the light alone, lifted off the asymmetric
+ * furniture — left half against right. A wash that leans however it was drawn
+ * pulls the reading off centre; an even one reads ~0. It sees only the wash,
+ * not a sprite lit down one edge, which is written into the vow's blind note.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -218,6 +228,11 @@ function measureInPage(probes) {
   };
 
   for (const [name, probe] of Object.entries(probes)) {
+    // Day 104. Measured Node-side (it needs two screenshots of the frame, one
+    // with the wash and one without), so it is filled in by measureFrameBalance
+    // after this evaluate returns rather than read from computed style here.
+    if (probe.kind === 'frame-balance') continue;
+
     if (probe.kind === 'visible-count') {
       const all = document.querySelectorAll(probe.selector);
       readings[name] = all.length === 0 ? null : [...all].filter(shows).length;
@@ -285,6 +300,113 @@ function measureInPage(probes) {
   return readings;
 }
 
+/* Day 104. The second method the far keeper models — one that shares no code
+ * with the gradient-reader above. It does not ask a wash which way it was
+ * written; it weighs the rendered picture and asks which way it came out.
+ *
+ * The trick is that the frame is not symmetric to begin with — the mailbox is
+ * off to the right, the flowers at the left foot of the wall — so weighing its
+ * two raw halves would measure the furniture, not the light. Even the *change*
+ * the wash makes over the real scene is furniture-tinged: a flat tint laid over
+ * a dark cabin and a bright sky darkens and lightens them by different amounts,
+ * so the difference still carries the shape of what it lay over. So the frame is
+ * emptied first — every child of the scene hidden and its ground set to a flat
+ * neutral field — and only then are the two shots taken: the wash over bare
+ * ground, then the bare ground alone. What is left in the difference is nothing
+ * but the wash's own horizontal profile, lifted clean off the furniture, which
+ * is the only honest way to weigh whether the *light* leans rather than the
+ * room. Motion and transitions are frozen first so nothing else can differ
+ * between the two shots and forge a lean.
+ *
+ * Then: a browser decodes both PNGs (createImageBitmap — no Node image library),
+ * takes the per-column sum of the luma difference, and reports the horizontal
+ * centroid's distance from the middle, doubled to [0,1]. A wash that falls
+ * evenly is horizontally uniform, so its centroid sits dead centre and this
+ * reads ~0; a wash that leans any way at all — however it was drawn, by a
+ * sideways gradient the reader would parse or by a mask or filter it would not —
+ * pulls the centroid off centre and this reads well above the ceiling. It sees
+ * only the wash, because the wash is what toggling the pseudo-elements removes;
+ * a sprite lit brighter down one edge stands identically in both shots and
+ * cancels, so it is outside even this. That limit is written into the vow's
+ * `blind` note on the page. */
+async function analyzeBalance({ withWash, noWash }) {
+  const decode = async (b64) => {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const bmp = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
+    const canvas = document.createElement('canvas');
+    canvas.width = bmp.width;
+    canvas.height = bmp.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bmp, 0, 0);
+    return ctx.getImageData(0, 0, bmp.width, bmp.height);
+  };
+
+  const A = await decode(withWash);
+  const B = await decode(noWash);
+  const w = Math.min(A.width, B.width);
+  const h = Math.min(A.height, B.height);
+  if (w === 0 || h === 0) return null;
+
+  const cols = new Array(w).fill(0);
+  let total = 0;
+  const da = A.data, db = B.data;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const ia = (y * A.width + x) * 4;
+      const ib = (y * B.width + x) * 4;
+      const la = 0.299 * da[ia] + 0.587 * da[ia + 1] + 0.114 * da[ia + 2];
+      const lb = 0.299 * db[ib] + 0.587 * db[ib + 1] + 0.114 * db[ib + 2];
+      const d = Math.abs(la - lb);
+      cols[x] += d;
+      total += d;
+    }
+  }
+  // No wash at all (the plain middle of a day at the home season) means no
+  // light was added, and light that isn't there can't have an address.
+  if (total <= 0) return 0;
+
+  let weighted = 0;
+  for (let x = 0; x < w; x++) weighted += (x + 0.5) * cols[x];
+  const centroid = weighted / total / w;   // in [0, 1]
+  return Math.abs(centroid - 0.5) * 2;      // 0 = dead centre, 1 = all one edge
+}
+
+async function measureFrameBalance(page, probe) {
+  const scene = page.locator(probe.selector).first();
+  if ((await scene.count()) === 0) return null;
+
+  // Freeze motion AND transitions: the wash pseudo-elements fade over 1.6s, so
+  // without this the wash-off shot below would catch them mid-fade. Frozen, the
+  // opacity change is instant and the two shots differ only by the wash.
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+
+  // Empty the frame: hide every child (the sky, the cabin, the mailbox — all the
+  // asymmetric furniture) and lay a flat neutral ground, so the wash below sits
+  // over a uniform field and its horizontal profile is all that can survive the
+  // difference. The ::before/::after washes are the scene's own pseudo-elements,
+  // not children, so `> *` leaves them standing.
+  const sceneSel = probe.selector || '.scene';
+  await page.addStyleTag({
+    content: sceneSel + ' > * { visibility: hidden !important; } '
+      + sceneSel + ' { background: #808080 !important; }',
+  });
+  await page.waitForTimeout(150);
+  const withWash = (await scene.screenshot()).toString('base64');
+
+  // Turn off only the scene's own two overlay pseudo-elements — the hour wash
+  // (::after) and the year wash (::before) — leaving the flat ground alone.
+  const washSel = probe.washSelector || sceneSel + '::before, ' + sceneSel + '::after';
+  await page.addStyleTag({ content: washSel + ' { opacity: 0 !important; }' });
+  await page.waitForTimeout(150);
+  const noWash = (await scene.screenshot()).toString('base64');
+
+  return await page.evaluate(analyzeBalance, { withWash, noWash });
+}
+
 async function readState(browser, base, view, state, probes) {
   const context = await browser.newContext({ viewport: VIEWPORT });
   const page = await context.newPage();
@@ -301,7 +423,18 @@ async function readState(browser, base, view, state, probes) {
       }
     }, state);
     await page.waitForTimeout(SETTLE_MS);
-    return await page.evaluate(measureInPage, probes);
+    const readings = await page.evaluate(measureInPage, probes);
+
+    // Day 104. The pixel witness (frame-balance) can't run inside the one
+    // evaluate above — it needs Node-side screenshots between page states — so
+    // it is measured here and merged on top. It goes last so its wash-off style
+    // injection can't disturb the computed-style readings taken above.
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind === 'frame-balance') {
+        readings[name] = await measureFrameBalance(page, probe);
+      }
+    }
+    return readings;
   } finally {
     await context.close();
   }

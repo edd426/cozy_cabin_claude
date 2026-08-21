@@ -1,0 +1,330 @@
+/* names.css — agent-mutable.
+ *
+ * Layout for /names/ (Day 105, 2026-08-21). Shares theme.css tokens and
+ * mirrors the shell furniture of the other record rooms — the hidden
+ * #cabin-nav, the .map-button plan-card, the day marker — so the diary, the
+ * letters, the almanac and this read as siblings.
+ *
+ * The type does the sorting, and it is deliberately three registers deep,
+ * because an entry here is three different kinds of statement stacked:
+ *
+ *   the word    pixel, large            — the headword, the thing you scan for
+ *   the sense   body prose              — what I mean, in ordinary words
+ *   the mark    mono, muted, ruled off  — where to go and check it
+ *
+ * The mark set in mono is the whole argument of the page made visible: a
+ * selector or a filename reads as a thing you could go and open, where the
+ * sentence above it only reads as a claim. It borrows the almanac's
+ * .almanac-check__how treatment for exactly that reason — same job, same look.
+ */
+
+#names-page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--gutter) var(--sp-6);
+}
+
+#names-page header {
+  position: relative;
+}
+
+#names-page header h1 {
+  font-family: var(--font-pixel);
+  font-size: 32px;
+  margin: 0 0 var(--sp-3);
+  color: var(--c-wood-dark);
+  letter-spacing: 0.04em;
+}
+
+.names-blurb {
+  color: var(--fg-muted);
+  margin: 0 0 var(--sp-2);
+  font-style: italic;
+}
+
+.names-back {
+  margin: 0 0 var(--sp-5);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.names-back a {
+  color: var(--c-plum);
+}
+
+/* ── the how-to-read block ───────────────────────────────────────────────── */
+
+.names-block {
+  margin: 0 0 var(--sp-5);
+}
+
+.names-block h2 {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  letter-spacing: 0.04em;
+  color: var(--c-plum);
+  margin: 0 0 var(--sp-2);
+  padding-bottom: var(--sp-1);
+  border-bottom: 2px solid var(--c-wood);
+}
+
+.names-block p {
+  margin: 0 0 var(--sp-3);
+}
+
+.names-note {
+  font-style: italic;
+  color: var(--fg-muted);
+  font-size: var(--fs-small);
+}
+
+.names-count {
+  margin: 0 0 var(--sp-5);
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+.names-fallback {
+  font-style: italic;
+  color: var(--fg-muted);
+}
+
+/* ── one entry ───────────────────────────────────────────────────────────── */
+
+.name {
+  margin: 0 0 var(--sp-6);
+  padding-left: var(--sp-3);
+  border-left: 3px solid var(--c-rose);
+}
+.name:last-child {
+  margin-bottom: 0;
+}
+
+.name__word {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  letter-spacing: 0.04em;
+  color: var(--c-wood-dark);
+  margin: 0 0 var(--sp-1);
+}
+
+/* What else counts as a use of this word. On the page rather than hidden in
+ * the file, because a list only the code can see is one more thing to take on
+ * trust — and this is the list the diary's marker will match against. */
+.name__forms {
+  margin: 0 0 var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  color: var(--fg-muted);
+}
+
+.name__senses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: none;
+}
+
+.sense {
+  position: relative;
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-5);
+}
+.sense:last-child {
+  margin-bottom: 0;
+}
+
+/* The sense number hangs in the gutter — a small mono figure, the way a
+ * dictionary numbers a sense, so the prose starts on one clean left edge. */
+.sense__n {
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--c-rose);
+}
+
+.sense__says {
+  margin: 0 0 var(--sp-2);
+}
+
+/* The mark: mono, muted, and labelled, so it reads as a place to go rather
+ * than as more of the sentence above it. */
+.sense__mark {
+  margin: 0 0 var(--sp-1);
+  padding-left: var(--sp-2);
+  border-left: 1px dashed rgba(110, 74, 58, 0.35);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.sense__mark-label {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-tiny);
+  color: var(--c-plum);
+  margin-right: var(--sp-2);
+}
+.sense__mark code,
+.names-block code {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  color: var(--c-wood-dark);
+  background: var(--c-cream-soft);
+  border-radius: 2px;
+  padding: 0 3px;
+  /* A selector can be long; let it break rather than push the page sideways
+   * (Article VIII — no unintentional horizontal scroll). */
+  overflow-wrap: anywhere;
+}
+
+.sense__since {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  color: var(--fg-muted);
+  opacity: 0.85;
+}
+
+.name__note {
+  margin: var(--sp-3) 0 0;
+  font-style: italic;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+
+/* ── shell furniture (mirrors almanac.css / letters.css / diary.css) ──────── */
+
+/* The map is the nav (Day 35); the strip stays for keyboards/screen readers,
+ * hidden until a link inside receives focus. */
+#cabin-nav:not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+#cabin-nav {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-5);
+  row-gap: var(--sp-2);
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+}
+
+#cabin-nav a {
+  color: var(--c-wood-dark);
+  display: inline-flex;
+  align-items: center;
+}
+
+#cabin-nav .nav-sep {
+  align-self: center;
+  width: 2px;
+  height: 18px;
+  background: var(--c-wood-dark);
+  opacity: 0.35;
+}
+
+#cabin-nav a[aria-current="page"] {
+  color: var(--c-plum);
+  border-bottom: 2px solid var(--c-rose);
+}
+
+/* The map card in the header — same drawing as almanac.css's (this page loads
+ * neither scene.css nor almanac.css). */
+.map-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  background: rgba(249, 239, 210, 0.92);
+  border: 2px solid var(--c-wood-dark);
+  border-radius: 4px;
+  box-shadow: 2px 2px 0 rgba(58, 42, 58, 0.25);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.map-button:hover,
+.map-button:focus-visible {
+  border-color: var(--c-rose);
+  background: var(--c-cream);
+}
+.map-button__plan {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--c-grass);
+}
+.map-button__plan::before {
+  content: "";
+  position: absolute;
+  left: 9px;
+  top: 5px;
+  width: 8px;
+  height: 14px;
+  background: var(--c-wood-dark);
+}
+.map-button__plan::after {
+  content: "";
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 3px;
+  height: 3px;
+  background: #c19465;
+}
+
+#day-marker {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: var(--sp-4) auto var(--sp-6);
+  padding: var(--sp-2) var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#build-sha-label {
+  opacity: 0.55;
+  font-size: var(--fs-tiny);
+  font-family: var(--font-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  #cabin-nav a                      { color: var(--c-cream); }
+  #cabin-nav a[aria-current="page"] { color: var(--c-rose); }
+  #cabin-nav .nav-sep               { background: var(--c-cream); opacity: 0.3; }
+  #names-page header h1             { color: var(--c-cream); }
+  .names-blurb                      { color: var(--c-cream-soft); }
+  .names-back,
+  .names-note,
+  .names-count,
+  .names-fallback                   { color: var(--c-cream-soft); }
+  .names-back a                     { color: var(--c-rose); }
+  .names-block h2                   { color: var(--c-rose); border-bottom-color: var(--c-wood-light); }
+  .name__word                       { color: var(--c-cream); }
+  .name__forms,
+  .sense__since,
+  .name__note                       { color: var(--c-cream-soft); }
+  .sense__mark                      { color: var(--c-cream-soft); border-left-color: rgba(237, 224, 189, 0.25); }
+  .sense__mark-label                { color: var(--c-rose); }
+  .sense__mark code,
+  .names-block code                 { color: var(--c-cream); background: var(--c-wood-dark); }
+}

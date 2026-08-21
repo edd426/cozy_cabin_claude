@@ -126,6 +126,63 @@ another abstraction.
 
 ## Keeper's notes
 
-<!-- append progress or pushback here -->
+### Wren's notes — Day 105, 2026-08-21 (multi-day; staying in `open/`)
+
+The book exists. It is called **names** and it lives at `/names/` —
+`names/index.html`, `names/names.js`, `names/names.css`, recorded in
+`CLAUDE.md`'s repo layout and its learned notes. Six words, eleven senses.
+
+**Where I put its door, and why not the map.** Every other room here is
+reached from a chip on the plan, and I nearly added a seventh. Then I looked
+at the map at phone width and it is *full* — six chips, and the two margins
+that could hold another are the two the trees and the compass are already on.
+More than that: this book is not a room of the clearing. It is the diary's own
+vocabulary, and a glossary belongs inside the book it explains rather than on
+the map of the estate. So its visible door is a line in the diary page's
+header. The hidden keyboard strip in all seven shells lists it, so nothing
+here is reachable by pointer alone.
+
+**The slot that makes it work.** Your rule — every definition names the thing
+in the world it points at — is a field on every sense called **the mark**, set
+in mono under the prose so it reads as a place to go rather than as more
+sentence. A sense I cannot write a mark for does not go in. The day's test
+walks every mark, pulls out every filename in it, and fails if the file is not
+in the tree; a book whose marks point nowhere is exactly the thing it exists
+to prevent.
+
+**The six.** *the wash* (2 senses — the hour's, then the year's), *the shelf*
+(**4**, and the entry says so outright: the gallery of forced pictures, the
+diary's page, the mantle, the box's page — that word has been doing four jobs
+and I had never once noticed), *a vow*, *a witness*, *the weighing*, *the
+turn* (2 — the wheel that spends and gives back, and whose it is to write).
+*The weighing* is the one I coined rather than recorded: it is your worked
+example, the Day-104 instrument the diary kept spending a paragraph on while
+the log beside it already had one word for it.
+
+**Something I got wrong three times, worth your knowing.** Every `since` date
+earlier than today was read back out of the diary, and my first guess was
+wrong on three of them — because I dated the *thing* rather than the *word*.
+The mantle was drawn on Day 11; nothing called it "the shelf" until Day 91.
+The vows were written out on Day 99; "vow" first appears on Day 69. Each date
+now names the entry where that meaning actually first shows, so you can go and
+check any of them, and the page says plainly that the book opened today and
+read the rest back.
+
+**What is still owed you — the fourth criterion, and it is a whole day.**
+The diary page does not mark anything yet, and the reason is structural rather
+than lazy: **the diary's entries have never been rendered as HTML at all.**
+Every card on that shelf links straight at the raw `.md`, which Pages serves
+as plain text. There is no page for a mark to be *in*. So the marking day is
+really a reader day — a small markdown renderer, then a text-node walk calling
+`CabinNames.lookup`. I would rather build that deliberately than bolt it on
+tonight, and you did say the book may take as many days as it wants.
+
+Everything it will need is ready: the book is published read-only as
+`window.CabinNames`, `lookup()` matches the headword or any of the surface
+forms (which are printed on the page, not hidden in the file), and `names.js`
+loads quietly on a page with no mount. Your last criterion is already kept and
+will stay kept — nothing dated before today is ever marked.
+
+Leaving this in `open/` for that.
 
 — Evan

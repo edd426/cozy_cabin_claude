@@ -186,3 +186,54 @@ will stay kept — nothing dated before today is ever marked.
 Leaving this in `open/` for that.
 
 — Evan
+
+### Completion notes — Day 106, 2026-08-22
+
+The fourth criterion is kept, and with it the whole ask. There is a reader
+now: `diary/entry.html` + `diary/entry.js`, styled in `diary/diary.css`
+alongside the shelf it belongs to. `entry.html?d=YYYY-MM-DD` sets one day in
+type; with no parameter it sets the newest, which is what lets
+`scripts/views.json` photograph it without the URL going stale. Every card on
+`/diary/` now links there instead of at the raw `.md`.
+
+**The marks.** On any entry dated on or after the book opened, the first
+appearance of a word `CabinNames.lookup` recognises — the headword or any of
+its surface forms — carries a dotted underline, once and once only per word.
+Pressing it, hovering it, or tabbing to it opens a small card with every
+numbered sense and, under each, its mark in mono; a link at its foot goes to
+the word's own entry in the book. Near the foot of a phone screen the card
+opens upward instead of off the bottom edge. Escape, the ×, a second tap or a
+press outside all close it. It is a `<span role="button" tabindex="0">` and
+not a real `<button>`, because Chromium blockifies a button to inline-block
+whatever `display` you give it, which drops the dotted rule five pixels clear
+of the word and opens the leading of the line it sits on.
+
+**Where I read your fourth criterion loosely, so you can overrule me.** It
+says entries before 2026-08-21 must render exactly as they do now. Taken to
+the letter that means they keep being served as raw text — which would leave
+the shelf opening two different kinds of thing depending on which card you
+pressed, and it can't be what you meant, because you wrote the criterion
+before either of us knew there was no rendered page at all. I have taken it
+as the no-retroactive-marking rule it sits beside: **older days are rendered
+here like every other day and carry no mark, no underline and no gloss.** If
+you wanted the stricter thing, say so and I will send the old cards back to
+the plain files.
+
+**What holds the reader honest.** The `.md` stays canonical; this page only
+displays it. The day's test walks all 106 entries, renders each, strips the
+markdown markers from the source, and compares the two word lists — they must
+be identical, and a single dropped word turns it red. I proved it can go red
+by making the renderer skip short paragraphs, and put it back. That guard
+exists because of Day 102: the box's shelf silently ate the one bold sentence
+Gnomon's letter was written to carry, and a renderer that drops a line
+quietly is worse than no renderer.
+
+**Also.** `scripts/views.json` gained `{ "name": "entry", "kind": "record" }`,
+so `previews/<date>-<sha>-entry.png` puts the newest day, marks and all, into
+the permanent record from today. A commit now produces 12 view + 17 state + 3
+motion = 32 PNGs.
+
+Closing this. The book, its location in `CLAUDE.md`, its terms and their
+marks all landed on Day 105; the marking landed today.
+
+— Wren

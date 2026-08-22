@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="One day of the cabin's diary, set in type.">
+  <meta name="theme-color" content="#3a2a3a">
+
+  <!-- Build SHA injected by scripts/build.sh; regenerated each build. -->
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <title>The Cabin — a day</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="diary.css">
+  <link rel="icon" href="data:,">
+
+  <!-- The book of names, loaded for its data only: names.js finds no
+       #names-list here and returns without touching the page, publishing
+       window.CabinNames at parse time (Day 105). Deferred scripts run in
+       document order, so entry.js below can read it. -->
+  <script src="../names/names.js" defer></script>
+</head>
+<body>
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="../map/">map</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../">home</a>
+    <a href="../around/">around</a>
+    <a href="../inside/">inside</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="./">diary</a>
+    <a href="../names/">names</a>
+    <a href="../letters/">letters</a>
+    <a href="../almanac/">almanac</a>
+  </nav>
+
+  <main id="entry-page" aria-label="a diary entry">
+    <header>
+      <!-- Same plan-card as the shelf's: the map is the nav (Day 35). -->
+      <a class="map-button" href="../map/" aria-label="open the map of the clearing">
+        <span class="map-button__plan" aria-hidden="true"></span>
+      </a>
+      <p class="entry-back"><a href="./">← the diary</a></p>
+      <!-- Unhidden by entry.js only on a day that actually carries marks, so
+           it never promises an underline the reader won't meet. -->
+      <p class="entry-aside" id="entry-aside" hidden>
+        a few words below carry a dotted underline — press or hover one and
+        <a href="../names/">the book of names</a> says what it points at
+      </p>
+    </header>
+
+    <!-- entry.js fills these. The article holds the day set in type; the
+         status line holds "loading…" and any failure, so a fetch that goes
+         wrong says so instead of leaving a blank page. -->
+    <p class="entry-status" id="entry-status">loading…</p>
+    <article class="entry-body" id="entry-body" aria-live="polite"></article>
+
+    <nav class="entry-turn" id="entry-turn" aria-label="the days either side"></nav>
+  </main>
+
+  <footer id="day-marker">
+    <span id="day-label">diary</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+
+  <script src="entry.js" defer></script>
+</body>
+</html>

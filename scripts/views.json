@@ -5,6 +5,7 @@
   { "name": "map",     "url_path": "map/"      },
 
   { "name": "diary",   "url_path": "diary/",   "kind": "record" },
+  { "name": "entry",   "url_path": "diary/entry.html", "kind": "record" },
   { "name": "letters", "url_path": "letters/", "kind": "record" },
   { "name": "almanac", "url_path": "almanac/", "kind": "record" },
   { "name": "names",   "url_path": "names/",   "kind": "record" }

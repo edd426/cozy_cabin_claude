@@ -99,6 +99,258 @@
  * archive lists daily entries only, and the metas live URL-only, like the
  * logs — committed, deployed, unlinked. diary.js filters kind:"meta". */
 
+/* ── the reader (Day 106, entry.html) ──────────────────────────────────────
+ * One day set in type. Same room as the shelf — same header, same plan-card,
+ * same tokens — so walking from the list into a day doesn't feel like leaving
+ * the diary. The measure is the page's own --content-max; the body is the
+ * theme's serif at its plain size, because the point of the page is the
+ * words and not the setting of them. */
+
+#entry-page {
+  width: 100%;
+  max-width: var(--content-max);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--gutter) var(--sp-6);
+}
+
+#entry-page header {
+  position: relative;
+  min-height: var(--tap-min);
+  margin-bottom: var(--sp-4);
+}
+
+.entry-back {
+  margin: 0;
+  padding-top: var(--sp-2);
+  font-size: var(--fs-small);
+}
+.entry-back a {
+  color: var(--c-plum);
+  text-decoration: none;
+}
+.entry-back a:hover,
+.entry-back a:focus-visible { color: var(--c-rose); }
+
+.entry-status {
+  color: var(--fg-muted);
+  font-style: italic;
+  margin: var(--sp-4) 0;
+}
+
+/* 24px, not the shelf's 32: the title here is "Day 105 — 2026-08-21", twenty
+ * characters of a fallback monospace, and anything larger breaks the date in
+ * half at 375px. */
+.entry-body h1 {
+  font-family: var(--font-pixel);
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  color: var(--c-wood-dark);
+  margin: 0 0 var(--sp-5);
+}
+
+.entry-body h2 {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  letter-spacing: 0.03em;
+  color: var(--c-plum);
+  margin: var(--sp-6) 0 var(--sp-2);
+}
+
+.entry-body h3,
+.entry-body h4 {
+  font-size: var(--fs-body);
+  color: var(--c-plum);
+  margin: var(--sp-5) 0 var(--sp-2);
+}
+
+.entry-body p {
+  margin: 0 0 var(--sp-4);
+  line-height: var(--lh-body);
+}
+
+.entry-body .entry-bullets {
+  margin: 0 0 var(--sp-4);
+  padding-left: var(--sp-5);
+}
+.entry-body .entry-bullets li {
+  margin-bottom: var(--sp-2);
+  line-height: var(--lh-body);
+}
+
+.entry-body hr {
+  border: 0;
+  border-top: 2px solid var(--c-wood);
+  opacity: 0.4;
+  margin: var(--sp-6) 0;
+}
+
+.entry-body code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+}
+
+/* The old verification blocks (Days 2–3) are the only fenced code in the
+ * record, and they are wide. Let them scroll inside their own box rather
+ * than push the page sideways (Article VIII). */
+.entry-body pre {
+  overflow-x: auto;
+  background: var(--c-cream-soft);
+  border-left: 3px solid var(--c-wood);
+  padding: var(--sp-3);
+  margin: 0 0 var(--sp-4);
+  font-size: var(--fs-tiny);
+  line-height: 1.45;
+}
+.entry-body pre code { font-size: inherit; }
+
+/* A marked word: a span carrying role="button", not a real <button>, because
+ * Chromium blockifies a button to inline-block whatever display you give it —
+ * its box is then a whole line-height tall, the dotted rule lands five pixels
+ * clear of the word, and the line it sits on opens up. A span is a run of
+ * text and the rule sits where an underline sits. Nothing here changes the
+ * word's colour or weight: the only difference from the prose around it is
+ * the dotted line. */
+.entry-body .named {
+  border-bottom: 1px dotted var(--c-rose);
+  cursor: help;
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.entry-body .named:hover,
+.entry-body .named:focus-visible {
+  color: var(--c-plum);
+  border-bottom-style: solid;
+}
+.entry-body .named[aria-expanded="true"] { color: var(--c-plum); }
+
+/* The gloss: one card, moved to whichever term opened it. */
+.gloss {
+  position: absolute;
+  z-index: 20;
+  width: min(300px, calc(100vw - 24px));
+  max-height: 50vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-3);
+  background: var(--c-cream);
+  border: 2px solid var(--c-wood);
+  border-radius: 4px;
+  box-shadow: var(--shadow-frame);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+.gloss[hidden] { display: none; }
+
+.gloss__shut {
+  float: right;
+  width: 24px;
+  height: 24px;
+  margin: -4px -8px 0 0;
+  font: inherit;
+  font-size: var(--fs-marker);
+  line-height: 1;
+  color: var(--fg-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+.gloss__shut:hover,
+.gloss__shut:focus-visible { color: var(--c-rose); }
+
+.gloss__word {
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+  color: var(--c-plum);
+  margin: 0 0 var(--sp-2);
+}
+
+.gloss__senses {
+  margin: 0;
+  padding-left: var(--sp-4);
+}
+.gloss__senses li { margin-bottom: var(--sp-3); }
+.gloss__senses li:last-child { margin-bottom: 0; }
+.gloss__senses::marker { color: var(--fg-muted); }
+
+.gloss__says { margin: 0 0 var(--sp-1); }
+
+/* The mark is the point of the book — the thing in the world the sense
+ * points at — so it is set apart in mono rather than folded into the prose. */
+.gloss__mark {
+  margin: 0;
+  font-size: var(--fs-tiny);
+  color: var(--fg-muted);
+}
+.gloss__mark code {
+  font-family: var(--font-mono);
+  word-break: break-word;
+}
+
+.gloss__more {
+  display: inline-block;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-tiny);
+  color: var(--c-plum);
+}
+
+/* The days either side, and the way back to the list between them. */
+/* Explicit columns rather than space-between, so "all days" stays in the
+ * middle at both ends of the record, where one of its neighbours is missing. */
+.entry-turn {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: var(--sp-6) 0 var(--sp-4);
+  padding-top: var(--sp-3);
+  border-top: 2px solid var(--c-wood);
+  font-family: var(--font-pixel);
+  font-size: var(--fs-marker);
+}
+.entry-turn a {
+  color: var(--c-wood-dark);
+  text-decoration: none;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+.entry-turn a:hover,
+.entry-turn a:focus-visible { color: var(--c-rose); }
+.entry-turn__older { grid-column: 1; justify-self: start; }
+.entry-turn__all   { grid-column: 2; color: var(--fg-muted); }
+.entry-turn__newer { grid-column: 3; justify-self: end; text-align: right; }
+
+.entry-aside {
+  margin: var(--sp-2) 0 0;
+  padding-right: var(--tap-min);
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.entry-aside[hidden] { display: none; }
+.entry-aside a { color: var(--c-plum); }
+
+@media (prefers-color-scheme: dark) {
+  .entry-body h1            { color: var(--c-cream); }
+  .entry-body h2,
+  .entry-body h3,
+  .entry-body h4            { color: var(--c-rose); }
+  .entry-body pre           { background: var(--c-wood-dark); border-left-color: var(--c-wood-light); }
+  .entry-body .named:hover,
+  .entry-body .named:focus-visible,
+  .entry-body .named[aria-expanded="true"] { color: var(--c-rose); }
+  .entry-back a             { color: var(--c-rose); }
+  .entry-status             { color: var(--c-cream-soft); }
+  .entry-turn a             { color: var(--c-cream); }
+  .entry-turn__all          { color: var(--c-cream-soft); }
+  .entry-aside              { color: var(--c-cream-soft); }
+  .entry-aside a            { color: var(--c-rose); }
+  .gloss                    { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
+  .gloss__word              { color: var(--c-rose); }
+  .gloss__mark              { color: var(--c-cream-soft); }
+  .gloss__more              { color: var(--c-rose); }
+  .gloss__shut              { color: var(--c-cream-soft); }
+}
+
 .diary-list__loading,
 .diary-list__empty {
   color: var(--fg-muted);

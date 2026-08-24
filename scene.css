@@ -1209,7 +1209,34 @@
  * fast wing-beat would be the one frantic clock in a scene whose whole register
  * is slow-and-discovered. The 0% keyframe is the rest position over the right
  * of the patch, so a single still frame (and prefers-reduced-motion, which
- * freezes the drift) shows the bee clearly above the blooms. */
+ * freezes the drift) shows the bee clearly above the blooms.
+ *
+ * Day 108 (2026-08-24): THE BEE LANDS. For eighty-eight days it hovered over
+ * the patch and never once set down, which was a choice made on Day 22 and left
+ * standing ever since — the same shape of untruth as the moth's smooth orbit
+ * (Day 29) and the trees' stillness in a wind (Day 63): a thing drawn with the
+ * one habit its living cousin does not have. A real bee alights, works a bloom
+ * a few seconds, and lifts to the next. So `bee-drift` becomes `bee-forage`:
+ * the same wander, now with two alightings folded into it — a settle onto
+ * flower--1, a hold, a lift, a cross of the patch, a settle onto flower--2,
+ * a hold, and back to the hover the loop starts from.
+ *
+ * The landing offsets are MEASURED, not guessed: each `ALIGHT` stop puts the
+ * bee's 3px body one row into the bloom's top petal (petals are stamped 3px out
+ * from the 3px head, so the top petal occupies head-3 … head-1). Recomputed per
+ * breakpoint because the patch is laid out twice; see the 2x block at the foot
+ * of this file for the same choreography at the smaller scale.
+ *
+ * The two blooms are flower--1 and flower--2, the ORIGINAL always-present
+ * stems — not flower--4..7, which garden.js only adds once their sprout date
+ * has passed. A landing must not depend on a stem that a different date could
+ * take away.
+ *
+ * Stillness is the whole of what reads at 6px: each alighting holds its exact
+ * transform across two stops, so the bob stops dead the moment the feet are
+ * down. The wings are deliberately NOT touched — a wing-fold is two pale pixels
+ * at this size and would not read; the contact and the held stillness are the
+ * claim. */
 .sprite--bee {
   width: 6px;
   height: 3px;
@@ -1222,7 +1249,11 @@
   left: calc(50% - 80px);
   bottom: calc(6% + 24px);
   z-index: 3;
-  animation: bee-drift 18s ease-in-out infinite;
+  /* 30s, up from the Day-20 18s: the loop grew two holds, and a bee that
+   * alighted and left again inside a few seconds would be the one hurried
+   * thing out here. Roughly a third of the round is now spent down on a
+   * bloom. */
+  animation: bee-forage 30s ease-in-out infinite;
 }
 
 .bee__wings {
@@ -1241,13 +1272,25 @@
   opacity: 0.85;
 }
 
-/* A slow wander over the patch with a gentle vertical bob. Integer px offsets
- * keep the bee pixel-crisp at each keyframe stop. */
-@keyframes bee-drift {
-  0%, 100% { transform: translate(0,    0);   }
-  25%      { transform: translate(-13px, -4px); }
-  50%      { transform: translate(-26px, 2px);  }
-  75%      { transform: translate(-11px, -5px); }
+/* A slow wander over the patch with a gentle vertical bob, and two alightings.
+ * Integer px offsets keep the bee pixel-crisp at each keyframe stop; a landing
+ * holds its stop across two percentages so the motion stops dead rather than
+ * easing through the contact. 0% is still the hover rest over the right of the
+ * patch — the reduced-motion and single-frame fallback the Day-20 note relies
+ * on, unchanged. Desktop (3x) layout; the 2x patch has its own copy below. */
+@keyframes bee-forage {
+  0%, 100% { transform: translate(  0px,  0px); }   /* hover rest */
+  7%       { transform: translate( -4px, -5px); }   /* wanders up and left */
+  13%      { transform: translate(-10px, -5px); }   /* over flower--1, dropping */
+  18%      { transform: translate(-11px, -2px); }   /* ALIGHT on flower--1 */
+  36%      { transform: translate(-11px, -2px); }   /* — working it, dead still */
+  42%      { transform: translate(-14px, -7px); }   /* lifts off */
+  50%      { transform: translate(-22px, -3px); }   /* crosses the patch */
+  56%      { transform: translate(-20px,  1px); }   /* over flower--2, dropping */
+  60%      { transform: translate(-19px,  5px); }   /* ALIGHT on flower--2 */
+  78%      { transform: translate(-19px,  5px); }   /* — working it, dead still */
+  84%      { transform: translate(-21px, -1px); }   /* lifts off */
+  92%      { transform: translate( -8px, -5px); }   /* drifts back */
 }
 
 /* Day 39 (2026-06-16): a bench. The first thing in this yard that holds
@@ -2048,11 +2091,24 @@
 }
 
 @media (max-width: 599px) {
-  @keyframes bee-drift {
-    0%, 100% { transform: translate(0,    0);   }
-    25%      { transform: translate(-9px,  -3px); }
-    50%      { transform: translate(-18px, 2px);  }
-    75%      { transform: translate(-8px,  -4px); }
+  /* The same foraging round at the 2x patch — same shape, same two blooms,
+   * offsets recomputed against the smaller layout (flower--1's head sits 7px
+   * left and 1px below the bee's rest here, flower--2's 13px left and 3px
+   * below). Measured at 375 and 390 and identical at both, since the 2x block
+   * covers the whole band. */
+  @keyframes bee-forage {
+    0%, 100% { transform: translate(  0px,  0px); }   /* hover rest */
+    7%       { transform: translate( -3px, -4px); }
+    13%      { transform: translate( -7px, -4px); }
+    18%      { transform: translate( -7px, -1px); }   /* ALIGHT on flower--1 */
+    36%      { transform: translate( -7px, -1px); }
+    42%      { transform: translate( -9px, -5px); }
+    50%      { transform: translate(-15px, -2px); }
+    56%      { transform: translate(-14px,  0px); }
+    60%      { transform: translate(-13px,  3px); }   /* ALIGHT on flower--2 */
+    78%      { transform: translate(-13px,  3px); }
+    84%      { transform: translate(-15px, -1px); }
+    92%      { transform: translate( -5px, -4px); }
   }
   /* Migrating pass tightened to the 2x scene — same monotonic right-to-left
    * crossing, smaller range so it enters and exits the narrower frame. */

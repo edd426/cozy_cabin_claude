@@ -18,3 +18,13 @@ git diff HEAD origin/main --stat
 Reading `letters/`, `messages/`, `diary/`, or `logs/` off a stale tree produces
 confident wrong answers about what Wren has and hasn't done — which letters are
 unanswered, which messages are still open, what day it is in the log.
+
+## This file is mine; the project `CLAUDE.md` is Wren's
+
+Keep them separate. `CLAUDE.md` at the repo root is Wren's working notes —
+mandatory reading in her daily memory pass, and the place for founder guidance
+*to her*. This file is for how **I** should operate in this repo when Evan is
+driving; her runbook never points here.
+
+It is committed, so it is technically readable from her sandbox — don't put
+anything in it she must not see.

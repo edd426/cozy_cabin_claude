@@ -70,6 +70,26 @@
 //       gallery infix, so the memory glob `ls <date>-<sha>*.png` picks strips up
 //       alongside everything else.
 //
+//       A clip may carry `seek` instead of being sampled on the wall clock
+//       (Day 109, 2026-08-25). Every capture this file makes stands where the
+//       clock happens to put it: `capture` shoots at networkidle + 1.5s and
+//       `captureState` at + 2s, which lands 6.6–8.3% into any perpetual loop and
+//       will land there again tomorrow and every morning after; and a wall-clock
+//       strip spans MOTION_FRAMES × MOTION_INTERVAL_MS = 4.5s, so anything whose
+//       telling moment falls later than that is outside the record entirely. The
+//       bee's foraging round runs 30s and puts its feet down at 18% and 60% of it
+//       (scene.css `bee-forage`, Day 108) — the two moments the whole build was
+//       for, and neither is reachable by waiting a reasonable while. So a `seek`
+//       clip doesn't wait. It PINS: every perpetual animation on the page is
+//       paused and driven to the same instant of the round, which is what the
+//       clearing would look like standing there at that second, arrived at by
+//       aiming rather than by patience. Deterministic (no sampling jitter), and
+//       cheaper than a wall-clock clip because it does no waiting at all. A seek
+//       clip may also carry `crop` — a native-px window around named elements,
+//       redrawn at an integer scale — because a 6px bee inside a 375px frame is
+//       below the legibility floor CLAUDE.md's founder note sets ("if a thing
+//       can't read at its size, make it bigger").
+//
 //   screenshot.js --motion-cross BASE_URL OUT_DIR DATE_TAG SHA_SHORT
 //       Cross-view motion strip. The --motion strips read across TIME within one
 //       view; this one reads across the HOUSE. It captures the front face (whose
@@ -223,12 +243,49 @@ const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over
 // bounding logic as --gallery: the wind and the fireflies both live on the front
 // face; around/inside motion (the door-side straight smoke, the hearth flicker) is
 // a later slice if wanted.
+//
+// A clip carrying `seek` is not sampled on the wall clock at all — see the
+// --motion note in the header. `seek.animation` is the keyframes name to read
+// the round's length off (naming it rather than assuming means a renamed
+// keyframe set fails loudly instead of silently filming the wrong loop), and
+// `seek.at` lists the moments to stand at, each a fraction of one round with
+// the label that goes under its cell. `crop` is optional: `around` is the
+// selectors whose union the window is cut to, `margin` the native px of air
+// left round them, `scale` the integer redraw factor.
 const MOTION_VIEW = '';                 // home root ('' resolves to BASE_URL)
 const MOTION_FRAMES = 6;
 const MOTION_INTERVAL_MS = 900;
+const MOTION_SEEK_SETTLE_MS = 120;      // two frames' grace for the pinned paint
 const MOTION_CLIPS = [
   { name: 'day',   tod: 'day',   season: 'summer' },
   { name: 'night', tod: 'night', season: 'summer' },
+  // Day 109 (2026-08-25) — the bee's round, the first clip the camera aims at
+  // rather than waits for. Six moments of one 30s `bee-forage` loop, chosen for
+  // what each says rather than for being evenly spaced: the hover it rests at
+  // (0%, and the one phase every other capture in this file has ever caught),
+  // the drop toward the first bloom (13%), the alighting itself (18%), the hold
+  // eighteen percent of a round later with the bee's transform identical and the
+  // smoke and flag behind it visibly moved on — which is what stillness looks
+  // like and no single frame can say — the crossing (50%), and the second
+  // alighting (60%). Cropped to the flower patch and redrawn at 3× because the
+  // bee is 6×3 native px and its whole travel is under twenty.
+  {
+    name: 'bee',
+    tod: 'day',
+    season: 'summer',
+    seek: {
+      animation: 'bee-forage',
+      at: [
+        { frac: 0.00, label: 'hover' },
+        { frac: 0.13, label: 'dropping' },
+        { frac: 0.18, label: 'on bloom 1' },
+        { frac: 0.36, label: 'still down' },
+        { frac: 0.50, label: 'crossing' },
+        { frac: 0.60, label: 'on bloom 2' },
+      ],
+    },
+    crop: { around: ['.flower', '.sprite--bee'], margin: 18, scale: 3 },
+  },
 ];
 
 // --motion-cross mode config. One forced state (the wind is a day-story, and the
@@ -421,8 +478,8 @@ async function galleryRun(baseUrl, outDir, dateTag, shaShort) {
 // little clock sits under each frame. The cream ground matches the site so the
 // strip reads as part of the record. Runs inside the browser and returns a
 // base64 PNG data URL.
-async function compositeFilmstrip(page, frames, title, labels) {
-  const dataUrl = await page.evaluate(async ({ frames, title, labels }) => {
+async function compositeFilmstrip(page, frames, title, labels, crop = null) {
+  const dataUrl = await page.evaluate(async ({ frames, title, labels, crop }) => {
     const PAD = 16, GAP = 10, TITLE_H = 26, CAP_H = 22;
     const imgs = await Promise.all(frames.map((src) => new Promise((resolve, reject) => {
       const im = new Image();
@@ -430,7 +487,16 @@ async function compositeFilmstrip(page, frames, title, labels) {
       im.onerror = reject;
       im.src = src;
     })));
-    const fw = imgs[0].naturalWidth, fh = imgs[0].naturalHeight;
+    // With no crop the whole frame is drawn 1:1, exactly as before. With one,
+    // the same native-px window is cut from every frame and redrawn at an
+    // integer scale with smoothing off — the site's own `image-rendering:
+    // pixelated` idiom, so enlarging costs no crispness.
+    const sx = crop ? crop.x : 0;
+    const sy = crop ? crop.y : 0;
+    const sw = crop ? crop.w : imgs[0].naturalWidth;
+    const sh = crop ? crop.h : imgs[0].naturalHeight;
+    const scale = crop && crop.scale ? crop.scale : 1;
+    const fw = sw * scale, fh = sh * scale;
     const W = PAD * 2 + imgs.length * fw + (imgs.length - 1) * GAP;
     const H = PAD * 2 + TITLE_H + fh + CAP_H;
     const canvas = document.createElement('canvas');
@@ -447,7 +513,7 @@ async function compositeFilmstrip(page, frames, title, labels) {
     imgs.forEach((im, i) => {
       const x = PAD + i * (fw + GAP);
       const y = PAD + TITLE_H;
-      ctx.drawImage(im, x, y, fw, fh);
+      ctx.drawImage(im, sx, sy, sw, sh, x, y, fw, fh);
       ctx.strokeStyle = '#cdbf9d';
       ctx.strokeRect(x + 0.5, y + 0.5, fw - 1, fh - 1);
       ctx.fillStyle = '#8a785f';
@@ -455,8 +521,79 @@ async function compositeFilmstrip(page, frames, title, labels) {
       ctx.fillText(labels[i], x + 2, y + fh + 5);
     });
     return canvas.toDataURL('image/png');
-  }, { frames, title, labels });
+  }, { frames, title, labels, crop });
   return dataUrl;
+}
+
+// Stand the whole scene at one instant of a running round, without waiting for
+// that instant to come round. Every perpetual animation on the page is paused
+// and driven to the SAME absolute time — infinite iterations wrap on their own,
+// so each layer lands at its own honest phase of that second rather than each
+// being dragged to the same fraction of its own period, which would be a lie
+// about their relative rates. Finite animations and the (long-finished) wash
+// transitions are only paused, never moved.
+//
+// `animationName` is read off the target so a renamed keyframe set throws here
+// rather than quietly filming some other loop. Returns the round's length so
+// the strip can label its cells in real seconds.
+async function seekScene(page, animationName, frac) {
+  const result = await page.evaluate(({ animationName, frac }) => {
+    const anims = document.getAnimations();
+    const target = anims.find((a) => a.animationName === animationName);
+    if (!target) {
+      throw new Error(`no running animation named "${animationName}" on this page`);
+    }
+    const durationMs = target.effect.getComputedTiming().duration;
+    if (typeof durationMs !== 'number' || !isFinite(durationMs) || durationMs <= 0) {
+      throw new Error(`animation "${animationName}" has no finite round length`);
+    }
+    const atMs = frac * durationMs;
+    for (const a of anims) {
+      try {
+        a.pause();
+        const timing = a.effect && a.effect.getComputedTiming();
+        if (timing && timing.iterations === Infinity) a.currentTime = atMs;
+      } catch (e) {
+        /* a finished transition may refuse to be driven; it is already where it
+         * belongs, and pausing the rest is what matters. */
+      }
+    }
+    return { durationMs, atMs };
+  }, { animationName, frac });
+  // Two frames' grace so the pinned positions are painted before the shutter.
+  await page.waitForTimeout(MOTION_SEEK_SETTLE_MS);
+  return result;
+}
+
+// The native-px window a cropped clip is cut to: the union of everything the
+// `around` selectors match, plus `margin` of air, in coordinates relative to the
+// .scene box. Measured rather than written down — the patch is laid out at two
+// scales and a hardcoded rect would be right at one of them (Day 108's lesson,
+// one level out). Called once per seek phase and unioned across all of them, so
+// adding a phase can never crop the subject out of its own strip.
+async function measureCropWindow(page, around, margin) {
+  return page.evaluate(({ around, margin }) => {
+    const scene = document.querySelector('.scene');
+    const s = scene.getBoundingClientRect();
+    let l = Infinity, t = Infinity, r = -Infinity, b = -Infinity;
+    for (const sel of around) {
+      for (const el of document.querySelectorAll(sel)) {
+        const q = el.getBoundingClientRect();
+        if (!q.width && !q.height) continue;
+        l = Math.min(l, q.left);  t = Math.min(t, q.top);
+        r = Math.max(r, q.right); b = Math.max(b, q.bottom);
+      }
+    }
+    if (!isFinite(l)) throw new Error(`crop: nothing matched ${around.join(', ')}`);
+    return {
+      left:   l - s.left - margin,
+      top:    t - s.top  - margin,
+      right:  r - s.left + margin,
+      bottom: b - s.top  + margin,
+      sceneW: s.width,
+      sceneH: s.height,
+    };
+  }, { around, margin });
 }
 
 // Capture one motion clip: force the state, wait out the wash so the lean-in isn't
@@ -471,6 +608,9 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
     deviceScaleFactor: 1,
   });
   const frames = [];
+  let labels = [];
+  let title = '';
+  let crop = null;
   try {
     const page = await shotContext.newPage();
     console.log(`screenshot: navigating to ${fullUrl} for motion clip ${clip.name}`);
@@ -486,15 +626,57 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
       }
     }, clip);
     await page.waitForTimeout(WASH_SETTLE_MS);
-    // The perpetual animations (smoke, flag, sway, fireflies) run on their own
-    // clocks now; sample the scene box across one span of them.
     const sceneEl = page.locator('.scene').first();
-    for (let f = 0; f < MOTION_FRAMES; f++) {
-      // locator.screenshot() returns a Buffer (its options have no `encoding`),
-      // so base64-encode it ourselves for the data URL.
-      const buf = await sceneEl.screenshot();
-      frames.push(`data:image/png;base64,${buf.toString('base64')}`);
-      if (f < MOTION_FRAMES - 1) await page.waitForTimeout(MOTION_INTERVAL_MS);
+
+    if (clip.seek) {
+      // Aimed clip: stand at each named moment of the round in turn. First pass
+      // measures the crop window across every phase (so nothing the strip means
+      // to show can fall outside it), second pass takes the pictures.
+      const phases = clip.seek.at;
+      let durationMs = 0;
+      if (clip.crop) {
+        let box = null;
+        for (const phase of phases) {
+          ({ durationMs } = await seekScene(page, clip.seek.animation, phase.frac));
+          const m = await measureCropWindow(page, clip.crop.around, clip.crop.margin);
+          box = box ? {
+            left: Math.min(box.left, m.left), top: Math.min(box.top, m.top),
+            right: Math.max(box.right, m.right), bottom: Math.max(box.bottom, m.bottom),
+            sceneW: m.sceneW, sceneH: m.sceneH,
+          } : m;
+        }
+        const x = Math.max(0, Math.floor(box.left));
+        const y = Math.max(0, Math.floor(box.top));
+        crop = {
+          x, y,
+          w: Math.min(Math.ceil(box.right), Math.round(box.sceneW)) - x,
+          h: Math.min(Math.ceil(box.bottom), Math.round(box.sceneH)) - y,
+          scale: clip.crop.scale || 1,
+        };
+        console.log(`screenshot: motion clip ${clip.name} crop ${crop.w}×${crop.h} at ${crop.x},${crop.y} ×${crop.scale}`);
+      }
+      for (const phase of phases) {
+        const at = await seekScene(page, clip.seek.animation, phase.frac);
+        durationMs = at.durationMs;
+        const buf = await sceneEl.screenshot();
+        frames.push(`data:image/png;base64,${buf.toString('base64')}`);
+        labels.push(`t=${(at.atMs / 1000).toFixed(1)}s · ${phase.label}`);
+      }
+      const roundS = (durationMs / 1000).toFixed(0);
+      title = `motion — home / ${clip.name} · ${phases.length} moments aimed at across one ${roundS}s ${clip.seek.animation} round (read left → right)`;
+    } else {
+      // Wall-clock clip: the perpetual animations run on their own clocks; sample
+      // the scene box across one span of them.
+      for (let f = 0; f < MOTION_FRAMES; f++) {
+        // locator.screenshot() returns a Buffer (its options have no `encoding`),
+        // so base64-encode it ourselves for the data URL.
+        const buf = await sceneEl.screenshot();
+        frames.push(`data:image/png;base64,${buf.toString('base64')}`);
+        if (f < MOTION_FRAMES - 1) await page.waitForTimeout(MOTION_INTERVAL_MS);
+      }
+      const spanS = ((MOTION_FRAMES - 1) * MOTION_INTERVAL_MS / 1000).toFixed(1);
+      title = `motion — home / ${clip.name} · ${MOTION_FRAMES} frames over ${spanS}s (read left → right)`;
+      labels = frames.map((_, i) => `t=${((i * MOTION_INTERVAL_MS) / 1000).toFixed(1)}s`);
     }
   } finally {
     await shotContext.close();
@@ -505,10 +687,7 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
   try {
     const page = await compContext.newPage();
     await page.setContent('<!doctype html><body></body>', { waitUntil: 'load' });
-    const spanS = ((MOTION_FRAMES - 1) * MOTION_INTERVAL_MS / 1000).toFixed(1);
-    const title = `motion — home / ${clip.name} · ${MOTION_FRAMES} frames over ${spanS}s (read left → right)`;
-    const labels = frames.map((_, i) => `t=${((i * MOTION_INTERVAL_MS) / 1000).toFixed(1)}s`);
-    const dataUrl = await compositeFilmstrip(page, frames, title, labels);
+    const dataUrl = await compositeFilmstrip(page, frames, title, labels, crop);
     const b64 = dataUrl.split(',')[1];
     console.log(`screenshot: writing ${outPath}`);
     fs.writeFileSync(outPath, Buffer.from(b64, 'base64'));

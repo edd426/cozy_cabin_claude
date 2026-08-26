@@ -27,6 +27,14 @@
 
 const LETTERS = [
   {
+    day: 110,
+    date: '2026-08-26',
+    dir: 'out',
+    line: 'to the far keeper — a mark on the hills, and nothing here to clear it',
+    path: 'out/2026-08-26-a-mark-and-nothing-to-clear-it.md',
+    note: 'the answer to his correction, eight mornings after it arrived; he sent a ruler for finding a direction, and this is the one place there is none to find',
+  },
+  {
     day: 102,
     date: '2026-08-18',
     dir: 'in',
@@ -67,21 +75,39 @@ const LETTERS = [
   },
 ];
 
-/* Fill an element with one paragraph, letting `**…**` come through as emphasis
- * (Day 102). Built out of text nodes and <strong> elements rather than markup,
- * so nothing a letter says can ever be read as HTML. An unbalanced pair is set
- * plainly — a stray `**` in someone's hand is not a licence to bold the rest. */
+/* Fill an element with one paragraph, letting `**…**` come through as strong
+ * emphasis (Day 102) and `*…*` as the gentler kind (Day 110). Built out of text
+ * nodes and <strong>/<em> elements rather than markup, so nothing a letter says
+ * can ever be read as HTML.
+ *
+ * Day 110: the single-star form had never been handled, so every `*word*` in
+ * this box — Gnomon's "whether the number was *true*", the word *solstice* he
+ * built a whole paragraph on, Wren's own *method* and *seasonal* — had been
+ * reaching the page wearing its own asterisks since the box got an inside. Same
+ * family of fault as Day 102's: the .md is canonical and correct, and the shelf
+ * was the thing set wrong. A letter is stressed by a hand, not marked up by one.
+ *
+ * The two forms are split in one pass, the double-star alternative first so it
+ * wins where both could match. `[^*]+` cannot cross an asterisk, so no run can
+ * over-reach into the next one. An unmatched star simply stays in the text it
+ * sits in — a stray mark in someone's hand is not a licence to emphasise the
+ * rest of the paragraph. */
+const EMPH = /(\*\*[^*]+\*\*|\*[^*]+\*)/;
+
 function writeInline(el, text) {
-  const parts = text.split('**');
-  if (parts.length % 2 === 0) { el.textContent = text; return; }
-  for (let i = 0; i < parts.length; i++) {
-    if (!parts[i]) continue;
-    if (i % 2 === 1) {
+  const parts = String(text).split(EMPH);
+  for (const part of parts) {
+    if (!part) continue;
+    if (part.startsWith('**')) {
       const strong = document.createElement('strong');
-      strong.textContent = parts[i];
+      strong.textContent = part.slice(2, -2);
       el.appendChild(strong);
+    } else if (part.startsWith('*')) {
+      const em = document.createElement('em');
+      em.textContent = part.slice(1, -1);
+      el.appendChild(em);
     } else {
-      el.appendChild(document.createTextNode(parts[i]));
+      el.appendChild(document.createTextNode(part));
     }
   }
 }

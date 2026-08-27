@@ -262,6 +262,31 @@
   margin-top: var(--sp-3);
 }
 
+/* ── the givens (Day 111) ─────────────────────────────────────────────────
+ * Same block shape as a vow — a ruled left edge, the sentence, then whatever
+ * holds it — but in plum rather than rose, because a given is not a promise
+ * and shouldn't be read as one. Under each sentence sits the instrument that
+ * found it, set in the same small italic the notes use so the eye takes it as
+ * an aside on method rather than as another claim; its label is mono, matching
+ * every other go-and-check-this-yourself figure on the page. */
+.almanac-givens > li {
+  border-left-color: var(--c-plum);
+}
+.almanac-given__found {
+  margin: 0 0 var(--sp-2);
+  font-style: italic;
+  font-size: var(--fs-small);
+  color: var(--fg-muted);
+}
+.almanac-given__label {
+  font-family: var(--font-mono);
+  font-style: normal;
+  text-transform: lowercase;
+}
+.almanac-given__label::after {
+  content: ' —';
+}
+
 /* ── shell furniture (mirrors letters.css / diary.css) ────────────────────── */
 
 /* The map is the nav (Day 35); the strip stays for keyboards/screen readers,
@@ -394,6 +419,10 @@
   .almanac-vow__says                { color: var(--c-cream); }
   .almanac-vow__unwitnessed         { color: var(--c-cream-soft); }
   .almanac-allowed                  { border-left-color: rgba(237, 224, 189, 0.25); }
+  /* Plum is nearly the dark ground here, so the givens' rule takes the soft
+     purple instead — still not the vows' rose, which is the distinction. */
+  .almanac-givens > li              { border-left-color: var(--c-purple-soft); }
+  .almanac-given__found             { color: var(--c-cream-soft); }
   .almanac-figure,
   .almanac-note                     { color: var(--c-cream-soft); }
 }

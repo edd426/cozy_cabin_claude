@@ -59,6 +59,21 @@
  * pulls the reading off centre; an even one reads ~0. It sees only the wash,
  * not a sprite lit down one edge, which is written into the vow's blind note.
  *
+ * Day 111 (2026-08-27): a fifth kind, `hold`, and it is the first here that
+ * forces no state at all. The page now publishes GIVENS — conditions of the
+ * clearing rather than claims about it — and one of them is that the yard reads
+ * its hour once, when you arrive, and holds it for as long as you stay. That
+ * cannot be caught by standing the scene in a state and measuring it, because
+ * the whole claim is about what happens between two instants. So a hold check
+ * carries its own two instants and gets its own kind of visit: the page is
+ * opened on a STEPPED clock (a Date shim installed before any script runs,
+ * reading a mutable instant the runner can move), the reading is taken, the
+ * clock is walked across a band edge, and the reading is taken again. It must
+ * not have moved. And then, because a check that cannot fail is decoration
+ * (Day 98), the same page is opened FRESH at the later instant and that reading
+ * must differ — which is what proves the two instants really did straddle an
+ * edge, and so that the first half was asking anything at all.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -232,6 +247,12 @@ function measureInPage(probes) {
     // with the wash and one without), so it is filled in by measureFrameBalance
     // after this evaluate returns rather than read from computed style here.
     if (probe.kind === 'frame-balance') continue;
+
+    // Day 111. An `attr` probe belongs to a hold check, which visits the page
+    // itself on a stepped clock rather than in a forced state — so there is
+    // nothing here for it, and reading it in a forced state would be a reading
+    // of the forcing.
+    if (probe.kind === 'attr') continue;
 
     if (probe.kind === 'visible-count') {
       const all = document.querySelectorAll(probe.selector);
@@ -407,6 +428,101 @@ async function measureFrameBalance(page, probe) {
   return await page.evaluate(analyzeBalance, { withWash, noWash });
 }
 
+/* Day 111. The clock a hold check stands on.
+ *
+ * Installed with page.addInitScript, so it is in place before sky.js and
+ * season.js run and read `new Date()`. `window.__cabinClockMs` is the instant
+ * the page believes it is; the runner moves it with a plain evaluate, and every
+ * later `new Date()` on the page answers from the new one. Two details are
+ * load-bearing and were learned the first time this trick was used, for the
+ * gallery's frozen-clock states (CLAUDE.md, Day 95): keep the real prototype so
+ * getUTCFullYear() and friends still work on what comes back, and re-export
+ * now/parse/UTC, because garden.js and door-plant.js call Date.UTC directly and
+ * would throw without it. */
+function steppedClock(startMs) {
+  var Real = Date;
+  window.__cabinClockMs = startMs;
+  function Fake(a, b, c, d, e, f, g) {
+    switch (arguments.length) {
+      case 0: return new Real(window.__cabinClockMs);
+      case 1: return new Real(a);
+      case 2: return new Real(a, b);
+      case 3: return new Real(a, b, c);
+      case 4: return new Real(a, b, c, d);
+      case 5: return new Real(a, b, c, d, e);
+      case 6: return new Real(a, b, c, d, e, f);
+      default: return new Real(a, b, c, d, e, f, g);
+    }
+  }
+  Fake.prototype = Real.prototype;
+  Fake.now = function () { return window.__cabinClockMs; };
+  Fake.parse = Real.parse;
+  Fake.UTC = Real.UTC;
+  window.Date = Fake;
+}
+
+/* "2026-12-21T15:25" → ms, read as UTC. Parsed by hand rather than handed to
+ * `new Date(iso)`, which would read it as local: the page is opened in a UTC
+ * context below, so both ends have to agree on which noon is meant no matter
+ * what clock the machine running this keeps. */
+function instantMs(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/.exec(iso);
+  if (!m) return NaN;
+  return Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5], 0, 0);
+}
+
+/* One hold check, all three of its readings. Returns
+ * { arrived, stayed, arrivedLate } — the tag on arriving at the first instant,
+ * the tag after standing still while the clock crossed to the second, and the
+ * tag on arriving fresh at the second. */
+async function readHold(browser, base, check, probe) {
+  const arriveMs = instantMs(check.hold.arrive);
+  const stayMs = instantMs(check.hold.stay);
+  if (!Number.isFinite(arriveMs) || !Number.isFinite(stayMs)) {
+    throw new Error(`hold check on ${check.probe} has an unreadable instant`);
+  }
+
+  const url = new URL(VIEW_PATH[probe.view], base).toString();
+
+  const openAt = async (ms) => {
+    const context = await browser.newContext({ viewport: VIEWPORT, timezoneId: 'UTC' });
+    const page = await context.newPage();
+    await page.addInitScript(steppedClock, ms);
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
+    await page.waitForSelector('.scene', { timeout: 15000 });
+    return { context, page };
+  };
+
+  const tag = (page) => page.evaluate(({ selector, attr }) => {
+    const el = document.querySelector(selector);
+    return el ? el.getAttribute(attr) : null;
+  }, { selector: probe.selector, attr: probe.attr });
+
+  // Arrive at the first instant, then stand there while the clock crosses.
+  const first = await openAt(arriveMs);
+  let arrived, stayed;
+  try {
+    arrived = await tag(first.page);
+    await first.page.evaluate((ms) => { window.__cabinClockMs = ms; }, stayMs);
+    await first.page.waitForTimeout(SETTLE_MS);
+    stayed = await tag(first.page);
+  } finally {
+    await first.context.close();
+  }
+
+  // Then arrive fresh on the far side of the edge, which is what says the two
+  // instants were ever on opposite sides of anything.
+  const second = await openAt(stayMs);
+  let arrivedLate;
+  try {
+    arrivedLate = await tag(second.page);
+  } finally {
+    await second.context.close();
+  }
+
+  return { arrived, stayed, arrivedLate };
+}
+
 async function readState(browser, base, view, state, probes) {
   const context = await browser.newContext({ viewport: VIEWPORT });
   const page = await context.newPage();
@@ -444,6 +560,30 @@ async function readState(browser, base, view, state, probes) {
  * compared. Opacities come back as floats, so give them a hair of room. */
 function matches(got, want) {
   return got !== null && Math.abs(got - want) < 0.01;
+}
+
+/* Day 111. A hold check's two halves, in the order they matter: the place did
+ * not turn while somebody stood in it, and the two instants it was asked about
+ * really were on opposite sides of an edge. The second is what keeps the first
+ * from being a check that cannot fail. */
+function verdictsForHold(check, taken) {
+  if (!taken) {
+    return [{ ok: false, detail: 'the hold could not be read at all' }];
+  }
+  const { arrived, stayed, arrivedLate } = taken;
+  return [
+    {
+      ok: arrived !== null && stayed === arrived,
+      detail: `arrived at ${check.hold.arrive} in "${arrived}", still "${stayed}" ` +
+              `after the clock reached ${check.hold.stay} — the yard must not turn`,
+    },
+    {
+      ok: arrivedLate !== null && arrivedLate !== arrived,
+      detail: `arriving fresh at ${check.hold.stay} gives "${arrivedLate}", which ` +
+              `must differ from "${arrived}" — otherwise the two instants never ` +
+              'crossed an edge and the line above asks nothing',
+    },
+  ];
 }
 
 function verdictsFor(check, probeName, readings) {
@@ -554,10 +694,24 @@ async function main() {
       console.log(`check-almanac: read ${key} (${views.join(', ')})`);
     }
 
+    // 2b. The hold checks (Day 111) force no state, so workNeeded above never
+    // asked for them. Each gets its own visits, on a clock the runner steps.
+    const holds = new Map();
+    for (const check of CHECKS) {
+      if (!check.hold) continue;
+      const probe = PROBES[check.probe];
+      if (!probe) continue;
+      holds.set(check, await readHold(browser, base, check, probe));
+      console.log(`check-almanac: stood in ${probe.view} from ` +
+                  `${check.hold.arrive} to ${check.hold.stay}`);
+    }
+
     // 3. Hold the sentences to the readings.
     console.log('');
     for (const check of CHECKS) {
-      const verdicts = verdictsFor(check, check.probe, readings);
+      const verdicts = check.hold
+        ? verdictsForHold(check, holds.get(check))
+        : verdictsFor(check, check.probe, readings);
       const held = verdicts.every((v) => v.ok);
       if (!held) failures++;
       console.log(`${held ? 'HELD' : 'BROKE'}  ${check.probe} — ${check.guards}`);

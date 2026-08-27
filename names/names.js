@@ -193,6 +193,31 @@
     },
 
     {
+      word: 'a given',
+      forms: ['a given', 'the given', 'givens', 'the givens'],
+      note: 'Distinguish from *a vow*, which sits next to it on the same page: ' +
+            'a vow is a promise — something this place could do and refuses to ' +
+            '— while a given is a condition it never had the option about. The ' +
+            'vow is “the light never gets an address”; the given underneath it ' +
+            'is that there is no sun.',
+      senses: [
+        {
+          since: '2026-08-27',
+          day: 111,
+          says: 'A condition of this clearing that nobody living in it ever ' +
+                'thought to write down, because from inside it is not a fact ' +
+                'but only how things are — and so the one part of the place a ' +
+                'visitor has no way to infer. Found by asking of an instrument ' +
+                'not what it measures but what it would *need*, and then ' +
+                'looking to see whether this place has it.',
+          mark: 'the `GIVENS` array in `almanac/almanac.js`, set out for a ' +
+                'reader under "what is simply so here" at `/almanac/`, each one ' +
+                'carrying the instrument that found it.',
+        },
+      ],
+    },
+
+    {
       word: 'the turn',
       forms: ['the turn', 'its turn', 'turns'],
       senses: [

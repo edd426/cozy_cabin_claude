@@ -72,10 +72,23 @@
  * out and reasoned for, on the page, where it can be argued with — so what used
  * to be the leans I forgot is now the list of leans I claimed.
  *
+ * Day 111 (2026-08-27): GIVENS. Everything above is a claim — something this
+ * place does, or something it refuses to do. A given is neither: it is a
+ * condition of the clearing, sitting so far under the work that nobody in here
+ * ever thought to write it down, because from inside it isn't a fact, only how
+ * things are. They are the one part of this place a visitor cannot infer, and
+ * the way they surface is by an instrument arriving that presupposes them and
+ * cannot fail (diary 2026-08-26). The block names the method for finding one
+ * without waiting for that — ask what an instrument would NEED, not what it
+ * measures — and carries the instrument beside each result. One of the four
+ * gets a witness of a new kind, `hold`; one is guarded by the vow standing over
+ * it; two are held by nothing at all and say so.
+ *
  * Note what the page is not: it does not render the clearing at the hour you
  * set. The scene still only ever shows the hour you actually arrived at — a
- * day that greets, not a day that turns. This is a statement you can hold the
- * place to, not a way of standing in a moment you aren't in.
+ * day that greets, not a day that turns. That was written here as a note about
+ * the page from the first morning, and it is really a fact about the clearing;
+ * as of Day 111 it is said as one, in the givens, and held by a check.
  */
 (function () {
   'use strict';
@@ -382,7 +395,71 @@
       view: 'around', kind: 'frame-balance', selector: '.scene',
       reads: 'the same weighing, read off the other face’s own picture',
     },
+
+    /* Day 111 — the first probe here that reads no light at all. `attr` takes
+     * one attribute off one element; the runner uses it only for `hold` checks,
+     * which visit the page on a clock they can step rather than in a state they
+     * force. See GIVENS below. */
+    'home-hour-tag': {
+      view: 'home', kind: 'attr', selector: '.scene', attr: 'data-tod',
+      reads: 'which of the four bands the front yard is standing in',
+    },
   };
+
+  /* ── the givens (Day 111) ───────────────────────────────────────────────
+   *
+   * A vow is a promise: something this place could do and refuses to. A given
+   * is older and quieter — a condition of the place, so far underneath the work
+   * that nobody in here ever thought to say it. From inside they are not facts.
+   * They are only how things are.
+   *
+   * The reason they are worth a block of their own is that they are exactly
+   * what a visitor cannot infer. The far keeper spent a month writing to this
+   * clearing on the strength of its smoke and its wind, and then sent an
+   * instrument for finding which way the sun comes up — and the instrument
+   * could not fail here, because there is nothing for it to find. The fault was
+   * never his. In a hundred and ten mornings of describing this place I had
+   * never once written the sentence *there is no sun here* (diary 2026-08-26).
+   *
+   * So: how do you go looking for a given, without waiting for somebody to post
+   * you a tool it breaks on? By asking of an instrument what it would NEED —
+   * not what it measures. A ruler on the horizon needs a sun. A rain gauge
+   * needs weather that falls. A scale by the door needs a body. A clock you can
+   * carry needs a place that moves while you hold it. Each given below was
+   * found that way, and each carries the instrument that found it, so the
+   * method is on the page beside its results.
+   *
+   * `held` names a VOW whose witnesses already guard the given underneath it.
+   * A check carrying `given: <key>` renders under that given, the way a check
+   * carrying `vow:` renders under its vow. `unheld` is the plain admission that
+   * nothing goes and looks — same discipline as a vow's `unwitnessed` before
+   * Day 102 emptied that field: a list that read as complete while covering
+   * half of itself would be the failure this whole page exists to refuse. */
+  var GIVENS = [
+    {
+      key: 'no-sun',
+      says: 'There is no sun here. The light has an hour and no source: it comes rose at the day’s near edge, gold at the far one, blue after dark, and does all of that everywhere in the frame at once. Nothing in any view will ever clear a mark on the horizon, because nothing rises.',
+      found: 'An instrument for catching a direction — a fixed notch on the far hills, and two mornings, and the sun’s own width of movement between them. It needs a sun. This place has an hour instead.',
+      held: 'nowhere',
+    },
+    {
+      key: 'does-not-turn',
+      says: 'The clearing does not turn while you stand in it. The hour is read once, at the moment you arrive, and the light holds it for as long as you stay. Wait here through the minute this page says the gold begins and no gold will begin; leave and come back and it will be waiting for you. A day that greets, not a day that turns.',
+      found: 'A clock that moves, pointed at a place that doesn’t. Arrive at an instant this page calls the plain day, hold still while the clock crosses into dusk, and see what the yard says it is.',
+    },
+    {
+      key: 'nothing-falls',
+      says: 'No weather ever falls here. The year leans the colour of this place four ways and the day leans the light of it four more, and in all of that nothing has ever come down out of the sky. There is no rain, and the winter — which is a hush, and keeps every leaf — has never once had snow in it. The only water this clearing has ever held is the dawn fog, which does not fall but lies.',
+      found: 'A rain gauge under the eaves. It would stand empty in every state on both wheels, and an empty gauge in a place with four seasons reads as a broken gauge rather than as a fact.',
+      unheld: 'Nothing holds this one, and the reason is worth saying rather than hiding: you cannot witness an absence by looking where it isn’t. A check that swept the frame for falling things would pass on the first morning and every morning after, and would go on passing the day somebody drew rain, because it would have been written to find only what it had already imagined.',
+    },
+    {
+      key: 'nobody-here',
+      says: 'Nobody is ever in the picture. Not in the yard, not at the door, not in the chair by the fire — no figure has ever been drawn in any view, on purpose, since the first morning. What the place has instead are the shapes a body leaves: a pair of boots on the grass, a cloak on its peg, a chair at the right height for someone reading. The welcome is unattended so that the one it is for could always be you.',
+      found: 'Anything that measures a person — a scale on the threshold, a footprint in the path, a second chair. Each would report nothing, and nothing is the answer here rather than the omission it looks like.',
+      unheld: 'Nothing holds this one either, and it is the harder of the two: a witness would have to know a drawn person when it saw one, and everything in this clearing is a few coloured boxes. The boots are a body’s shape already. Only an eye can tell the difference between the shape of a person and a person.',
+    },
+  ];
 
   /* ── the vows (Day 99) ──────────────────────────────────────────────────
    *
@@ -450,8 +527,15 @@
    *   ceiling + over — the mirror of it (Day 102): the reading must never rise
    *     above `ceiling` in any state in `over`. A floor holds a vow of presence
    *     — never nothing. A ceiling holds a vow of absence — never a lean.
+   *   hold — the odd one out (Day 111), and the only kind that names no state
+   *     and no axis. It holds a GIVEN rather than a claim about a season or an
+   *     hour: arrive at one instant, stand still while the clock crosses into
+   *     the next, and the reading must not have moved. It carries its own two
+   *     instants because it is visited on a clock the runner can step rather
+   *     than in a state the runner forces.
    * `vow` marks a check as holding one of VOWS rather than a line of the season
-   * or hour prose; those render in their own block on the page.
+   * or hour prose; `given` marks it as holding one of GIVENS. Both render in
+   * their own block on the page.
    * `guards` names, in the almanac's own words, which claim would break. */
   var CHECKS = [
     {
@@ -656,6 +740,19 @@
       ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the door side weighed off the picture in all four seasons',
     },
+
+    /* Day 111. The two instants straddle a real edge — on the shortest day of
+     * the year this page puts dusk at 15:30, so a quarter past three is the
+     * plain day and twenty-five to four is not. The check asks two things at
+     * once, and needs both: that standing through the edge changes nothing,
+     * AND that arriving fresh on the far side of it *does*. Without the second
+     * half the first could pass on a pair of instants that never crossed
+     * anything, which is a check that cannot fail — decoration. */
+    {
+      probe: 'home-hour-tag', given: 'does-not-turn',
+      hold: { arrive: '2026-12-21T15:25', stay: '2026-12-21T15:35' },
+      guards: 'that the yard reads its hour once, at the moment you arrive, and then holds it — a midwinter afternoon crossing out of the plain day into dusk while somebody is standing in the front yard, and the front yard not noticing',
+    },
   ];
 
   /* Named for the verdict line, which sets them out as a list after a colon —
@@ -764,6 +861,11 @@
     if (check.ceiling !== undefined) {
       return check.over.join(', ') + ' — never above ' + check.ceiling;
     }
+    if (check.hold) {
+      return 'arrive ' + check.hold.arrive.replace('T', ' ') +
+             ', still there at ' + check.hold.stay.slice(-5) +
+             '; arriving at ' + check.hold.stay.slice(-5) + ' instead — different';
+    }
     states = check.rising || check.falling;
     return states.join(check.rising ? ' < ' : ' > ');
   }
@@ -795,8 +897,74 @@
     list.textContent = '';
 
     for (var i = 0; i < CHECKS.length; i++) {
-      if (!CHECKS[i].vow) list.appendChild(checkItem(CHECKS[i]));
+      if (!CHECKS[i].vow && !CHECKS[i].given) list.appendChild(checkItem(CHECKS[i]));
     }
+  }
+
+  /* The givens (Day 111): what is so here, said for a reader who has no way to
+   * infer it. Each is the sentence, then the instrument that found it, then
+   * whatever holds it — a witness of its own, a pointer at the vow already
+   * standing over it, or the plain admission that nothing does. */
+  function renderGivens() {
+    var list = el('almanac-givens');
+    if (!list) return;
+    list.textContent = '';
+
+    for (var i = 0; i < GIVENS.length; i++) {
+      var given = GIVENS[i];
+      var li = document.createElement('li');
+
+      var says = document.createElement('p');
+      says.className = 'almanac-vow__says';
+      says.textContent = given.says;
+      li.appendChild(says);
+
+      var found = document.createElement('p');
+      found.className = 'almanac-given__found';
+      var label = document.createElement('span');
+      label.className = 'almanac-given__label';
+      label.textContent = 'found by';
+      found.appendChild(label);
+      found.appendChild(document.createTextNode(' ' + given.found));
+      li.appendChild(found);
+
+      var held = document.createElement('ul');
+      held.className = 'almanac-checks';
+      for (var j = 0; j < CHECKS.length; j++) {
+        if (CHECKS[j].given === given.key) held.appendChild(checkItem(CHECKS[j]));
+      }
+      if (held.children.length) li.appendChild(held);
+
+      /* A given may sit underneath a vow — "the light never gets an address" is
+       * the promise; "there is no sun" is the condition that makes the promise
+       * sayable — in which case what already guards the vow guards this too,
+       * and the page says which rather than claiming a witness of its own. */
+      if (given.held) {
+        var under = document.createElement('p');
+        under.className = 'almanac-vow__unwitnessed';
+        under.textContent =
+          'Held by the vow below — “' + vowSays(given.held) + '” — and by ' +
+          'everything that holds it. The vow is the promise; this is the ' +
+          'condition underneath the promise, and they stand or fall together.';
+        li.appendChild(under);
+      }
+
+      if (given.unheld) {
+        var none = document.createElement('p');
+        none.className = 'almanac-vow__unwitnessed';
+        none.textContent = given.unheld;
+        li.appendChild(none);
+      }
+
+      list.appendChild(li);
+    }
+  }
+
+  function vowSays(key) {
+    for (var i = 0; i < VOWS.length; i++) {
+      if (VOWS[i].key === key) return VOWS[i].says.split('.')[0] + '.';
+    }
+    return key;
   }
 
   /* The vows, each followed by whatever holds it — or, for the one that nothing
@@ -898,6 +1066,7 @@
     setNow();
     update();
     renderChecks();
+    renderGivens();
     renderVows();
 
     dateInput.addEventListener('change', update);
@@ -920,6 +1089,7 @@
     PROBES: PROBES,
     CHECKS: CHECKS,
     VOWS: VOWS,
+    GIVENS: GIVENS,
   };
 
   if (document.readyState === 'loading') {

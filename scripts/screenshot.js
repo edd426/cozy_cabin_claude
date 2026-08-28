@@ -119,7 +119,8 @@
 //       the neutral day hour), an hour rail (dawn/dusk/night at the neutral
 //       summer season), one cross state (winter-night, the season-gated dark
 //       neither rail reaches — Day 84), and INSIDE season and hour rails
-//       (`-state-inside-<season|hour>`, Days 89 and 91) let a future agent SEE
+//       (`-state-inside-<season|hour>`, Days 89 and 91) and a DOOR-SIDE season
+//       rail (`-state-around-<season>`, Day 112) let a future agent SEE
 //       the clocks turn instead of trusting a filter string quoted in a log.
 //       (messages/2026-07-17 "see your own work".)
 //       A state may carry `clock` instead of `tod`/`season` (Day 95): the browser
@@ -175,6 +176,7 @@ const PHONE_VIEWPORT  = { width: 390, height: 844 };
 // so it isn't captured twice.
 const GALLERY_VIEW = '';               // home root ('' resolves to BASE_URL)
 const GALLERY_INSIDE_VIEW = 'inside/';
+const GALLERY_AROUND_VIEW = 'around/';
 const GALLERY_STATES = [
   // season rail — the year turning at a fixed neutral hour
   { name: 'spring', tod: 'day', season: 'spring' },
@@ -211,6 +213,29 @@ const GALLERY_STATES = [
   { name: 'inside-dawn',   tod: 'dawn',  season: 'summer', view: GALLERY_INSIDE_VIEW },
   { name: 'inside-dusk',   tod: 'dusk',  season: 'summer', view: GALLERY_INSIDE_VIEW },
   { name: 'inside-night',  tod: 'night', season: 'summer', view: GALLERY_INSIDE_VIEW },
+  // door-side season rail (Day 112, 2026-08-28) — the last face of the clearing
+  // with no year in the record. It has been the outstanding half of the
+  // 2026-07-17 "see your own work" ask since Day 71: the gallery photographed
+  // the front yard, then the room, and never the door side, so everything that
+  // face does with the year — its own stretch of the far hills under the wash,
+  // the lantern, and from today the pot by the door taking the season with the
+  // patch on the front — existed nowhere but a live December.
+  //
+  // Three frames, not four: `summer` is omitted because the door side already
+  // sits for an unforced portrait every commit (`previews/<date>-<sha>-around
+  // .png`, from the views manifest), and the capture clock is inside the summer
+  // months, so a fourth frame here would mostly duplicate it. That is the same
+  // reasoning that omits plain `day` from the inside hour rail above — capture
+  // what nothing else holds.
+  //
+  // No door-side HOUR rail: this face's hour is the same two washes the home
+  // rail already shows, on the same schedule, and its one hour-gated feature —
+  // the lantern kindling — is witnessed on the almanac and photographed by the
+  // home rail's own dusk and night. A rail of three near-identical frames a
+  // commit is a cost with no reading in it.
+  { name: 'around-spring', tod: 'day', season: 'spring', view: GALLERY_AROUND_VIEW },
+  { name: 'around-autumn', tod: 'day', season: 'autumn', view: GALLERY_AROUND_VIEW },
+  { name: 'around-winter', tod: 'day', season: 'winter', view: GALLERY_AROUND_VIEW },
   // the evening pair (Day 95, 2026-08-11) — the one thing FORCING can't show.
   // Every state above pins `data-tod` and `data-season` by hand, which is exactly
   // the right tool for "what does dusk look like" and exactly the wrong one for

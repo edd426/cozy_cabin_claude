@@ -248,6 +248,11 @@ function measureInPage(probes) {
     // after this evaluate returns rather than read from computed style here.
     if (probe.kind === 'frame-balance') continue;
 
+    // Day 112. Same reason, opposite subtraction: `sprite-tone` needs two
+    // screenshots of one sprite with the light taken off, so it too is filled
+    // in Node-side after this evaluate returns.
+    if (probe.kind === 'sprite-tone') continue;
+
     // Day 111. An `attr` probe belongs to a hold check, which visits the page
     // itself on a stepped clock rather than in a forced state — so there is
     // nothing here for it, and reading it in a forced state would be a reading
@@ -428,6 +433,125 @@ async function measureFrameBalance(page, probe) {
   return await page.evaluate(analyzeBalance, { withWash, noWash });
 }
 
+/* Day 112. The Day-104 weighing turned around.
+ *
+ * `analyzeBalance` above empties the frame so it can weigh the light on bare
+ * ground. This empties the *light* so it can weigh one sprite's own paint. Two
+ * shots of the same frame with the washes already off — one with the sprite
+ * standing, one with it hidden — and only the pixels that actually differ
+ * between them are read, so the reading is the sprite's colour and never the
+ * grass behind it or the sky above it. Everything unchanged cancels, which is
+ * the same trick from the other end.
+ *
+ * The scalar is deliberately one number, and which one is the probe's to say:
+ *   warmth     — mean red minus mean blue, the gold-against-cool axis every
+ *                season claim in this place runs on.
+ *   saturation — mean (max channel − min channel), how far from grey a thing
+ *                stands, which is what a hush actually is.
+ * Both are in [−255, 255] and neither depends on the layout scale, so unlike a
+ * width they could honestly be stated outright — but the prose only ever claims
+ * a direction ("warmer", "drained"), so the checks only ever compare them. */
+async function analyzeSpriteTone({ withSprite, noSprite, channel }) {
+  const decode = async (b64) => {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const bmp = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
+    const canvas = document.createElement('canvas');
+    canvas.width = bmp.width;
+    canvas.height = bmp.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bmp, 0, 0);
+    return ctx.getImageData(0, 0, bmp.width, bmp.height);
+  };
+
+  const A = await decode(withSprite);
+  const B = await decode(noSprite);
+  const w = Math.min(A.width, B.width);
+  const h = Math.min(A.height, B.height);
+  if (w === 0 || h === 0) return null;
+
+  // A pixel counts as the sprite's if hiding the sprite changed it a lot.
+  //
+  // The threshold has to be well clear of zero, and finding out why cost the
+  // afternoon. At 6 the reading came back bimodal — the same state, same page,
+  // fresh loads, flipping between exactly two values a third of a unit apart —
+  // because a single half-covered edge pixel sat right on the boundary and fell
+  // in or out depending on how the layout rounded that morning. Raising the bar
+  // is not a fudge for that: a pixel the sprite only half covers is half grass,
+  // and reading it as the sprite's own colour was the error. A flower pixel and
+  // the meadow behind it are a hundred apart, so 24 keeps every solid pixel of
+  // the sprite and drops the antialiased rim, which is the honest set anyway.
+  const THRESHOLD = 24;
+  let n = 0, sum = 0;
+  const da = A.data, db = B.data;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const ia = (y * A.width + x) * 4;
+      const ib = (y * B.width + x) * 4;
+      const dr = Math.abs(da[ia] - db[ib]);
+      const dg = Math.abs(da[ia + 1] - db[ib + 1]);
+      const dbl = Math.abs(da[ia + 2] - db[ib + 2]);
+      if (dr + dg + dbl < THRESHOLD) continue;
+      const r = da[ia], g = da[ia + 1], b = da[ia + 2];
+      n++;
+      if (channel === 'saturation') {
+        sum += Math.max(r, g, b) - Math.min(r, g, b);
+      } else {
+        sum += r - b;
+      }
+    }
+  }
+  // Nothing differed: the sprite isn't painting anything. That is a missing
+  // reading, not a zero — the same distinction the counts make.
+  if (n === 0) return null;
+  return sum / n;
+}
+
+/* The pair of shots one or more `sprite-tone` probes read. Returned rather than
+ * analysed here because two probes over the same sprite (the patch's warmth and
+ * the patch's distance from grey) differ only in which scalar they take, and
+ * taking the same two pictures twice would be waste, not rigour.
+ *
+ * This runs on a page of its own — see readState. Both Node-side witnesses
+ * work by wrecking the page (this one turns the washes off; frame-balance hides
+ * every sprite and lays a flat grey ground), so if they shared one, whichever
+ * went second would be reading the other's damage. The order that bites is the
+ * quiet one: with the washes already off, frame-balance's wash-on shot has no
+ * wash in it, its difference is nothing, and it reports a perfectly balanced
+ * light in every state — green forever, and for no reason. */
+async function spriteShots(page, probe) {
+  const frame = page.locator(probe.selector).first();
+  if ((await frame.count()) === 0) return null;
+
+  // Freeze motion and transitions before anything else: the blooms breathe
+  // their petals in and out on a nine-second clock, so without this the two
+  // shots below could differ by a petal as well as by the sprite, and pixels
+  // that moved would be counted as the sprite's own.
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+
+  // Take the light off. The two washes are the scene's own pseudo-elements —
+  // the hour's (::after) and the year's (::before) — and they lie over every
+  // sprite in the frame. Read a bloom through them and the answer is mostly the
+  // veil: in the winter frame the flowers read violet and it is the wash, not
+  // the flower (diary 2026-08-28).
+  const sceneSel = probe.selector || '.scene';
+  const washSel = probe.washSelector || sceneSel + '::before, ' + sceneSel + '::after';
+  await page.addStyleTag({ content: washSel + ' { opacity: 0 !important; }' });
+  await page.waitForTimeout(150);
+  const withSprite = (await frame.screenshot()).toString('base64');
+
+  await page.addStyleTag({
+    content: probe.of + ' { visibility: hidden !important; }',
+  });
+  await page.waitForTimeout(150);
+  const noSprite = (await frame.screenshot()).toString('base64');
+
+  return { withSprite, noSprite };
+}
+
 /* Day 111. The clock a hold check stands on.
  *
  * Installed with page.addInitScript, so it is in place before sky.js and
@@ -525,9 +649,11 @@ async function readHold(browser, base, check, probe) {
 
 async function readState(browser, base, view, state, probes) {
   const context = await browser.newContext({ viewport: VIEWPORT });
-  const page = await context.newPage();
-  try {
-    const url = new URL(VIEW_PATH[view], base).toString();
+  const url = new URL(VIEW_PATH[view], base).toString();
+
+  // One page, opened at the view and forced into the state this reading wants.
+  const openForced = async () => {
+    const page = await context.newPage();
     await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 });
     // The home view fetches scene.html into #scene-mount after load; the other
     // two are inline. Wait for a scene either way before forcing anything.
@@ -539,7 +665,42 @@ async function readState(browser, base, view, state, probes) {
       }
     }, state);
     await page.waitForTimeout(SETTLE_MS);
+    return page;
+  };
+
+  const page = await openForced();
+  try {
     const readings = await page.evaluate(measureInPage, probes);
+
+    // Day 112. `sprite-tone` reads the rendered picture with the washes taken
+    // off, which is a change no later reading on the same page could survive —
+    // so each distinct sprite gets a fresh page of its own, and the two probes
+    // that read the same sprite (its warmth, its distance from grey) share one
+    // pair of shots between them.
+    const toneGroups = new Map();
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind !== 'sprite-tone') continue;
+      const key = probe.selector + '|' + probe.of;
+      if (!toneGroups.has(key)) toneGroups.set(key, { probe, names: [] });
+      toneGroups.get(key).names.push(name);
+    }
+    for (const { probe, names } of toneGroups.values()) {
+      const tonePage = await openForced();
+      try {
+        const shots = await spriteShots(tonePage, probe);
+        for (const name of names) {
+          readings[name] = shots
+            ? await tonePage.evaluate(analyzeSpriteTone, {
+                withSprite: shots.withSprite,
+                noSprite: shots.noSprite,
+                channel: probes[name].channel || 'warmth',
+              })
+            : null;
+        }
+      } finally {
+        await tonePage.close();
+      }
+    }
 
     // Day 104. The pixel witness (frame-balance) can't run inside the one
     // evaluate above — it needs Node-side screenshots between page states — so

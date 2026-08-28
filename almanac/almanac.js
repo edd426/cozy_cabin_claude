@@ -105,6 +105,7 @@
         'the meadow at its fullest warm green, and the tree crowns exactly the green they were drawn in',
         'the woodpile at the wall restacked to seven logs, four along the bottom and three nested above',
         'the chimney at its thin easy thread — three puffs off a fire nobody needs the heat of',
+        'the wildflowers at the wall’s foot in their sown rose, and the pot by the door in the green it was potted in',
         'indoors, a low fire on its ember bed, and the light it lays on the boards reaching no further than the chair on one side and the wood on the other',
         'fireflies up off the grass once the light goes, and no stars at all',
       ],
@@ -115,6 +116,7 @@
         'a gold over the whole frame, and the tree crowns gold with it',
         'the woodpile laid in full — nine logs, a crown course of two nested in the middle row’s valleys, standing two proud of the sill above it',
         'the chimney a touch fuller than the summer thread — the first fires',
+        'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
         'the sprig in the mantle jar gone the same amber as the crowns outside; plain dark after sundown, no sparks and no stars',
       ],
@@ -125,6 +127,7 @@
         'a pale blue-grey quiet over the frame, and the crowns cooled to a muted sage — never a bare branch',
         'the woodpile being spent: six logs, the middle row’s right-hand end gone first, picked from the side the door is on',
         'the chimney at its deepest — a fourth puff where three climb all year, each brighter and spreading wider by the top',
+        'the wildflowers drained to a dusty pink on grey-sage stems and the door pot quieted with them — every stem still standing, none of them taken',
         'indoors, the fire tallest and widest in its opening with its coals a hotter red, its light washing right out over the chair and the wood, and their shadows half again as long',
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
       ],
@@ -135,6 +138,7 @@
         'a fresh pistachio over the frame with a breath of blossom high in it, and the crowns lifted bright with new growth',
         'the woodpile at its thinnest — four logs, the bottom course only',
         'the chimney a touch fuller than the summer thread — the last fires',
+        'the wildflowers at their brightest and freshest rose of the year, and the door pot lifted with them — new bloom on new growth',
         'indoors, a shade more heat in the fire’s colour and its light a stride further out, the same as autumn',
         'a pale tender tip budding above the sprig in the jar; plain dark after sundown, no sparks and no stars',
       ],
@@ -396,6 +400,53 @@
       reads: 'the same weighing, read off the other face’s own picture',
     },
 
+    /* Day 112 — the Day-104 weighing turned around.
+     *
+     * `frame-balance` above hides every sprite in the frame so it can weigh the
+     * *light* on bare ground. `sprite-tone` does the opposite: it lifts the two
+     * washes off and reads what one sprite is *itself* coloured, with nothing
+     * lying over it. Two screenshots again, Node-side — one with the sprite
+     * standing, one with it hidden — and only the pixels that differ between
+     * them are read, so the reading is the sprite's own paint and not a
+     * neighbouring pixel of grass. `channel` picks the scalar: `warmth` is mean
+     * red minus mean blue (the gold-against-cool axis every season claim here
+     * runs on) and `saturation` is mean max-channel minus min-channel (how far
+     * from grey — which is what a hush actually is).
+     *
+     * It exists because the flowers' claim could not otherwise be witnessed at
+     * all. The season reaches them through `filter`, which is a render-time
+     * effect: `getComputedStyle` returns the same colour in January as in June,
+     * so every probe above it — all of which read the instructions — is blind
+     * to the whole of this build, exactly as they were blind to a bare tree on
+     * Day 99. And the light has to come off first, or the reading is mostly the
+     * wash: in the winter frame the blooms read violet, and it is the veil over
+     * them, not the flower (see the note in scene.css). You cannot read a
+     * thing's own colour through the light lying over it. */
+    'flower-tone': {
+      view: 'home', kind: 'sprite-tone', selector: '.scene', of: '.flower',
+      channel: 'warmth',
+      reads: 'how warm the wildflower patch’s own colours are, with the season’s light lifted off them',
+    },
+    'flower-hush': {
+      view: 'home', kind: 'sprite-tone', selector: '.scene', of: '.flower',
+      channel: 'saturation',
+      reads: 'how far from grey the patch’s own colours stand, the light lifted off',
+    },
+    'door-plant-tone': {
+      view: 'around', kind: 'sprite-tone', selector: '.scene',
+      of: '.door-plant__foliage',
+      channel: 'warmth',
+      reads: 'the same reading taken of the plant in the pot by the door',
+    },
+    'flowers-standing': {
+      view: 'home', kind: 'visible-count', selector: '.flower',
+      reads: 'how many wildflower stems are standing at the wall’s foot',
+    },
+    'door-plant-standing': {
+      view: 'around', kind: 'visible-count', selector: '.door-plant__foliage',
+      reads: 'whether the pot by the door still has its plant in it',
+    },
+
     /* Day 111 — the first probe here that reads no light at all. `attr` takes
      * one attribute off one element; the runner uses it only for `hold` checks,
      * which visit the page on a clock they can step rather than in a state they
@@ -507,7 +558,11 @@
         'light it has to lift the wash off the furniture — the frame was never even to begin with — so it ' +
         'sees only the wash. A sprite whose own pixels are brighter down one edge stands the same with the ' +
         'wash on or off and cancels clean out of the weighing, invisible to the picture-reader as surely ' +
-        'as to the gradient-reader. Green here means no wash draws or renders a sideways lean anywhere I ' +
+        'as to the gradient-reader. There is now a witness that does read a sprite’s own pixels — it takes ' +
+        'the wash off and reads what a thing is itself coloured — and it does not close that gap either, ' +
+        'because what it returns is a mean over the whole sprite, and a mean is exactly what a bright edge ' +
+        'and a dark one cancel out of. It answers what colour, never which side. Green here means no wash ' +
+        'draws or renders a sideways lean anywhere I ' +
         'can see one, in the states on the wheel, at the width I stood at. It does not mean nothing points ' +
         'sideways.',
     },
@@ -589,6 +644,30 @@
       guards: '“the candle … standing full again as though a hand replaced it in the dark”, “spent down to four of its six”, then “down to three, a low stub”',
     },
 
+    /* Day 112. The first three claims on this page that are about a COLOUR, and
+     * the first read off the rendered picture of a sprite rather than off the
+     * lines that drew it. Everything the season does to a growing thing here is
+     * done with `filter`, which is a render-time effect: computed style answers
+     * the same in January as in June, so every instruction-reading probe above
+     * is blind to the whole of it. These take the two washes off first and read
+     * what the flowers and the pot are themselves coloured — the Day-104
+     * weighing turned around, which lifted the sprites off to weigh the light. */
+    {
+      probe: 'flower-tone', axis: 'season', at: { tod: 'day' },
+      rising: ['winter', 'summer', 'autumn'],
+      guards: '“the wildflowers gone over to a spent russet on gilded stems” in autumn, against summer’s sown rose and the winter’s drained “dusty pink on grey-sage stems”',
+    },
+    {
+      probe: 'flower-hush', axis: 'season', at: { tod: 'day' },
+      rising: ['winter', 'summer', 'spring'],
+      guards: 'the winter patch “drained” furthest from its own colour of any month, and spring “at their brightest and freshest rose of the year”',
+    },
+    {
+      probe: 'door-plant-tone', axis: 'season', at: { tod: 'day' },
+      rising: ['winter', 'summer', 'autumn'],
+      guards: 'the pot by the door taking the same year as the patch on the front — one season leans both faces of the clearing, or it is two seasons',
+    },
+
     /* ── the vows' witnesses (Day 99) ────────────────────────────────────
      * Every one of these walks the whole wheel, not the states some sentence
      * points at. None of them says what a thing is; each says what it never
@@ -609,6 +688,16 @@
       probe: 'sprig-stem', axis: 'season', at: { tod: 'day' }, vow: 'hush',
       floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the sprig still drawn in the jar in every season — it draws in for the cold and is never gone',
+    },
+    {
+      probe: 'flowers-standing', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the wildflowers at the wall’s foot still standing in every month — the winter drains their colour and takes no stem',
+    },
+    {
+      probe: 'door-plant-standing', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the pot by the door never emptied by a season — the same promise kept on the other face',
     },
     {
       probe: 'woodpile-logs', axis: 'season', at: { tod: 'day' }, vow: 'kept',

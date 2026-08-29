@@ -106,6 +106,7 @@
         'the woodpile at the wall restacked to seven logs, four along the bottom and three nested above',
         'the chimney at its thin easy thread — three puffs off a fire nobody needs the heat of',
         'the wildflowers at the wall’s foot in their sown rose, and the pot by the door in the green it was potted in',
+        'the pot’s bloom wheel at its fastest of the year — half again the pace it keeps at the equinoxes, a bloom’s whole round from bud to bare in about a fortnight and a half',
         'indoors, a low fire on its ember bed, and the light it lays on the boards reaching no further than the chair on one side and the wood on the other',
         'fireflies up off the grass once the light goes, and no stars at all',
       ],
@@ -117,6 +118,7 @@
         'the woodpile laid in full — nine logs, a crown course of two nested in the middle row’s valleys, standing two proud of the sill above it',
         'the chimney a touch fuller than the summer thread — the first fires',
         'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
+        'the pot’s bloom wheel slowing out of the summer toward its middling pace, each bloom holding every state a little longer than it did in August',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
         'the sprig in the mantle jar gone the same amber as the crowns outside; plain dark after sundown, no sparks and no stars',
       ],
@@ -128,6 +130,7 @@
         'the woodpile being spent: six logs, the middle row’s right-hand end gone first, picked from the side the door is on',
         'the chimney at its deepest — a fourth puff where three climb all year, each brighter and spreading wider by the top',
         'the wildflowers drained to a dusty pink on grey-sage stems and the door pot quieted with them — every stem still standing, none of them taken',
+        'the pot’s bloom wheel at its slowest — a quarter of the midsummer pace, a round taking most of the season — and still turning, and still never fewer than three blooms standing in it, because the four stems keep a fixed spacing on the wheel and only the pace changes',
         'indoors, the fire tallest and widest in its opening with its coals a hotter red, its light washing right out over the chair and the wood, and their shadows half again as long',
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
       ],
@@ -139,6 +142,7 @@
         'the woodpile at its thinnest — four logs, the bottom course only',
         'the chimney a touch fuller than the summer thread — the last fires',
         'the wildflowers at their brightest and freshest rose of the year, and the door pot lifted with them — new bloom on new growth',
+        'the pot’s bloom wheel quickening back out of the cold, past its middling pace at the equinox and on toward the summer',
         'indoors, a shade more heat in the fire’s colour and its light a stride further out, the same as autumn',
         'a pale tender tip budding above the sprig in the jar; plain dark after sundown, no sparks and no stars',
       ],
@@ -455,6 +459,26 @@
       view: 'home', kind: 'attr', selector: '.scene', attr: 'data-tod',
       reads: 'which of the four bands the front yard is standing in',
     },
+
+    /* Day 113 — the pot's wheel, which answers to neither clock the rest of
+     * this page varies. Its pace is worked from the DATE, so forcing a season
+     * onto the scene does nothing to it whatever; the checks that use these two
+     * carry `on` instead of `axis`, and are read on a frozen clock (see the note
+     * above CHECKS).
+     *
+     * `attr-number` is `attr` with the string parsed as a number, so the
+     * ordinary rising/floor machinery can hold it. The pot publishes the very
+     * figure its own render used rather than one worked out again here — a
+     * second copy could be right on a morning the pot was wrong. */
+    'door-pot-pace': {
+      view: 'around', kind: 'attr-number',
+      selector: '.door-plant__foliage', attr: 'data-bloom-rate',
+      reads: 'the pace the pot’s bloom wheel is turning at, as a multiple of its middling one',
+    },
+    'door-pot-blooms': {
+      view: 'around', kind: 'visible-count', selector: '.door-plant__bloom',
+      reads: 'how many blooms are standing in the pot by the door',
+    },
   };
 
   /* ── the givens (Day 111) ───────────────────────────────────────────────
@@ -588,6 +612,19 @@
    *     the next, and the reading must not have moved. It carries its own two
    *     instants because it is visited on a clock the runner can step rather
    *     than in a state the runner forces.
+   *
+   * `on` (Day 113) replaces `axis` + `at` rather than joining them. It names its
+   * own states — `{ midwinter: '2026-12-21T12:00', … }` — and each is a date
+   * rather than a tag, read by opening the view on a clock frozen to that
+   * instant and letting the place reckon its own season and hour from it. Every
+   * verdict kind above then works on those names unchanged, because `expect`,
+   * `rising` and `floor` only ever cared what the states were called.
+   *
+   * It exists because forcing cannot reach everything. `data-season` on a scene
+   * is what the *colour* of the year is gated on, and the runner sets it by
+   * hand; but the pot's wheel is gated on the date itself, so a forced winter
+   * leaves it turning at whatever pace today happens to be. A claim about a
+   * thing that reads the calendar has to be asked on the calendar.
    * `vow` marks a check as holding one of VOWS rather than a line of the season
    * or hour prose; `given` marks it as holding one of GIVENS. Both render in
    * their own block on the page.
@@ -667,6 +704,16 @@
       rising: ['winter', 'summer', 'autumn'],
       guards: 'the pot by the door taking the same year as the patch on the front — one season leans both faces of the clearing, or it is two seasons',
     },
+    {
+      probe: 'door-pot-pace',
+      on: {
+        midwinter: '2026-12-21T12:00',
+        'the spring equinox': '2027-03-20T12:00',
+        midsummer: '2027-06-21T12:00',
+      },
+      rising: ['midwinter', 'the spring equinox', 'midsummer'],
+      guards: 'the pot’s bloom wheel stalling in the cold and racing in the warm — slowest at midwinter, its middling pace at the equinox, fastest at midsummer',
+    },
 
     /* ── the vows' witnesses (Day 99) ────────────────────────────────────
      * Every one of these walks the whole wheel, not the states some sentence
@@ -733,6 +780,18 @@
       probe: 'smoke-puffs', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
       floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
       guards: 'the chimney breathing at every hour — “someone’s always home, the fire never quite goes out”',
+    },
+    {
+      probe: 'door-pot-blooms', vow: 'kept',
+      on: {
+        'the autumn equinox': '2026-09-22T12:00',
+        midwinter: '2026-12-21T12:00',
+        'the spring equinox': '2027-03-20T12:00',
+        midsummer: '2027-06-21T12:00',
+      },
+      floor: 1,
+      over: ['the autumn equinox', 'midwinter', 'the spring equinox', 'midsummer'],
+      guards: 'the pot never standing empty at any corner of the year, however slowly the cold has its wheel turning — the four stems keep a fixed spacing on the wheel, so a slower pace moves all of them together and can never close the gaps between them',
     },
 
     /* ── the third vow's witnesses (Day 102) ─────────────────────────────
@@ -973,6 +1032,21 @@
     how.textContent =
       probe.reads + ', in ' + VIEW_NAME[probe.view] + ' — ' + readingOf(check);
     li.appendChild(how);
+
+    // Day 113. An `on` check's states are dates rather than tags, and a name
+    // like "midwinter" is only a promise about a date until the date is on the
+    // page beside it. Same reason the allowed leans carry their reasons: a
+    // state nobody can look up is one more thing to take on trust.
+    if (check.on) {
+      var when = document.createElement('span');
+      when.className = 'almanac-check__how';
+      var names = Object.keys(check.on), parts = [];
+      for (var k = 0; k < names.length; k++) {
+        parts.push(names[k] + ' ' + check.on[names[k]].replace('T', ' '));
+      }
+      when.textContent = 'read on a clock frozen to ' + parts.join(', ');
+      li.appendChild(when);
+    }
 
     return li;
   }

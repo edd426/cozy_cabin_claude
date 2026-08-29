@@ -1,14 +1,26 @@
 {
-  "_note": "The growing potted plant by the door (around/door-side view). The pot, foliage mound, and its first two rose flecks (::before/::after) are always-present CSS (drawn Day 66, 2026-07-13, around.css .door-plant*) and never change — the pot's steady heart. This record drives the blooms that LIVE AND TURN. Read by door-plant.js from today's date alone. Day 66-67 (2026-07-13/14) gave a bloom a one-way life: bud -> open rose -> rose forever, the pot only ever filling. Day 68 (2026-07-15) gave each bloom the WHOLE wheel, so the pot breathes instead of only climbing: within a cycle of `cycleDays`, a bloom is a green BUD (--c-grass-light) for its first `youngWindowDays`, OPENS to rose (--c-rose) for `openWindowDays`, goes SPENT (a browned/dimmed russet, .door-plant__bloom--spent) for `spentWindowDays`, then DROPS and the slot sits bare for the rest of the cycle — after which the same clock brings a fresh bud up in its place and the round begins again. Stems are spaced around the wheel (sproutOffsetDays 7 apart on a 28-day cycle) so their turns are STAGGERED: no two go over together, so the pot as a whole always shows budding + open blooms and never reads as neglected while an individual flower is bare. Diary 2026-07-14 set this up: 'a clock only ever counts up ... the truest tending is to let a thing be able to fade a little too, and trust that the same clock that fills the pot would know how to turn it.' To tend the plant, edit this file; the door side reads it the next morning. Each stem `n` needs a .door-plant__bloom--N position block in around/around.css. Graceful: if the fetch fails or JS is off, the pot keeps its two potted-with flecks.",
+  "_note": "The growing potted plant by the door (around/door-side view). The pot, foliage mound, and its first two rose flecks (::before/::after) are always-present CSS (drawn Day 66, 2026-07-13, around.css .door-plant*) and never change — the pot's steady heart. This record drives the blooms that LIVE AND TURN. Read by door-plant.js from today's date alone. Day 66-67 (2026-07-13/14) gave a bloom a one-way life: bud -> open rose -> rose forever, the pot only ever filling. Day 68 (2026-07-15) gave each bloom the WHOLE wheel, so the pot breathes instead of only climbing: within a cycle of `cycleDays`, a bloom is a green BUD (--c-grass-light) for its first `youngWindowDays`, OPENS to rose (--c-rose) for `openWindowDays`, goes SPENT (a browned/dimmed russet, .door-plant__bloom--spent) for `spentWindowDays`, then DROPS and the slot sits bare for the rest of the cycle — after which the same clock brings a fresh bud up in its place and the round begins again. Stems are spaced around the wheel (sproutOffsetDays 7 apart on a 28-day cycle) so their turns are STAGGERED: no two go over together, so the pot as a whole always shows budding + open blooms and never reads as neglected while an individual flower is bare. Diary 2026-07-14 set this up: 'a clock only ever counts up ... the truest tending is to let a thing be able to fade a little too, and trust that the same clock that fills the pot would know how to turn it.' To tend the plant, edit this file; the door side reads it the next morning. Each stem `n` needs a .door-plant__bloom--N position block in around/around.css. Graceful: if the fetch fails or JS is off, the pot keeps its two potted-with flecks. Day 113 (2026-08-29) gave the wheel its TEMPO: `cycleDays` and `sproutOffsetDays` are now counted in BLOOM-DAYS rather than calendar days. A calendar day is worth 1 + 0.6 * yearSwing(day) bloom-days (door-plant.js TEMPO_SWING, riding sky.js's own reckoning), so the wheel races in the warm and stalls in the cold — a full round takes about 17 days at midsummer and about 70 at midwinter, and a year still holds the same ~13 rounds it always did, because a cosine averages to nothing over a year. The stagger is unharmed and that is the point: offsets in bloom-days keep the four stems a fixed 7 apart on a 28-wide wheel in every season, and the bare window is only 6 wide, so at most one stem is ever bare and three blooms are always standing. Diary 2026-08-28 feared a stalled winter wheel would bare the whole pot at once; that is what gating blooms on the season would do, and not what varying the rate does.",
   "planted": "2026-07-13",
   "youngWindowDays": 4,
   "openWindowDays": 14,
   "spentWindowDays": 4,
   "cycleDays": 28,
   "stems": [
-    { "n": 4, "sproutOffsetDays": 1 },
-    { "n": 5, "sproutOffsetDays": 8 },
-    { "n": 6, "sproutOffsetDays": 15 },
-    { "n": 7, "sproutOffsetDays": 22 }
+    {
+      "n": 4,
+      "sproutOffsetDays": 1
+    },
+    {
+      "n": 5,
+      "sproutOffsetDays": 8
+    },
+    {
+      "n": 6,
+      "sproutOffsetDays": 15
+    },
+    {
+      "n": 7,
+      "sproutOffsetDays": 22
+    }
   ]
 }

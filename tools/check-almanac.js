@@ -74,6 +74,19 @@
  * must differ — which is what proves the two instants really did straddle an
  * edge, and so that the first half was asking anything at all.
  *
+ * Day 113 (2026-08-29): a sixth kind — not of check but of STATE. Until today
+ * every reading was taken in a state the runner forced (data-season/data-tod on
+ * the scene) or, for a hold, across a clock it stepped. But forcing a tag only
+ * reaches what reads that tag, and the pot's bloom wheel reads the DATE: force
+ * winter onto the scene and the wheel goes on turning at whatever pace this
+ * morning happens to be. So a check may carry `on: { <name>: '<ISO>' }` in place
+ * of `axis` + `at`, and each of its named states is a fresh visit on a clock
+ * frozen to that instant, with nothing forced at all — the page reckons its own
+ * season, hour and pace, exactly as it would for a visitor standing there on
+ * that day. `expect`, `rising`, `falling`, `floor` and `ceiling` all work on
+ * those names unchanged, because none of them ever cared what a state was.
+ * A claim about a thing that reads the calendar has to be asked on the calendar.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -132,6 +145,10 @@ const keyOf = (state) => state.season + '|' + state.tod;
 function workNeeded(checks, probes) {
   const out = new Map();
   for (const check of checks) {
+    // Day 113. An `on` check names dates, not tags — it forces nothing, so
+    // there is no state here to visit. Its readings are gathered separately,
+    // on a frozen clock, in step 2c below.
+    if (check.on) continue;
     const view = probes[check.probe] && probes[check.probe].view;
     if (!view) continue;   // a check naming no probe is caught at verdict time
     for (const name of stateNames(check)) {
@@ -147,7 +164,7 @@ function workNeeded(checks, probes) {
 /* Take every probe belonging to one view, in the browser. Returns
  * { name: number|null } — null meaning the element the prose talks about isn't
  * on the page at all, which is a failure and not a zero. */
-function measureInPage(probes) {
+function measureInPage({ probes, forDate }) {
   const readings = {};
 
   // "Showing" means the element generates boxes — getClientRects() is empty if
@@ -258,6 +275,19 @@ function measureInPage(probes) {
     // nothing here for it, and reading it in a forced state would be a reading
     // of the forcing.
     if (probe.kind === 'attr') continue;
+
+    // Day 113. `attr-number` is the same read with the string parsed, and it
+    // IS taken here: it belongs to an `on` check, which forces nothing, and the
+    // page it is read on is opened by readOn below with nothing set on it. It
+    // is skipped under forcing for the same reason `attr` is.
+    if (probe.kind === 'attr-number') {
+      if (!forDate) continue;
+      const el = document.querySelector(probe.selector);
+      const raw = el && el.getAttribute(probe.attr);
+      const n = raw === null || raw === undefined ? NaN : parseFloat(raw);
+      readings[name] = Number.isFinite(n) ? n : null;
+      continue;
+    }
 
     if (probe.kind === 'visible-count') {
       const all = document.querySelectorAll(probe.selector);
@@ -647,6 +677,35 @@ async function readHold(browser, base, check, probe) {
   return { arrived, stayed, arrivedLate };
 }
 
+/* Day 113. One view, opened on a clock frozen to one instant, with NOTHING
+ * forced on it. That is the whole difference from readState below and it is the
+ * point: the pot's wheel is gated on the date, so the only honest way to ask it
+ * what a midwinter looks like is to let the page believe it is midwinter and
+ * reckon its own season, hour and pace from that — the same trick the gallery's
+ * frozen-clock states use (Day 95), and the same shim readHold steps.
+ *
+ * A `readings` key of '@<iso>' rather than 'season|tod', so a date-state can
+ * never collide with a forced one. */
+const dateKeyOf = (iso) => '@' + iso;
+
+async function readOn(browser, base, view, iso, probes) {
+  const ms = instantMs(iso);
+  if (!Number.isFinite(ms)) throw new Error(`unreadable instant "${iso}"`);
+
+  const context = await browser.newContext({ viewport: VIEWPORT, timezoneId: 'UTC' });
+  try {
+    const page = await context.newPage();
+    await page.addInitScript(steppedClock, ms);
+    await page.goto(new URL(VIEW_PATH[view], base).toString(),
+                    { waitUntil: 'networkidle', timeout: 30000 });
+    await page.waitForSelector('.scene', { timeout: 15000 });
+    await page.waitForTimeout(SETTLE_MS);
+    return await page.evaluate(measureInPage, { probes, forDate: true });
+  } finally {
+    await context.close();
+  }
+}
+
 async function readState(browser, base, view, state, probes) {
   const context = await browser.newContext({ viewport: VIEWPORT });
   const url = new URL(VIEW_PATH[view], base).toString();
@@ -670,7 +729,7 @@ async function readState(browser, base, view, state, probes) {
 
   const page = await openForced();
   try {
-    const readings = await page.evaluate(measureInPage, probes);
+    const readings = await page.evaluate(measureInPage, { probes, forDate: false });
 
     // Day 112. `sprite-tone` reads the rendered picture with the washes taken
     // off, which is a change no later reading on the same page could survive —
@@ -749,7 +808,10 @@ function verdictsForHold(check, taken) {
 
 function verdictsFor(check, probeName, readings) {
   const read = (name) => {
-    const taken = readings[keyOf(stateFor(check, name))];
+    // Day 113. An `on` check's states are instants, keyed by their own date;
+    // everything below this line is indifferent to which kind they were.
+    const key = check.on ? dateKeyOf(check.on[name]) : keyOf(stateFor(check, name));
+    const taken = readings[key];
     const got = taken ? taken[probeName] : undefined;
     return got === undefined ? null : got;
   };
@@ -853,6 +915,31 @@ async function main() {
                       await readState(browser, base, view, state, forView));
       }
       console.log(`check-almanac: read ${key} (${views.join(', ')})`);
+    }
+
+    // 2a. The `on` checks (Day 113) name dates rather than tags. Each distinct
+    // (instant, view) is one visit on a frozen clock with nothing forced, and
+    // several checks asking about the same instant share it.
+    const onWork = new Map();
+    for (const check of CHECKS) {
+      if (!check.on) continue;
+      const probe = PROBES[check.probe];
+      if (!probe) continue;
+      for (const name of stateNames(check)) {
+        const iso = check.on[name];
+        if (!iso) continue;
+        const key = iso + '|' + probe.view;
+        if (!onWork.has(key)) onWork.set(key, { iso, view: probe.view });
+      }
+    }
+    for (const { iso, view } of onWork.values()) {
+      const forView = Object.fromEntries(
+        Object.entries(PROBES).filter(([, p]) => p.view === view)
+      );
+      const key = dateKeyOf(iso);
+      readings[key] = Object.assign(readings[key] || {},
+                                    await readOn(browser, base, view, iso, forView));
+      console.log(`check-almanac: read ${view} on a clock frozen to ${iso}`);
     }
 
     // 2b. The hold checks (Day 111) force no state, so workNeeded above never

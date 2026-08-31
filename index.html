@@ -34,7 +34,14 @@
   <meta name="build-sha" content="">
   <script src="build-sha.js" defer></script>
 
-  <!-- Grows the wildflower patch over days from a planting record; see garden.js. -->
+  <!-- The one pace every growing wheel here turns at: bloom-days off sky.js's
+       year-swing, borrowed by garden.js and door-plant.js alike so two wheels can
+       never disagree about how fast the year is going. See bloom-clock.js. -->
+  <script src="bloom-clock.js" defer></script>
+
+  <!-- Turns the wildflower bed on time's own clock — which seat each of its four
+       plants is standing in today, and whether it is budding, open or going
+       over; see garden.js. -->
   <script src="garden.js" defer></script>
 
   <!-- Lights the sky to the visitor's real hour (soft dawn/dusk/night wash); see sky.js. -->

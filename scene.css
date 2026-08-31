@@ -1167,23 +1167,47 @@
 .flower--2 .flower__head { animation-duration: 10s;  animation-delay: -4s;   }
 .flower--3 .flower__head { animation-duration: 7.5s; animation-delay: -2.5s; }
 
-/* Day 19: the patch grows. flower--4..7 are sown over weeks on time's clock by
- * garden.js, which reads assets/composed/garden.json and adds only the stems
- * whose sprout-date has passed. They fan the original clump outward at the
- * left wall foot — same idiom (thin stem, 3px rose blossom), different depths
- * and heights so the patch reads as spreading rather than stacking. A stem
- * spends its first few days as a green bud (.flower--young, below) before it
- * opens. Positions live here for both breakpoints; presence is the script's
- * job. To sow another stem: add it to garden.json AND give it a block here. */
-.flower--4 { height: 10px; bottom: 6%;             left: calc(50% - 76px);  }
-.flower--5 { height: 14px; bottom: calc(6% + 5px); left: calc(50% - 104px); }
-.flower--6 { height: 9px;  bottom: 6%;             left: calc(50% - 100px); }
-.flower--7 { height: 16px; bottom: calc(6% + 7px); left: calc(50% - 84px);  }
+/* Day 19: the bed grows. Day 115: it turns.
+ *
+ * flower--4..11 are SEATS — positions in the ground, not plants. garden.js
+ * reads assets/composed/garden.json, works out where each of the bed's four
+ * plants is on its own wheel today, and fills the seat that plant came up in
+ * this round. When a plant goes over and drops, the next round brings it up in
+ * the NEXT of its seats (4↔8, 5↔9, 6↔10, 7↔11), because a bed in open ground
+ * reseeds beside itself rather than refilling the same hole. So the bed keeps
+ * roughly its number and never twice the same arrangement, and no seat here is
+ * guaranteed to be occupied on any given morning.
+ *
+ * The seats fan the hand-sown clump (flower--1..3) outward along the wall foot
+ * — same idiom (thin stem, 3px rose blossom), different heights and depths so
+ * the bed reads as spreading rather than stacking. The two seats of one plant
+ * are placed a few px apart so a reseeding reads as the same plant having moved
+ * a little, not as a new bed; and no two seats that can be filled at once sit
+ * closer than the 4px the original clump already uses (flower--5/--6).
+ *
+ * NOTHING here can take flower--1..3 away: they are always-present markup, and
+ * they are what the bee alights on (Day 108). Positions live here for both
+ * breakpoints; occupancy is the script's job. To open another seat: give it a
+ * block here at BOTH widths and add its number to a plant's `seats` in
+ * garden.json. */
+.flower--4  { height: 10px; bottom: 6%;             left: calc(50% - 76px);  }
+.flower--5  { height: 14px; bottom: calc(6% + 5px); left: calc(50% - 104px); }
+.flower--6  { height: 9px;  bottom: 6%;             left: calc(50% - 100px); }
+.flower--7  { height: 16px; bottom: calc(6% + 7px); left: calc(50% - 84px);  }
+/* The second seat of each plant — the fresh ground it comes up in next round. */
+.flower--8  { height: 13px; bottom: calc(6% + 4px); left: calc(50% - 72px);  }
+.flower--9  { height: 11px; bottom: calc(6% + 2px); left: calc(50% - 108px); }
+.flower--10 { height: 13px; bottom: calc(6% + 4px); left: calc(50% - 92px);  }
+.flower--11 { height: 8px;  bottom: 6%;             left: calc(50% - 68px);  }
 
-.flower--4 .flower__head { animation-duration: 9.5s; animation-delay: -1s; }
-.flower--5 .flower__head { animation-duration: 8s;   animation-delay: -3s; }
-.flower--6 .flower__head { animation-duration: 11s;  animation-delay: -6s; }
-.flower--7 .flower__head { animation-duration: 7s;   animation-delay: -5s; }
+.flower--4  .flower__head { animation-duration: 9.5s;  animation-delay: -1s;   }
+.flower--5  .flower__head { animation-duration: 8s;    animation-delay: -3s;   }
+.flower--6  .flower__head { animation-duration: 11s;   animation-delay: -6s;   }
+.flower--7  .flower__head { animation-duration: 7s;    animation-delay: -5s;   }
+.flower--8  .flower__head { animation-duration: 10.5s; animation-delay: -2s;   }
+.flower--9  .flower__head { animation-duration: 8.5s;  animation-delay: -7s;   }
+.flower--10 .flower__head { animation-duration: 9s;    animation-delay: -4.5s; }
+.flower--11 .flower__head { animation-duration: 12s;   animation-delay: -8s;   }
 
 /* A just-sown stem: a closed green bud on the stem tip, not yet bloomed and
  * not yet breathing. After garden.json's youngWindowDays it loses this class
@@ -1195,6 +1219,32 @@
   height: 4px;
   background: var(--c-grass-shadow);
   box-shadow: 0 -1px 0 var(--c-grass);   /* a pale tip — the bud about to open */
+  animation: none;
+}
+
+/* Day 115: a bloom gone over — the far side of the same wheel the bud opens on.
+ * The rose browns to the door pot's own spent russet (#a5675c, around.css, Day
+ * 68), value for value, so a bloom past its best on the front and a bloom past
+ * its best in the pot are the same going-over and not two; and the pollen
+ * centre dulls from the smoke's near-white to a warm grey, because a spent
+ * bloom's eye goes before its petals do.
+ *
+ * The petals draw in a pixel — resting at 2px out where an open bloom rests at
+ * 3 — and the breathing STOPS. That pair is the whole reading at this size: the
+ * bud has not started breathing yet and the spent bloom has finished, and the
+ * open rose between them is the only one of the three that moves. It is the
+ * same argument the bee's landing turns on (Day 108) — what says a thing has
+ * stopped is that it quits moving, not that it sits lower.
+ *
+ * It never goes bare in place: the stem stands, drawn and green, until the wheel
+ * drops it, and then the plant comes up in its other seat. Nothing is lost. */
+.flower--spent .flower__head {
+  background: #cbb49b;                   /* the pollen eye gone dull */
+  box-shadow:
+    -2px  0   0 #a5675c,
+     2px  0   0 #a5675c,
+     0   -2px 0 #a5675c,
+     0    2px 0 #a5675c;
   animation: none;
 }
 
@@ -2130,12 +2180,19 @@
   .flower--1           { height: 10px; bottom: calc(8% + 4px); left: calc(50% - 60px); }
   .flower--2           { height: 8px;  bottom: calc(8% + 2px); left: calc(50% - 66px); }
   .flower--3           { height: 7px;  bottom: 8%;             left: calc(50% - 54px); }
-  /* Grown stems (flower--4..7) rebased to the 2x clump. Same spreading fan,
-   * left of the cabin's 2x left edge (50% - 48px). */
+  /* The bed's eight seats (flower--4..11) rebased to the 2x clump. Same
+   * spreading fan, left of the cabin's 2x left edge (50% - 48px); 8..11 are the
+   * second seat of each plant, the ground it comes up in when its wheel turns
+   * (Day 115). Rebased at ~0.687 of the 3x offsets, the ratio the original
+   * clump already uses, so the fan holds its shape across the breakpoint. */
   .flower--4           { height: 7px;  bottom: 8%;             left: calc(50% - 52px); }
   .flower--5           { height: 10px; bottom: calc(8% + 3px); left: calc(50% - 72px); }
   .flower--6           { height: 6px;  bottom: 8%;             left: calc(50% - 69px); }
   .flower--7           { height: 11px; bottom: calc(8% + 5px); left: calc(50% - 58px); }
+  .flower--8           { height: 9px;  bottom: calc(8% + 3px); left: calc(50% - 49px); }
+  .flower--9           { height: 8px;  bottom: calc(8% + 1px); left: calc(50% - 74px); }
+  .flower--10          { height: 9px;  bottom: calc(8% + 3px); left: calc(50% - 63px); }
+  .flower--11          { height: 6px;  bottom: 8%;             left: calc(50% - 47px); }
   /* Bee rebased to the 2x clump (flowers between 50% - 52px and 50% - 72px,
    * foot at 8%). Body size stays constant — pixel art needs its minimum
    * feature width; the drift range tightens to the smaller patch. */

@@ -479,6 +479,17 @@
       view: 'around', kind: 'visible-count', selector: '.door-plant__bloom',
       reads: 'how many blooms are standing in the pot by the door',
     },
+
+    /* Day 115 — the front bed's own wheel. It answers to the date exactly as
+     * the pot's does, so its checks carry `on` too. The pace is read off the
+     * patch element because that is the figure the render itself used; the
+     * point of holding it beside `door-pot-pace` is that the two wheels borrow
+     * one clock (bloom-clock.js) and a copy apiece would let them drift. */
+    'patch-pace': {
+      view: 'home', kind: 'attr-number',
+      selector: '.sprite--flowers', attr: 'data-bloom-rate',
+      reads: 'the pace the wildflower bed’s wheel is turning at, as a multiple of its middling one',
+    },
   };
 
   /* ── the givens (Day 111) ───────────────────────────────────────────────
@@ -715,6 +726,29 @@
       guards: 'the pot’s bloom wheel stalling in the cold and racing in the warm — slowest at midwinter, its middling pace at the equinox, fastest at midsummer',
     },
 
+    /* Day 115. The pair, and the pair is the point. Two growing wheels turn in
+     * this clearing now — the pot by the door and the bed at the front wall —
+     * and they borrow their pace from one place (bloom-clock.js) rather than
+     * each keeping a copy of the year. Two copies would be the oldest fault
+     * here in new clothes: honest apart, and able to be right on one morning
+     * and wrong on another. So the same two numbers are asked of both, and if
+     * either wheel ever gets a year of its own, one of these two goes red while
+     * the other stays green. Stated outright rather than compared, because a
+     * pace is scale-free and this page's whole business is publishing figures a
+     * stranger can work forward and hold the place to. */
+    {
+      probe: 'patch-pace',
+      on: { midwinter: '2026-12-21T12:00', midsummer: '2027-06-21T12:00' },
+      expect: { midwinter: 0.4, midsummer: 1.6 },
+      guards: 'the wildflower bed’s wheel at four tenths of its middling pace on the shortest day and one and six tenths on the longest — a bloom’s whole round takes a fortnight and a half at the top of the year and most of a season at the bottom',
+    },
+    {
+      probe: 'door-pot-pace',
+      on: { midwinter: '2026-12-21T12:00', midsummer: '2027-06-21T12:00' },
+      expect: { midwinter: 0.4, midsummer: 1.6 },
+      guards: 'the pot by the door turning at those very same two numbers — one clock behind both wheels, borrowed by each and owned by neither, so a growing thing on the front and a growing thing at the door can never disagree about how fast the year is going',
+    },
+
     /* ── the vows' witnesses (Day 99) ────────────────────────────────────
      * Every one of these walks the whole wheel, not the states some sentence
      * points at. None of them says what a thing is; each says what it never
@@ -792,6 +826,18 @@
       floor: 1,
       over: ['the autumn equinox', 'midwinter', 'the spring equinox', 'midsummer'],
       guards: 'the pot never standing empty at any corner of the year, however slowly the cold has its wheel turning — the four stems keep a fixed spacing on the wheel, so a slower pace moves all of them together and can never close the gaps between them',
+    },
+    {
+      probe: 'flowers-standing', vow: 'kept',
+      on: {
+        'the autumn equinox': '2026-09-22T12:00',
+        midwinter: '2026-12-21T12:00',
+        'the spring equinox': '2027-03-20T12:00',
+        midsummer: '2027-06-21T12:00',
+      },
+      floor: 3,
+      over: ['the autumn equinox', 'midwinter', 'the spring equinox', 'midsummer'],
+      guards: 'the bed at the wall’s foot never thinned below the three stems sown into it by hand, at any corner of the year — its four other plants each live, go over, and come up again in fresh ground beside where they stood, so the bed is never twice the same arrangement. Unlike the pot it claims nothing about those four: they keep no shared spacing and could in principle all be bare at once, because what a bed promises is not a count of blooms but that the ground goes on being flowered',
     },
 
     /* ── the third vow's witnesses (Day 102) ─────────────────────────────

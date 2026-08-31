@@ -46,15 +46,15 @@
  *      exactly as many as before. The year's total is untouched; only its
  *      distribution moved. (The vow: nothing here is ever lost.)
  *
- * The rate rides `yearSwing` from `sky.js`, published on `window.CabinSky`
- * (Day 97) — the one reckoning this place keeps, borrowed rather than copied,
- * so a wheel here can never be right on a morning the light is wrong. If sky.js
- * is absent the rate falls back to a flat 1 and the wheel counts plain days,
- * which is exactly what it did before today.
- *
- * TEMPO_SWING is chosen for legibility rather than derived from anything — the
- * same footing as sky.js's EDGE_SWING_H, and for the same reason: this clearing
- * has no place on the earth and won't pretend to one.
+ * Day 115 (2026-08-31): that arithmetic no longer lives here. The front
+ * wildflower bed took the same turn this morning, and the moment there are two
+ * wheels a copy apiece could be right on one morning and wrong on another —
+ * two growing things under one year, disagreeing about how fast it is going. So
+ * the pace moved out to `bloom-clock.js` and is borrowed from
+ * `window.CabinBloom` by both wheels, which own none of it. It in turn rides
+ * `yearSwing` from `sky.js` (`window.CabinSky`, Day 97) — the one reckoning
+ * this place keeps. If either script is absent the rate falls back to a flat 1
+ * and the wheel counts plain days, which is exactly what it did before Day 113.
  *
  * The pot publishes both numbers on the foliage element — `data-bloom-days`
  * (how far the wheel has turned since planting) and `data-bloom-rate` (today's
@@ -81,14 +81,6 @@
     : 'assets/composed/door-plant.json';
   const DAY_MS = 86400000;
 
-  /* How far the wheel's pace leans with the year. 0 would be the flat clock it
-   * kept until Day 113; 0.6 makes a midsummer day worth 1.6 bloom-days and a
-   * midwinter day 0.4 — four times the pace at one end of the year than the
-   * other, which reads, while keeping the winter wheel plainly turning. It must
-   * stay below 1: at 1 the midwinter rate is nought and the wheel would stop
-   * dead, which is a death and not a hush. */
-  const TEMPO_SWING = 0.6;
-
   function utcMidnight(d) {
     return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
   }
@@ -97,27 +89,21 @@
     return Date.UTC(y, m - 1, day);
   }
 
-  /* What one calendar day is worth to the wheel, on the same reckoning the
-   * light's edges slide by (sky.js, published on window.CabinSky). No second
-   * cosine lives here on purpose — a wheel with its own copy of the year could
-   * be right on a morning the yard was wrong, which is the thing publishing the
-   * working is meant to make impossible (diary 2026-08-13). */
+  /* What one calendar day is worth to the wheel. Borrowed from
+   * `window.CabinBloom` (bloom-clock.js), never kept here — a wheel with its own
+   * copy of the year could be right on a morning the yard was wrong, which is
+   * the thing publishing the working is meant to make impossible (diary
+   * 2026-08-13), and since Day 115 there are two wheels to keep in step. */
   function tempoAt(ms) {
-    const sky = window.CabinSky;
-    if (!sky || typeof sky.yearSwing !== 'function') return 1;
-    const swing = sky.yearSwing(new Date(ms));
-    return Number.isFinite(swing) ? 1 + TEMPO_SWING * swing : 1;
+    const clock = window.CabinBloom;
+    return clock && typeof clock.tempoAt === 'function' ? clock.tempoAt(ms) : 1;
   }
-
-  /* Bloom-days between two midnights: one calendar day at a time, each weighted
-   * by what the year was doing that day. A day-at-a-time sum rather than a
-   * closed form because the sum asks `yearSwing` the same question the yard
-   * asks it, and an integral would be a second piece of arithmetic to keep
-   * true. It is a few dozen turns today and a few thousand in a decade. */
   function bloomDaysBetween(fromMs, toMs) {
-    let sum = 0;
-    for (let ms = fromMs; ms < toMs; ms += DAY_MS) sum += tempoAt(ms);
-    return sum;
+    const clock = window.CabinBloom;
+    if (clock && typeof clock.bloomDaysBetween === 'function') {
+      return clock.bloomDaysBetween(fromMs, toMs);
+    }
+    return Math.floor((toMs - fromMs) / DAY_MS); // flat fallback: plain days
   }
 
   function render(foliage, record) {

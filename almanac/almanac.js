@@ -119,8 +119,9 @@
         'the chimney a touch fuller than the summer thread — the first fires',
         'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
         'the pot’s bloom wheel slowing out of the summer toward its middling pace, each bloom holding every state a little longer than it did in August',
+        'leaves coming down off the two crowns — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one east wind carries them the way it leans the smoke',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
-        'the sprig in the mantle jar gone the same amber as the crowns outside; plain dark after sundown, no sparks and no stars',
+        'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
       ],
     },
     winter: {
@@ -289,6 +290,11 @@
       view: 'home', kind: 'visible-count',
       selector: '.sprite--smoke .smoke-puff',
       reads: 'how many puffs are climbing off the chimney',
+    },
+    'falling-leaves': {
+      view: 'home', kind: 'visible-count',
+      selector: '.sprite--leaffall .leaf',
+      reads: 'how many leaves are coming down off the two crowns',
     },
     'firefly-layer': {
       view: 'home', kind: 'opacity',
@@ -650,6 +656,16 @@
       probe: 'smoke-puffs', axis: 'season', at: { tod: 'day' },
       expect: { summer: 3, autumn: 3, winter: 4, spring: 3 },
       guards: '“three puffs off a fire nobody needs the heat of”, and winter’s “fourth puff where three climb all year”',
+    },
+    {
+      probe: 'falling-leaves', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 4, winter: 0, spring: 0 },
+      guards: '“leaves coming down off the two crowns — four of them in the air at any moment” in autumn, and no leaf-fall at all in the other three seasons',
+    },
+    {
+      probe: 'falling-leaves', axis: 'tod', at: { season: 'autumn' },
+      expect: { dawn: 4, day: 4, dusk: 4, night: 4 },
+      guards: '“only the leaves still coming down in it” — the fall runs at every hour, because a leaf lets go whenever it lets go; it is the season’s gesture and not a welcome for any part of the day',
     },
     {
       probe: 'firefly-layer', axis: 'season', at: { tod: 'night' },

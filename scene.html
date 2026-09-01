@@ -296,4 +296,35 @@
        src="assets/composed/tree-small.png"
        width="15" height="33"
        alt="">
+
+  <!-- Leaf-fall (Day 116, 2026-09-01): autumn's own ownerless gesture, the way
+       the fireflies are summer's and the stars are winter's — but NOT a
+       night-welcome, and deliberately not one. Day 78's ruling that "a year is
+       allowed nights that simply close the door softly" stands: the autumn dark
+       still gets no light of its own. This runs at every hour, because a leaf
+       lets go whenever it lets go, and it takes the hour's wash like the grass
+       and the flowers do (z-index 1, under .scene::after) rather than punching
+       through it the way the sparks and the lantern do. It is not a light.
+
+       Four leaves, two off each crown, each on its own long slow clock so no two
+       fall together — the register the blooms, the puffs and the two trees'
+       sway all keep. The crowns are UNTOUCHED: nothing is taken from them and
+       their filter is unchanged, so the oldest vow holds exactly as it did
+       (the season may lean the leaf's colour, it may never bare the branch).
+       These are extra leaves in the air, not leaves subtracted from a tree.
+
+       DOM order matters: this layer follows the two trees and shares their
+       z-index, so a leaf paints OVER the crown it came off — which is how each
+       one starts, camouflaged among the foliage in its own crown's colour, and
+       only becomes a leaf once it has cleared the shape. Season-gated by
+       `display` rather than opacity (like the woodpile's spent logs and winter's
+       fourth puff) so the layer is honestly absent in the other three seasons
+       and countable in this one. Decorative, pointer-inert; JS off means no
+       data-season and no leaves, so nothing is lost when the year isn't kept. -->
+  <div class="sprite sprite--leaffall" aria-hidden="true">
+    <span class="leaf leaf--1"></span>
+    <span class="leaf leaf--2"></span>
+    <span class="leaf leaf--3"></span>
+    <span class="leaf leaf--4"></span>
+  </div>
 </div>

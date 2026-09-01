@@ -311,6 +311,38 @@ const MOTION_CLIPS = [
     },
     crop: { around: ['.flower', '.sprite--bee'], margin: 18, scale: 3 },
   },
+  // Day 116 (2026-09-01) — the leaf-fall, autumn's own gesture (scene.css
+  // `leaf-fall-1`…`-4`). This is the clip the strips were built for: a single
+  // still of a falling leaf is a 3px fleck on the grass, and no frame can say
+  // whether it is coming down or lying there. The round is 13s, three times the
+  // 4.5s a wall-clock strip spans, so it is aimed rather than waited out — and
+  // aimed at one leaf's whole descent: still up among the leaves it hasn't left,
+  // the let-go, the two ends of its swing, and down into the grass. Because a
+  // seek pins every perpetual animation to the same ABSOLUTE second rather than
+  // to each one's own fraction, the other three leaves stand wherever their own
+  // longer rounds honestly put them at that instant — which is the point: they
+  // are four separate falls, not one fall drawn four times. Forced to autumn
+  // because the layer exists nowhere else, and to the plain day hour because
+  // this is a season's story and not an hour's. Cropped to the left crown and
+  // the path its two leaves take (measured across every phase and unioned, so
+  // nothing can fall outside its own picture) and redrawn at 3×.
+  {
+    name: 'leaves',
+    tod: 'day',
+    season: 'autumn',
+    seek: {
+      animation: 'leaf-fall-1',
+      at: [
+        { frac: 0.00, label: 'on the crown' },
+        { frac: 0.18, label: 'let go' },
+        { frac: 0.36, label: 'swung back' },
+        { frac: 0.55, label: 'swung out' },
+        { frac: 0.74, label: 'nearly down' },
+        { frac: 0.90, label: 'in the grass' },
+      ],
+    },
+    crop: { around: ['.sprite--tree-left', '.leaf--1', '.leaf--2'], margin: 6, scale: 3 },
+  },
 ];
 
 // --motion-cross mode config. One forced state (the wind is a day-story, and the

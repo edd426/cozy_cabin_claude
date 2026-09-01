@@ -880,9 +880,20 @@
 .sprite--tree-small {
   transition: filter 1.6s ease;
 }
+/* The autumn gild lives in ONE place, on the scene, because two things wear it:
+ * the crowns here and the falling leaves below (Day 116). A leaf that let go of
+ * that crown has to be made of that crown — so rather than copy the four filter
+ * functions into a second rule where the two could quietly drift apart, both
+ * read this. It is the shared-reckoning move sky.js and season.js make for the
+ * almanac (Day 97), one level down and in colour: the leaf is the tree's own
+ * green seen through the tree's own lens, so retune the gild and the leaf turns
+ * with the crown, always. */
+.scene[data-season="autumn"] {
+  --crown-gild: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
+}
 .scene[data-season="autumn"] .sprite--tree,
 .scene[data-season="autumn"] .sprite--tree-small {
-  filter: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
+  filter: var(--crown-gild);
 }
 .scene[data-season="winter"] .sprite--tree,
 .scene[data-season="winter"] .sprite--tree-small {
@@ -893,6 +904,156 @@
   filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
 }
 /* summer — no rule on purpose: the identity, the green the trees were born in. */
+
+/* ── Leaf-fall (Day 116, 2026-09-01) ───────────────────────────────────────
+ * The first autumn this clearing has ever actually stood in. The year had
+ * reached the crowns' COLOUR on Day 70, and after that an autumn frame differed
+ * from a summer one by a tint and nothing else — no gesture that belongs to the
+ * season the way the fireflies belong to a June dark and the stars to a January
+ * one. This is autumn's, and like those two it is ownerless: nothing hung it,
+ * nobody lit it, the year simply does it.
+ *
+ * WHAT IT IS NOT, and the line is worth keeping. It is not a night-welcome.
+ * Day 78 settled that spring and autumn darks are allowed to close the door
+ * softly — "the quiet between the two voices that lets you hear them as voices"
+ * — and that ruling stands untouched. Leaves fall at every hour because a leaf
+ * lets go whenever it lets go; that the autumn dark is no longer quite empty is
+ * a consequence, not the purpose, and the season still gets no light of its own.
+ *
+ * THE VOW, which decides the whole shape: the year may lean the leaf, but it may
+ * NEVER bare the branch (Day 70; the founder's oldest line — winter is a hush,
+ * not a death). So nothing is subtracted from a crown. The two tree filters are
+ * untouched, no opacity moves, and `tree-crowns` counts two solid crowns in
+ * every season exactly as before. These are extra leaves in the air. And nothing
+ * is lost either: a leaf settles into the grass, the layer refills, and the
+ * spring rule above lifts "new growth on the bough" — autumn spends leaves and
+ * the year gives them back, the same wheel the woodpile rides (Day 88).
+ *
+ * COLOUR is the crown's, by construction rather than by matching: each leaf is a
+ * flat block of one of the tree PNG's own two crown greens (#97bb8e body,
+ * #aed499 lit) seen through `--crown-gild`, the very filter the crowns wear —
+ * see the note above it. Two leaves of each, so they read as leaves that turned
+ * different amounts rather than four stamps of one swatch.
+ *
+ * NO LIT SIDE. A near thing lit down one edge implies a sun with an address, and
+ * this place has spent a hundred days refusing to give the light one (Days
+ * 56–58, and the third vow). A leaf is as near as anything out here, so it is
+ * flat colour: shape and motion say leaf, and the light says nothing at all.
+ *
+ * THE MOTION is the reason the layer earns its place, and it makes two claims at
+ * once. The side-to-side swing is the LEAF's — a falling leaf planes, stalls and
+ * planes back the other way, which is the one motion out here allowed to cross
+ * upwind of itself (the flag and the crowns may not: a thing held out by a
+ * steady breeze does not rock both ways, but a thing in free fall is not being
+ * held by anything). The net drift is the YARD's one east wind: every leaf ends
+ * further RIGHT than it began, the way the flag streams, the smoke leans, the
+ * clouds ride and the crowns bend. And it drifts further, relative to how far it
+ * falls, than anything else here moves — a leaf is the loosest thing this
+ * clearing has ever had, lighter than cloth, lighter than smoke. Front-view-only
+ * by nature, exactly like the trees it comes off: the door side has no trees, and
+ * looks end-on up this wind anyway (RULES Art XIII).
+ *
+ * Positioned and animated entirely in `%` of the frame, so the whole fall scales
+ * across the 600px breakpoint with no rebase — the leaves' 3×2px blocks stay
+ * fixed like every other small sprite here (pixel art keeps its minimum feature
+ * width). Each leaf starts INSIDE its own crown, in that crown's colour, and so
+ * is invisible until it clears the shape: the DOM order in scene.html puts this
+ * layer after the trees at the same z-index, so a leaf paints over the crown.
+ *
+ * Season-gated by `display`, not opacity — the layer is honestly absent in the
+ * other three seasons and countable in this one, the same gate the woodpile's
+ * spent logs and winter's fourth puff use (a visible-count witness reads layout,
+ * not brightness — Day 98). Default (no data-season, JS off) is no leaves.
+ *
+ * Under prefers-reduced-motion theme.css collapses every duration, holding each
+ * leaf at its 0%/100% frame — which here is up in the crown it hasn't left yet.
+ * That is the right still for this layer: not a leaf frozen in mid-air, but a
+ * tree with all its leaves on. */
+.sprite--leaffall {
+  position: absolute;
+  inset: 0;
+  z-index: 1;                 /* the trees' own plane: behind the cabin (z 2),  */
+  pointer-events: none;       /* and under the two washes (z 5) — not a light.  */
+  display: none;
+}
+.scene[data-season="autumn"] .sprite--leaffall { display: block; }
+
+.leaf {
+  position: absolute;
+  width: 3px;
+  height: 2px;
+  /* The crowns' own lens, and then one half-step further down the same road: a
+   * leaf that has let go is the one that turned furthest, so it is deeper and
+   * warmer than the canopy it left — which is also what makes a 3px block read
+   * against the meadow at all. Composed onto `--crown-gild` rather than written
+   * out fresh, so the leaf still cannot drift from the crown (see above). */
+  filter: var(--crown-gild) hue-rotate(-8deg) saturate(1.45) brightness(0.93);
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;  /* a leaf falls at its own steady rate */
+}
+/* The crown's body green and its lit green — the two tones the tree PNG is
+ * actually drawn in, gilded by the line the crowns are gilded by. */
+.leaf--1, .leaf--4 { background: #97bb8e; }
+.leaf--2, .leaf--3 { background: #aed499; }
+
+/* Two off the left crown (which spans about 5–17% of the frame at both widths,
+ * its top at 59–66%), two off the right (87–93%, top at 55–62%). Each starts
+ * inside its own crown and settles into the grass near 92%. Long periods, all
+ * different, with negative delays spreading the four around their cycles so the
+ * fall is always somewhere in the frame and never in step. */
+.leaf--1 { animation-name: leaf-fall-1; animation-duration: 13s;   animation-delay: 0s;   }
+.leaf--2 { animation-name: leaf-fall-2; animation-duration: 16s;   animation-delay: -6s;  }
+.leaf--3 { animation-name: leaf-fall-3; animation-duration: 14.5s; animation-delay: -3s;  }
+.leaf--4 { animation-name: leaf-fall-4; animation-duration: 18s;   animation-delay: -11s; }
+
+/* Each fall is its own path — no two leaves come down the same way. The swing
+ * crosses back and forth; the finish is always right of the start. The last two
+ * frames of each cut the leaf out at the grass and return it, unseen, to the
+ * crown, so 0% and 100% are the same in-crown rest. */
+@keyframes leaf-fall-1 {
+  0%    { top: 68%;   left:  9.5%; opacity: 1; }
+  18%   { top: 73%;   left: 11.8%; }
+  36%   { top: 78%;   left: 10.6%; }
+  55%   { top: 83%;   left: 13.4%; }
+  74%   { top: 87.5%; left: 12.4%; }
+  90%   { top: 91%;   left: 15.0%; opacity: 1; }
+  97%   { top: 92%;   left: 15.6%; opacity: 0; }
+  97.5% { top: 68%;   left:  9.5%; opacity: 0; }
+  100%  { top: 68%;   left:  9.5%; opacity: 1; }
+}
+@keyframes leaf-fall-2 {
+  0%    { top: 69%;   left: 13.5%; opacity: 1; }
+  22%   { top: 75%;   left: 12.2%; }
+  44%   { top: 81%;   left: 15.6%; }
+  64%   { top: 85.5%; left: 14.4%; }
+  84%   { top: 89.5%; left: 17.8%; }
+  94%   { top: 92%;   left: 18.4%; opacity: 1; }
+  99%   { top: 93%;   left: 19.0%; opacity: 0; }
+  99.5% { top: 69%;   left: 13.5%; opacity: 0; }
+  100%  { top: 69%;   left: 13.5%; opacity: 1; }
+}
+@keyframes leaf-fall-3 {
+  0%    { top: 66%;   left: 88.0%; opacity: 1; }
+  20%   { top: 71%;   left: 90.4%; }
+  40%   { top: 76%;   left: 89.2%; }
+  60%   { top: 81%;   left: 92.0%; }
+  80%   { top: 86%;   left: 91.0%; }
+  93%   { top: 89.5%; left: 93.6%; opacity: 1; }
+  98%   { top: 91%;   left: 94.4%; opacity: 0; }
+  98.5% { top: 66%;   left: 88.0%; opacity: 0; }
+  100%  { top: 66%;   left: 88.0%; opacity: 1; }
+}
+@keyframes leaf-fall-4 {
+  0%    { top: 67%;   left: 91.0%; opacity: 1; }
+  24%   { top: 73%;   left: 92.8%; }
+  46%   { top: 79%;   left: 91.6%; }
+  68%   { top: 84%;   left: 94.6%; }
+  88%   { top: 88.5%; left: 93.6%; }
+  95%   { top: 90.5%; left: 95.6%; opacity: 1; }
+  99%   { top: 91.5%; left: 96.2%; opacity: 0; }
+  99.5% { top: 67%;   left: 91.0%; opacity: 0; }
+  100%  { top: 67%;   left: 91.0%; opacity: 1; }
+}
 
 /* Bush — 32×28 native, scaled 2.5x. Front-right corner. */
 .sprite--bush {

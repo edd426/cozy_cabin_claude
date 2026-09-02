@@ -118,11 +118,19 @@
 //       one per entry in GALLERY_STATES below. A season rail (all four years at
 //       the neutral day hour), an hour rail (dawn/dusk/night at the neutral
 //       summer season), one cross state (winter-night, the season-gated dark
-//       neither rail reaches — Day 84), and INSIDE season and hour rails
-//       (`-state-inside-<season|hour>`, Days 89 and 91) and a DOOR-SIDE season
-//       rail (`-state-around-<season>`, Day 112) let a future agent SEE
-//       the clocks turn instead of trusting a filter string quoted in a log.
-//       (messages/2026-07-17 "see your own work".)
+//       neither rail reaches — Day 84), INSIDE season and hour rails
+//       (`-state-inside-<season|hour>`, Days 89 and 91) and DOOR-SIDE season
+//       and hour rails (`-state-around-<season|hour>`, Days 112 and 117) let a
+//       future agent SEE the clocks turn instead of trusting a filter string
+//       quoted in a log. (messages/2026-07-17 "see your own work".)
+//       What the rails cover, and what they don't, is no longer a matter of
+//       whose eye is on it: tools/check-gallery.js reads GALLERY_STATES off
+//       this file (see module.exports at the foot) and sweeps every element of
+//       every scene view through all sixteen (season, band) states, and fails
+//       the run if anything drawn here shows in no kept frame. That is what
+//       found the door-side hour rail missing — five hour-gated layers on that
+//       face, three of them built precisely because they differ from the
+//       front's, none of them ever photographed.
 //       A state may carry `clock` instead of `tod`/`season` (Day 95): the browser
 //       clock is pinned to that instant before load and NOTHING is forced, so the
 //       scripts reckon the tags themselves. That is the only way to photograph
@@ -228,14 +236,41 @@ const GALLERY_STATES = [
   // reasoning that omits plain `day` from the inside hour rail above — capture
   // what nothing else holds.
   //
-  // No door-side HOUR rail: this face's hour is the same two washes the home
-  // rail already shows, on the same schedule, and its one hour-gated feature —
-  // the lantern kindling — is witnessed on the almanac and photographed by the
-  // home rail's own dusk and night. A rail of three near-identical frames a
-  // commit is a cost with no reading in it.
   { name: 'around-spring', tod: 'day', season: 'spring', view: GALLERY_AROUND_VIEW },
   { name: 'around-autumn', tod: 'day', season: 'autumn', view: GALLERY_AROUND_VIEW },
   { name: 'around-winter', tod: 'day', season: 'winter', view: GALLERY_AROUND_VIEW },
+  // door-side HOUR rail (Day 117, 2026-09-02) — and it is a correction, so the
+  // sentence that stood here for five days is worth keeping in view. Day 112
+  // declined this rail on the grounds that "this face's hour is the same two
+  // washes the home rail already shows, on the same schedule, and its one
+  // hour-gated feature — the lantern kindling — is witnessed on the almanac and
+  // photographed by the home rail's own dusk and night."
+  //
+  // That was a list of what one hand happened to think of, and tools/
+  // check-gallery.js swept the face and found five hour-gated layers on it, of
+  // which three exist BECAUSE they differ from the front's:
+  //   · its own ::after wash, on its own frame;
+  //   · the lit crests of ITS four hills — the range mirrored to the right on
+  //     Day 48 because the door side looks west and north falls that way;
+  //   · its own bank of the dawn fog, which Day 57 gave a BRIGHTENED TOP RIM
+  //     the front's bank does not have, because this face looks east into the
+  //     coming sun and the front sees it raked across;
+  //   · the two stray fireflies of Day 63 — deliberately a sparser, left-leaning
+  //     scatter than the front meadow's six, not a copy;
+  //   · its own stretch of the winter stars (Day 84), double-gated on
+  //     winter AND the dim bands, so it lives at a corner of both wheels and
+  //     the season rail above could never reach it however long it ran.
+  // Every one of those was drawn on the argument that one world seen from two
+  // places shows two honest faces — and not one of them had ever been kept.
+  //
+  // Four frames, and the method is the home rail's exactly: three bands at the
+  // neutral `summer`, plus the same winter-after-dark corner the home rail
+  // needed for the same reason. `day` is omitted because it is the
+  // `-state-around-summer` frame the season rail already declines to duplicate.
+  { name: 'around-dawn',         tod: 'dawn',  season: 'summer', view: GALLERY_AROUND_VIEW },
+  { name: 'around-dusk',         tod: 'dusk',  season: 'summer', view: GALLERY_AROUND_VIEW },
+  { name: 'around-night',        tod: 'night', season: 'summer', view: GALLERY_AROUND_VIEW },
+  { name: 'around-winter-night', tod: 'night', season: 'winter', view: GALLERY_AROUND_VIEW },
   // the evening pair (Day 95, 2026-08-11) — the one thing FORCING can't show.
   // Every state above pins `data-tod` and `data-season` by hand, which is exactly
   // the right tool for "what does dusk look like" and exactly the wrong one for
@@ -902,7 +937,22 @@ async function motionCrossRun(baseUrl, outDir, dateTag, shaShort) {
   console.log('screenshot: done — 1 cross-view motion filmstrip');
 }
 
-(async () => {
+// Published read-only so a checker can read the rails off the camera that
+// takes them, rather than keeping a second copy that could be right on a
+// morning the gallery was wrong. Same export move sky.js and season.js make
+// (Day 97) — and the same reason: tools/check-gallery.js asks whether every
+// drawn thing in this clearing shows in at least one kept frame, and a list of
+// kept frames it maintained itself would answer for a gallery that isn't this
+// one. The IIFE below is guarded so `require()` reads the table without
+// running the camera.
+module.exports = {
+  GALLERY_STATES,
+  GALLERY_VIEW,
+  GALLERY_INSIDE_VIEW,
+  GALLERY_AROUND_VIEW,
+};
+
+if (require.main === module) (async () => {
   const args = process.argv.slice(2);
 
   if (args[0] === '--manifest') {

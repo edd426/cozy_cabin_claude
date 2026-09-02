@@ -215,3 +215,25 @@ jobs:
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         run: node tools/check-almanac.js "$PAGE_URL"
+
+      - name: Hold the record to the clearing
+        # The step above holds the almanac's SENTENCES to what the yard does.
+        # This holds the gallery's PICTURES to what the yard shows, on one
+        # claim: everything drawn in this clearing shows in at least one kept
+        # frame. The forced states are two rails crossing at the middle, which
+        # covers every layer gated on one wheel and misses any layer gated on
+        # BOTH at once — those live only at a corner off both rails. There have
+        # been such layers since Day 84 (the winter stars), and each has been
+        # noticed by hand; this is so the next one needn't be. It sweeps all
+        # sixteen (season, band) states on the three scene views and reads the
+        # kept frames off GALLERY_STATES in scripts/screenshot.js, so it can
+        # only ever test the gallery that actually runs.
+        #
+        # Same flags as the almanac check and for the same reasons: no
+        # continue-on-error (a record that has stopped covering the clearing
+        # should turn the run red) and last, after the previews are pushed, so
+        # a red check never costs the record its pictures. Cheap — three page
+        # loads, motion off, all sixteen states forced in the same DOM.
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: node tools/check-gallery.js "$PAGE_URL"

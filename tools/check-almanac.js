@@ -730,7 +730,7 @@ async function measurePaintLean(page, probe) {
     }
   }, { sel, hidden });
 
-  let num = 0, den = 0;
+  let num = 0, den = 0, lost = 0;
   const parts = [];
   for (const sel of probe.of || []) {
     await setHidden(sel, true);
@@ -743,12 +743,16 @@ async function measurePaintLean(page, probe) {
       den += got.n;
       parts.push(`${sel} ${got.r.toFixed(3)}`);
     } else {
-      parts.push(`${sel} —`);
+      lost++;
+      parts.push(`${sel} NOT FOUND`);
     }
   }
-  // Not one of the named bodies could be found. Nothing was asked, so nothing
-  // may be answered.
-  if (den === 0) return null;
+  // A named body that hiding does not change is a body that is not there — a
+  // renamed class, a layer some later day took out. Averaging over the rest
+  // would go on reading green off a list quietly gone stale, which is the exact
+  // shape of fault this witness was built for. So it is a missing reading, and
+  // the check says so: the same rule the counts and the leans already keep.
+  if (lost > 0 || den === 0) return { reading: null, parts };
   return { reading: Math.round(Math.abs(num / den) * 1000), parts };
 }
 
@@ -942,7 +946,8 @@ async function readState(browser, base, view, state, probes) {
         const got = await measurePaintLean(leanPage, probe);
         readings[name] = got ? got.reading : null;
         if (got) {
-          console.log(`check-almanac:   ${name} ${keyOf(state)} = ${got.reading} ` +
+          console.log(`check-almanac:   ${name} ${keyOf(state)} = ` +
+                      `${got.reading === null ? 'nothing there' : got.reading} ` +
                       `(${got.parts.join(', ')})`);
         }
       } finally {

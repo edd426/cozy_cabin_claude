@@ -655,8 +655,11 @@
         'and could sit under the ceiling. So could a lean gentler than the fifth of a shade the ceiling ' +
         'was measured against. And every one of these is asked of the two outdoor faces at the four ' +
         'seasons, at one width, of the bodies named on the list — a body drawn some later day and never ' +
-        'added to it is weighed by nothing. Green here means nothing draws, renders, or is painted with a ' +
-        'sideways lean anywhere I can see one. It does not mean nothing points sideways.',
+        'added to it is weighed by nothing. (A body that IS on the list and can no longer be found turns ' +
+        'the reading to nothing at all rather than quietly averaging over the rest, because a list gone ' +
+        'stale reading green is the exact shape of fault this one was built for.) Green here means ' +
+        'nothing draws, renders, or is painted with a sideways lean anywhere I can see one. It does not ' +
+        'mean nothing points sideways.',
     },
   ];
 

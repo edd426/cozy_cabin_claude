@@ -189,6 +189,25 @@
                 '`door-frame-light-balance` in `almanac/almanac.js`, measured ' +
                 'Node-side from two screenshots in `tools/check-almanac.js`.',
         },
+        {
+          since: '2026-09-03',
+          day: 118,
+          says: 'The same weighing turned round to face the bodies instead of ' +
+                'the light — the gap sense 1 wrote into its own blind note. It ' +
+                'lifts the light off and asks each standing thing which of its ' +
+                'own sides it is brightest on, taking the correlation between a ' +
+                'pixel’s column and its brightness, which is nought for any ' +
+                'shape painted in one flat colour however lopsided the shape ' +
+                'is. Then it averages those across the frame by area, because a ' +
+                'light falls on area and not on object count. What it holds is ' +
+                'the AGREEMENT among the bodies and never one of them: nothing ' +
+                'here is symmetric, so a single body is unjudgeable, and a ' +
+                'light with an address is exactly the thing that would make ' +
+                'them all lean the same way at once.',
+          mark: 'the two `paint-lean` probes `home-paint-lean` and ' +
+                '`door-paint-lean` in `almanac/almanac.js`, measured by ' +
+                '`measurePaintLean` in `tools/check-almanac.js`.',
+        },
       ],
     },
 

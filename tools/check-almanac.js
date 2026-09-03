@@ -87,6 +87,32 @@
  * those names unchanged, because none of them ever cared what a state was.
  * A claim about a thing that reads the calendar has to be asked on the calendar.
  *
+ * Day 118 (2026-09-03): a seventh kind, `paint-lean`, and it closes the gap the
+ * Day-104 weighing wrote into the vow's blind note and Day 112 could not reach:
+ * a sprite whose OWN pixels are brighter down one edge. `frame-balance` lifts
+ * the wash off bare ground and so cancels such a sprite clean out; `sprite-tone`
+ * does read a sprite's own pixels but returns a mean over the whole of it, and a
+ * mean is exactly what a bright edge and a dark one cancel out of. It answers
+ * what colour, never which side.
+ *
+ * The obvious instrument — weigh one sprite against its own mirror — does not
+ * work, and it fails for the reason Day 104 already found one level out: the two
+ * halves do not start even. A bee has a head; a mailbox has a flag on one side.
+ * Measured on this yard, a single body reads as far as 0.29 with nothing at all
+ * wrong with it. A lean is not a property of a thing. It is an AGREEMENT between
+ * things: a light with an address lands on every body in the frame the same way,
+ * and that is the only part of it a picture can honestly weigh.
+ *
+ * So: isolate each named body's own pixels the Day-112 way (washes lifted, one
+ * shot with it standing and one with it hidden, only the pixels that differ),
+ * take the Pearson correlation between a pixel's column and its brightness —
+ * which is 0 for any shape painted in one flat colour, and only leaves 0 when a
+ * body's bright pixels sit off its own centre of mass — and then average those
+ * across the bodies WEIGHTED BY AREA, because a light falls on area and not on
+ * object count. Each body is measured against itself, so no two of them are ever
+ * compared and their different colours never enter; what survives the average is
+ * only what they agree about.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -139,9 +165,16 @@ const stateFor = (check, name) =>
 const keyOf = (state) => state.season + '|' + state.tod;
 
 /* Every state any check needs, and — for each — only the views that state has
- * a measurement waiting on. A page load costs a few seconds and this runs on
- * every commit, so it's worth not opening the room to read the woodpile.
- * Returns [{ state, views: [...] }]. */
+ * a measurement waiting on, and only the probes waiting on it there. A page
+ * load costs a few seconds and this runs on every commit, so it's worth not
+ * opening the room to read the woodpile.
+ *
+ * Day 118: `probeNames` as well as `views`. It always cost something to measure
+ * a probe in a state no sentence asks about, but with everything read off one
+ * computed-style pass the something was too small to see. `paint-lean` isolates
+ * every standing body in a frame one at a time, so an unasked-for state is
+ * eight screenshots and a page load — and it was doing that in ten states to
+ * answer about four. Returns [{ state, views: [...], probeNames: Set }]. */
 function workNeeded(checks, probes) {
   const out = new Map();
   for (const check of checks) {
@@ -154,11 +187,16 @@ function workNeeded(checks, probes) {
     for (const name of stateNames(check)) {
       const state = stateFor(check, name);
       const key = keyOf(state);
-      if (!out.has(key)) out.set(key, { state, views: new Set() });
+      if (!out.has(key)) {
+        out.set(key, { state, views: new Set(), probeNames: new Set() });
+      }
       out.get(key).views.add(view);
+      out.get(key).probeNames.add(check.probe);
     }
   }
-  return [...out.values()].map((w) => ({ state: w.state, views: [...w.views] }));
+  return [...out.values()].map((w) => ({
+    state: w.state, views: [...w.views], probeNames: w.probeNames,
+  }));
 }
 
 /* Take every probe belonging to one view, in the browser. Returns
@@ -269,6 +307,10 @@ function measureInPage({ probes, forDate }) {
     // screenshots of one sprite with the light taken off, so it too is filled
     // in Node-side after this evaluate returns.
     if (probe.kind === 'sprite-tone') continue;
+
+    // Day 118. Same again: `paint-lean` needs one shot of the frame plus one
+    // per body it isolates, so it too is filled in Node-side afterwards.
+    if (probe.kind === 'paint-lean') continue;
 
     // Day 111. An `attr` probe belongs to a hold check, which visits the page
     // itself on a stepped clock rather than in a forced state — so there is
@@ -582,6 +624,134 @@ async function spriteShots(page, probe) {
   return { withSprite, noSprite };
 }
 
+/* Day 118. One body's own paint, asked which side of itself it is brightest on.
+ *
+ * The pixel set is found exactly as `analyzeSpriteTone` finds it — the same two
+ * shots with the washes already lifted, the same THRESHOLD of 24, so the same
+ * honest set: every solid pixel of the body, and none of the half-covered rim,
+ * which is half grass and was never the body's colour to begin with.
+ *
+ * What is taken off it is different. `analyzeSpriteTone` returns a mean, which
+ * is deaf to which side anything sits on. This returns the Pearson correlation
+ * between a pixel's column and its brightness:
+ *
+ *   r = 0   the body's bright pixels sit on its own centre of mass. TRUE OF ANY
+ *           SHAPE PAINTED IN ONE FLAT COLOUR — the statistic is centred on the
+ *           body's own mass, so its outline never enters. A boot-shaped thing
+ *           and a square read alike if they are one colour.
+ *   r > 0   it gets brighter toward the right; r < 0, toward the left.
+ *   |r| = 1 brightness runs perfectly with width.
+ *
+ * Dimensionless, bounded, and free of the layout scale — so unlike a width it
+ * could be stated outright, and the check does state it, as a ceiling.
+ */
+async function analyzePaintLean({ withSprite, noSprite }) {
+  const decode = async (b64) => {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const bmp = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
+    const canvas = document.createElement('canvas');
+    canvas.width = bmp.width;
+    canvas.height = bmp.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bmp, 0, 0);
+    return ctx.getImageData(0, 0, bmp.width, bmp.height);
+  };
+
+  const A = await decode(withSprite);
+  const B = await decode(noSprite);
+  const w = Math.min(A.width, B.width);
+  const h = Math.min(A.height, B.height);
+  if (w === 0 || h === 0) return null;
+
+  const THRESHOLD = 24;
+  let n = 0, sx = 0, sxx = 0, sl = 0, sll = 0, sxl = 0;
+  const da = A.data, db = B.data;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const ia = (y * A.width + x) * 4;
+      const ib = (y * B.width + x) * 4;
+      const d = Math.abs(da[ia] - db[ib])
+              + Math.abs(da[ia + 1] - db[ib + 1])
+              + Math.abs(da[ia + 2] - db[ib + 2]);
+      if (d < THRESHOLD) continue;
+      const L = 0.299 * da[ia] + 0.587 * da[ia + 1] + 0.114 * da[ia + 2];
+      n++; sx += x; sxx += x * x; sl += L; sll += L * L; sxl += x * L;
+    }
+  }
+  // Too little of it showing to say anything. A missing reading, not a zero —
+  // the same distinction the counts and the tones make.
+  if (n < 20) return null;
+
+  const vx = n * sxx - sx * sx;
+  const vl = n * sll - sl * sl;
+  // Painted in one flat colour, or one pixel wide: nothing varies, so nothing
+  // can run with anything. That is an honest 0 and not a missing reading.
+  if (vx <= 0 || vl <= 0) return { n, r: 0 };
+  return { n, r: (n * sxl - sx * sl) / Math.sqrt(vx * vl) };
+}
+
+/* The whole of one `paint-lean` reading: every body in `probe.of`, isolated in
+ * turn on one page, and the area-weighted mean of their correlations.
+ *
+ * Weighted by area on purpose. A light with an address lands on area — a broad
+ * plank wall is where a raking one would be plainest — while object count is an
+ * artefact of how the markup happens to group things. Unweighted, four small
+ * quirky bodies would outvote the cabin they stand against; weighted, this yard
+ * reads a tenth of what the same yard reads with a lean painted into it.
+ *
+ * Returns { reading, parts } — the reading is |weighted mean| × 1000, rounded,
+ * so the ceiling is an integer and not a row of leading zeroes. `parts` is for
+ * the progress line: when this goes red, the number alone would say a frame
+ * leans and not which body does. */
+async function measurePaintLean(page, probe) {
+  const frame = page.locator(probe.selector).first();
+  if ((await frame.count()) === 0) return null;
+
+  // Freeze motion and transitions first, or a bloom breathing between two shots
+  // would be counted as part of the body it sits in front of.
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+
+  // Take the light off, or every body is read through the same veil and they
+  // would agree about the veil rather than about themselves (diary 2026-08-28).
+  const sceneSel = probe.selector || '.scene';
+  const washSel = probe.washSelector || sceneSel + '::before, ' + sceneSel + '::after';
+  await page.addStyleTag({ content: washSel + ' { opacity: 0 !important; }' });
+  await page.waitForTimeout(150);
+  const withSprite = (await frame.screenshot()).toString('base64');
+
+  const setHidden = (sel, hidden) => page.evaluate(({ sel, hidden }) => {
+    for (const el of document.querySelectorAll(sel)) {
+      if (hidden) el.style.setProperty('visibility', 'hidden', 'important');
+      else el.style.removeProperty('visibility');
+    }
+  }, { sel, hidden });
+
+  let num = 0, den = 0;
+  const parts = [];
+  for (const sel of probe.of || []) {
+    await setHidden(sel, true);
+    await page.waitForTimeout(120);
+    const noSprite = (await frame.screenshot()).toString('base64');
+    await setHidden(sel, false);
+    const got = await page.evaluate(analyzePaintLean, { withSprite, noSprite });
+    if (got) {
+      num += got.n * got.r;
+      den += got.n;
+      parts.push(`${sel} ${got.r.toFixed(3)}`);
+    } else {
+      parts.push(`${sel} —`);
+    }
+  }
+  // Not one of the named bodies could be found. Nothing was asked, so nothing
+  // may be answered.
+  if (den === 0) return null;
+  return { reading: Math.round(Math.abs(num / den) * 1000), parts };
+}
+
 /* Day 111. The clock a hold check stands on.
  *
  * Installed with page.addInitScript, so it is in place before sky.js and
@@ -761,6 +931,25 @@ async function readState(browser, base, view, state, probes) {
       }
     }
 
+    // Day 118. `paint-lean` lifts the washes the same way `sprite-tone` does,
+    // and hides each body in turn — so it gets a page of its own for the same
+    // reason, and for the quiet half of the same reason: sharing one with
+    // frame-balance would leave whichever ran second reading the other's damage.
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind !== 'paint-lean') continue;
+      const leanPage = await openForced();
+      try {
+        const got = await measurePaintLean(leanPage, probe);
+        readings[name] = got ? got.reading : null;
+        if (got) {
+          console.log(`check-almanac:   ${name} ${keyOf(state)} = ${got.reading} ` +
+                      `(${got.parts.join(', ')})`);
+        }
+      } finally {
+        await leanPage.close();
+      }
+    }
+
     // Day 104. The pixel witness (frame-balance) can't run inside the one
     // evaluate above — it needs Node-side screenshots between page states — so
     // it is measured here and merged on top. It goes last so its wash-off style
@@ -904,12 +1093,13 @@ async function main() {
 
     // 2. Visit each state, on each view that state owes a reading.
     const readings = {};
-    for (const { state, views } of workNeeded(CHECKS, PROBES)) {
+    for (const { state, views, probeNames } of workNeeded(CHECKS, PROBES)) {
       const key = keyOf(state);
       readings[key] = {};
       for (const view of views) {
         const forView = Object.fromEntries(
-          Object.entries(PROBES).filter(([, p]) => p.view === view)
+          Object.entries(PROBES).filter(
+            ([name, p]) => p.view === view && probeNames.has(name))
         );
         Object.assign(readings[key],
                       await readState(browser, base, view, state, forView));

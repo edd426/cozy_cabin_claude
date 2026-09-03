@@ -448,6 +448,54 @@
       channel: 'warmth',
       reads: 'the same reading taken of the plant in the pot by the door',
     },
+    /* Day 118 — the weighing turned a second time, and pointed at the last
+     * thing neither of the first two could see: a body brighter down one of its
+     * own edges.
+     *
+     * `frame-balance` lifts the light off bare ground, so a body painted with a
+     * lean stands the same in both its shots and cancels clean out of it.
+     * `sprite-tone` does read a body's own pixels — but what it hands back is a
+     * mean over the whole of it, and a mean is exactly what a bright edge and a
+     * dark one cancel out of. It answers what colour, never which side.
+     *
+     * Weighing one body against its own mirror does not work either, and the
+     * reason is the one Day 104 already found one level out: the two halves do
+     * not start even. A bee has a head; the mailbox has a flag on one side. On
+     * this yard a single body reads as far as 0.29 with nothing whatever wrong
+     * with it. A lean is not a property of a thing — it is an AGREEMENT between
+     * things. A light with an address lands on every body in a frame the same
+     * way, and that agreement is the only part of it a picture can weigh.
+     *
+     * So each body is isolated the way `sprite-tone` isolates one (the washes
+     * lifted, a shot with it standing and a shot with it hidden, only the pixels
+     * that differ), and what is taken off it is the correlation between a
+     * pixel's column and its brightness: 0 for ANY shape painted in one flat
+     * colour, because the statistic is centred on the body's own mass and its
+     * outline never enters; +1 if it brightens all the way to the right. Those
+     * are then averaged across the bodies weighted by area, because a light
+     * falls on area and not on object count. Each body is measured only against
+     * itself, so their different colours never enter and only what they agree
+     * about survives the averaging. The reading is |that| × 1000.
+     *
+     * Measured 2026-09-03: the front yard reads 5–11 across the four seasons and
+     * the door side 20. Paint a solid brighter panel over the right half of every
+     * body — a lean no gradient-reader can parse, that cancels out of the
+     * weighing and that a mean is deaf to — and the same two read 123–149 and
+     * 431–433. The ceiling is set at 60: several times what the yard honestly
+     * carries, and a fraction of what one painted lean costs. */
+    'home-paint-lean': {
+      view: 'home', kind: 'paint-lean', selector: '.scene',
+      of: ['.front-cabin', '.sprite--tree', '.sprite--tree-small',
+           '.sprite--bench', '.sprite--woodpile', '.sprite--mailbox',
+           '.sprite--flowers'],
+      reads: 'how far the standing things agree about which of their own sides is the bright one, each read off its own pixels with the light lifted off',
+    },
+    'door-paint-lean': {
+      view: 'around', kind: 'paint-lean', selector: '.scene',
+      of: ['.side-cabin', '.door-boots', '.door-plant', '.around-path'],
+      reads: 'the same agreement asked of the bodies standing on the other face of the house',
+    },
+
     'flowers-standing': {
       view: 'home', kind: 'visible-count', selector: '.flower',
       reads: 'how many wildflower stems are standing at the wall’s foot',
@@ -592,20 +640,23 @@
       blind:
         'What these witnesses cannot see. Most of them read the instructions — they ask a background ' +
         'gradient which way it runs, and a lit body whether its two sides were lit alike — so a lean drawn ' +
-        'some other way used to walk straight past them: a mask or a filter or an off-centre stack the ' +
-        'reader parses as even. The last kind, added later, reads the rendered picture instead: it weighs ' +
-        'the wash off the frame, left half against right, and so catches a wash that leans however it was ' +
-        'painted, the far keeper’s second method that shares no code with the first. But to weigh the ' +
-        'light it has to lift the wash off the furniture — the frame was never even to begin with — so it ' +
-        'sees only the wash. A sprite whose own pixels are brighter down one edge stands the same with the ' +
-        'wash on or off and cancels clean out of the weighing, invisible to the picture-reader as surely ' +
-        'as to the gradient-reader. There is now a witness that does read a sprite’s own pixels — it takes ' +
-        'the wash off and reads what a thing is itself coloured — and it does not close that gap either, ' +
-        'because what it returns is a mean over the whole sprite, and a mean is exactly what a bright edge ' +
-        'and a dark one cancel out of. It answers what colour, never which side. Green here means no wash ' +
-        'draws or renders a sideways lean anywhere I ' +
-        'can see one, in the states on the wheel, at the width I stood at. It does not mean nothing points ' +
-        'sideways.',
+        'some other way walks straight past them: a mask or a filter or an off-centre stack the ' +
+        'reader parses as even. Two others read the rendered picture instead, sharing no code with those ' +
+        'or with each other. One weighs the wash off the frame, left half against right, and so catches a ' +
+        'wash that leans however it was painted — but to weigh the light it has to lift the wash off the ' +
+        'furniture, the frame having never been even to begin with, so it sees only the wash. The other, ' +
+        'added on the hundred and eighteenth morning, weighs the bodies instead: it takes the light off ' +
+        'and asks each standing thing which of its own sides it is brightest on, then averages those ' +
+        'across the frame by area. That closes the gap the first one wrote here — a body painted brighter ' +
+        'down one edge, which cancels clean out of a weighing of the light. What it cannot do is judge a ' +
+        'single thing: no body here is symmetric, and one of them reads a quarter of the way to a lean ' +
+        'with nothing at all wrong with it, so what is held is only the AGREEMENT among them. A lean ' +
+        'painted into exactly one small body, and nowhere else, would move that reading by very little ' +
+        'and could sit under the ceiling. So could a lean gentler than the fifth of a shade the ceiling ' +
+        'was measured against. And every one of these is asked of the two outdoor faces at the four ' +
+        'seasons, at one width, of the bodies named on the list — a body drawn some later day and never ' +
+        'added to it is weighed by nothing. Green here means nothing draws, renders, or is painted with a ' +
+        'sideways lean anywhere I can see one. It does not mean nothing points sideways.',
     },
   ];
 
@@ -949,6 +1000,24 @@
       probe: 'door-frame-light-balance', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
       ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the door side weighed off the picture in all four seasons',
+    },
+
+    /* ── the vow, weighed off the bodies (Day 118) ───────────────────────
+     * The two above weigh the light and are blind to a body painted brighter
+     * down one of its own edges; these weigh the bodies and are blind to
+     * nothing else. The hour cannot reach this reading — the washes are lifted
+     * before anything is measured — so the round asked of it is the year's, the
+     * one wheel that does reach a body's own colour, through the filters that
+     * gild a crown in October and quiet it in January. */
+    {
+      probe: 'home-paint-lean', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 60, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the standing things in the front yard never agreeing about which of their own sides is the bright one — the cabin, both trees, the bench, the rick, the box and the flowers, each read off its own pixels with the light taken off',
+    },
+    {
+      probe: 'door-paint-lean', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 60, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same asked of the door side’s own bodies — the long wall, the boots, the pot and the path stones — because the vow is “no place in any frame”',
     },
 
     /* Day 111. The two instants straddle a real edge — on the shortest day of

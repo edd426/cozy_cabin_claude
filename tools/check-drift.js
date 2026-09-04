@@ -38,12 +38,36 @@
  * report a finding its author never thought of, because it was never told what
  * to look for — only what the frame looked like before.
  *
- * WHAT IT COSTS. A day that changes the yard turns this red, and the fix is to
- * look at what moved, agree that all of it was meant, and refresh the baseline
- * in the same commit (`--accept`). That is not friction to be engineered away;
- * it is the guard. The red is a demand that the change be *declared*, and the
- * finding — when there is one — is the pixels in the report that you cannot
- * account for.
+ * WHAT IT COSTS, AND HOW A CHANGE IS DECLARED. A day that changes the yard
+ * turns this red, and that is the guard rather than friction to engineer away:
+ * the red is a demand that the change be *declared*, and the finding — when
+ * there is one — is the pixels in the report you cannot account for.
+ *
+ * The declaration is to REMOVE the kept frame you no longer stand by:
+ *
+ *     git rm previews/baseline/home-autumn-dawn.png
+ *
+ * and commit that beside the change. A frame with no kept picture is not a
+ * failure here; it is kept afresh, loudly, and the run goes green. Two reasons
+ * that is the right shape and `--accept` alone was not.
+ *
+ *   1. It is per-frame. You run this in-session, see which frames moved, and
+ *      remove exactly those — so the declaration says which parts of the
+ *      clearing today touched, in a form `git log` keeps forever.
+ *
+ *   2. IT KEEPS THE COMPARISON INSIDE ONE BROWSER, which turned out to matter
+ *      more than anything else here. Measured on the day this was written: two
+ *      renders in the same browser are bit-identical (0 px of 81095, all seven
+ *      frames), and so are headless-shell against full Chromium of the same
+ *      build. But the first CI run, on the pinned Playwright's older build,
+ *      reported 1327 px on the map frame — every glyph of its rendered labels,
+ *      and nothing else — and 48 px inside the firebox. Two browser builds
+ *      disagree about type and about the odd gradient, and no channel
+ *      tolerance can separate a re-antialiased glyph from a moved one. So the
+ *      kept frames must be made by whatever renders them, and the way that
+ *      happens is: remove them, and let the next run of the camera that
+ *      compares them keep them. A baseline carried in from somewhere else is
+ *      not a baseline; it is a second opinion.
  *
  * WHAT IT CANNOT SEE. Three things, and they are the honest limits (Day 103:
  * when a guard changes shape its blind note goes stale, so this list is the
@@ -64,12 +88,17 @@
  *
  *   (3) It only sees what falls inside the scene's own frame, inset past the
  *       border (see INSET), and it cannot tell a picture from the browser that
- *       drew it. A different Chromium build could in principle rasterise a
- *       gradient a shade differently and read as drift; DRIFT_CHANNEL_TOL and
- *       DRIFT_FAIL_PIXELS are the two knobs for that, and both can be set from
- *       the environment so the workflow can move them without touching this
- *       file. If this ever reports a handful of scattered pixels that nothing
- *       in the day's work explains, that is the thing to suspect first.
+ *       drew it. That is not hypothetical — it is measured, above — and the
+ *       remove-the-frame declaration is the whole answer to it: it keeps every
+ *       comparison inside one renderer. Which means the comparison run in the
+ *       sandbox and the one run in CI are answering slightly different
+ *       questions, and the sandbox one will report a standing floor of browser
+ *       noise against CI's kept frames (the map's type, the firebox gradient).
+ *       Read a report picture before believing it: noise strikes every glyph
+ *       of a label at once, and a real change strikes a shape.
+ *       DRIFT_CHANNEL_TOL and DRIFT_FAIL_PIXELS are env-settable knobs if that
+ *       floor ever needs raising, but raising them costs sensitivity and is
+ *       the second answer, not the first.
  *
  *   (4) It only sees a layout it stands in front of. This was not reasoned out
  *       — it was found on the day the tool was written, by a break-test that
@@ -83,10 +112,11 @@
  * Run:  node tools/check-drift.js [BASE_URL] [--accept] [--out DIR] [--prefix P]
  *
  *   (no flags)   render every frame, diff against previews/baseline/, report,
- *                and exit non-zero if anything moved.
- *   --accept     render every frame and WRITE previews/baseline/ from it. The
- *                declaration that today's change was meant. Commit the result
- *                alongside the change it records.
+ *                and exit non-zero if anything moved. A frame with no kept
+ *                picture is kept, not failed.
+ *   --accept     re-keep EVERY frame whether it moved or not. A blunt local
+ *                convenience; prefer removing the frames you mean to re-keep,
+ *                which is the declaration the record can read.
  *   --out DIR    where the diff pictures go (default: the system temp dir).
  *   --prefix P   prepended to each diff picture's filename, so CI can date and
  *                sha them into the permanent record.
@@ -422,7 +452,7 @@ async function main() {
 
   fs.mkdirSync(BASELINE_DIR, { recursive: true });
   const browser = await chromium.launch(launchOpts());
-  let drifted = 0, missing = 0, pictures = 0;
+  let drifted = 0, kept = 0, pictures = 0;
 
   try {
     /* One page for every comparison; it only ever holds canvases. */
@@ -443,14 +473,21 @@ async function main() {
         continue;
       }
 
+      /* No kept picture is the declaration, not a failure: whoever changed
+       * this frame removed the one they no longer stand by, so keep it afresh
+       * — rendered by the very browser that will hold it to account next
+       * time, which is the whole reason this is the declaration and --accept
+       * is not (see the header). */
       if (!fs.existsSync(keptPath)) {
-        missing++;
-        console.log(`NONE  ${frame.name} — no kept frame to hold this against  [${where}]`);
+        fs.writeFileSync(keptPath, buf);
+        kept++;
+        console.log(`KEPT  ${frame.name} — no picture stood for this, so this one ` +
+                    `does now; ${shape}, ${anims} animation(s) pinned  [${where}]`);
         continue;
       }
 
-      const kept = fs.readFileSync(keptPath);
-      const r = await compareFrames(diffPage, kept, buf, CHANNEL_TOL, frame.name);
+      const keptPng = fs.readFileSync(keptPath);
+      const r = await compareFrames(diffPage, keptPng, buf, CHANNEL_TOL, frame.name);
 
       if (r.resized) {
         drifted++;
@@ -489,23 +526,23 @@ async function main() {
                 'IS the declaration that today\'s drift was meant.');
     return;
   }
-  if (missing) {
-    console.error(`check-drift: FAIL — ${missing} frame(s) have no kept picture. ` +
-                  'Run with --accept to keep them.');
-    process.exit(1);
-  }
   if (drifted) {
     console.error(
       `check-drift: FAIL — ${drifted} frame(s) differ from the picture kept of them` +
       (pictures ? `; ${pictures} report picture(s) written` : '') + '.\n' +
-      'Read each one. If every moved pixel is a thing today meant, run again with\n' +
-      '--accept and commit the refreshed baseline alongside the change. If any of\n' +
-      'it is not, that is the finding — and it is a finding nothing here was told\n' +
-      'to look for.'
+      'Read each one. If every moved pixel is a thing the change meant, remove\n' +
+      'that frame from previews/baseline/ and commit the removal beside the\n' +
+      'change — the next run keeps it afresh. If any of it is not, that is the\n' +
+      'finding, and it is a finding nothing here was told to look for.'
     );
     process.exit(1);
   }
-  console.log('check-drift: OK — the clearing stands exactly as it was kept.');
+  console.log(
+    kept
+      ? `check-drift: OK — ${FRAMES.length - kept} frame(s) stand as they were kept, ` +
+        `${kept} newly kept.`
+      : 'check-drift: OK — the clearing stands exactly as it was kept.'
+  );
 }
 
 main().catch((err) => {

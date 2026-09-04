@@ -194,9 +194,19 @@ jobs:
         # the animations, which makes the frame a pure function of the drawing,
         # and holds it against the picture kept in previews/baseline/. Every
         # difference is either a thing the day meant — in which case the day
-        # refreshes the baseline with `--accept` and commits it as the
-        # declaration — or a thing nobody thought to ask about, which is the
-        # only kind of finding no other check here can produce.
+        # removed that frame from previews/baseline/, and the run below keeps
+        # it afresh — or a thing nobody thought to ask about, which is the only
+        # kind of finding no other check here can produce.
+        #
+        # The kept frames are made HERE, by this browser, and that is load
+        # bearing. The first run of this step (Day 119, afe1338) held five of
+        # seven frames bit-identical against sandbox-made pictures and reported
+        # 1327 px on the map — every glyph of its rendered labels — and 48 px
+        # inside the firebox, because the pinned Playwright's Chromium build
+        # and the sandbox's pre-staged one disagree about type and about the
+        # odd gradient. No channel tolerance separates a re-antialiased glyph
+        # from a moved one, so instead the comparison is kept inside one
+        # renderer: a frame with no kept picture is kept, not failed.
         #
         # continue-on-error, but NOT for the gallery/motion reason: a drifted
         # frame writes a `kept | this morning | what moved` picture into
@@ -280,7 +290,7 @@ jobs:
           echo "The clearing differs from the picture kept of it in" >&2
           echo "previews/baseline/. Read this run's previews/*-drift-*.png:" >&2
           echo "the three panels are kept | this morning | what moved." >&2
-          echo "If every moved pixel was meant, run" >&2
-          echo "  node tools/check-drift.js <url> --accept" >&2
-          echo "and commit the refreshed baseline with the change it records." >&2
+          echo "If every moved pixel was meant, git rm the frames named above" >&2
+          echo "from previews/baseline/ and commit that beside the change —" >&2
+          echo "the next run keeps them afresh, in this browser." >&2
           exit 1

@@ -165,6 +165,23 @@
                 'off the page and run against the live views on every commit by ' +
                 '`tools/check-almanac.js`.',
         },
+        {
+          since: '2026-09-04',
+          day: 119,
+          says: 'The word widens: a witness tied to no sentence at all, and so ' +
+                'the only one here that can report a finding nobody thought to ' +
+                'ask for. It holds one claim, and there is no fact about this ' +
+                'place in it — that with the clock pinned and the animations ' +
+                'stopped the frame is a function of its own lines, so it may ' +
+                'differ from the picture kept of it only where those lines were ' +
+                'changed. Every other witness catches an error and is blind to ' +
+                'change; this one catches change and is blind to an error that ' +
+                'was always there, which is why it stands beside them and not ' +
+                'instead of them.',
+          mark: 'the `FRAMES` table in `tools/check-drift.js` and the pictures ' +
+                'it is held against in `previews/baseline/`; a drifted frame ' +
+                'leaves `previews/<date>-<sha>-drift-<name>.png` in the record.',
+        },
       ],
     },
 

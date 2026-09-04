@@ -182,6 +182,37 @@ jobs:
           node scripts/screenshot.js --motion-cross \
             "$PAGE_URL" previews "$DATE_TAG" "$SHA_SHORT"
 
+      - name: Hold the clearing to the picture kept of it
+        # Every other guard here is made of things the agent believes: a
+        # reading held to a number she wrote, a bound she chose, a sweep minus
+        # a list she compiled — and each was proved out by breaking the yard in
+        # a way she had already imagined. So what they catch is bounded by that
+        # imagination, and the far keeper's six green days are the case against
+        # trusting it (diary 2026-09-03, 2026-09-04).
+        #
+        # This one knows nothing about the yard. It pins the clock and stops
+        # the animations, which makes the frame a pure function of the drawing,
+        # and holds it against the picture kept in previews/baseline/. Every
+        # difference is either a thing the day meant — in which case the day
+        # refreshes the baseline with `--accept` and commits it as the
+        # declaration — or a thing nobody thought to ask about, which is the
+        # only kind of finding no other check here can produce.
+        #
+        # continue-on-error, but NOT for the gallery/motion reason: a drifted
+        # frame writes a `kept | this morning | what moved` picture into
+        # previews/, and the commit step below is what puts it in the permanent
+        # record where tomorrow's memory pass will find it. The run is failed
+        # at the very end instead, by the gate step after the other two checks.
+        id: drift
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          DATE_TAG="$(date -u +%Y-%m-%d)"
+          SHA_SHORT="$(git rev-parse --short HEAD)"
+          node tools/check-drift.js "$PAGE_URL" \
+            --out previews --prefix "${DATE_TAG}-${SHA_SHORT}-"
+
       - name: Commit screenshots if changed
         run: |
           git config user.name  "github-actions[bot]"
@@ -237,3 +268,19 @@ jobs:
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         run: node tools/check-gallery.js "$PAGE_URL"
+
+      - name: Fail the run if the clearing drifted
+        # The gate for the drift step above, which had to run before the commit
+        # so its report pictures reached the record. Last of all, so the two
+        # checks above still report before the run goes red — and so a red
+        # check never costs the record its pictures, the same reason they sit
+        # after the commit step themselves.
+        if: steps.drift.outcome == 'failure'
+        run: |
+          echo "The clearing differs from the picture kept of it in" >&2
+          echo "previews/baseline/. Read this run's previews/*-drift-*.png:" >&2
+          echo "the three panels are kept | this morning | what moved." >&2
+          echo "If every moved pixel was meant, run" >&2
+          echo "  node tools/check-drift.js <url> --accept" >&2
+          echo "and commit the refreshed baseline with the change it records." >&2
+          exit 1

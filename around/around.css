@@ -769,3 +769,204 @@
 .cloud--e-1 { font-size: 12px; left: 16%; top:  9%; }
 .cloud--e-2 { font-size:  8px; left: 64%; top: 15%;
               animation-duration: 110s; animation-delay: -22s; }
+
+/* ── The east tree, met from beside it (Day 120, 2026-09-05) ────────────────
+ * The map has carried two trees since Day 24 and this face has shown neither
+ * since Day 5. Nothing was ever written to defend that — it is the Day-63 fault
+ * exactly (a thing placed early, silent, that stopped being honest once the
+ * world grew round it), one view along. The full reasoning for *which* tree and
+ * *which side* is in around/index.html beside the markup; the short of it: the
+ * map puts the west tree squarely behind the cabin from this standing point and
+ * the east tree in front of it and to the north, and north is the right of this
+ * frame (the Day-48 hills mirror).
+ *
+ * Drawn in CSS at the view's own `--s` rather than as an upscaled PNG. A sprite
+ * blown past the view's scale carries visibly chunkier pixels than the cabin
+ * beside it, and in a few-pixel medium a broken pixel grid reads as *wrong*
+ * rather than as *near*; nearness is carried by size and by ground-line instead.
+ *
+ * Native 30 x 68 — twice the front-view small tree's 15 x 33, the same tree met
+ * from about twice as close — with its foot at bottom 1% against the cabin's 6%,
+ * so it stands a stride nearer the viewer than the house. It crosses the far
+ * hills' band, which is the depth cue that actually reads (the founder's note:
+ * depth comes from one thing overlapping the BASE of another).
+ *
+ * PALETTE: sampled straight out of assets/composed/tree-small.png, value for
+ * value — crown body #97bb8e, lit #aed499, shade #6e967c, edge #5f7a79,
+ * highlight #c2e09a, bark #c49a6c / #aa7959 / #90625d. One species of tree in
+ * one clearing (Art XIII, "material truth"): the leaves that fall on the front
+ * (Day 116) are made of these same two greens.
+ *
+ * THE LIGHT HAS NO SIDE. Every band and every highlight is symmetric about the
+ * box's centre line, and the only gradient in the thing runs top-to-bottom — lit
+ * crown, body, shade beneath. That is the standing vow (light never gets an
+ * address): a low light is low from everywhere in the frame at once, so vertical
+ * weighting names no direction, while a lit flank would name one you could stand
+ * and face. The Day-118 `paint-lean` witness is what holds it, and this sprite is
+ * named in `door-paint-lean`'s body list so it is actually weighed.
+ *
+ * NO SWAY, on purpose. The front crowns bend downwind because that face meets
+ * the east wind broadside; this face looks straight up the wind's throat, which
+ * is why the door-side smoke stands straight (Day 61) and the door-side clouds
+ * hang without travelling (Day 62). A wind coming at you leans nothing sideways.
+ * The class is deliberately absent from scene.css's `tree-sway` rule.
+ *
+ * THE SEASON reaches it from scene.css: `.sprite--tree-near` is named in the
+ * same `[data-season]` filter lists as the two front crowns, so one line gilds
+ * all three and they cannot drift apart (the Day-116 shared-gild move). */
+.sprite--tree-near {
+  --s: 3;
+  --crown-body:  #97bb8e;
+  --crown-lit:   #aed499;
+  --crown-shade: #6e967c;
+  --crown-edge:  #5f7a79;
+  --crown-hi:    #c2e09a;
+  --bark:        #c49a6c;
+  --bark-mid:    #aa7959;
+  --bark-dark:   #90625d;
+
+  right: 4%;
+  bottom: 3%;                     /* nearer than the cabin's 8% ground line */
+  width:  calc(30px * var(--s));
+  height: calc(56px * var(--s));
+  z-index: 3;                     /* in front of the cabin (2): it is nearer */
+}
+
+/* The crown carries the silhouette's dark edge as four hard 1-native
+ * drop-shadows on the union of its bands — the same edge colour the PNG trees
+ * outline themselves with, and the thing that keeps a green crown legible where
+ * it crosses green grass. It sits on the inner wrapper so the outer element's
+ * `filter` stays free for the season's gild; filters nest, they don't collide. */
+.tree-near__crown {
+  position: absolute;
+  inset: 0;
+  filter:
+    drop-shadow(calc( 1px * var(--s)) 0 0 var(--crown-edge))
+    drop-shadow(calc(-1px * var(--s)) 0 0 var(--crown-edge))
+    drop-shadow(0 calc( 1px * var(--s)) 0 var(--crown-edge))
+    drop-shadow(0 calc(-1px * var(--s)) 0 var(--crown-edge));
+}
+
+/* Seven stacked bands: a narrow cap, three quick steps out to full width, a long
+ * straight-sided body, and a tuck at the foot. That is the source sprite's own
+ * silhouette at twice the size — measured off tree-small.png row by row rather
+ * than invented, which is why the crown is a capsule and not a circle. Stepped
+ * rectangles, so the shape is made of the same square pixels the cabin is. */
+.tree-near__band {
+  position: absolute;
+  display: block;
+}
+.tree-near__band--1 { left: calc(10px * var(--s)); top: calc( 0px * var(--s));
+                      width: calc(10px * var(--s)); height: calc( 3px * var(--s));
+                      background: var(--crown-lit); }
+.tree-near__band--2 { left: calc( 6px * var(--s)); top: calc( 3px * var(--s));
+                      width: calc(18px * var(--s)); height: calc( 3px * var(--s));
+                      background: var(--crown-lit); }
+.tree-near__band--3 { left: calc( 3px * var(--s)); top: calc( 6px * var(--s));
+                      width: calc(24px * var(--s)); height: calc( 4px * var(--s));
+                      background: var(--crown-lit); }
+.tree-near__band--4 { left: calc( 1px * var(--s)); top: calc(10px * var(--s));
+                      width: calc(28px * var(--s)); height: calc(16px * var(--s));
+                      background: var(--crown-body); }
+.tree-near__band--5 { left: calc( 1px * var(--s)); top: calc(26px * var(--s));
+                      width: calc(28px * var(--s)); height: calc( 6px * var(--s));
+                      background: var(--crown-shade); }
+.tree-near__band--6 { left: calc( 2px * var(--s)); top: calc(32px * var(--s));
+                      width: calc(26px * var(--s)); height: calc( 6px * var(--s));
+                      background: var(--crown-shade); }
+.tree-near__band--7 { left: calc( 6px * var(--s)); top: calc(38px * var(--s));
+                      width: calc(18px * var(--s)); height: calc( 4px * var(--s));
+                      background: var(--crown-shade); }
+
+/* Mottle. Flat bands read as a bucket; what says *leaves* at this size is that
+ * the tones interrupt each other — body-green breaking into the lit crown,
+ * lit-green breaking into the shade below, exactly as the PNG's rows do.
+ *
+ * EVERY fleck is placed as a mirrored pair (a span plus one box-shadow copy of
+ * itself) about the box's centre line at x=15 native, or else centred on it. The
+ * only gradient in this whole sprite runs top to bottom. That is the vow: a low
+ * light is low from everywhere in the frame at once, so vertical weighting names
+ * no direction, while a lit flank would name one you could stand and face. It is
+ * also what keeps the Day-118 `paint-lean` witness honestly green rather than
+ * green by not being looked at. */
+.tree-near__hi {
+  position: absolute;
+  display: block;
+  background: var(--crown-hi);
+}
+/* The one patch of the brightest tone, centred on the crown's own axis. */
+.tree-near__hi--1 { left: calc(12px * var(--s)); top: calc( 5px * var(--s));
+                    width: calc( 6px * var(--s)); height: calc( 5px * var(--s)); }
+
+.tree-near__mottle { position: absolute; display: block; }
+/* Lit-green straddling the crown's lit/body seam at y=10, so that boundary
+ * reads as leaves interrupting each other rather than as a ruled line. */
+.tree-near__mottle--a {
+  left: calc( 3px * var(--s)); top: calc(10px * var(--s));
+  width: calc( 3px * var(--s)); height: calc( 3px * var(--s));
+  background: var(--crown-lit);
+  box-shadow:
+    calc(21px * var(--s)) 0 0 var(--crown-lit),
+    calc( 5px * var(--s)) calc( 2px * var(--s)) 0 var(--crown-lit),
+    calc(16px * var(--s)) calc( 2px * var(--s)) 0 var(--crown-lit),
+    calc(10px * var(--s)) calc(-1px * var(--s)) 0 var(--crown-lit);
+}
+/* Body-green straddling the body/shade seam at y=26, and once more low down,
+ * so the crown's underside is shaded without going flat. */
+.tree-near__mottle--b {
+  left: calc( 4px * var(--s)); top: calc(25px * var(--s));
+  width: calc( 3px * var(--s)); height: calc( 3px * var(--s));
+  background: var(--crown-body);
+  box-shadow:
+    calc(19px * var(--s)) 0 0 var(--crown-body),
+    calc( 7px * var(--s)) calc( 3px * var(--s)) 0 var(--crown-body),
+    calc(12px * var(--s)) calc( 3px * var(--s)) 0 var(--crown-body),
+    calc( 3px * var(--s)) calc( 8px * var(--s)) 0 var(--crown-body),
+    calc(16px * var(--s)) calc( 8px * var(--s)) 0 var(--crown-body);
+}
+
+/* Bark: the source sprite's own trunk at twice the size and the same third of
+ * the crown's height — a mid band at the top where the crown's shade sits on it,
+ * plain bark below, and a 1-native dark column inset at each side (in the PNG
+ * those columns ARE the outline, so they belong inside the trunk's width rather
+ * than around it). */
+.tree-near__trunk {
+  position: absolute;
+  display: block;
+  left: calc(10px * var(--s));
+  top: calc(42px * var(--s));
+  width: calc(10px * var(--s));
+  height: calc(12px * var(--s));
+  background: linear-gradient(
+    to bottom,
+    var(--bark-mid) 0,
+    var(--bark-mid) calc(3px * var(--s)),
+    var(--bark)     calc(3px * var(--s)),
+    var(--bark)     100%
+  );
+  box-shadow:
+    inset calc( 1px * var(--s)) 0 0 var(--bark-dark),
+    inset calc(-1px * var(--s)) 0 0 var(--bark-dark);
+}
+/* The flare where the trunk meets the grass — the source widens by two pixels
+ * for one row before it stops, which is what keeps a trunk from reading as a
+ * post driven into the ground. */
+.tree-near__root {
+  position: absolute;
+  display: block;
+  left: calc( 8px * var(--s));
+  top: calc(54px * var(--s));
+  width: calc(14px * var(--s));
+  height: calc( 2px * var(--s));
+  background: var(--bark);
+  box-shadow:
+    inset calc( 1px * var(--s)) 0 0 var(--bark-dark),
+    inset calc(-1px * var(--s)) 0 0 var(--bark-dark);
+}
+
+/* One line, so it is kept beside the component rather than in the file's main
+ * 3x->2x block above: everything here is native-px x var(--s), so the whole tree
+ * rebases from this single declaration. */
+@media (max-width: 599px) {
+  .sprite--tree-near { --s: 2; }
+}

@@ -343,6 +343,16 @@
       selector: '.sprite--tree',
       reads: 'how solidly the larger crown is drawn',
     },
+    /* Day 120. The east tree is drawn a second time on the door face, from close
+     * beside it, and the hush is owed to it there as much as here — a crown that
+     * vanished from one face in January would break the vow whichever face you
+     * were standing on. The Day-118 lesson one wheel out: a body drawn some later
+     * day and never named in a probe is watched by nothing. */
+    'door-tree-crown': {
+      view: 'around', kind: 'visible-count',
+      selector: '.sprite--tree-near',
+      reads: 'whether the near tree is still standing on the door side',
+    },
     'candle-wax': {
       view: 'inside', kind: 'height',
       selector: '.mantle-item--candle',
@@ -492,7 +502,8 @@
     },
     'door-paint-lean': {
       view: 'around', kind: 'paint-lean', selector: '.scene',
-      of: ['.side-cabin', '.door-boots', '.door-plant', '.around-path'],
+      of: ['.side-cabin', '.door-boots', '.door-plant', '.around-path',
+           '.sprite--tree-near'],
       reads: 'the same agreement asked of the bodies standing on the other face of the house',
     },
 
@@ -652,7 +663,10 @@
         'single thing: no body here is symmetric, and one of them reads a quarter of the way to a lean ' +
         'with nothing at all wrong with it, so what is held is only the AGREEMENT among them. A lean ' +
         'painted into exactly one small body, and nowhere else, would move that reading by very little ' +
-        'and could sit under the ceiling. So could a lean gentler than the fifth of a shade the ceiling ' +
+        'and could sit under the ceiling — which stopped being a supposition on the hundred and twentieth ' +
+        'morning, when a whole side of the new tree on the door face was washed a third of a shade ' +
+        'brighter and the reading did not move off sixteen, the long wall behind it carrying five times ' +
+        'the tree\u2019s area. So could a lean gentler than the fifth of a shade the ceiling ' +
         'was measured against. And every one of these is asked of the two outdoor faces at the four ' +
         'seasons, at one width, of the bodies named on the list — a body drawn some later day and never ' +
         'added to it is weighed by nothing. (A body that IS on the list and can no longer be found turns ' +
@@ -829,6 +843,11 @@
       probe: 'tree-crowns', axis: 'season', at: { tod: 'day' }, vow: 'hush',
       floor: 2, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'both crowns still standing in every month of the year — “never a bare branch”',
+    },
+    {
+      probe: 'door-tree-crown', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the near tree on the door side standing in every month of the year too — the hush belongs to whichever face you are standing on',
     },
     {
       probe: 'tree-crown-fade', axis: 'season', at: { tod: 'day' }, vow: 'hush',
@@ -1020,7 +1039,7 @@
     {
       probe: 'door-paint-lean', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
       ceiling: 60, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'the same asked of the door side’s own bodies — the long wall, the boots, the pot and the path stones — because the vow is “no place in any frame”',
+      guards: 'the same asked of the door side’s own bodies — the long wall, the boots, the pot, the path stones and the near tree — because the vow is “no place in any frame”',
     },
 
     /* Day 111. The two instants straddle a real edge — on the shortest day of

@@ -300,6 +300,72 @@
         <span class="firefly firefly--e-1"></span>
         <span class="firefly firefly--e-2"></span>
       </div>
+
+      <!-- The east tree, seen from beside it (Day 120, 2026-09-05). The map has
+           said two trees stand in this clearing since Day 24 — one medium to the
+           WEST, one small to the EAST — and this face, drawn on Day 5, has never
+           shown either. Nothing was ever written to defend that; it is the trees
+           standing dead in the wind again (Day 63), one view along.
+
+           Which of the two this is, and why only one, is the map's answer and not
+           a composition choice (CLAUDE.md "One geometry, every view — and the map
+           is the truth"). The door side is the EAST face seen from the east
+           looking west, so north falls on the right (the Day-48 hills mirror).
+           On the plan the west tree sits at x 8-23%, y 20-40% and the east tree
+           at x 82-92%, y 7-20%, with the cabin's footprint at x 37-63%,
+           y 15-67%:
+
+             * the WEST tree is further from this camera than the cabin AND lies
+               at a northing the cabin's own body covers — so from here it is
+               squarely BEHIND the house, and drawing it would be inventing a
+               tree the wall is standing in front of;
+             * the EAST tree is nearer to this camera than the cabin and further
+               north than the cabin's north wall — so it stands to the RIGHT of
+               the house and in FRONT of it in depth, which is exactly where it
+               is drawn.
+
+           Hence one tree, on the right, with its foot BELOW the cabin's ground
+           line (bottom 1% against the cabin's 6%) and drawn at twice its
+           front-view size — the small east tree met from close by rather than
+           across the yard. It overlaps the far hills' band, which is the only
+           depth cue that matters here (the founder's note: depth comes from one
+           thing overlapping the BASE of another).
+
+           Drawn in CSS at the view's own scale rather than as an upscaled PNG,
+           because a sprite scaled past `--s` would carry visibly chunkier pixels
+           than the cabin beside it, and a broken pixel grid reads as wrong
+           rather than as near. The palette is the two front trees' own, sampled
+           from tree-small.png — same crown, same bark, so this is one species of
+           tree in one clearing (Art XIII / "material truth").
+
+           It does NOT sway. The crowns bend downwind on the front because that
+           face meets the east wind broadside; this face looks straight up the
+           wind's throat, which is why the door-side smoke stands straight (Day
+           61) and the door-side clouds hang without travelling (Day 62). A wind
+           coming at you leans nothing left or right. Same wind, told true from
+           the face that happens to look down it.
+
+           The season reaches it through scene.css's own tree rules — this class
+           is named in the same `data-season` filter lists as `.sprite--tree` and
+           `.sprite--tree-small`, so one line gilds all three crowns and they can
+           never drift apart (the Day-116 shared-gild move). -->
+      <div class="sprite sprite--tree-near" role="img"
+           aria-label="The small tree from the clearing's north-east corner, seen from close beside it: a broad green crown over a short trunk, standing to the right of the cabin.">
+        <span class="tree-near__crown" aria-hidden="true">
+          <span class="tree-near__band tree-near__band--1"></span>
+          <span class="tree-near__band tree-near__band--2"></span>
+          <span class="tree-near__band tree-near__band--3"></span>
+          <span class="tree-near__band tree-near__band--4"></span>
+          <span class="tree-near__band tree-near__band--5"></span>
+          <span class="tree-near__band tree-near__band--6"></span>
+          <span class="tree-near__band tree-near__band--7"></span>
+          <span class="tree-near__hi tree-near__hi--1"></span>
+          <span class="tree-near__mottle tree-near__mottle--a"></span>
+          <span class="tree-near__mottle tree-near__mottle--b"></span>
+        </span>
+        <span class="tree-near__trunk" aria-hidden="true"></span>
+        <span class="tree-near__root" aria-hidden="true"></span>
+      </div>
     </div>
   </main>
 

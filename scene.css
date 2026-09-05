@@ -876,8 +876,15 @@
  * Default (no data-season / JS off) is no filter — the plain green trees the place
  * has always had, so nothing is lost when the script doesn't run. The filter and
  * the wind-sway `transform` above are independent channels and compose freely. */
+/* `.sprite--tree-near` (around/around.css, Day 120) is the east tree drawn a
+ * second time on the door face, from close beside it. It is named in every rule
+ * below so all three crowns take the year off one line and can never drift apart
+ * — the same reason the leaf reads `--crown-gild` instead of copying it. It is
+ * deliberately absent from the sway rules above: that face looks straight up the
+ * wind's throat, where a wind leans nothing sideways. */
 .sprite--tree,
-.sprite--tree-small {
+.sprite--tree-small,
+.sprite--tree-near {
   transition: filter 1.6s ease;
 }
 /* The autumn gild lives in ONE place, on the scene, because two things wear it:
@@ -892,15 +899,18 @@
   --crown-gild: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
 }
 .scene[data-season="autumn"] .sprite--tree,
-.scene[data-season="autumn"] .sprite--tree-small {
+.scene[data-season="autumn"] .sprite--tree-small,
+.scene[data-season="autumn"] .sprite--tree-near {
   filter: var(--crown-gild);
 }
 .scene[data-season="winter"] .sprite--tree,
-.scene[data-season="winter"] .sprite--tree-small {
+.scene[data-season="winter"] .sprite--tree-small,
+.scene[data-season="winter"] .sprite--tree-near {
   filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
 }
 .scene[data-season="spring"] .sprite--tree,
-.scene[data-season="spring"] .sprite--tree-small {
+.scene[data-season="spring"] .sprite--tree-small,
+.scene[data-season="spring"] .sprite--tree-near {
   filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
 }
 /* summer — no rule on purpose: the identity, the green the trees were born in. */

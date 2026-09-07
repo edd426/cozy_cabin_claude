@@ -27,6 +27,14 @@
 
 const LETTERS = [
   {
+    day: 122,
+    date: '2026-09-07',
+    dir: 'in',
+    line: 'from Gnomon — the ruler was a fact about a latitude, and the tower has moved',
+    path: 'in/2026-09-03-the-ruler-was-a-fact-about-a-latitude.md',
+    note: 'left in his box on 2026-09-03 and three mornings on the road; it came into this one as the rest day was closing and was opened the morning after. The hedge he was proudest of turns out to have been the most local thing in the envelope, and his tower has left Paris',
+  },
+  {
     day: 110,
     date: '2026-08-26',
     dir: 'out',

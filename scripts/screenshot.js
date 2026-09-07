@@ -59,7 +59,7 @@
 //       the clearing moves (the flag lifts, the smoke leans downwind, the crowns
 //       bend, the fireflies blink and drift) and the gallery/manifest stills swear
 //       none of it (messages/2026-07-17 "see your own work", motion slice). This
-//       mode captures the home .scene SIX times a beat apart, then composites the
+//       mode captures a view's .scene SIX times a beat apart, then composites the
 //       frames shoulder-to-shoulder into one page — a strip you READ left-to-right,
 //       the way a flip-book or a galloping-horse plate does, so the eye supplies
 //       the motion that lives in the gaps between frames. A film would need a
@@ -89,6 +89,14 @@
 //       redrawn at an integer scale — because a 6px bee inside a 375px frame is
 //       below the legibility floor CLAUDE.md's founder note sets ("if a thing
 //       can't read at its size, make it bigger").
+//
+//       A clip may also carry `view`, a path relative to BASE_URL, exactly as a
+//       GALLERY_STATES entry may (Day 122); it defaults to MOTION_VIEW, the home
+//       root, and the strip's title names whichever face it stood on. The first
+//       clip to leave home is `leaves-door`, and the reason is the reason the
+//       whole mode exists: the door side's leaf-fall makes a claim ABOUT the
+//       front's (that it drifts and this one does not), and a strip of one face
+//       is structurally unable to carry a claim about the other.
 //
 //   screenshot.js --motion-cross BASE_URL OUT_DIR DATE_TAG SHA_SHORT
 //       Cross-view motion strip. The --motion strips read across TIME within one
@@ -312,7 +320,13 @@ const WASH_SETTLE_MS = 2000;           // the hour/season washes transition over
 // the label that goes under its cell. `crop` is optional: `around` is the
 // selectors whose union the window is cut to, `margin` the native px of air
 // left round them, `scale` the integer redraw factor.
+// A clip may carry `view` — a path relative to BASE_URL — the way a
+// GALLERY_STATES entry may (Day 89); MOTION_VIEW is the default. Added Day 122
+// for the door side's own leaf-fall, whose whole claim is that it differs from
+// the front's, and which therefore cannot be told on the front's own strip.
 const MOTION_VIEW = '';                 // home root ('' resolves to BASE_URL)
+const MOTION_AROUND_VIEW = 'around/';
+const MOTION_VIEW_LABEL = { '': 'home', 'around/': 'door side' };
 const MOTION_FRAMES = 6;
 const MOTION_INTERVAL_MS = 900;
 const MOTION_SEEK_SETTLE_MS = 120;      // two frames' grace for the pinned paint
@@ -377,6 +391,35 @@ const MOTION_CLIPS = [
       ],
     },
     crop: { around: ['.sprite--tree-left', '.leaf--1', '.leaf--2'], margin: 6, scale: 3 },
+  },
+  // Day 122 (2026-09-07) — the same fall on the door side (around.css
+  // `leaf-fall-e-1`…`-3`), and the first clip in this mode to leave the home
+  // view. It exists because of what it is FOR: the front leaf finishes further
+  // right than it began, because that face takes the one east wind broadside;
+  // this one finishes in the very column it let go from, because this face looks
+  // straight up that wind's throat. That difference is the day's whole claim, and
+  // a strip of the front can no more show it than a photograph of straight smoke
+  // can show that the smoke elsewhere is leaning (Day 75). It cannot be witnessed
+  // either — every check on the almanac reads a count, an opacity or a size, and
+  // a count cannot see a path. Read this strip beside `-motion-leaves`: same six
+  // fractions of a round, same crop scale, one drifting and one not.
+  {
+    name: 'leaves-door',
+    view: MOTION_AROUND_VIEW,
+    tod: 'day',
+    season: 'autumn',
+    seek: {
+      animation: 'leaf-fall-e-1',
+      at: [
+        { frac: 0.00, label: 'in the crown' },
+        { frac: 0.20, label: 'let go' },
+        { frac: 0.42, label: 'swung back' },
+        { frac: 0.64, label: 'swung out' },
+        { frac: 0.84, label: 'nearly down' },
+        { frac: 0.93, label: 'in the grass' },
+      ],
+    },
+    crop: { around: ['.sprite--tree-near', '.leaf--e-1', '.leaf--e-2'], margin: 6, scale: 3 },
   },
 ];
 
@@ -695,6 +738,7 @@ async function measureCropWindow(page, around, margin) {
 // integer-scaled with image-rendering: pixelated) and tiny movers like the
 // fireflies stay legible rather than being downscaled away.
 async function captureMotion(browser, fullUrl, outPath, clip) {
+  const viewLabel = MOTION_VIEW_LABEL[clip.view || MOTION_VIEW] || (clip.view || 'home');
   const shotContext = await browser.newContext({
     viewport: NARROW_VIEWPORT,
     deviceScaleFactor: 1,
@@ -755,7 +799,7 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
         labels.push(`t=${(at.atMs / 1000).toFixed(1)}s · ${phase.label}`);
       }
       const roundS = (durationMs / 1000).toFixed(0);
-      title = `motion — home / ${clip.name} · ${phases.length} moments aimed at across one ${roundS}s ${clip.seek.animation} round (read left → right)`;
+      title = `motion — ${viewLabel} / ${clip.name} · ${phases.length} moments aimed at across one ${roundS}s ${clip.seek.animation} round (read left → right)`;
     } else {
       // Wall-clock clip: the perpetual animations run on their own clocks; sample
       // the scene box across one span of them.
@@ -767,7 +811,7 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
         if (f < MOTION_FRAMES - 1) await page.waitForTimeout(MOTION_INTERVAL_MS);
       }
       const spanS = ((MOTION_FRAMES - 1) * MOTION_INTERVAL_MS / 1000).toFixed(1);
-      title = `motion — home / ${clip.name} · ${MOTION_FRAMES} frames over ${spanS}s (read left → right)`;
+      title = `motion — ${viewLabel} / ${clip.name} · ${MOTION_FRAMES} frames over ${spanS}s (read left → right)`;
       labels = frames.map((_, i) => `t=${((i * MOTION_INTERVAL_MS) / 1000).toFixed(1)}s`);
     }
   } finally {
@@ -791,11 +835,11 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
 async function motionRun(baseUrl, outDir, dateTag, shaShort) {
   const base = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
   fs.mkdirSync(outDir, { recursive: true });
-  const fullUrl = new URL(MOTION_VIEW, base).toString();
 
   const browser = await chromium.launch(launchOpts());
   try {
     for (const clip of MOTION_CLIPS) {
+      const fullUrl = new URL(clip.view || MOTION_VIEW, base).toString();
       const outPath = path.join(outDir, `${dateTag}-${shaShort}-motion-${clip.name}.png`);
       await captureMotion(browser, fullUrl, outPath, clip);
     }

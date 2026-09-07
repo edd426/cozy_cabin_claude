@@ -186,6 +186,14 @@ const FRAMES = [
   /* the door side at midsummer dusk: the lantern kindled, the gold wash, the
    * hills on their own side of that frame, the stray sparks, the pot. */
   { name: 'around-summer-dusk', view: 'around/', clock: '2026-06-15T20:00' },
+  /* the door side in mid-autumn (Day 122). The frame above stands in the home
+   * season, where every season-gated layer on this face is at its identity: the
+   * near tree ungilded and its leaves not falling at all. So until today nothing
+   * kept a picture of this face wearing a year, and the layer added this morning
+   * would have been invisible to the one witness here that believes nothing. Same
+   * instant as `home-autumn-dawn` shifted to the plain middle of the day, which
+   * is where the fall reads without the dawn wash over it. */
+  { name: 'around-autumn-day', view: 'around/', clock: '2026-10-15T12:00' },
   /* the room in deep winter: the taller fire, the floor pool at its longest,
    * the two cast shadows, the lit breast and the mantle's shade, the sprig
    * drawn in, the window's band hushed. */

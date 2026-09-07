@@ -968,5 +968,107 @@
  * 3x->2x block above: everything here is native-px x var(--s), so the whole tree
  * rebases from this single declaration. */
 @media (max-width: 599px) {
-  .sprite--tree-near { --s: 2; }
+  .sprite--tree-near,
+  .sprite--leaffall--e { --s: 2; }
+}
+
+/* ── Leaves off the east tree (Day 122, 2026-09-07) ─────────────────────────
+ * The full argument is in around/index.html beside the markup. The short of it:
+ * Day 116 gave autumn its gesture on the front and wrote in the margin that the
+ * layer was front-view-only because "the door side has no trees"; Day 120 put a
+ * tree here and nobody went back for the sentence. That is the Day-63 rot in a
+ * reason rather than in a thing — a justification that curdles because the world
+ * grew next to it.
+ *
+ * SHARED, NOT COPIED. `.sprite--leaffall` and `.leaf` come from scene.css, which
+ * this page loads: the season gate (`display` on `[data-season="autumn"]`), the
+ * crown greens, `--crown-gild` and the leaf's one half-step past it, the linear
+ * timing and the infinite count are all the front's own and are not restated
+ * here. What is this view's: the stacking, the size, and the three falls. Retune
+ * the gild and every leaf in the clearing turns with every crown, on both faces
+ * (the Day-116 shared-gild move, and the Day-97 shared-reckoning one before it).
+ *
+ * NO NET DRIFT. Every keyframe set below finishes in the same column it starts
+ * in. On the front a leaf ends further right because that face takes the one
+ * east wind broadside; this face looks straight up its throat, where a wind
+ * leans nothing sideways — the same silence the door-side smoke keeps (Day 61),
+ * the door-side clouds keep (Day 62) and this tree's own stillness keeps (Day
+ * 120). The swing across each fall is the leaf's own and stays: a thing in free
+ * fall is held by nothing, so it may cross back over itself where the flag and
+ * the crowns may not.
+ *
+ * MEASURED, NOT GUESSED (Day 108). The crown's box runs x 77.4-94.9 / y 52.0-84.7
+ * of the frame at 375, x 78.2-95.0 / y 53.9-85.2 at 390, and x 82.4-95.5 /
+ * y 63.7-88.1 at 900 — the tree is native-px-scaled inside a `%`-sized frame, so
+ * it covers a different fraction of each. Every start below sits inside the
+ * overlap of all three (x 83-94, y 74-80) so a leaf is always in the canopy when
+ * it lets go, and every settle is at 95.5-96.5%, which is grass at every width
+ * (the trunk's foot is 94.0 / 94.1 / 95.1 and the ground band runs to 98.5). All
+ * placement is in `%` of the frame, so nothing needs a breakpoint rebase. */
+.sprite--leaffall--e {
+  --s: 3;                  /* the tree's own scale — kept in step in the media
+                              query at the foot of the tree's block above */
+  z-index: 3;              /* the near tree's plane: in front of the cabin (2) */
+}
+
+/* 3x2 of THIS view's pixels rather than 3x2 fixed screen px, which is what the
+ * front leaf is. The whole tree beside it is drawn native-px x var(--s), so a
+ * leaf off it that ignored `--s` would sit off the grid the crown is made of at
+ * one of the two layouts — the Day-120 rule that a broken pixel grid reads as
+ * *wrong* rather than as *near*, one level down. On a phone that comes out at
+ * 6x4, exactly twice the front leaf, which is the ratio the tree itself keeps. */
+.leaf--e-1, .leaf--e-2, .leaf--e-3 {
+  width:  calc(3px * var(--s));
+  height: calc(2px * var(--s));
+}
+
+/* Two of the crown's body green and one of its lit green, so three leaves read
+ * as three leaves that turned different amounts rather than one swatch stamped
+ * out. Both tones are the tree PNG's own, the same pair the front leaves use. */
+.leaf--e-1, .leaf--e-3 { background: #97bb8e; }
+.leaf--e-2             { background: #aed499; }
+
+/* Long periods, none of them the front's and none of them each other's, with
+ * negative delays spreading the three around their cycles so the fall is always
+ * somewhere on this face and the three never come down together. */
+.leaf--e-1 { animation-name: leaf-fall-e-1; animation-duration: 12s;   animation-delay: 0s;   }
+.leaf--e-2 { animation-name: leaf-fall-e-2; animation-duration: 15.5s; animation-delay: -5s;  }
+.leaf--e-3 { animation-name: leaf-fall-e-3; animation-duration: 17s;   animation-delay: -11s; }
+
+/* Each fall swings and returns; the last frames cut the leaf out at the grass
+ * and put it back, unseen, in the crown, so 0% and 100% are the same in-canopy
+ * rest. Note the `left` at 0% and at 90% (the settle) is the same number in all
+ * three — that identity IS the claim this layer makes about the wind. */
+@keyframes leaf-fall-e-1 {
+  0%    { top: 76%;   left: 85.0%; opacity: 1; }
+  20%   { top: 80%;   left: 87.4%; }
+  42%   { top: 85%;   left: 83.4%; }
+  64%   { top: 89%;   left: 87.0%; }
+  84%   { top: 93%;   left: 83.8%; }
+  93%   { top: 95.5%; left: 85.0%; opacity: 1; }
+  98%   { top: 96.5%; left: 85.0%; opacity: 0; }
+  98.5% { top: 76%;   left: 85.0%; opacity: 0; }
+  100%  { top: 76%;   left: 85.0%; opacity: 1; }
+}
+@keyframes leaf-fall-e-2 {
+  0%    { top: 80%;   left: 90.0%; opacity: 1; }
+  24%   { top: 84%;   left: 87.2%; }
+  48%   { top: 88%;   left: 91.8%; }
+  70%   { top: 92%;   left: 88.0%; }
+  86%   { top: 94.5%; left: 91.2%; }
+  93%   { top: 96%;   left: 90.0%; opacity: 1; }
+  98%   { top: 96.8%; left: 90.0%; opacity: 0; }
+  98.5% { top: 80%;   left: 90.0%; opacity: 0; }
+  100%  { top: 80%;   left: 90.0%; opacity: 1; }
+}
+@keyframes leaf-fall-e-3 {
+  0%    { top: 74%;   left: 92.6%; opacity: 1; }
+  18%   { top: 79%;   left: 89.6%; }
+  40%   { top: 84%;   left: 93.6%; }
+  60%   { top: 88%;   left: 90.2%; }
+  80%   { top: 92%;   left: 93.8%; }
+  93%   { top: 95%;   left: 92.6%; opacity: 1; }
+  98%   { top: 96.2%; left: 92.6%; opacity: 0; }
+  98.5% { top: 74%;   left: 92.6%; opacity: 0; }
+  100%  { top: 74%;   left: 92.6%; opacity: 1; }
 }

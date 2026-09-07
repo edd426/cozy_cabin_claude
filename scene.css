@@ -959,9 +959,18 @@
  * further RIGHT than it began, the way the flag streams, the smoke leans, the
  * clouds ride and the crowns bend. And it drifts further, relative to how far it
  * falls, than anything else here moves — a leaf is the loosest thing this
- * clearing has ever had, lighter than cloth, lighter than smoke. Front-view-only
- * by nature, exactly like the trees it comes off: the door side has no trees, and
- * looks end-on up this wind anyway (RULES Art XIII).
+ * clearing has ever had, lighter than cloth, lighter than smoke.
+ *
+ * ON THE OTHER FACE (mended Day 122). This note used to end "front-view-only by
+ * nature … the door side has no trees, and looks end-on up this wind anyway."
+ * Four days after it was written a tree arrived on the door side (Day 120), and
+ * the first clause stopped being true while nobody was reading it — the Day-63
+ * rot, in a reason rather than in a thing. The layer runs on both faces now:
+ * `.sprite--leaffall--e` in around/around.css reuses this container and this
+ * `.leaf` base, so the season gate and the crown's colour are shared and cannot
+ * drift apart. The second clause still holds and is what shapes it — that face
+ * looks straight up the wind's throat, so a leaf there keeps its own swing and
+ * finishes in the column it let go from, with no drift at all (RULES Art XIII).
  *
  * Positioned and animated entirely in `%` of the frame, so the whole fall scales
  * across the 600px breakpoint with no rebase — the leaves' 3×2px blocks stay

@@ -119,7 +119,8 @@
         'the chimney a touch fuller than the summer thread — the first fires',
         'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
         'the pot’s bloom wheel slowing out of the summer toward its middling pace, each bloom holding every state a little longer than it did in August',
-        'leaves coming down off the two crowns — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one east wind carries them the way it leans the smoke',
+        'leaves coming down off the two crowns out front — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one east wind carries them the way it leans the smoke',
+        'and three more off the near tree on the door side, the same leaves off the same crown, keeping the same swing and finishing in the very column each let go from — that face looks straight up the wind’s throat, and a wind coming at you leans nothing sideways',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
         'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
       ],
@@ -294,7 +295,15 @@
     'falling-leaves': {
       view: 'home', kind: 'visible-count',
       selector: '.sprite--leaffall .leaf',
-      reads: 'how many leaves are coming down off the two crowns',
+      reads: 'how many leaves are coming down off the two crowns out front',
+    },
+    /* Day 122. The door side's own fall, off the near tree. Same container
+     * class and same `.leaf` base as the front's, so the season gate is one
+     * line for both faces; only the falls are this view's. */
+    'door-falling-leaves': {
+      view: 'around', kind: 'visible-count',
+      selector: '.sprite--leaffall--e .leaf',
+      reads: 'how many leaves are coming down off the near tree on the door side',
     },
     'firefly-layer': {
       view: 'home', kind: 'opacity',
@@ -734,6 +743,11 @@
       probe: 'falling-leaves', axis: 'tod', at: { season: 'autumn' },
       expect: { dawn: 4, day: 4, dusk: 4, night: 4 },
       guards: '“only the leaves still coming down in it” — the fall runs at every hour, because a leaf lets go whenever it lets go; it is the season’s gesture and not a welcome for any part of the day',
+    },
+    {
+      probe: 'door-falling-leaves', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 3, winter: 0, spring: 0 },
+      guards: '“three more off the near tree on the door side” in autumn, and nothing falling on that face in the other three seasons. There is deliberately no second hour check here: both faces are opened by the one `[data-season="autumn"]` rule on the shared container, so asking the door side about the four bands as well would be putting the same line on the stand twice. What no check on this page holds is the thing that makes this face’s fall its own — that each leaf finishes in the column it let go from, where a front leaf finishes further right. A count cannot see a path.',
     },
     {
       probe: 'firefly-layer', axis: 'season', at: { tod: 'night' },

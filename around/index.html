@@ -366,6 +366,48 @@
         <span class="tree-near__trunk" aria-hidden="true"></span>
         <span class="tree-near__root" aria-hidden="true"></span>
       </div>
+
+      <!-- Leaves off the east tree (Day 122, 2026-09-07). Autumn's gesture came
+           to the front on Day 116, and the note written beside it that morning
+           said the layer was "front-view-only by nature … the door side has no
+           trees, and looks end-on up this wind anyway." Four days later a tree
+           arrived on this face. The first half of that sentence went stale
+           exactly the way "a cloud has no heading" went stale on Day 63 — true
+           the morning it was written, quietly false ever since the world grew
+           round it. The second half is still true, and it is what decides the
+           whole shape of this layer.
+
+           SAME LAYER, NOT A SECOND ONE. The container reuses `.sprite--leaffall`
+           from scene.css, so the season gate that opens the fall on the front
+           opens it here off the same line; only the stacking and the falls
+           themselves are this view's (`--e`). The leaves reuse `.leaf`, so the
+           crown greens and `--crown-gild` are the shared ones — a leaf on this
+           face cannot drift to a colour the front's leaves aren't wearing.
+
+           NO NET DRIFT, which is the whole argument. On the front every leaf
+           finishes further right than it began, because that face meets the one
+           east wind broadside. This face looks straight up the wind's throat, so
+           there is nothing to lean: the door-side smoke stands straight (Day
+           61), the clouds hang without travelling (Day 62), the near tree does
+           not sway (Day 120), and a leaf here ends in the column it let go from.
+           What it keeps is its OWN swing — a falling leaf planes and stalls and
+           planes back whether or not any wind is on it, because a thing in free
+           fall is held by nothing (Day 116). So the swing crosses and the drift
+           is nought: one wind, told true from the face that looks down it.
+
+           TWICE THE SIZE, for the same reason the tree is: this is the same leaf
+           met from about twice as close, so its block is 6x4 where the front's is
+           3x2. Three of them off one crown where the front has four off two.
+
+           The layer sits at the tree's own z-index (3) rather than the front
+           layer's 1, because this tree stands in FRONT of the cabin and what
+           falls off it does too; and it comes after the tree in DOM order, so a
+           leaf paints over the crown it is leaving. -->
+      <div class="sprite sprite--leaffall sprite--leaffall--e" aria-hidden="true">
+        <span class="leaf leaf--e-1"></span>
+        <span class="leaf leaf--e-2"></span>
+        <span class="leaf leaf--e-3"></span>
+      </div>
     </div>
   </main>
 

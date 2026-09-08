@@ -113,6 +113,33 @@
  * compared and their different colours never enter; what survives the average is
  * only what they agree about.
  *
+ * Day 123 (2026-09-08): an eighth kind, `exemption`, and it is the first that
+ * measures a claim of the page's own rather than a thing of the clearing's. The
+ * three sweeps subtract a hand-written list of the six things here that lean on
+ * purpose, each with a reason beside it — and for twenty mornings nothing
+ * anywhere went back to ask whether any of those reasons was still so. That is
+ * not a small hole: a guard of the form "everything, minus these" is exactly as
+ * honest as its minus, and a list is the one part of a witness that rots
+ * silently, because a sentence goes on reading true long after the thing it is
+ * about has changed.
+ *
+ * So every entry on that list now carries the property its reason names, and
+ * this kind reads them back off the yard in the same ten states the sweeps
+ * already open: is the thing still findable in the view it claims, does its
+ * lean still repeat, does the bar still sit on the centre of its pane, does the
+ * lamp still throw no side, do the two indoor shadows still point apart. The
+ * reading is the count of exceptions that have lapsed, so a ceiling of nought
+ * is the whole list still standing on its reasons. An entry with no test at all
+ * counts as lapsed — an exemption nobody can check is the thing this was built
+ * against, and waving it through would be the hole one layer further in.
+ *
+ * What it cannot do is read the reason. It holds each exception to a property,
+ * and a property can hold perfectly while the reason for excusing the thing is
+ * the wrong one; an exception that never belonged on the list, and has been
+ * true to its own test since the morning it was written, reads green forever.
+ * It catches an exception that has gone off. It does not catch one that was
+ * wrong to begin with. That is in the vow's blind note beside it.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -358,6 +385,246 @@ function measureInPage({ probes, forDate }) {
         }
       }
       readings[name] = total;
+      continue;
+    }
+
+    // Day 123. The sweep above is only as honest as the list it subtracts, and
+    // until this morning nothing anywhere asked whether the reasons on that
+    // list were still so. This reads them back off the yard. For every
+    // exemption that claims to live in this view: is it still findable here,
+    // and does it still have the property its written reason names? The
+    // reading is the count of the ones that have lapsed, so nought is the
+    // whole list standing.
+    //
+    // Three ways to lapse, and all three are the same fault wearing different
+    // clothes — a sentence going on excusing something after it stopped being
+    // true of it:
+    //   the selector finds nothing in a view the entry claims (a stale name);
+    //   the entry carries no test at all (an exemption nobody can check is the
+    //     very thing this was built against, so it counts as lapsed rather
+    //     than being waved through);
+    //   the thing is there and no longer holds what the reason says of it.
+    //
+    // Failure detail goes on window.__cabinExemptionNotes for the Node side to
+    // print — the reading is a count, and a count tells you how many places to
+    // go and look but never which.
+    if (probe.kind === 'exemption') {
+      const view = probe.view;
+      const allow = probe.allow || [];
+      const notes = [];
+
+      // Split a computed background-image into whole gradient functions,
+      // balancing parens — rgb(…) and calc(…) both carry commas, so a naive
+      // split on commas cuts a gradient in half.
+      const gradientsOf = (image) => {
+        if (!image || image === 'none') return [];
+        const out = [];
+        const head = /(?:repeating-)?(?:linear|radial|conic)-gradient\(/g;
+        let m;
+        while ((m = head.exec(image))) {
+          let depth = 0, j = m.index + m[0].length - 1;
+          for (; j < image.length; j++) {
+            if (image[j] === '(') depth++;
+            else if (image[j] === ')') { depth--; if (depth === 0) { j++; break; } }
+          }
+          out.push(image.slice(m.index, j));
+          head.lastIndex = j;
+        }
+        return out;
+      };
+
+      // One gradient's own head, same reading as `sideways` above.
+      const headOf = (grad) => {
+        const open = grad.indexOf('(');
+        const comma = grad.indexOf(',');
+        const arg = grad.slice(open + 1, comma > open ? comma : grad.length - 1);
+        return { kind: grad.slice(0, open), arg: arg.trim().toLowerCase() };
+      };
+      const leans = (grad) => sideways(grad) > 0;
+
+      // Which way, for a pair that must point apart: -1 leftward, +1 rightward,
+      // 0 for anything with no horizontal component.
+      const leanSign = (grad) => {
+        const { kind, arg } = headOf(grad);
+        if (!kind.endsWith('linear-gradient')) return 0;
+        if (arg.startsWith('to ')) {
+          if (/\bleft\b/.test(arg)) return -1;
+          if (/\bright\b/.test(arg)) return 1;
+          return 0;
+        }
+        const angle = /^(-?[\d.]+)deg\b/.exec(arg);
+        if (!angle) return 0;
+        const s = Math.sin((parseFloat(angle[1]) * Math.PI) / 180);
+        return Math.abs(s) < 1e-6 ? 0 : Math.sign(s);
+      };
+
+      // A stop's position as a fraction of the box it is drawn on. Handles the
+      // forms Chromium actually serialises — `0px`, `45%`, `calc(50% - 1px)`.
+      const posFraction = (pos, w) => {
+        let s = pos.trim();
+        const calc = /^calc\((.*)\)$/i.exec(s);
+        if (calc) s = calc[1];
+        const terms = s.match(/[-+]?\s*[\d.]+(?:%|px)/g);
+        if (!terms) return null;
+        let f = 0;
+        for (const t of terms) {
+          const v = parseFloat(t.replace(/\s+/g, ''));
+          if (/%\s*$/.test(t)) f += v / 100;
+          else if (w > 0) f += v / w;
+          else return null;
+        }
+        return Number.isFinite(f) ? f : null;
+      };
+
+      // Does the gradient read the same from either side of the thing's own
+      // centre — same colours in reverse order, at the same distances in from
+      // each edge? Anything this cannot parse reads as NOT mirrored, on the
+      // standing rule that a witness which shrugs is worse than none.
+      const mirrors = (grad, w) => {
+        const open = grad.indexOf('(');
+        const body = grad.slice(open + 1, grad.length - 1);
+        const parts = [];
+        let depth = 0, cur = '';
+        for (const ch of body) {
+          if (ch === '(') depth++;
+          else if (ch === ')') depth--;
+          if (ch === ',' && depth === 0) { parts.push(cur); cur = ''; } else cur += ch;
+        }
+        if (cur.trim()) parts.push(cur);
+
+        const stops = [];
+        for (const raw of parts) {
+          const p = raw.trim();
+          const m2 = /^(rgba?\([^)]*\))\s*(.*)$/i.exec(p);
+          if (!m2) {
+            // the direction, if it is the first part; anything else is unparsed
+            if (stops.length === 0) continue;
+            return false;
+          }
+          const f = posFraction(m2[2], w);
+          if (f === null) return false;
+          stops.push({ colour: m2[1].replace(/\s+/g, ''), f });
+        }
+        if (stops.length < 2) return false;
+        for (let i = 0, n = stops.length; i < n; i++) {
+          const j = n - 1 - i;
+          if (stops[i].colour !== stops[j].colour) return false;
+          if (Math.abs(stops[i].f - (1 - stops[j].f)) > 0.01) return false;
+        }
+        return true;
+      };
+
+      // Every box-shadow layer on the thing, x-offset zero: what it throws is a
+      // halo and not a light with a side.
+      const evenGlow = (els) => {
+        for (const el of els) {
+          for (const pseudo of [null, '::before', '::after']) {
+            const sh = getComputedStyle(el, pseudo).boxShadow;
+            if (!sh || sh === 'none') continue;
+            const layers = [];
+            let depth = 0, cur = '';
+            for (const ch of sh) {
+              if (ch === '(') depth++;
+              else if (ch === ')') depth--;
+              if (ch === ',' && depth === 0) { layers.push(cur); cur = ''; } else cur += ch;
+            }
+            if (cur.trim()) layers.push(cur);
+            for (const layer of layers) {
+              const nums = layer.replace(/rgba?\([^)]*\)/g, ' ').trim()
+                .split(/\s+/).map(parseFloat).filter(Number.isFinite);
+              if (nums.length && Math.abs(nums[0]) > 0.01) return false;
+            }
+          }
+        }
+        return true;
+      };
+
+      // Everything the selector covers: the matched elements and their parts,
+      // since `closest` is what excuses them in the sweep.
+      const subtree = (sel) => {
+        const out = [];
+        for (const el of document.querySelectorAll(sel)) {
+          out.push(el, ...el.querySelectorAll('*'));
+        }
+        return out;
+      };
+
+      // Every leaning gradient under a selector, with the box it is drawn on.
+      const leansUnder = (sel) => {
+        const found = [];
+        for (const el of subtree(sel)) {
+          for (const pseudo of [null, '::before', '::after']) {
+            const cs = getComputedStyle(el, pseudo);
+            const w = parseFloat(cs.width);
+            for (const grad of gradientsOf(cs.backgroundImage)) {
+              if (leans(grad)) found.push({ grad, w: Number.isFinite(w) ? w : 0 });
+            }
+          }
+        }
+        return found;
+      };
+
+      const signUnder = (sel) => {
+        let total = 0;
+        for (const { grad } of leansUnder(sel)) total += leanSign(grad);
+        return total;
+      };
+
+      let lapsed = 0;
+      for (const entry of allow) {
+        if (!entry.where || entry.where.indexOf(view) === -1) continue;
+        if (!entry.holds || !entry.holds.length) {
+          lapsed++; notes.push(`${entry.selector}: no test written for its reason`);
+          continue;
+        }
+        const els = document.querySelectorAll(entry.selector);
+        if (els.length === 0) {
+          lapsed++; notes.push(`${entry.selector}: claims this view and is not in it`);
+          continue;
+        }
+
+        const wants = entry.holds;
+        const gradientTests = wants.filter((h) => h === 'repeats' || h === 'mirrors');
+        let ok = true;
+
+        if (gradientTests.length) {
+          const found = leansUnder(entry.selector);
+          if (found.length === 0) {
+            ok = false;
+            notes.push(`${entry.selector}: nothing here leans any more — the exception excuses nothing`);
+          }
+          for (const { grad, w } of found) {
+            const passes = gradientTests.some((h) =>
+              h === 'repeats' ? /^repeating-/.test(grad) : mirrors(grad, w));
+            if (!passes) {
+              ok = false;
+              notes.push(`${entry.selector}: a lean here is neither ${gradientTests.join(' nor ')} — ${grad.slice(0, 70)}`);
+              break;
+            }
+          }
+        }
+
+        if (wants.indexOf('even-glow') !== -1 && !evenGlow(subtree(entry.selector))) {
+          ok = false;
+          notes.push(`${entry.selector}: what it throws now has a side to it`);
+        }
+
+        if (wants.indexOf('opposed') !== -1) {
+          const mine = signUnder(entry.selector);
+          const theirs = entry.against ? signUnder(entry.against) : 0;
+          if (mine === 0 || theirs === 0 || mine * theirs > 0) {
+            ok = false;
+            notes.push(`${entry.selector}: no longer points away from ${entry.against || '(nothing named)'} ` +
+                       `(${mine} against ${theirs})`);
+          }
+        }
+
+        if (!ok) lapsed++;
+      }
+
+      window.__cabinExemptionNotes = window.__cabinExemptionNotes || {};
+      window.__cabinExemptionNotes[name] = notes;
+      readings[name] = lapsed;
       continue;
     }
 
@@ -904,6 +1171,19 @@ async function readState(browser, base, view, state, probes) {
   const page = await openForced();
   try {
     const readings = await page.evaluate(measureInPage, { probes, forDate: false });
+
+    // Day 123. An `exemption` reading is a count of lapsed exceptions, which
+    // says how many places to go and look and never which. The detail is left
+    // on the page by the evaluate above; print it, and only when something has
+    // actually lapsed.
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind !== 'exemption') continue;
+      const notes = await page.evaluate(
+        (n) => (window.__cabinExemptionNotes || {})[n] || [], name);
+      for (const note of notes) {
+        console.log(`check-almanac:   ${name} ${keyOf(state)} — ${note}`);
+      }
+    }
 
     // Day 112. `sprite-tone` reads the rendered picture with the washes taken
     // off, which is a change no later reading on the same page could survive —

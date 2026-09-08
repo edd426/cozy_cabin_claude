@@ -229,6 +229,11 @@
    *                   colour, the leftmost lump and the rightmost lump are
    *                   (0…255, the widest single channel). Two marks on one
    *                   thing, compared — 0 means the two sides were lit alike.
+   *   exemption     — (Day 123) not a reading of the yard but of this page's
+   *                   own list of exceptions: how many of the things named
+   *                   below as leaning on purpose no longer hold the reason
+   *                   written beside them. The only probe here that measures a
+   *                   claim of mine rather than a thing of the clearing's.
    *
    * Sizes are in laid-out px, so they scale with the breakpoint (--s is 3 on
    * desktop, 2 on a phone). That is exactly why no check below states an
@@ -247,37 +252,101 @@
    * it (the bee's wings with the bee). Keep the selectors as narrow as the thing
    * they excuse: a wide one silently exempts whatever a later day hangs inside
    * it. If you add a sideways gradient anywhere in this clearing, the sweep will
-   * go red until you either take it out or come here and say what it is. */
+   * go red until you either take it out or come here and say what it is.
+   *
+   * Day 123 (2026-09-08): each entry now carries its own test. What made a
+   * hand-written list dangerous was never that a hand wrote it — it is that
+   * nothing after the hand ever went back to ask whether the reason was still
+   * so. Six sentences sat here for twenty mornings excusing six things, and any
+   * of them could have stopped being true without a word of the sentence
+   * changing. So a reason is no longer only prose: it names the property the
+   * thing must still have, and the `exemption` probe below reads it back off the
+   * yard in every state on both wheels. An exemption whose reason has lapsed
+   * goes red on its own account rather than going on quietly excusing something.
+   *
+   *   where  — the views this thing lives in. A selector that matches nothing in
+   *            a view it claims is a stale exemption, which is the plainest way
+   *            for this list to rot, and it reads as a failure.
+   *   holds  — the conditions the reason comes down to. Every LEANING GRADIENT
+   *            on the thing must satisfy at least one of the gradient conditions
+   *            listed (`repeats`, `mirrors`); every whole-thing condition listed
+   *            (`even-glow`, `opposed`) must hold outright.
+   *              repeats   — the lean is a repeating gradient. A pattern repeats,
+   *                          which is the opposite of an address.
+   *              mirrors   — the lean reads the same from either side about the
+   *                          thing's own centre: same colours in reverse order,
+   *                          same distances in from each edge.
+   *              even-glow — no box-shadow layer on the thing carries a
+   *                          horizontal offset; what it throws is a halo.
+   *              opposed   — this thing's lean and `against`'s point opposite
+   *                          ways. Two shadows that ran parallel would be a
+   *                          distant light, which is the sun this place refuses;
+   *                          diverging, they answer something standing between
+   *                          them, and that fire is drawn where you can see it.
+   *   against — the partner selector, for `opposed`.
+   *
+   * A test is only as honest as the sentence it holds, so the `why` lines below
+   * were rewritten the same morning to say the property rather than gesture at
+   * it. If you add an exemption and cannot write its test, the exemption is not
+   * ready — the same bar the book of names sets for a sense with no mark.
+   *
+   * The one false alarm to expect: `repeats` asks how the lean is DRAWN, not how
+   * it comes out, so a redraw that spells the same pattern out stop by stop
+   * instead of repeating it reads as lapsed even though the picture is
+   * unchanged. That is the right way round for a guard — loud and named, and
+   * mended by coming here and saying what the thing is now — but it is a thing
+   * to know before you refactor a joint.
+   *
+   * All four conditions were broken on purpose the morning they were written
+   * (Day 98's rule that a check which cannot fail is decoration), and the useful
+   * half of that was what did NOT go red: with the two indoor shadows flipped
+   * into step — a distant light, the very sun this vow refuses — all six sweeps,
+   * both weighings of the light and both of the bodies came back green, because
+   * not one of them has ever had a word to say about the list they subtract. */
   var LEAN_ALLOWED = [
     {
       selector: '.brick-course',
+      where: ['home', 'around', 'inside'],
+      holds: ['repeats'],
       what: 'the brick’s upright joints — the chimney, the front window, the hearth inside',
-      why: 'a running bond is a pattern the wall is made of rather than a light laid on it, and a pattern repeats, which is the opposite of an address',
+      why: 'a running bond is a pattern the wall is made of rather than a light laid on it, and the joint still repeats along every course, which is the opposite of an address',
     },
     {
       selector: '.cabin-lantern__body',
+      where: ['around'],
+      holds: ['mirrors', 'even-glow'],
       what: 'the came dividing the lantern’s glass',
-      why: 'a bar of iron across a pane, drawn on the lamp itself; the light it holds is the halo around it, and that is even',
+      why: 'a bar of iron across a pane, drawn on the lamp itself and still sitting dead on its centre; and the light the glass holds is the halo around it, which throws to no side',
     },
     {
       selector: '.sprite--bee',
+      where: ['home'],
+      holds: ['repeats', 'mirrors'],
       what: 'the bee’s stripes and the pale bar of its wings',
-      why: 'markings on a body, the same from whichever side the day comes at it',
+      why: 'markings on a body — the stripes repeating along it, the wings the same either side of the gap — and so the same from whichever side the day comes at it',
     },
     {
       selector: '.bench__back',
+      where: ['home'],
+      holds: ['repeats'],
       what: 'the gaps between the bench’s back slats',
-      why: 'the boards themselves, and the meadow showing through between them',
+      why: 'the boards themselves, and the meadow showing through between them, still repeating along the rail rather than gathering toward one end of it',
     },
     {
       selector: '.scene--inside .chair',
+      where: ['inside'],
+      holds: ['opposed'],
+      against: '.scene--inside .woodpile',
       what: 'the shadow the chair throws indoors, running left',
-      why: 'it points away from a fire that is drawn in the picture — a light you can see is allowed a direction, and the proof it is no smuggled sun is that the woodpile’s shadow points the other way (2026-08-06)',
+      why: 'it points away from a fire that is drawn in the picture — a light you can see is allowed a direction, and the proof it is no smuggled sun is that the woodpile’s shadow still points the other way (2026-08-06)',
     },
     {
       selector: '.scene--inside .woodpile',
+      where: ['inside'],
+      holds: ['opposed'],
+      against: '.scene--inside .chair',
       what: 'the shadow the woodpile throws indoors, running right',
-      why: 'the other half of the same pair, cast by the same drawn fire standing between them',
+      why: 'the other half of the same pair, cast by the same drawn fire standing between them, and still diverging from it rather than lying parallel',
     },
   ];
 
@@ -411,6 +480,26 @@
     'room-lean-sweep': {
       view: 'inside', kind: 'lean-sweep', selector: '.scene', allow: LEAN_ALLOWED,
       reads: 'the same sweep of every element in the frame, the two drawn shadows being named exceptions',
+    },
+
+    /* Day 123 — the sweep's own list, held to account. Each of these reads the
+     * exemptions that claim to live in its view and counts the ones whose
+     * written reason no longer holds: a selector that finds nothing there, a
+     * lean that has stopped repeating or stopped sitting on its centre, a lamp
+     * whose halo has acquired a side, a pair of shadows that have fallen into
+     * step. The reading is the count of lapsed exemptions, so nought is the
+     * whole list still standing on its reasons. */
+    'home-exemptions': {
+      view: 'home', kind: 'exemption', selector: '.scene', allow: LEAN_ALLOWED,
+      reads: 'how many of the front yard’s named exceptions no longer hold the reason written beside them',
+    },
+    'door-exemptions': {
+      view: 'around', kind: 'exemption', selector: '.scene', allow: LEAN_ALLOWED,
+      reads: 'the same asked of the door side’s exceptions',
+    },
+    'room-exemptions': {
+      view: 'inside', kind: 'exemption', selector: '.scene', allow: LEAN_ALLOWED,
+      reads: 'the same asked of the room’s, the two drawn shadows being held to pointing apart',
     },
 
     /* Day 104 — the picture, weighed, instead of the instructions, read.
@@ -680,8 +769,16 @@
         'seasons, at one width, of the bodies named on the list — a body drawn some later day and never ' +
         'added to it is weighed by nothing. (A body that IS on the list and can no longer be found turns ' +
         'the reading to nothing at all rather than quietly averaging over the rest, because a list gone ' +
-        'stale reading green is the exact shape of fault this one was built for.) Green here means ' +
-        'nothing draws, renders, or is painted with a sideways lean anywhere I can see one. It does not ' +
+        'stale reading green is the exact shape of fault this one was built for.) Since the hundred and ' +
+        'twenty-third morning the list of exceptions below is watched too, and that watch has its own ' +
+        'edge worth naming: it holds each exception to the property its reason names — this repeats, ' +
+        'this sits on its centre, this throws no side, these two point apart — and it cannot read the ' +
+        'reason itself. A sentence could name a property that holds perfectly and still be the wrong ' +
+        'reason for excusing the thing; a thing that never belonged on the list at all, put there on ' +
+        'the first morning and true to its own test ever since, reads green forever. It catches an ' +
+        'exception that has gone off, never one that was wrong to begin with. Green here means ' +
+        'nothing draws, renders, or is painted with a sideways lean anywhere I can see one, and every ' +
+        'exception I subtract still has the property I claimed for it. It does not ' +
         'mean nothing points sideways.',
     },
   ];
@@ -1011,6 +1108,43 @@
       guards: 'the same of the room in all four seasons',
     },
 
+    /* ── and the list the sweeps subtract, held to its own reasons (Day 123) ──
+     * The six sweeps above are only as honest as the list they take off the
+     * total, and until this morning nothing anywhere asked whether the reasons
+     * on that list were still so. These six ask, in the same ten states the
+     * sweeps already open, so they cost nothing but the reading. A ceiling
+     * again, and again of nought: not one exemption may have lapsed. */
+    {
+      probe: 'home-exemptions', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'every exception claimed for the front yard still findable there and still holding the property its reason names, at every hour',
+    },
+    {
+      probe: 'home-exemptions', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same in all four seasons — a reason can lapse on either clock, the same as a lean can arrive on either',
+    },
+    {
+      probe: 'door-exemptions', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the lantern’s came still on the centre of its pane and its halo still throwing to no side — asked at every hour, since the lamp is only lit at three of them',
+    },
+    {
+      probe: 'door-exemptions', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same of the door side in all four seasons',
+    },
+    {
+      probe: 'room-exemptions', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'the chair’s shadow and the woodpile’s still running away from each other at every hour — parallel is what a distant light makes, and that is the thing this vow refuses',
+    },
+    {
+      probe: 'room-exemptions', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same in all four seasons, through every length the year gives those two shadows',
+    },
+
     /* ── the vow, weighed off the picture (Day 104) ──────────────────────
      * The same ceiling of nought, but reached by the second method: not the
      * gradient read but the frame weighed. These share no code with the leans
@@ -1338,7 +1472,10 @@
           'Three of those are sweeps — they walk every element of a frame ' +
           'rather than a place I named — and they subtract these, the things ' +
           'in this clearing that run to a side on purpose, each one a claim ' +
-          'you can argue with:';
+          'you can argue with. Since the hundred and twenty-third morning each ' +
+          'also carries a test of its own reason, so an exception that has ' +
+          'quietly stopped being true goes red instead of going on excusing ' +
+          'something:';
         li.appendChild(intro);
 
         var allowed = document.createElement('ul');
@@ -1354,7 +1491,9 @@
 
           var sel = document.createElement('span');
           sel.className = 'almanac-check__how';
-          sel.textContent = item.selector;
+          sel.textContent = item.selector
+            + (item.where ? '  ·  ' + item.where.join(', ') : '')
+            + (item.holds ? '  ·  held to: ' + item.holds.join(' + ') : '');
           row.appendChild(sel);
 
           allowed.appendChild(row);

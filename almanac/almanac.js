@@ -737,6 +737,25 @@
     {
       key: 'hush',
       says: 'Winter is a hush, not a death. The year may lean the colour of a thing; it may never strip it. Nothing in this clearing goes bare, and nothing goes black.',
+      blind:
+        'What these witnesses cannot see. Until the hundred and twenty-fourth morning each of them was ' +
+        'a floor at a number I picked — never below one — which is the lowest bar this vow could be ' +
+        'held to, and a crown down to a single leaf would have passed every one. They hold a SHARE now ' +
+        'instead: the leanest month of a thing against the fullest month of that same thing, so the bar ' +
+        'is set by the yard rather than by me and rises on its own the day the yard grows. That closes ' +
+        'the gap under them and opens a different one, which is the whole of what is worth saying here. ' +
+        'A share can only see what the WHEEL does. A thing thinned in every season at once — drawn ' +
+        'spare on the morning it was made, or quietly cut back later in all four — reads a perfect share ' +
+        'forever, because it is as full in January as it ever is in June. The bar moving with the yard ' +
+        'is exactly why: a guard that asks only whether a thing keeps its own proportions cannot ask ' +
+        'whether the proportions were ever right. What holds that half is not on this page — it is the ' +
+        'kept frames, which are pictures of a morning I already stood in and go red at anything that ' +
+        'moves against them, and which know change and know nothing at all of error. Between them: the ' +
+        'share catches the year taking something, the frames catch a hand taking it, and neither of them ' +
+        'can catch a thing that was too thin the day it was drawn. That one is still whoever comes up ' +
+        'the path with fresh eyes. Nor does a share read colour: a leaf held at its full size and ' +
+        'drained to the grey of the boards behind it would pass here, and is caught, if at all, by the ' +
+        'three tone witnesses further up this page.',
     },
     {
       key: 'kept',
@@ -797,6 +816,24 @@
    *   ceiling + over — the mirror of it (Day 102): the reading must never rise
    *     above `ceiling` in any state in `over`. A floor holds a vow of presence
    *     — never nothing. A ceiling holds a vow of absence — never a lean.
+   *   share + over (Day 124) — a floor with no number of mine in it. The
+   *     reading in the leanest state in `over` must be at least `share` of the
+   *     reading in the FULLEST state in `over` — the same thing at its own
+   *     best, so the bar is supplied by the yard and moves when the yard moves.
+   *     It exists because a floor is a sentence that can be wrong the morning
+   *     it is written and green every morning after: the hush vow's floors were
+   *     all set at never-nothing, and on the hundred and fifteenth morning the
+   *     bed lost its entire root while its floor of one sat green, six stems
+   *     still standing beside the hole. `share` is what a hush actually claims
+   *     — that the cold takes a part and not the thing — and the only number
+   *     left in it is how large a part, which is a statement about the promise
+   *     rather than a measurement of the yard that could go stale.
+   *     Two consequences worth holding on to. A ratio of two readings of one
+   *     thing at one width cancels `--s`, so a share may hold a SIZE where a
+   *     floor could only ever hold presence (Day 98's rule that no check states
+   *     an expected width is untouched — this states none). And if the fullest
+   *     state reads nothing at all, the check fails rather than dividing: a
+   *     share of nothing is not a hush.
    *   hold — the odd one out (Day 111), and the only kind that names no state
    *     and no axis. It holds a GIVEN rather than a claim about a season or an
    *     hour: arrive at one instant, stand still while the clock crosses into
@@ -949,36 +986,57 @@
      * points at. None of them says what a thing is; each says what it never
      * becomes. They are meant to stay green through any amount of honest
      * redrawing above — change the pile's counts and you mend `expect`; the
-     * floor only ever goes red if the pile actually empties. */
+     * floor only ever goes red if the pile actually empties.
+     *
+     * Day 124: the hush's six are shares now, not floors, and the kept vow's
+     * are still floors, and the split is on purpose rather than for tidiness.
+     * "Nothing here is ever lost" is a claim about a bottom — the store must
+     * never stand at none, the candle never a cold saucer — and a floor is the
+     * right shape for a bottom. "Winter is a hush, not a death" is a claim
+     * about a PROPORTION: not that something remains but that most of it does.
+     * A floor could never say that, and the six below each sat at never-nothing
+     * for twenty-five mornings saying a far smaller thing than the vow above
+     * them. Note what the change gives up: `tree-crowns` used to demand two,
+     * and a share demands only that no season take one, so a crown removed from
+     * every month at once now passes here. That is the honest division of
+     * labour and not a hole — the vow forbids the YEAR taking a thing; a tree
+     * removed from the yard altogether is a redrawing, and what watches for a
+     * redrawing is the kept frames, which hold this morning against a picture
+     * of a morning already stood in. */
     {
       probe: 'tree-crowns', axis: 'season', at: { tod: 'day' }, vow: 'hush',
-      floor: 2, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'both crowns still standing in every month of the year — “never a bare branch”',
+      share: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'every crown the front yard has in its fullest month still standing in its leanest — “never a bare branch”, held as a share so the bar is the yard’s own count and not a number I chose',
     },
     {
       probe: 'door-tree-crown', axis: 'season', at: { tod: 'day' }, vow: 'hush',
-      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'the near tree on the door side standing in every month of the year too — the hush belongs to whichever face you are standing on',
+      share: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the near tree on the door side kept whole through the year in the same way — the hush belongs to whichever face you are standing on',
     },
     {
       probe: 'tree-crown-fade', axis: 'season', at: { tod: 'day' }, vow: 'hush',
-      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'the crown drawn solid in every season — the year tints the leaf and never thins it away',
+      share: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the crown drawn as solid in its faintest season as in its strongest — the year tints the leaf and never thins it away',
     },
     {
       probe: 'sprig-stem', axis: 'season', at: { tod: 'day' }, vow: 'hush',
-      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'the sprig still drawn in the jar in every season — it draws in for the cold and is never gone',
+      share: 0.75, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the sprig in the mantle jar never drawn in past three quarters of its own full height — the one thing indoors the cold is allowed to take a part of, and the size of that part is the only number on this line. It measures a little over four fifths today; a quarter is where a drawing-in would stop being a hush',
     },
     {
       probe: 'flowers-standing', axis: 'season', at: { tod: 'day' }, vow: 'hush',
-      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'the wildflowers at the wall’s foot still standing in every month — the winter drains their colour and takes no stem',
+      share: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'every stem standing at the wall’s foot in one season standing in all four — the winter drains their colour and takes no stem, and the bed’s own count is what the claim is measured against, whatever the day’s wheel has left standing there',
     },
     {
       probe: 'door-plant-standing', axis: 'season', at: { tod: 'day' }, vow: 'hush',
-      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      share: 1, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the pot by the door never emptied by a season — the same promise kept on the other face',
+    },
+    {
+      probe: 'door-pot-blooms', axis: 'season', at: { tod: 'day' }, vow: 'hush',
+      share: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'and not merely the plant but every bloom on it — whatever the pot is carrying when you arrive, the season takes none of it. The line above asks only whether there is still a plant in the pot, which is a thinner question than the vow asks, and on its own it would let a winter strip the stems and leave the leaves',
     },
     {
       probe: 'woodpile-logs', axis: 'season', at: { tod: 'day' }, vow: 'kept',
@@ -1309,6 +1367,10 @@
     }
     if (check.ceiling !== undefined) {
       return check.over.join(', ') + ' — never above ' + check.ceiling;
+    }
+    if (check.share !== undefined) {
+      return check.over.join(', ') + ' — never under ' +
+             (check.share === 1 ? 'its own fullest' : check.share + ' of its own fullest');
     }
     if (check.hold) {
       return 'arrive ' + check.hold.arrive.replace('T', ' ') +

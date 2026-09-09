@@ -87,6 +87,18 @@
  * those names unchanged, because none of them ever cared what a state was.
  * A claim about a thing that reads the calendar has to be asked on the calendar.
  *
+ * Day 124 (2026-09-09): `share` + `over`, which is a floor with no number of
+ * mine in it — the leanest state on the wheel held against the FULLEST state of
+ * the same probe, so the bar is the yard's own reading and moves when the yard
+ * moves. It reuses `over` exactly as `ceiling` does, so stateNames() and
+ * workNeeded() needed no branch. It exists because a floor is a sentence, and a
+ * sentence can be wrong the morning it is written and green every morning
+ * after: the hush vow's six floors all sat at never-nothing, which is the
+ * lowest bar that vow could take, and on the hundred and fifteenth morning the
+ * front bed lost its entire root with its floor of one still green. There is no
+ * test for a bar set too low, the bar being the thing that is wrong; what there
+ * is instead is not setting one.
+ *
  * Day 118 (2026-09-03): a seventh kind, `paint-lean`, and it closes the gap the
  * Day-104 weighing wrote into the vow's blind note and Day 112 could not reach:
  * a sprite whose OWN pixels are brighter down one edge. `frame-balance` lifts
@@ -1305,6 +1317,49 @@ function verdictsFor(check, probeName, readings) {
                 `${got === null ? 'nothing there' : got}`,
       });
     }
+    return out;
+  }
+
+  // A vow's share (Day 124): a floor with no number of mine in it. Where
+  // `floor` holds each reading against a bar I wrote down, this holds it
+  // against the same probe's reading in the FULLEST state of the same wheel —
+  // so the bar comes off the yard, and rises by itself the day the yard grows.
+  // Reuses `over`, so stateNames() and workNeeded() need no branch, exactly as
+  // `ceiling` didn't. Three things it is careful about: a reading that isn't
+  // there at all fails rather than counting as a zero (the convention every
+  // other kind here keeps); a fullest of nothing fails rather than dividing,
+  // because a share of nothing is not a hush; and the comparison is a ratio of
+  // two readings taken at one width, which cancels `--s` and so may hold a size
+  // without ever stating one.
+  if (check.share !== undefined) {
+    const names = check.over || [];
+    const got = names.map(read);
+    const fmt = (v) => (v === null ? 'nothing there' : Math.round(v * 100) / 100);
+
+    if (got.some((v) => v === null)) {
+      names.forEach((name, i) => out.push({
+        ok: got[i] !== null,
+        detail: `${name}: read ${fmt(got[i])}`,
+      }));
+      return out;
+    }
+    const hi = Math.max(...got);
+    if (!(hi > 0)) {
+      out.push({
+        ok: false,
+        detail: `nothing standing in any of ${names.join(', ')} — ` +
+                'a share of nothing is not a hush',
+      });
+      return out;
+    }
+    names.forEach((name, i) => {
+      const ratio = got[i] / hi;
+      out.push({
+        ok: ratio >= check.share - 1e-9,
+        detail: `${name}: ${fmt(got[i])} of the fullest ${fmt(hi)} — ` +
+                `${ratio.toFixed(3)}, never under ${check.share}`,
+      });
+    });
     return out;
   }
 

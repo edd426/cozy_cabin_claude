@@ -1306,7 +1306,50 @@
  * Bark is #3a2418 — the same wood as the log already burning in the
  * fire, so the pile still reads as supply for the lit appliance. Cut
  * faces are cream-soft with one warm-tan cell, the off-centre heart
- * of the sawn end. */
+ * of the sawn end.
+ *
+ * Day 125 (2026-09-10) gives the armful the year — the middle link of the
+ * fire's chain, which had held the same three logs in January as in August
+ * while both its ends moved. The rick outside takes the season (scene.css,
+ * Day 85), the fire takes it (Day 88), the smoke takes it (Day 87); the
+ * armful standing between the store and the firebox did not.
+ *
+ * It rides the FIRE's own three-step table and not the rick's, because that
+ * is what feeds it: summer the identity, autumn and spring one step up, winter
+ * the deepest. So the count runs 3 / 4 / 5 / 4 — and note the phase. The rick
+ * outside peaks in AUTUMN (9, laid in against what is coming) and bottoms in
+ * spring; the armful peaks in WINTER (5) while the rick is down to six. A
+ * store fills against what is coming; an armful fills with what is being
+ * burnt. The two wheels are the same wood at two removes from the fire, and
+ * they are fullest at different times because of it.
+ *
+ * The base row takes the extra logs rather than the pile growing a third
+ * tier: a 2-wide base cannot carry one (a log resting on a single log is a
+ * tower, not a rick), so the pile widens RIGHTWARD — away from the hearth,
+ * into open floor — from 8 native to 12, and the third tier never happens.
+ * Winter then nests a second log in the new valley:
+ *
+ *     ..BB..BB       y=7   (top-far shows in winter only)
+ *     .BffBBffB      y=6
+ *     .BffBBffB      y=5   top log, and winter's second, in the two valleys
+ *     ..BB..BB.      y=4
+ *     .BB..BB..BB.   y=3
+ *     BffBBffBBffB   y=2   three bottom logs (far one: autumn/winter/spring)
+ *     BffBBffBBffB   y=1
+ *     .BB..BB..BB.   y=0
+ *     0123456789..
+ *
+ * Three things move with the width and all three are arithmetic off the same
+ * fact — the bottom row's floor-contact bark ends at x=6 on the 8-wide pile
+ * and x=10 on the 12-wide one (the octagon's bottom row spans only L..L+1 of
+ * each log anchored at L): the box itself, the ::after contact band (x=1 to
+ * that last bark cell), and the ::before cast smear's start (one past it).
+ * Summer keeps the born values and gets no rule, as everything here does.
+ *
+ * The window above does NOT move with it. It is centred over the summer pile
+ * and stays there in every season, because a hole in a wall does not shift
+ * when the firewood under it grows — the off-centring in the cold months is
+ * the pile leaning out from under the sill, which is what a pile does. */
 .woodpile {
   --s: 3;                     /* scale; the 2x media block only swaps this + the anchor */
   position: absolute;
@@ -1375,6 +1418,41 @@
 .woodpile__log--left  { left: calc(1px * var(--s)); bottom: calc(1px * var(--s)); }
 .woodpile__log--right { left: calc(5px * var(--s)); bottom: calc(1px * var(--s)); }
 .woodpile__log--top   { left: calc(3px * var(--s)); bottom: calc(5px * var(--s)); }
+
+/* The two the year adds (Day 125). Both absent in summer, which is the pile
+ * as it was drawn. `--far` is the third log of the base row, standing furthest
+ * from the fire; `--top-far` nests in the valley it opens with `--right`. */
+.woodpile__log--far     { left: calc(9px * var(--s)); bottom: calc(1px * var(--s)); display: none; }
+.woodpile__log--top-far { left: calc(7px * var(--s)); bottom: calc(5px * var(--s)); display: none; }
+
+/* Autumn and spring: a fourth log in — the first fires and the last. Winter:
+ * five, the fullest armful of the year. The box, the contact band and the
+ * cast smear's start all step together with the widened base row; `display`
+ * is what gates the logs, so a hidden one is honestly absent to a count that
+ * reads layout rather than brightness (Day 98). */
+.scene--inside[data-season="autumn"] .woodpile,
+.scene--inside[data-season="spring"] .woodpile,
+.scene--inside[data-season="winter"] .woodpile {
+  width: calc(12px * var(--s));
+}
+.scene--inside[data-season="autumn"] .woodpile::after,
+.scene--inside[data-season="spring"] .woodpile::after,
+.scene--inside[data-season="winter"] .woodpile::after {
+  width: calc(10px * var(--s));
+}
+.scene--inside[data-season="autumn"] .woodpile::before,
+.scene--inside[data-season="spring"] .woodpile::before,
+.scene--inside[data-season="winter"] .woodpile::before {
+  left: calc(11px * var(--s));
+}
+.scene--inside[data-season="autumn"] .woodpile__log--far,
+.scene--inside[data-season="spring"] .woodpile__log--far,
+.scene--inside[data-season="winter"] .woodpile__log--far {
+  display: block;
+}
+.scene--inside[data-season="winter"] .woodpile__log--top-far {
+  display: block;
+}
 
 /* ─── Coat on peg (Day 15) ──────────────────────────────────────────
  *

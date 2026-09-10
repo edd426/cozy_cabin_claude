@@ -108,6 +108,7 @@
         'the wildflowers at the wall’s foot in their sown rose, and the pot by the door in the green it was potted in',
         'the pot’s bloom wheel at its fastest of the year — half again the pace it keeps at the equinoxes, a bloom’s whole round from bud to bare in about a fortnight and a half',
         'indoors, a low fire on its ember bed, and the light it lays on the boards reaching no further than the chair on one side and the wood on the other',
+        'three logs in the armful by the hearth — as much as a banked fire asks for, and the fewest of the year',
         'fireflies up off the grass once the light goes, and no stars at all',
       ],
     },
@@ -122,6 +123,7 @@
         'leaves coming down off the two crowns out front — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one east wind carries them the way it leans the smoke',
         'and three more off the near tree on the door side, the same leaves off the same crown, keeping the same swing and finishing in the very column each let go from — that face looks straight up the wind’s throat, and a wind coming at you leans nothing sideways',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
+        'a fourth log in the armful by the hearth — the first fires being fed; the pile widens along the floor away from the hearth to take it, rather than growing a tier a two-wide base could not carry',
         'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
       ],
     },
@@ -134,6 +136,7 @@
         'the wildflowers drained to a dusty pink on grey-sage stems and the door pot quieted with them — every stem still standing, none of them taken',
         'the pot’s bloom wheel at its slowest — a quarter of the midsummer pace, a round taking most of the season — and still turning, and still never fewer than three blooms standing in it, because the four stems keep a fixed spacing on the wheel and only the pace changes',
         'indoors, the fire tallest and widest in its opening with its coals a hotter red, its light washing right out over the chair and the wood, and their shadows half again as long',
+        'five logs in the armful by the hearth, the fullest of the year — and the store outside is down to six in the same month, its lowest but for spring. A store fills against what is coming; an armful fills with what is being burnt, so the two ends of the same wood are fullest at opposite times of year',
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
       ],
     },
@@ -146,6 +149,7 @@
         'the wildflowers at their brightest and freshest rose of the year, and the door pot lifted with them — new bloom on new growth',
         'the pot’s bloom wheel quickening back out of the cold, past its middling pace at the equinox and on toward the summer',
         'indoors, a shade more heat in the fire’s colour and its light a stride further out, the same as autumn',
+        'four logs in the armful by the hearth — the last fires, the same as autumn, though the store they came from is at its thinnest now and was at its fullest then',
         'a pale tender tip budding above the sprig in the jar; plain dark after sundown, no sparks and no stars',
       ],
     },
@@ -355,6 +359,16 @@
       view: 'home', kind: 'visible-count',
       selector: '.sprite--woodpile .woodpile-log',
       reads: 'how many split logs are showing in the rick at the front wall',
+    },
+    /* Day 125. The other end of the same wood: the armful set down beside the
+     * fire, which rides the FIRE's three-step season table rather than the
+     * rick's four-step one, because the fire is what spends it. Counted on
+     * layout and not brightness, like the rick — the logs are gated with
+     * `display`, so a hidden one is honestly absent. */
+    'hearth-armful': {
+      view: 'inside', kind: 'visible-count',
+      selector: '.woodpile .woodpile__log',
+      reads: 'how many logs are standing in the armful by the hearth',
     },
     'smoke-puffs': {
       view: 'home', kind: 'visible-count',
@@ -862,6 +876,11 @@
       probe: 'woodpile-logs', axis: 'season', at: { tod: 'day' },
       expect: { summer: 7, autumn: 9, winter: 6, spring: 4 },
       guards: 'the pile’s count in all four seasons — seven restacked by summer, nine laid in full by autumn, six being spent through winter, four at the spring thinnest',
+    },
+    {
+      probe: 'hearth-armful', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 3, autumn: 4, winter: 5, spring: 4 },
+      guards: 'the armful’s count in all four seasons — three for a banked summer fire, a fourth in for the first fires and the last, five in the deep of winter. Standing beside the line above, it also holds the phase: the rick peaks at nine in autumn and the armful peaks at five in winter, so the two tables cannot both be right unless the store and the armful are fullest at different times, which is the claim',
     },
     {
       probe: 'smoke-puffs', axis: 'season', at: { tod: 'day' },

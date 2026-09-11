@@ -238,9 +238,13 @@
   width: calc(10px * var(--s));
   height: calc(2px * var(--s));
   background: #7a2e10;            /* dark coal */
-  /* Glowing top edge — the hot surface of the coal bed. The colour is
-   * season-tunable (Day 88 block below); the born value is summer's. */
-  box-shadow: inset 0 calc(1px * var(--s)) 0 var(--ember-glow, #c75418);
+  /* Glowing top edge — the hot surface of the coal bed. Two knobs, and they
+   * belong to two different clocks (Day 126): the SEASON sets how hot the
+   * coals are (--ember-glow, the Day-88 block below), and the HOUR sets how
+   * much of the 2-native bed is alight (--ember-lit, the Day-126 block after
+   * it). They never collide because they are different properties. Born
+   * values are summer's, at the hours the fire stands. */
+  box-shadow: inset 0 calc(var(--ember-lit, 1px) * var(--s)) 0 var(--ember-glow, #c75418);
   z-index: 3;
 }
 
@@ -387,6 +391,72 @@
 }
 .scene--inside[data-season="winter"] .hearth__embers { --ember-glow: #e46a20; }
 
+/* Day 126 (2026-09-11): the hearth fire takes the HOUR — the last link of the
+ * fire's chain that answered only the year.
+ *
+ * The chain reads pile → fire → smoke, and since Day 87 every part of it has
+ * leaned with the season: the rick laid to nine against the cold (Day 85), the
+ * flame deeper in its opening (Day 88), the fourth puff on the chimney (Day
+ * 87), the armful beside the hearth (Day 125). Not one of them knew what time
+ * it was. A house somebody lives in banks the fire before bed and builds it
+ * back at first light; this one burned the same at midnight as at noon.
+ *
+ * The catch was Day 88's own promise — that the room keeps one warmth waiting
+ * whatever hour you come in from — and BANKING IS NOT SPENDING, which is what
+ * lets both stand. You rake the coals together and damp the flame so the fire
+ * burns slow: less flame, and the whole bed alight under it. The heat is held
+ * down in the coals rather than let go up the chimney, which is the whole point
+ * of doing it. So the night takes nothing from this hearth. It only puts the
+ * fire down into its own bottom, and the morning lifts it back — the same
+ * far-half-of-a-wheel the candle a foot above has ridden since Day 77.
+ *
+ * The move is TIERS, not sizes, and that is what makes it compose. The flame
+ * is three stacked rectangles and the season sets how big each one is; the
+ * hour says only how many of them stand. So every season keeps its own fire
+ * and each of the four banks the same way, out of one block, with nothing off
+ * the native grid (a fractional width on a pixel sprite is a soft edge, and
+ * `image-rendering: pixelated` cannot mend one).
+ *
+ *   day / dusk   base + flame + tip   standing, up to the lintel  (no rule —
+ *                                     the born fire, as summer is for season)
+ *   dawn         base + flame         built back off the night's coals, caught
+ *                                     before it is up to full lick
+ *   night        base                 banked: one low sheet over the coals
+ *
+ * The ember bed answers the other way about, which is the argument in one
+ * detail: at the hours the flame stands, one native row of the 2-native bed
+ * glows; through the night and the dawn the whole bed is alight, because that
+ * is where the fire went. Fewest tiers, most coal. */
+.scene--inside[data-tod="dawn"] .hearth__fire--tip { display: none; }
+.scene--inside[data-tod="night"] .hearth__fire--tip,
+.scene--inside[data-tod="night"] .hearth__fire--flame { display: none; }
+
+.scene--inside[data-tod="dawn"] .hearth__embers,
+.scene--inside[data-tod="night"] .hearth__embers { --ember-lit: 2px; }
+
+/* And what the fire throws has to bank with it. Day 89 built the pool on the
+ * boards because a fire that grows and lights nothing more is the same lie the
+ * whole chain kept telling; a fire that banks and dims nothing is that lie
+ * turned round. So --firelight rides every surface the hearth reaches — the
+ * pool (Day 89), the glow on the chimney breast (Day 92), and the two cast
+ * shadows and the mantle's (Days 90, 92), because a shadow can be no darker
+ * than the light it interrupts any more than it can be longer than it.
+ *
+ * It moves STRENGTH and never REACH, and the division is the honest one: the
+ * year says how big this fire is, so it sets how far the light gets (the size
+ * tables below are the season's and stay the season's); the hour says how hard
+ * it is burning right now, so it sets only how much of that light there is.
+ * Nothing moves on the floor at midnight — the chair stands where it stands and
+ * its shadow falls exactly as far. There is simply less of both.
+ *
+ * Declared on the scene so it inherits to the pool and the two standing things,
+ * which live outside .hearth. Default 1 — and unset (JS off, no data-tod) is
+ * the fire standing, the same default every hour-gated thing in this room
+ * keeps. */
+.scene--inside                  { --firelight: 1; }
+.scene--inside[data-tod="dawn"]  { --firelight: 0.84; }
+.scene--inside[data-tod="night"] { --firelight: 0.58; }
+
 /* ─── Hearth-light on the boards (Day 89, 2026-08-05) ───────────────
  *
  * The pool of warm light the fire throws onto the floor around its foot.
@@ -444,7 +514,7 @@
   width: calc(var(--light-w) * var(--s));
   height: calc(var(--light-h) * var(--s));
   transform: translate(-50%, 50%);   /* centre the ellipse ON that floor line */
-  opacity: 0.72;
+  opacity: calc(0.72 * var(--firelight, 1));
   z-index: 1;                        /* over the boards, under chair/pile/hearth */
   pointer-events: none;
 }
@@ -479,12 +549,12 @@
 .scene--inside[data-season="spring"] .hearth-light {
   --light-w: 64px;
   --light-h: 40px;
-  opacity: 0.86;
+  opacity: calc(0.86 * var(--firelight, 1));
 }
 .scene--inside[data-season="winter"] .hearth-light {
   --light-w: 78px;
   --light-h: 44px;
-  opacity: 1;
+  opacity: calc(1 * var(--firelight, 1));
 }
 
 /* ─── Cast shadows on the boards (Day 90, 2026-08-06) ───────────────
@@ -543,7 +613,7 @@
   bottom: calc(-2px * var(--s));
   width: calc(var(--cast) * var(--s));
   height: calc(2px * var(--s));
-  opacity: var(--cast-o);
+  opacity: calc(var(--cast-o) * var(--firelight, 1));
   pointer-events: none;
 }
 
@@ -680,7 +750,7 @@
     calc((var(--wl-h) / 2 + 6px) * var(--s))
     0
   );
-  opacity: 0.66;
+  opacity: calc(0.66 * var(--firelight, 1));
   z-index: 1;                        /* over the brick + wall, under the mantle */
   pointer-events: none;
 }
@@ -728,7 +798,7 @@
     to right, rgba(0,0,0,0) 0%, #000 14%, #000 86%, rgba(0,0,0,0) 100%);
   mask-image: linear-gradient(
     to right, rgba(0,0,0,0) 0%, #000 14%, #000 86%, rgba(0,0,0,0) 100%);
-  opacity: 0.58;
+  opacity: calc(0.58 * var(--firelight, 1));
   z-index: 1;                        /* over the glow, under the candle's light */
   pointer-events: none;
 }
@@ -737,22 +807,22 @@
 .scene--inside[data-season="spring"] .fire-wall-light {
   --wl-w: 66px;
   --wl-h: 92px;
-  opacity: 0.83;
+  opacity: calc(0.83 * var(--firelight, 1));
 }
 .scene--inside[data-season="winter"] .fire-wall-light {
   --wl-w: 76px;
   --wl-h: 104px;
-  opacity: 1;
+  opacity: calc(1 * var(--firelight, 1));
 }
 
 .scene--inside[data-season="autumn"] .mantle-shadow,
 .scene--inside[data-season="spring"] .mantle-shadow {
   --ms-h: 24px;
-  opacity: 0.78;
+  opacity: calc(0.78 * var(--firelight, 1));
 }
 .scene--inside[data-season="winter"] .mantle-shadow {
   --ms-h: 28px;
-  opacity: 1;
+  opacity: calc(1 * var(--firelight, 1));
 }
 
 /* ─── Candle light on the brick (Day 91, 2026-08-07) ────────────────

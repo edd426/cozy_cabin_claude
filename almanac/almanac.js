@@ -135,7 +135,7 @@
         'the chimney at its deepest — a fourth puff where three climb all year, each brighter and spreading wider by the top',
         'the wildflowers drained to a dusty pink on grey-sage stems and the door pot quieted with them — every stem still standing, none of them taken',
         'the pot’s bloom wheel at its slowest — a quarter of the midsummer pace, a round taking most of the season — and still turning, and still never fewer than three blooms standing in it, because the four stems keep a fixed spacing on the wheel and only the pace changes',
-        'indoors, the fire tallest and widest in its opening with its coals a hotter red, its light washing right out over the chair and the wood, and their shadows half again as long',
+        'indoors, the fire tallest and widest in its opening with its coals a hotter red, its light washing right out over the chair and the wood, and their shadows half again as long — the size the season makes it at the hours it stands; the night banks this one down the same as any other',
         'five logs in the armful by the hearth, the fullest of the year — and the store outside is down to six in the same month, its lowest but for spring. A store fills against what is coming; an armful fills with what is being burnt, so the two ends of the same wood are fullest at opposite times of year',
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
       ],
@@ -165,6 +165,7 @@
         'low white fog out over the far grass, on both faces of the house; the door side’s banks lit along their top rims, because that face looks east into it',
         'the far hills’ crests warmed a shade, and the clouds warm along their bellies where the low sun sits under them',
         'the lantern by the door kindled faint, and the candle on the mantle standing full again as though a hand replaced it in the dark',
+        'the hearth built back off the night’s coals — two tiers of flame up where three stand by day, the whole ember bed still alight under them, and the light it lays on the room most of the way back',
         season === 'winter'
           ? 'the sprig beginning to lean toward the window; the stars gone with the dark'
           : 'the sprig beginning to lean toward the window; no sparks — they belong to the falling edge of the day, not the waking one',
@@ -175,6 +176,7 @@
         'no wash at all — the plain cream clearing this place was born in, the long neutral middle of the day',
         'no fog, no lantern, nothing lit; the lamp by the door is only a fixture waiting',
         'the candle full on the mantle, and the sprig at its fullest lean toward the glass around midday',
+        'the hearth standing its full three tiers, the tip licking the lintel — whatever size the season has made of it, this is the hour it is up',
         'the window indoors showing plain pale sky above its crossbar and the season’s own meadow below it',
       ];
     },
@@ -184,6 +186,7 @@
         'the far hills’ crests taking a thin gold, and the clouds gold along their bellies',
         'the lantern by the door burning fuller, and the candle spent down to four of its six — its flame riding the wax down',
         'the sprig easing part-way back from the window as the gold goes low',
+        'the hearth still standing its three tiers — the fire is not banked until the house goes to bed, so the evening is the one edge of the day it keeps its full height through',
         season === 'summer'
           ? 'the first fireflies coming up off the front meadow, faint, with a stray spark or two round the corner past the lamp'
           : season === 'winter'
@@ -197,6 +200,7 @@
         'the lantern by the door burning with its soft halo — the one warm point on a blue-washed wall',
         'the candle down to three, a low stub with its flame guttering close to the mantle, and the glow it lays on the brick sunk with it',
         'the sprig standing straight and resting, with nothing left in the glass to reach for',
+        'the hearth banked — one low sheet of flame where three tiers stand by day, whatever the season has made of it, and the whole ember bed alight beneath because that is where the fire went. Banking is not spending: the heat is held down in the coals rather than let up the chimney, so the room keeps the warmth it keeps at every other hour and only the light of it is less. The pool on the boards, the glow on the breast and both cast shadows dim with the flame, and not one of them moves — a banked fire lights no shorter a way, only less',
         season === 'summer'
           ? 'the fireflies at their fullest over the grass, winking and bobbing each on its own slow count'
           : season === 'winter'
@@ -417,6 +421,22 @@
       view: 'inside', kind: 'width',
       selector: '.hearth__fire--flame',
       reads: 'how wide the fire stands in its opening',
+    },
+    /* Day 126. The flame is three stacked tiers and the hour says how many of
+     * them stand: all three while the house is up, two while the morning fire
+     * is catching, one — a low sheet over the coals — through the banked night.
+     * Counted on layout and not brightness, because all three tiers flicker
+     * their opacity (Day 98's rule); they are gated with `display`, so a tier
+     * the hour has put down is honestly absent to this count. */
+    'fire-tiers': {
+      view: 'inside', kind: 'visible-count',
+      selector: '.hearth__fire',
+      reads: 'how many tiers of flame are standing in the firebox',
+    },
+    'hearth-glow': {
+      view: 'inside', kind: 'opacity',
+      selector: '.hearth-light',
+      reads: 'how strongly the fire lights the boards',
     },
     'sprig-stem': {
       view: 'inside', kind: 'height',
@@ -942,6 +962,21 @@
       falling: ['dawn', 'dusk', 'night'],
       guards: '“the candle … standing full again as though a hand replaced it in the dark”, “spent down to four of its six”, then “down to three, a low stub”',
     },
+    /* Day 126. A count, so it may be stated outright rather than only compared
+     * (Day 98) — and stating it is the point, because the whole claim is which
+     * hours the fire is up and which it is banked for. Held at summer, but the
+     * gate is the hour alone: every season banks to its own bottom tier, so
+     * this reads 1 at midnight in January exactly as it does in July. */
+    {
+      probe: 'fire-tiers', axis: 'tod', at: { season: 'summer' },
+      expect: { dawn: 2, day: 3, dusk: 3, night: 1 },
+      guards: '“the hearth banked — one low sheet of flame where three tiers stand by day”, the two-tier fire “built back off the night’s coals” at dawn, and the evening keeping its full height through',
+    },
+    {
+      probe: 'hearth-glow', axis: 'tod', at: { season: 'summer' },
+      falling: ['dusk', 'night'],
+      guards: '“the pool on the boards … dim with the flame” — what the banked fire takes off the room is light and not reach',
+    },
 
     /* Day 112. The first three claims on this page that are about a COLOUR, and
      * the first read off the rendered picture of a sprite rather than off the
@@ -1078,9 +1113,21 @@
       guards: 'the candle standing full again at dawn after the evening spends it — the far half of the day’s wheel',
     },
     {
-      probe: 'fire-flame', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      /* Day 126 repointed this off `fire-flame` — the MIDDLE tier — because
+       * the hour now puts that tier down at midnight, honestly and on purpose,
+       * and a floor under a thing the night is allowed to take is a floor that
+       * would go red on a fire doing exactly what it should. What the vow is
+       * about is the bottom (Day 124: a floor is the right shape for a bottom),
+       * so it counts tiers instead: the flame may be banked to one and may
+       * never be banked to none. */
+      probe: 'fire-tiers', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
       floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
-      guards: 'the hearth lit at every hour — you come in cold at any of them and stop being cold',
+      guards: 'the hearth lit at every hour — you come in cold at any of them and stop being cold; the night banks it to one low sheet and never out',
+    },
+    {
+      probe: 'fire-tiers', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      rising: ['night', 'dawn'],
+      guards: 'the fire built back up at first light after the night banks it — the far half of the same wheel the candle beside it rides',
     },
     {
       probe: 'fire-flame', axis: 'season', at: { tod: 'day' }, vow: 'kept',

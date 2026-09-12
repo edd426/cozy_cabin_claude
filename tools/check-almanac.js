@@ -670,6 +670,16 @@ function measureInPage({ probes, forDate }) {
     } else if (probe.kind === 'width' || probe.kind === 'height') {
       const px = parseFloat(cs[probe.kind]);
       readings[name] = Number.isFinite(px) ? px : null;
+    } else if (probe.kind === 'duration') {
+      // Day 127. Seconds, off the real computed longhand — so this reads the
+      // pace the element is ACTUALLY running at, not merely the var behind it.
+      const s = parseFloat(cs.animationDuration);
+      readings[name] = Number.isFinite(s) ? s : null;
+    } else if (probe.kind === 'css-var') {
+      // Day 127. One custom property, as a number. The weakest kind here and
+      // deliberately the last resort: see the note beside it in almanac.js.
+      const v = parseFloat(cs.getPropertyValue(probe.prop));
+      readings[name] = Number.isFinite(v) ? v : null;
     } else {
       readings[name] = null;   // an unknown kind is a fault, not a pass
     }

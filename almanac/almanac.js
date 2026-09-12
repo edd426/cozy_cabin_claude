@@ -166,6 +166,7 @@
         'the far hills’ crests warmed a shade, and the clouds warm along their bellies where the low sun sits under them',
         'the lantern by the door kindled faint, and the candle on the mantle standing full again as though a hand replaced it in the dark',
         'the hearth built back off the night’s coals — two tiers of flame up where three stand by day, the whole ember bed still alight under them, and the light it lays on the room most of the way back',
+        'the chimney’s column still thickish at the cap and still climbing slowly — a morning fire catching on a cold flue smokes before it draws clean. Not more smoke than the day’s: how much there is belongs to the year, which is to say to how much wood is going up. What the hour changes is how completely it burns',
         season === 'winter'
           ? 'the sprig beginning to lean toward the window; the stars gone with the dark'
           : 'the sprig beginning to lean toward the window; no sparks — they belong to the falling edge of the day, not the waking one',
@@ -177,6 +178,7 @@
         'no fog, no lantern, nothing lit; the lamp by the door is only a fixture waiting',
         'the candle full on the mantle, and the sprig at its fullest lean toward the glass around midday',
         'the hearth standing its full three tiers, the tip licking the lintel — whatever size the season has made of it, this is the hour it is up',
+        'the chimney drawing clean — the column leaving the cap as a thin fast thread and only spreading as it cools, which is the quickest and most tapered it gets all day',
         'the window indoors showing plain pale sky above its crossbar and the season’s own meadow below it',
       ];
     },
@@ -187,6 +189,7 @@
         'the lantern by the door burning fuller, and the candle spent down to four of its six — its flame riding the wax down',
         'the sprig easing part-way back from the window as the gold goes low',
         'the hearth still standing its three tiers — the fire is not banked until the house goes to bed, so the evening is the one edge of the day it keeps its full height through',
+        'the chimney drawing as cleanly as at noon, for the same reason: the column at the plain day’s own thin thread and the plain day’s own pace',
         season === 'summer'
           ? 'the first fireflies coming up off the front meadow, faint, with a stray spark or two round the corner past the lamp'
           : season === 'winter'
@@ -201,6 +204,7 @@
         'the candle down to three, a low stub with its flame guttering close to the mantle, and the glow it lays on the brick sunk with it',
         'the sprig standing straight and resting, with nothing left in the glass to reach for',
         'the hearth banked — one low sheet of flame where three tiers stand by day, whatever the season has made of it, and the whole ember bed alight beneath because that is where the fire went. Banking is not spending: the heat is held down in the coals rather than let up the chimney, so the room keeps the warmth it keeps at every other hour and only the light of it is less. The pool on the boards, the glow on the breast and both cast shadows dim with the flame, and not one of them moves — a banked fire lights no shorter a way, only less',
+        'and the same banking read from outside the wall, where it comes out the other way about: a damped fire burns slow and cool and therefore INCOMPLETELY, so the column is at its thickest and laziest of the whole day — already broad as it leaves the cap instead of a thin thread, and taking half again as long to climb. Still the same number of puffs the season sets, because the night takes no extra wood off the rick. At midnight this one fire is at its dimmest inside the wall and its thickest outside it',
         season === 'summer'
           ? 'the fireflies at their fullest over the grass, winking and bobbing each on its own slow count'
           : season === 'winter'
@@ -237,6 +241,24 @@
    *                   colour, the leftmost lump and the rightmost lump are
    *                   (0…255, the widest single channel). Two marks on one
    *                   thing, compared — 0 means the two sides were lit alike.
+   *   duration      — (Day 127) how long one turn of an element's animation
+   *                   takes, in seconds, read off the computed longhand. A
+   *                   second is not a size: it does not scale with `--s`, so
+   *                   unlike a width it may be stated outright, the same way a
+   *                   count or an opacity is.
+   *   css-var       — (Day 127) one custom property on one element, as a
+   *                   number. The weakest kind on this page and the last
+   *                   resort, for a knob that only ever reaches the picture
+   *                   through a keyframe: the rendered thing it controls is a
+   *                   transform whose value depends entirely on what phase the
+   *                   animation happened to be at when the reading was taken,
+   *                   and a probe that measured THAT would be measuring the
+   *                   shutter. What it cannot see is whether the var is still
+   *                   wired to anything — unhook `--puff-born` from the
+   *                   keyframe and this reads on, unmoved, forever. So a
+   *                   `css-var` check is only ever worth as much as whatever
+   *                   else holds the same layer: here, the `duration` beside
+   *                   it, which does read the real running thing.
    *   exemption     — (Day 123) not a reading of the yard but of this page's
    *                   own list of exceptions: how many of the things named
    *                   below as leaning on purpose no longer hold the reason
@@ -378,6 +400,20 @@
       view: 'home', kind: 'visible-count',
       selector: '.sprite--smoke .smoke-puff',
       reads: 'how many puffs are climbing off the chimney',
+    },
+    /* Day 127 — the chimney's hour. Both read the same puff, and they are
+     * deliberately two readings and not one: how much breath there is belongs
+     * to the year (the count above), and these two are about how completely
+     * the wood is burning, which is the hour's. */
+    'smoke-pace': {
+      view: 'home', kind: 'duration',
+      selector: '.sprite--smoke .smoke-puff',
+      reads: 'how many seconds a puff takes to climb the column',
+    },
+    'smoke-girth': {
+      view: 'home', kind: 'css-var', prop: '--puff-born',
+      selector: '.sprite--smoke .smoke-puff',
+      reads: 'how wide a puff already is as it leaves the chimney cap, against the width it reaches at the top',
     },
     'falling-leaves': {
       view: 'home', kind: 'visible-count',
@@ -906,6 +942,16 @@
       probe: 'smoke-puffs', axis: 'season', at: { tod: 'day' },
       expect: { summer: 3, autumn: 3, winter: 4, spring: 3 },
       guards: '“three puffs off a fire nobody needs the heat of”, and winter’s “fourth puff where three climb all year”',
+    },
+    {
+      probe: 'smoke-pace', axis: 'tod', at: { season: 'summer' },
+      expect: { dawn: 5.5, day: 4.5, dusk: 4.5, night: 7 },
+      guards: 'the column climbing half again as slowly at midnight as at noon, a fifth slower at dawn, and the evening at the plain day’s own pace — the fire is not banked until the house goes to bed. Stated in seconds rather than compared, because a second does not scale with the width of the window the way a drawn size does. This is the four-band table of the two below; the girth check beside it holds only an ordering, so if a later day ever gives dusk a rule of its own, this is the line that will say so',
+    },
+    {
+      probe: 'smoke-girth', axis: 'tod', at: { season: 'summer' },
+      rising: ['day', 'dawn', 'night'],
+      guards: 'the column already thick as it leaves the cap once the fire is damped, and leaving it as a thin thread while the fire draws clean — a claim about the ORDER of the three and not about any of the numbers, which the prose never states either. What it cannot see is whether that width still reaches the picture; the pace above is what holds the layer to running at all',
     },
     {
       probe: 'falling-leaves', axis: 'season', at: { tod: 'day' },

@@ -69,7 +69,7 @@
  *      compares them keep them. A baseline carried in from somewhere else is
  *      not a baseline; it is a second opinion.
  *
- * WHAT IT CANNOT SEE. Three things, and they are the honest limits (Day 103:
+ * WHAT IT CANNOT SEE. Five things, and they are the honest limits (Day 103:
  * when a guard changes shape its blind note goes stale, so this list is the
  * blind note and belongs beside the guard).
  *
@@ -108,6 +108,23 @@
  *       That is the Day-33/34 phone blind spot in new clothes, so `viewport`
  *       exists on a frame and the last entry of FRAMES stands at the 3x
  *       layout's own width. Two widths still are not all widths.
+ *
+ *   (5) It cannot see a layer whose life begins AFTER the instant it pins to.
+ *       Found on Day 127, the same way (4) was — by a break-test that failed to
+ *       break. The chimney's smoke was given the hour, its dawn and midnight
+ *       columns visibly changed, and this reported 0 px of 81095 on both the
+ *       dawn frame and the night one. Nothing was wrong: pinAnimations() stands
+ *       every perpetual animation at absolute currentTime 0, and a `.smoke-puff`
+ *       carries a POSITIVE animation-delay, so at zero it has not started and
+ *       renders its base style — `opacity: 0`. The one puff with no delay is at
+ *       its own 0% keyframe, which is also `opacity: 0`. So the column is absent
+ *       from all eight kept frames and always has been. Any layer that is born
+ *       invisible and only comes up as it runs is in the same position.
+ *       The fix is a line: pin to a fixed NON-zero absolute time instead, which
+ *       is just as deterministic and just as blind to rate (see the note on
+ *       pinAnimations). It is not made here because it re-keeps every frame at
+ *       once, and a guard that discards its whole memory should be its own day's
+ *       work rather than the tail of another's.
  *
  * Run:  node tools/check-drift.js [BASE_URL] [--accept] [--out DIR] [--prefix P]
  *
@@ -246,7 +263,16 @@ async function freezeClock(page, iso) {
  * animation-delay is a real phase offset between layers, and dragging each to
  * the same fraction of its own period would be a lie about their rates. Zero
  * is not a meaningful moment of any round — it is simply the same moment every
- * time, which is all a comparison needs. */
+ * time, which is all a comparison needs.
+ *
+ * Day 127: and that is exactly why it has a cost nobody had measured. Zero is
+ * before the start of anything carrying a POSITIVE animation-delay, so such an
+ * element renders its base style rather than a keyframe — and for a layer whose
+ * base style is invisible (the chimney's smoke: `opacity: 0` until the climb
+ * lifts it) the whole layer is missing from every kept frame. See blind note
+ * (5) above. Any fixed non-zero absolute time would keep the same determinism
+ * and the same indifference to rate while standing inside the rounds rather
+ * than in front of them; changing it re-keeps all eight frames, so it waits. */
 function pinAnimations() {
   const anims = document.getAnimations();
   for (const a of anims) {

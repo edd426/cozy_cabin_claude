@@ -1108,28 +1108,44 @@
   opacity: 0;
   bottom: 0;
   left: 0;
-  /* The breath's fullness, season-tunable (Day 87 block below): how bright a
-   * puff holds at its peak and mid-climb, and how wide it has spread by the
+  /* HOW MUCH breath there is — season-tunable (Day 87 block below): how bright
+   * a puff holds at its peak and mid-climb, and how wide it has spread by the
    * top. The born values are the thin summer thread. */
   --puff-peak: 0.95;
   --puff-mid:  0.55;
   --puff-end:  1.3;
+  /* HOW COMPLETELY it is burning — hour-tunable (Day 127 block below): how wide
+   * the puff already is as it leaves the cap, and how long it takes to climb.
+   * The born values are a clean draught. Deliberately a different pair of
+   * properties from the season's three above, so the two clocks never meet on
+   * one declaration and no rule ever has to name both wheels at once. */
+  --puff-born: 0.70;
+  --puff-rise: 4.5s;
   /* Pixel-art cluster: the puff plus three neighbouring pixel blocks
    * make a chunky 12x12 cloud while keeping integer pixel edges. */
   box-shadow:
      6px  0   0 #fff8ec,
      0   -6px 0 #fff8ec,
      6px -6px 0 #fdeed0;
-  animation: smoke-rise 4.5s linear infinite;
+  animation: smoke-rise var(--puff-rise) linear infinite;
 }
-.smoke-puff--1 { animation-delay: 0s;    left:  0px;  }
-.smoke-puff--2 { animation-delay: 1.5s;  left: -4px;  }
-.smoke-puff--3 { animation-delay: 3.0s;  left:  4px;  }
+/* The stagger is written as a fraction of the round rather than in seconds, so
+ * the three (four, in the cold) puffs stay evenly spread however long the climb
+ * takes. Written as 1.5s / 3.0s / 2.25s they were tuned to a 4.5s round and
+ * would have bunched the moment the hour slowed it. At 4.5s these resolve to
+ * exactly the old numbers, which is why the day and dusk frames do not move. */
+.smoke-puff--1 { animation-delay: 0s;                              left:  0px;  }
+.smoke-puff--2 { animation-delay: calc(var(--puff-rise) / 3);      left: -4px;  }
+.smoke-puff--3 { animation-delay: calc(var(--puff-rise) / 3 * 2);  left:  4px;  }
 /* The winter puff (Day 87): hidden except in the cold, when the column
- * carries four puffs instead of three. Its 2.25s delay lands it between
+ * carries four puffs instead of three. Its half-round delay lands it between
  * puffs 2 and 3, so the winter column reads denser without the cadence
  * turning metronomic. */
-.smoke-puff--4 { animation-delay: 2.25s; left: -2px; display: none; }
+.smoke-puff--4 {
+  animation-delay: calc(var(--puff-rise) / 2);
+  left: -2px;
+  display: none;
+}
 
 /* Day 87 (2026-08-03): the chimney's breath takes the year. The woodpile
  * (Day 85) now spends through the winter and restacks by summer — and the
@@ -1157,6 +1173,74 @@
 }
 .scene[data-season="winter"] .smoke-puff--4 { display: block; }
 
+/* Day 127 (2026-09-12): the chimney's breath takes the hour — and it is NOT the
+ * flame's own wheel run out through the wall. Day 126 banked the hearth at
+ * midnight and lifted it again at first light, and the obvious next step would
+ * be to thin the column with the flame. That is wrong about fire. Banking is
+ * raking the coals together and damping the draught so the burn goes slow and
+ * cool, and a slow cool burn is an INCOMPLETE one: the wood gives up its
+ * volatiles unburnt and they go up the flue as dirty smoke. A damped fire does
+ * not stop smoking. It smokes worse.
+ *
+ * But it also cannot smoke MORE, and that is what decides which knobs this
+ * block is allowed. Banking is not spending (Day 126): the night takes no extra
+ * wood off the rick, so no extra smoke can come off the stack. How much breath
+ * there is, is a question about how much wood is going up — and that is the
+ * YEAR's, already answered above by the rick's own wheel. What the hour changes
+ * is how completely that same wood burns. So:
+ *
+ *   the year says how much wood is going up, so it sets how much smoke there is
+ *   the hour says how completely it burns, so it sets how clean that smoke is
+ *
+ * — which is Day 126's own division (`the year sets how far the light reaches,
+ * the hour sets how much of it there is`) one wall further out, and the reason
+ * this block touches neither the count, the peak, the mid nor the spread.
+ *
+ * Two knobs, and both had to be found rather than reasoned to. THE COLOUR IS
+ * NOT ONE OF THEM, and the measurement that ruled it out is the reason this
+ * note is long. Dirty smoke is grey smoke, so the first build darkened the
+ * puff at night (#ddcfbc against the born #fff8ec) — and measured against the
+ * night sky behind it, at the peak of the climb, the mark went from +14.5
+ * luminance over that sky to −4.7 UNDER it: not a dimmer pale mark but a faint
+ * dark one, the smoke's polarity inverted. Worse, the value half way between
+ * (#ebdfcd) read +3.0, which is to say invisible — the night sky sits squarely
+ * between white smoke and grey smoke, so there is a whole band of "dirtier"
+ * that simply erases the column. Kill the two washes before judging a sprite's
+ * colour (Day 112) and then put the wash back to judge whether it still reads:
+ * this knob passed the first test and failed the second. The kept vow — the
+ * chimney breathing at every hour, someone's always home — is held by a COUNT,
+ * which would have gone on reading three through a column nobody could see.
+ *
+ * What is left is how the column is SHAPED, and that is the better answer
+ * anyway. A hot clean draught leaves the flue as a thin fast thread and only
+ * spreads as it cools; a damped one oozes out already thick and climbs slowly.
+ * So: `--puff-born`, how wide a puff already is at the cap, and `--puff-rise`,
+ * how long the climb takes. Night is the thickest and laziest. Dawn is half of
+ * that — the morning fire catching on a cold flue, which smokes before it
+ * draws clean (Day 126's two tiers, still coming up). Day and dusk get NO rule
+ * and keep the born values, dusk because the fire is not banked until the house
+ * goes to bed, the same reason Day 126 left the evening standing three tiers.
+ *
+ * Note what the pair of scales now says together: the SEASON sets how wide the
+ * column ends (`--puff-end`) and the HOUR sets how wide it starts, so the
+ * taper between them is the two wheels read against each other — a thin summer
+ * noon thread spreading wide, a winter midnight column barely tapering at all.
+ *
+ * Both faces take it together, exactly as Day 87's season does: one stack, one
+ * fire, and the wind vantages (Day 61) carry through untouched, since these
+ * vars tune girth and pace only — the front column still leans downwind and
+ * the door-side column still rises straight. So: at midnight this fire is at
+ * its dimmest inside the wall and its thickest outside it. One fire, told
+ * opposite ways on the two sides of one wall, and both ways true. */
+.scene[data-tod="dawn"] .smoke-puff {
+  --puff-born: 0.82;
+  --puff-rise: 5.5s;
+}
+.scene[data-tod="night"] .smoke-puff {
+  --puff-born: 0.95;
+  --puff-rise: 7s;
+}
+
 /* Day 61 (2026-07-08): the front smoke leans downwind. The mailbox flag (Day 60)
  * streams up-and-to-the-right on a steady breeze, and the smoke ten feet over was
  * still rising dead straight — which read as TWO winds (one moving the flag, one
@@ -1179,7 +1263,7 @@
 .scene--exterior .smoke-puff { animation-name: smoke-rise-lean; }
 
 @keyframes smoke-rise {
-  0%   { transform: translateY(0)     scale(0.7);              opacity: 0;                }
+  0%   { transform: translateY(0)     scale(var(--puff-born)); opacity: 0;                }
   12%  {                                                        opacity: var(--puff-peak); }
   60%  {                                                        opacity: var(--puff-mid);  }
   100% { transform: translateY(-72px) scale(var(--puff-end));  opacity: 0;                }
@@ -1191,10 +1275,22 @@
  * shape of a column carried by a steady wind, kept to a whisper (~7°, less than
  * the flag's lift). Rest at 0% keeps prefers-reduced-motion behaviour identical
  * to the vertical variant. */
+/* The two middle steps carry a transform only because a keyframe that names any
+ * part of `transform` must name all of it, and these two need the drift. Their
+ * scales are therefore not choices — the girth runs linearly from `--puff-born`
+ * at the cap to `--puff-end` at the top, so each middle step is written as its
+ * own fraction of that run rather than as a number. Written as 0.77 and 1.06
+ * they were the linear values for a 0.70 birth and would have stopped being so
+ * the moment the hour thickened it (Day 127). At 0.70 → 1.30 they resolve to
+ * exactly 0.77 and 1.06, which is why the day and dusk frames do not move. */
 @keyframes smoke-rise-lean {
-  0%   { transform: translate(0,     0)      scale(0.70);             opacity: 0;                }
-  12%  { transform: translate(1px,  -8.6px)  scale(0.77);             opacity: var(--puff-peak); }
-  60%  { transform: translate(5px,  -43px)   scale(1.06);             opacity: var(--puff-mid);  }
+  0%   { transform: translate(0,     0)      scale(var(--puff-born)); opacity: 0;                }
+  12%  { transform: translate(1px,  -8.6px)
+                    scale(calc(var(--puff-born) +
+                          (var(--puff-end) - var(--puff-born)) * 0.1167));  opacity: var(--puff-peak); }
+  60%  { transform: translate(5px,  -43px)
+                    scale(calc(var(--puff-born) +
+                          (var(--puff-end) - var(--puff-born)) * 0.6));     opacity: var(--puff-mid);  }
   100% { transform: translate(9px,  -72px)   scale(var(--puff-end));  opacity: 0;                }
 }
 

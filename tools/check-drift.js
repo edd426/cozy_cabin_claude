@@ -109,22 +109,26 @@
  *       exists on a frame and the last entry of FRAMES stands at the 3x
  *       layout's own width. Two widths still are not all widths.
  *
- *   (5) It cannot see a layer whose life begins AFTER the instant it pins to.
- *       Found on Day 127, the same way (4) was — by a break-test that failed to
- *       break. The chimney's smoke was given the hour, its dawn and midnight
- *       columns visibly changed, and this reported 0 px of 81095 on both the
- *       dawn frame and the night one. Nothing was wrong: pinAnimations() stands
- *       every perpetual animation at absolute currentTime 0, and a `.smoke-puff`
- *       carries a POSITIVE animation-delay, so at zero it has not started and
- *       renders its base style — `opacity: 0`. The one puff with no delay is at
- *       its own 0% keyframe, which is also `opacity: 0`. So the column is absent
- *       from all eight kept frames and always has been. Any layer that is born
- *       invisible and only comes up as it runs is in the same position.
- *       The fix is a line: pin to a fixed NON-zero absolute time instead, which
- *       is just as deterministic and just as blind to rate (see the note on
- *       pinAnimations). It is not made here because it re-keeps every frame at
- *       once, and a guard that discards its whole memory should be its own day's
- *       work rather than the tail of another's.
+ *   (5) It sees each moving layer at ONE moment of its round, and is blind to
+ *       every other moment of it. This is narrower than it was. Until Day 129
+ *       the pin was absolute zero, which is before the start of anything
+ *       carrying a positive animation-delay — so the chimney's whole column
+ *       (`.smoke-puff`, base style `opacity: 0`) was absent from every kept
+ *       frame and always had been, and Day 127 could change the dawn and the
+ *       midnight smoke and be told, honestly and twice, that nothing had moved.
+ *       The pin now stands inside the rounds instead of in front of them (see
+ *       PIN_AT_MS), which cost every frame kept to that date and is why it was
+ *       its own day's work. What remains is the general form of the same limit:
+ *       a layer that happens to be at an invisible moment of its own round at
+ *       the pin — a puff a hair from the top of its climb, a firefly mid-blink —
+ *       is not in the picture either, and nothing here can tell that from a
+ *       layer that was removed. The premise the pin rests on IS guarded: any
+ *       animation still waiting to start at PIN_AT_MS is named and fails the
+ *       run, so a later day writing a delay longer than the pin cannot drop a
+ *       layer out of the record in silence the way the smoke did. But a guard
+ *       on the premise is not a guard on the picture. What holds *presence* is
+ *       the almanac's counts (tools/check-almanac.js) and the record's coverage
+ *       (tools/check-gallery.js); this holds sameness and nothing else.
  *
  * Run:  node tools/check-drift.js [BASE_URL] [--accept] [--out DIR] [--prefix P]
  *
@@ -139,6 +143,10 @@
  *                sha them into the permanent record.
  *
  * BASE_URL falls back to COZY_CABIN_URL, then to the deployed site.
+ *
+ * Env knobs: DRIFT_CHANNEL_TOL, DRIFT_FAIL_PIXELS (blind note 3) and
+ * DRIFT_PIN_AT_MS (the instant the moving layers are stood at; every kept frame
+ * is a picture of that instant, so overriding it locally will fail every frame).
  */
 'use strict';
 
@@ -165,6 +173,22 @@ const WIDE_VIEWPORT = { width: 900, height: 900 };
 const WASH_SETTLE_MS = 2000;
 /* Two frames' grace after the animations are pinned, before the shutter. */
 const PIN_SETTLE_MS = 120;
+
+/* The instant every perpetual animation is stood at (Day 129). Any fixed
+ * absolute number gives this tool what it actually needs — the same moment
+ * every morning, arrived at without reference to how fast anything runs. Zero
+ * had that property too and one other nobody had measured: it is before the
+ * start of every layer carrying a positive animation-delay, which is the whole
+ * chimney column and anything else born waiting (blind note 5).
+ *
+ * Eight seconds is past the longest delay this yard writes — the night
+ * column's third puff, at two-thirds of a seven-second rise, 4.67s — with room
+ * for a slower column some later day. The margin is not the guarantee, though;
+ * the guarantee is that pinAnimations() names anything still waiting to start
+ * here and the run fails, so this number can be outgrown loudly but not
+ * quietly. Changing it re-keeps every frame in previews/baseline/, so change it
+ * for a reason and declare it the usual way. */
+const PIN_AT_MS = Number(process.env.DRIFT_PIN_AT_MS || 8000);
 
 /* Pixels inside the .scene box we ignore: the 4px border and the 2px inner
  * radius its `overflow: hidden` clips content to. Those corners are the only
@@ -216,7 +240,9 @@ const FRAMES = [
    * drawn in, the window's band hushed. */
   { name: 'inside-winter-day', view: 'inside/', clock: '2026-12-21T12:00' },
   /* the plan from overhead, which answers to no hour at all — so if this one
-   * ever moves, the change is in the drawing and nowhere else. */
+   * ever moves, the change is in the drawing and nowhere else. Measured on Day
+   * 129: it holds no animation whatever, which is why it was the one frame the
+   * new pin did not move and the only kept picture that survived that day. */
   { name: 'map-summer-day', view: 'map/', clock: '2026-06-15T12:00' },
   /* and the same front yard at the 3x layout's own width, where a different
    * set of rules is in force. Below 600px theme.css caps the column and the
@@ -258,34 +284,51 @@ async function freezeClock(page, iso) {
   }, iso);
 }
 
-/* Stop every animation and stand the perpetual ones at absolute zero. Absolute
- * rather than each-to-its-own-fraction, for the Day-109 reason: a negative
- * animation-delay is a real phase offset between layers, and dragging each to
- * the same fraction of its own period would be a lie about their rates. Zero
- * is not a meaningful moment of any round — it is simply the same moment every
- * time, which is all a comparison needs.
+/* Stop every animation and stand the perpetual ones at one absolute instant.
+ * Absolute rather than each-to-its-own-fraction, for the Day-109 reason: a
+ * negative animation-delay is a real phase offset between layers, and dragging
+ * each to the same fraction of its own period would be a lie about their rates.
+ * The instant itself is PIN_AT_MS, and it is not a meaningful moment of any
+ * round — it is simply the same moment every time, which is all a comparison
+ * needs.
  *
- * Day 127: and that is exactly why it has a cost nobody had measured. Zero is
- * before the start of anything carrying a POSITIVE animation-delay, so such an
- * element renders its base style rather than a keyframe — and for a layer whose
- * base style is invisible (the chimney's smoke: `opacity: 0` until the climb
- * lifts it) the whole layer is missing from every kept frame. See blind note
- * (5) above. Any fixed non-zero absolute time would keep the same determinism
- * and the same indifference to rate while standing inside the rounds rather
- * than in front of them; changing it re-keeps all eight frames, so it waits. */
-function pinAnimations() {
+ * Day 129 also returns the animations the seek left STILL WAITING TO START —
+ * those whose delay runs past the pin, so the element renders its base style
+ * instead of a keyframe. That was the whole of Day 127's finding (the chimney's
+ * base style is `opacity: 0`, so an unstarted column is an absent one) and it
+ * arrived as silence: the frames simply agreed, and agreed about nothing. It
+ * cannot arrive as silence again. `getComputedTiming().progress` is null in the
+ * delay phase and a number inside the round, which is the same question asked
+ * of the browser instead of of the stylesheet.
+ *
+ * What this does NOT tell you: whether a pinned layer is visible at the moment
+ * it was pinned to. Measured on the day it was written, the puff with no delay
+ * sat at progress 0 — inside its round, so not reported here, and at the 0%
+ * keyframe, so invisible all the same. Presence is the almanac's question and
+ * the gallery's; see blind note (5). */
+function pinAnimations(atMs) {
   const anims = document.getAnimations();
+  let pinned = 0;
+  const waiting = [];
   for (const a of anims) {
     try {
       a.pause();
       const timing = a.effect && a.effect.getComputedTiming();
-      if (timing && timing.iterations === Infinity) a.currentTime = 0;
+      if (!timing || timing.iterations !== Infinity) continue;
+      a.currentTime = atMs;
+      pinned++;
+      if (a.effect.getComputedTiming().progress === null) {
+        const el = a.effect.target;
+        const cls = el ? (el.getAttribute && el.getAttribute('class')) || el.tagName : '?';
+        waiting.push(`${a.animationName || '(unnamed)'} on .${String(cls).trim().split(/\s+/).join('.')}` +
+                     ` (delay ${Math.round(timing.delay)}ms)`);
+      }
     } catch (e) {
       /* a finished transition may refuse to be driven; it is already where it
        * belongs, and pausing the rest is what matters. */
     }
   }
-  return anims.length;
+  return { total: anims.length, pinned, waiting };
 }
 
 /* The window to photograph: the scene's own box, inset past its border and the
@@ -323,14 +366,14 @@ async function captureFrame(browser, base, frame) {
     /* The home scene is fetched into #scene-mount after load. */
     await page.waitForSelector('.scene', { timeout: 15000 });
     await page.waitForTimeout(WASH_SETTLE_MS);
-    const anims = await page.evaluate(pinAnimations);
+    const pin = await page.evaluate(pinAnimations, PIN_AT_MS);
     await page.waitForTimeout(PIN_SETTLE_MS);
     const clip = await page.evaluate(measureSceneClip, INSET);
     if (!clip || clip.width < 1 || clip.height < 1) {
       throw new Error(`no measurable .scene on ${url}`);
     }
     const buf = await page.screenshot({ clip });
-    return { buf, clip, anims };
+    return { buf, clip, anims: pin.total, waiting: pin.waiting };
   } finally {
     await context.close();
   }
@@ -486,7 +529,7 @@ async function main() {
 
   fs.mkdirSync(BASELINE_DIR, { recursive: true });
   const browser = await chromium.launch(launchOpts());
-  let drifted = 0, kept = 0, pictures = 0;
+  let drifted = 0, kept = 0, pictures = 0, unstarted = 0;
 
   try {
     /* One page for every comparison; it only ever holds canvases. */
@@ -496,10 +539,23 @@ async function main() {
 
     for (const frame of FRAMES) {
       const keptPath = path.join(BASELINE_DIR, `${frame.name}.png`);
-      const { buf, clip, anims } = await captureFrame(browser, base, frame);
+      const { buf, clip, anims, waiting } = await captureFrame(browser, base, frame);
       const vp = frame.viewport || VIEWPORT;
       const where = `${frame.view || '(home)'} @ ${frame.clock}, ${vp.width}px`;
       const shape = `${clip.width}×${clip.height}`;
+
+      /* The pin's own premise, checked before the picture is worth comparing:
+       * a layer still inside its delay at PIN_AT_MS renders its base style, and
+       * a base style can be invisible. That is Day 127's fault exactly, and it
+       * announced itself as two frames quietly agreeing. It announces itself
+       * here instead. */
+      if (waiting.length) {
+        unstarted++;
+        console.log(`UNBORN ${frame.name} — ${waiting.length} animation(s) had not ` +
+                    `started at the pin (${PIN_AT_MS}ms), so they are in this frame ` +
+                    `only as whatever their base style draws  [${where}]`);
+        for (const w of waiting) console.log(`        ${w}`);
+      }
 
       if (args.accept) {
         fs.writeFileSync(keptPath, buf);
@@ -554,6 +610,19 @@ async function main() {
   }
 
   console.log('');
+  if (unstarted) {
+    console.error(
+      `check-drift: FAIL — ${unstarted} frame(s) hold a layer that had not started ` +
+      `at the pin.\n` +
+      `Some layer now carries an animation-delay longer than PIN_AT_MS ` +
+      `(${PIN_AT_MS}ms),\n` +
+      'so this witness is drawing it as its base style rather than as itself, and a\n' +
+      'base style can be invisible — which is exactly how the chimney went missing\n' +
+      'from every kept frame for ten days. Raise PIN_AT_MS past the delay named\n' +
+      'above and re-key the frames, or give the layer a smaller delay.'
+    );
+    process.exit(1);
+  }
   if (args.accept) {
     console.log(`check-drift: kept ${FRAMES.length} frame(s) in ${BASELINE_DIR}.`);
     console.log('check-drift: commit them with the change they record — the baseline ' +

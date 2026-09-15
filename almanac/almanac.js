@@ -580,12 +580,40 @@
      * however it was painted, but sees only the wash, not a sprite lit down one
      * edge. It is measured Node-side (two screenshots), so it carries no pseudo. */
     'frame-light-balance': {
-      view: 'home', kind: 'frame-balance', selector: '.scene',
+      view: 'home', kind: 'frame-balance', selector: '.scene', read: 'lean',
       reads: 'whether the light the washes lay over the whole frame is weighed evenly left and right, read off the rendered picture and not the gradient that drew it',
     },
     'door-frame-light-balance': {
-      view: 'around', kind: 'frame-balance', selector: '.scene',
+      view: 'around', kind: 'frame-balance', selector: '.scene', read: 'lean',
       reads: 'the same weighing, read off the other face’s own picture',
+    },
+
+    /* Day 130 — the weighing's own premise, taken off the very same pair of
+     * shots and costing no extra picture.
+     *
+     * A weighing is a comparison, and a comparison handed two identical
+     * pictures cannot tell "nothing changed" from "nothing was there": both
+     * come back as the most reassuring answer it owns. The two above used to
+     * answer a difference of nothing with a flat 0 — a perfect pass — under a
+     * comment claiming the plain middle of a summer day draws no wash, which
+     * was simply false (summer has a `::before` rule like the other three), so
+     * that branch had never once run and was waiting for a morning when
+     * something lifted the light before the weighing reached it. Then it would
+     * have reported a perfectly even frame in every state and every season,
+     * green forever and for nothing.
+     *
+     * So `weight` — the mean luma the wash adds per pixel of the frame — is
+     * read beside the lean and held to a floor. It is a per-pixel mean, so it
+     * does not ride the layout, and it is nought exactly when the difference
+     * was empty. The ceiling says the light does not lean; this says there was
+     * a light there not to lean. */
+    'frame-light-weight': {
+      view: 'home', kind: 'frame-balance', selector: '.scene', read: 'weight',
+      reads: 'how much light there actually was to weigh — the mean the washes add to a pixel of the frame, which is nought exactly when the weighing above was handed two identical pictures',
+    },
+    'door-frame-light-weight': {
+      view: 'around', kind: 'frame-balance', selector: '.scene', read: 'weight',
+      reads: 'the same premise asked of the other face’s own picture',
     },
 
     /* Day 112 — the Day-104 weighing turned around.
@@ -842,7 +870,14 @@
         'reader parses as even. Two others read the rendered picture instead, sharing no code with those ' +
         'or with each other. One weighs the wash off the frame, left half against right, and so catches a ' +
         'wash that leans however it was painted — but to weigh the light it has to lift the wash off the ' +
-        'furniture, the frame having never been even to begin with, so it sees only the wash. The other, ' +
+        'furniture, the frame having never been even to begin with, so it sees only the wash. That one has ' +
+        'a blind spot of a different shape from all the others here, and since the hundred and thirtieth ' +
+        'morning it is guarded rather than merely named: a weighing is a COMPARISON, and a comparison ' +
+        'handed two identical pictures cannot tell that nothing changed from that nothing was there. Both ' +
+        'come back as the evenest frame there is. So beside every ceiling on that reading there is now a ' +
+        'floor on how much light the two pictures differed by at all. It is a floor of presence, not of ' +
+        'proportion — a wash faded to a tenth of itself would still clear it — and it holds only the ' +
+        'premise, never the promise. The other, ' +
         'added on the hundred and eighteenth morning, weighs the bodies instead: it takes the light off ' +
         'and asks each standing thing which of its own sides it is brightest on, then averages those ' +
         'across the frame by area. That closes the gap the first one wrote here — a body painted brighter ' +
@@ -1340,6 +1375,36 @@
       probe: 'door-frame-light-balance', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
       ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the door side weighed off the picture in all four seasons',
+    },
+
+    /* ── the premise under the four above (Day 130) ──────────────────────
+     * A floor of one is a PRESENCE floor and is stated as one, the same reading
+     * the counts take: the faintest wash on this yard weighs 2.7 and the
+     * deepest 8.2, so one is well under the least of them and far above nothing.
+     * It is deliberately not a share (Day 124's instrument for a proportion) —
+     * the four states honestly differ threefold in strength and no promise here
+     * says otherwise, so a fraction would be a number invented to look strict.
+     * What this forbids is the one thing a ceiling on an even light cannot: a
+     * frame where the light has gone, and the witness above reporting it even. */
+    {
+      probe: 'frame-light-weight', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'there being a light over the front yard at all, at every hour — the premise the weighing above stands on, since a weighing handed two identical pictures reports the evenest frame there is',
+    },
+    {
+      probe: 'frame-light-weight', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same premise through all four seasons of the year’s wash',
+    },
+    {
+      probe: 'door-frame-light-weight', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'and asked of the door side too, at every hour — one stylesheet washes both faces, so a wash that went out there would go out here, and a premise held on one face only is half a premise',
+    },
+    {
+      probe: 'door-frame-light-weight', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      floor: 1, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the door side’s premise through all four seasons',
     },
 
     /* ── the vow, weighed off the bodies (Day 118) ───────────────────────

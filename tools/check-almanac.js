@@ -58,6 +58,12 @@
  * furniture — left half against right. A wash that leans however it was drawn
  * pulls the reading off centre; an even one reads ~0. It sees only the wash,
  * not a sprite lit down one edge, which is written into the vow's blind note.
+ * Since Day 130 a `frame-balance` probe says which of two scalars it takes off
+ * that one pair of shots — `read: 'lean'` (as above) or `read: 'weight'`, how
+ * much light there was to weigh at all — because a comparison handed two
+ * identical pictures answers the same way whether nothing changed or nothing
+ * was there, and the second reading is the only thing that can tell those
+ * apart. See analyzeBalance.
  *
  * Day 111 (2026-08-27): a fifth kind, `hold`, and it is the first here that
  * forces no state at all. The page now publishes GIVENS — conditions of the
@@ -582,9 +588,10 @@ function measureInPage({ probes, forDate }) {
         return total;
       };
 
-      let lapsed = 0;
+      let lapsed = 0, asked = 0;
       for (const entry of allow) {
         if (!entry.where || entry.where.indexOf(view) === -1) continue;
+        asked++;
         if (!entry.holds || !entry.holds.length) {
           lapsed++; notes.push(`${entry.selector}: no test written for its reason`);
           continue;
@@ -634,9 +641,21 @@ function measureInPage({ probes, forDate }) {
         if (!ok) lapsed++;
       }
 
+      // Day 130. "Every exception claimed for this view still holds" said over
+      // NO exceptions is the same vacuity the weighing had: a nought that means
+      // nothing was asked, wearing the face of a nought that means nothing was
+      // wrong. The day's survey found this one; Day 129's question had only
+      // guessed at the weighing. The sweeps would go red if the whole list
+      // vanished — the six deliberate leans would stop being subtracted — but
+      // this check's own sentence would go on reading green, and a sentence
+      // that cannot go red is not a witness. So: a missing reading.
+      if (asked === 0) {
+        notes.push('no exception on the list claims this view at all — ' +
+                   'nothing was asked, which is not the same as nothing being wrong');
+      }
       window.__cabinExemptionNotes = window.__cabinExemptionNotes || {};
       window.__cabinExemptionNotes[name] = notes;
-      readings[name] = lapsed;
+      readings[name] = asked === 0 ? null : lapsed;
       continue;
     }
 
@@ -715,7 +734,24 @@ function measureInPage({ probes, forDate }) {
  * only the wash, because the wash is what toggling the pseudo-elements removes;
  * a sprite lit brighter down one edge stands identically in both shots and
  * cancels, so it is outside even this. That limit is written into the vow's
- * `blind` note on the page. */
+ * `blind` note on the page.
+ *
+ * Day 130 (2026-09-15): it returns TWO numbers off the one pair of shots, and
+ * the second is the first one's premise.
+ *
+ *   lean   — as above: how far off centre the added light weighs, 0…1.
+ *   weight — how much light there was to weigh: the mean luma the wash added
+ *            per pixel of the frame.
+ *
+ * A weighing is a comparison, and a comparison handed two identical pictures
+ * cannot tell "nothing changed" from "nothing was there" — it reports the same
+ * reassuring answer either way. That is the one failure a comparison cannot
+ * tell from success, because success looks exactly like it. `lean` alone had no
+ * way to say which it had met; the pair does. `weight` is a per-pixel mean, so
+ * it does not ride the viewport, and it is 0 exactly when the difference was
+ * empty — which is why the page holds it to a floor beside every ceiling on the
+ * lean. The ceiling says the light does not lean; the floor beside it says
+ * there was a light there not to lean. */
 async function analyzeBalance({ withWash, noWash }) {
   const decode = async (b64) => {
     const bin = atob(b64);
@@ -750,14 +786,31 @@ async function analyzeBalance({ withWash, noWash }) {
       total += d;
     }
   }
-  // No wash at all (the plain middle of a day at the home season) means no
-  // light was added, and light that isn't there can't have an address.
-  if (total <= 0) return 0;
+
+  // `weight` is how much light there was to weigh at all: the mean luma the
+  // wash added per pixel of the frame. It is a per-pixel mean, so it does not
+  // ride the viewport, and it is 0 exactly when the two pictures were the same.
+  // Rounded to three places only so the report reads — the floor it is held to
+  // is 1, and this yard's faintest wash weighs 2.7.
+  const weight = Math.round((total / (w * h)) * 1000) / 1000;
+
+  // Day 130. Two identical pictures mean NOTHING WAS LIFTED, and a lean is not
+  // a thing that can be read off nothing. This used to return 0 here — a
+  // perfect pass — under a comment claiming the plain middle of a day at the
+  // home season draws no wash. That was simply wrong: `.scene[data-season=
+  // "summer"]::before` is a rule like the other three, so every state this is
+  // ever asked about does have light in it and this branch had never once run.
+  // It was a reassuring answer waiting for the day something silently lifted
+  // the light before the weighing got to it — and then it would have reported a
+  // perfectly even frame in every state, green forever and for nothing (diary
+  // 2026-09-14). A missing reading, then, like every other kind here.
+  if (total <= 0) return { lean: null, weight: 0 };
 
   let weighted = 0;
   for (let x = 0; x < w; x++) weighted += (x + 0.5) * cols[x];
-  const centroid = weighted / total / w;   // in [0, 1]
-  return Math.abs(centroid - 0.5) * 2;      // 0 = dead centre, 1 = all one edge
+  const centroid = weighted / total / w;        // in [0, 1]
+  return { lean: Math.abs(centroid - 0.5) * 2,  // 0 = dead centre, 1 = all one edge
+           weight };
 }
 
 async function measureFrameBalance(page, probe) {
@@ -791,6 +844,8 @@ async function measureFrameBalance(page, probe) {
   await page.waitForTimeout(150);
   const noWash = (await scene.screenshot()).toString('base64');
 
+  // { lean, weight } — see analyzeBalance. Both come off this one pair of shots,
+  // so a probe asking for the weight costs no extra page and no extra picture.
   return await page.evaluate(analyzeBalance, { withWash, noWash });
 }
 
@@ -1261,9 +1316,29 @@ async function readState(browser, base, view, state, probes) {
     // evaluate above — it needs Node-side screenshots between page states — so
     // it is measured here and merged on top. It goes last so its wash-off style
     // injection can't disturb the computed-style readings taken above.
+    //
+    // Day 130. Probes over the same frame are grouped and measured once, and
+    // each takes the scalar it asks for off the one pair of shots — `lean` (how
+    // far off centre the light weighs) or `weight` (how much light there was to
+    // weigh at all). For the two `sprite-tone` probes over one sprite (Day 112)
+    // sharing a pair of shots was thrift; here it is REQUIRED. measureFrameBalance
+    // leaves the wash switched off on the page it ran on, so a second call would
+    // take its wash-ON shot through a wash already lifted, find no difference,
+    // and — before this morning — report a perfectly even light. The witness
+    // would have been broken by the act of asking it twice.
+    const balanceGroups = new Map();
     for (const [name, probe] of Object.entries(probes)) {
-      if (probe.kind === 'frame-balance') {
-        readings[name] = await measureFrameBalance(page, probe);
+      if (probe.kind !== 'frame-balance') continue;
+      const key = (probe.selector || '.scene') + '|' + (probe.washSelector || '');
+      if (!balanceGroups.has(key)) balanceGroups.set(key, { probe, names: [] });
+      balanceGroups.get(key).names.push(name);
+    }
+    for (const { probe, names } of balanceGroups.values()) {
+      const got = await measureFrameBalance(page, probe);
+      for (const name of names) {
+        const want = probes[name].read || 'lean';
+        const v = got ? got[want] : null;
+        readings[name] = v === undefined ? null : v;
       }
     }
     return readings;
@@ -1523,7 +1598,20 @@ async function main() {
   console.log('check-almanac: OK — every witnessed claim still holds.');
 }
 
-main().catch((err) => {
-  console.error('check-almanac: FAIL —', err.message);
-  process.exit(1);
-});
+/* Day 130. Published read-only, and guarded so that requiring this file does
+ * not run the whole check — the same move screenshot.js made on Day 117 so
+ * tools/check-gallery.js could read the rails off the camera that takes them.
+ * What it is for here is the survey in the day's own `/tmp/` test: the three
+ * witnesses that read by DIFFERENCE are handed two identical pictures and asked
+ * what they say. A copy of them in the test would only prove what the copy
+ * does, which is the Day-97 shared-reckoning fault one level out. */
+module.exports = { analyzeBalance, analyzeSpriteTone, analyzePaintLean,
+                   measureFrameBalance, spriteShots, measurePaintLean,
+                   measureInPage, launchOpts, VIEWPORT, SETTLE_MS };
+
+if (require.main === module) {
+  main().catch((err) => {
+    console.error('check-almanac: FAIL —', err.message);
+    process.exit(1);
+  });
+}

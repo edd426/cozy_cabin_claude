@@ -1100,6 +1100,122 @@ async function measurePaintLean(page, probe) {
   return { reading: Math.round(Math.abs(num / den) * 1000), parts };
 }
 
+/* ------------------------------------------------------------------------ *
+ * Day 131 — the seal a page carries, and what a witness says when it is
+ * handed not nothing but another witness's damage.
+ *
+ * Three of the readings above work by WRECKING the page they read.
+ * `measureFrameBalance` hides every child of the frame, lays a flat grey ground
+ * and lifts the two washes; `spriteShots` lifts the washes and hides one named
+ * body; `measurePaintLean` lifts the washes and hides each of a list in turn.
+ * None of them puts the page back. So which of them may share a page and which
+ * needs one of its own has been, since Day 112, a fact about the shape of
+ * readState below — three loops in a chosen order, each with a comment saying
+ * why. That is a hand-written list, and Day 123 found out what is wrong with
+ * one while holding a different list of six: what makes it dangerous was never
+ * that a hand wrote it, it is that nothing after the hand ever asks whether it
+ * is still so.
+ *
+ * Day 130 asked each witness what it says when handed nothing, and each of
+ * these three now answers a missing reading rather than a number — so the loud
+ * half of this fault is already held. What is not held is the PARTIAL overlap,
+ * and there is a real one on this yard. `door-plant-tone` hides
+ * `.door-plant__foliage`; `door-paint-lean` isolates `.door-plant`, which
+ * CONTAINS that foliage. Let the two share a page and the second still finds
+ * pixels to read — the pot, without the plant in it — so it hands back a
+ * plausible number rather than nothing at all.
+ *
+ * Measured, with the lean loop deliberately reusing the tone group's page:
+ * `.door-plant` reads -0.313 where it honestly reads -0.161, `door-paint-lean`
+ * reads 15 against its ceiling of 60, and the check HELD in all four seasons.
+ * On the same broken run `home-paint-lean` went BROKE in all four — because
+ * there the hidden `.flower` is the whole of the listed `.sprite--flowers`, so
+ * it came back NOT FOUND. One shared page, two faults, and only the
+ * total-overlap one was visible. The one that matters is the other.
+ *
+ * So the page carries a seal: a short reading of exactly the properties these
+ * three witnesses answer through — the frame's own background, the computed
+ * opacity of its two wash pseudo-elements, how many of its descendants still
+ * lay out and show, and how many CSS animations are still running (each of the
+ * three freezes them as its first act, so the seal catches all three before
+ * they have lifted anything). It is MEASURED off the rendered page and never
+ * declared by the witness, which is the whole point: a kind added some later
+ * day by a hand that never thought about any of this is caught the first time
+ * it runs on a page somebody else had.
+ *
+ * A reading taken on a page whose seal has moved is not a reading. It comes
+ * back null and the run goes red naming both witnesses, the way check-drift
+ * names an unborn layer (Day 129) — a guard on the premise, reported before
+ * the verdicts and separately from them, because a witness reporting
+ * `read nothing there` sends a reader out to the yard looking for a renamed
+ * class (Day 118's addendum says exactly that), and the fault would be in here.
+ *
+ * What it cannot see, and it is the same shape as every blind note on the
+ * almanac: it holds that a page did not CHANGE under a witness, never that the
+ * witness read it correctly. Damage a later kind does and then perfectly undoes
+ * — a body hidden and shown again, a style tag injected and removed — restores
+ * the seal and passes, and so does any damage in a property the seal does not
+ * read. It holds the isolation, not the reading.
+ * ------------------------------------------------------------------------ */
+
+const PAGE_SEAL = new WeakMap();
+const REFUSALS = [];
+
+/* The seal itself. Deliberately small and deliberately about the rendered page:
+ * every quantity in it is one a witness above answers through. */
+async function readSeal(page) {
+  return await page.evaluate(() => {
+    const frames = [];
+    for (const scene of document.querySelectorAll('.scene')) {
+      let shown = 0;
+      for (const el of scene.querySelectorAll('*')) {
+        if (el.getClientRects().length === 0) continue;
+        if (getComputedStyle(el).visibility === 'hidden') continue;
+        shown++;
+      }
+      frames.push([
+        getComputedStyle(scene).backgroundColor,
+        getComputedStyle(scene, '::before').opacity,
+        getComputedStyle(scene, '::after').opacity,
+        shown,
+      ].join('/'));
+    }
+    // Animations only, never transitions: a CSSTransition is in this list only
+    // while it is mid-flight, so counting them would make the seal a fact about
+    // the instant it was taken. A CSSAnimation carries `animationName`; the
+    // ones here are all infinite, so their count holds still on a settled page.
+    const running = document.getAnimations()
+      .filter((a) => typeof a.animationName === 'string').length;
+    return frames.join(' ') + ' anims=' + running;
+  });
+}
+
+/* Seal a page as it is opened. Every page a reading is taken on goes through
+ * here, so `takenOn` below can tell an unsealed page from an undamaged one. */
+async function sealPage(page) {
+  PAGE_SEAL.set(page, { seal: await readSeal(page), spentBy: null });
+  return page;
+}
+
+/* One reading, taken on a page nothing has worked on yet — or refused.
+ * Returns { value } or { refused }. */
+async function takenOn(page, name, fn) {
+  const st = PAGE_SEAL.get(page);
+  if (!st) {
+    throw new Error(`internal: "${name}" was handed a page nobody sealed`);
+  }
+  if ((await readSeal(page)) !== st.seal) {
+    const by = st.spentBy || 'something nothing here recorded';
+    const refused = `${name} was handed a page ${by} had already worked on`;
+    REFUSALS.push(refused);
+    console.log(`check-almanac:   REFUSED — ${refused}`);
+    return { refused };
+  }
+  const value = await fn();
+  if ((await readSeal(page)) !== st.seal) st.spentBy = name;
+  return { value };
+}
+
 /* Day 111. The clock a hold check stands on.
  *
  * Installed with page.addInitScript, so it is in place before sky.js and
@@ -1218,7 +1334,10 @@ async function readOn(browser, base, view, iso, probes) {
                     { waitUntil: 'networkidle', timeout: 30000 });
     await page.waitForSelector('.scene', { timeout: 15000 });
     await page.waitForTimeout(SETTLE_MS);
-    return await page.evaluate(measureInPage, { probes, forDate: true });
+    await sealPage(page);
+    const taken = await takenOn(page, `the reading on ${iso}`, () =>
+      page.evaluate(measureInPage, { probes, forDate: true }));
+    return taken.value || {};
   } finally {
     await context.close();
   }
@@ -1242,12 +1361,20 @@ async function readState(browser, base, view, state, probes) {
       }
     }, state);
     await page.waitForTimeout(SETTLE_MS);
-    return page;
+    // Day 131. Every page a reading is taken on carries a seal from the moment
+    // it settles, so `takenOn` can refuse a reading on a page another witness
+    // has already worked on rather than quietly taking one.
+    return await sealPage(page);
   };
 
   const page = await openForced();
   try {
-    const readings = await page.evaluate(measureInPage, { probes, forDate: false });
+    // The computed-style pass is a pure read, and it goes first so it is taken
+    // before frame-balance below lifts the light off this same page. That order
+    // used to be held by a comment; it is held by the seal now.
+    const taken = await takenOn(page, 'the computed-style pass', () =>
+      page.evaluate(measureInPage, { probes, forDate: false }));
+    const readings = taken.value || {};
 
     // Day 123. An `exemption` reading is a count of lapsed exceptions, which
     // says how many places to go and look and never which. The detail is left
@@ -1277,15 +1404,22 @@ async function readState(browser, base, view, state, probes) {
     for (const { probe, names } of toneGroups.values()) {
       const tonePage = await openForced();
       try {
-        const shots = await spriteShots(tonePage, probe);
+        const taken = await takenOn(tonePage, names.join('+'), async () => {
+          const shots = await spriteShots(tonePage, probe);
+          const out = {};
+          for (const name of names) {
+            out[name] = shots
+              ? await tonePage.evaluate(analyzeSpriteTone, {
+                  withSprite: shots.withSprite,
+                  noSprite: shots.noSprite,
+                  channel: probes[name].channel || 'warmth',
+                })
+              : null;
+          }
+          return out;
+        });
         for (const name of names) {
-          readings[name] = shots
-            ? await tonePage.evaluate(analyzeSpriteTone, {
-                withSprite: shots.withSprite,
-                noSprite: shots.noSprite,
-                channel: probes[name].channel || 'warmth',
-              })
-            : null;
+          readings[name] = taken.value ? taken.value[name] : null;
         }
       } finally {
         await tonePage.close();
@@ -1300,7 +1434,9 @@ async function readState(browser, base, view, state, probes) {
       if (probe.kind !== 'paint-lean') continue;
       const leanPage = await openForced();
       try {
-        const got = await measurePaintLean(leanPage, probe);
+        const taken = await takenOn(leanPage, name, () =>
+          measurePaintLean(leanPage, probe));
+        const got = taken.value;
         readings[name] = got ? got.reading : null;
         if (got) {
           console.log(`check-almanac:   ${name} ${keyOf(state)} = ` +
@@ -1334,7 +1470,9 @@ async function readState(browser, base, view, state, probes) {
       balanceGroups.get(key).names.push(name);
     }
     for (const { probe, names } of balanceGroups.values()) {
-      const got = await measureFrameBalance(page, probe);
+      const taken = await takenOn(page, names.join('+'), () =>
+        measureFrameBalance(page, probe));
+      const got = taken.value;
       for (const name of names) {
         const want = probes[name].read || 'lean';
         const v = got ? got[want] : null;
@@ -1587,15 +1725,39 @@ async function main() {
   }
 
   console.log('');
+
+  // Day 131. The premise before the verdicts, the way check-drift reports an
+  // unborn layer before it compares a picture. A refusal is not a claim the
+  // clearing broke — it is this runner having taken a reading on a page another
+  // witness had already wrecked, which is a fault in here and not out there.
+  // It is said first and separately so nobody goes looking in the yard for it.
+  if (REFUSALS.length) {
+    console.error(
+      `check-almanac: FAIL — ${REFUSALS.length} reading(s) refused; a witness was ` +
+      'handed a page another had already worked on.'
+    );
+    for (const refused of REFUSALS) console.error(`        ✗ ${refused}`);
+    console.error(
+      'Three of the readings here wreck the page they read: frame-balance empties\n' +
+      'the frame and lifts the washes, sprite-tone lifts the washes and hides one\n' +
+      'body, paint-lean lifts them and hides a list in turn. None puts the page\n' +
+      'back, so each needs one nothing else has touched. Give the refused reading\n' +
+      'a page of its own in readState (openForced), or move it ahead of whatever\n' +
+      'spent this one. The numbers above it are not to be trusted either way.'
+    );
+  }
+
   if (failures) {
     console.error(
       `check-almanac: FAIL — ${failures} claim(s) the clearing no longer keeps.\n` +
       'Either the yard changed and /almanac/\'s prose needs mending (almanac.js,\n' +
       'the SEASON and HOUR tables), or the change itself was the mistake.'
     );
-    process.exit(1);
   }
-  console.log('check-almanac: OK — every witnessed claim still holds.');
+
+  if (failures || REFUSALS.length) process.exit(1);
+  console.log('check-almanac: OK — every witnessed claim still holds, and every ' +
+              'reading was taken on a page nothing else had worked on.');
 }
 
 /* Day 130. Published read-only, and guarded so that requiring this file does
@@ -1607,7 +1769,12 @@ async function main() {
  * does, which is the Day-97 shared-reckoning fault one level out. */
 module.exports = { analyzeBalance, analyzeSpriteTone, analyzePaintLean,
                    measureFrameBalance, spriteShots, measurePaintLean,
-                   measureInPage, launchOpts, VIEWPORT, SETTLE_MS };
+                   measureInPage, launchOpts, VIEWPORT, SETTLE_MS,
+                   // Day 131. The seal, published for the same reason: a `/tmp/`
+                   // test that wants to ask a page whether a witness left a mark
+                   // on it must read the seal this runner reads, not a copy of
+                   // it — a copy would only ever prove what the copy does.
+                   readSeal, sealPage, takenOn };
 
 if (require.main === module) {
   main().catch((err) => {

@@ -182,6 +182,23 @@
                 'it is held against in `previews/baseline/`; a drifted frame ' +
                 'leaves `previews/<date>-<sha>-drift-<name>.png` in the record.',
         },
+        {
+          since: '2026-09-17',
+          day: 132,
+          says: 'The word widens a second time, and this one is about what a ' +
+                'witness is *of*. Senses 1 and 2 both watch the clearing — one ' +
+                'holds a sentence about it, one holds the drawing of it. These ' +
+                'watch the watching: what they hold is the bookkeeping the other ' +
+                'checks are made of, so they are the only ones here whose finding ' +
+                'is never news about the yard. That is also why they are not on ' +
+                'the almanac page and never will be — it is for what this place ' +
+                'promises, and a promise is not what these are about.',
+          mark: 'the page seal (`readSeal` / `takenOn` in `tools/check-almanac.js`), ' +
+                'which refuses a reading taken on a page another witness has ' +
+                'wrecked; and `tools/check-nesting.js`, which holds every ' +
+                'hand-written selector on those lists against every other, less ' +
+                'the relations set out in its own `DECLARED`.',
+        },
       ],
     },
 

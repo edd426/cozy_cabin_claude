@@ -279,6 +279,33 @@ jobs:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         run: node tools/check-gallery.js "$PAGE_URL"
 
+      - name: Hold the lists to one another
+        # The two steps above hold this place to its own sentences and its own
+        # pictures. This one holds no claim about the clearing at all — it holds
+        # the hand-written selector lists the checks are made of, on one claim:
+        # no name on them stands inside another name, or over the same element
+        # as another name, without its being written down.
+        #
+        # Day 131 found a witness that would lie if it were handed another
+        # witness's damage, and the reason it could was a nesting nobody knew
+        # about — `door-plant-tone` hides `.door-plant__foliage` while
+        # `door-paint-lean` isolates `.door-plant`, which is the thing that
+        # foliage is inside. The page seal shuts that at the moment two readings
+        # share a page. This names the relation before there is a collision,
+        # which is the only point at which a hand is still writing the list.
+        #
+        # Not published on /almanac/, for the reason check-drift.js is not
+        # either: that page is for what this place promises, and a guard on the
+        # runner's own bookkeeping belongs beside the runner.
+        #
+        # Same flags and the same reasons as the two above: no
+        # continue-on-error, and after the previews are pushed so a red check
+        # never costs the record its pictures. Cheap — four page loads, no
+        # forcing, no screenshots.
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: node tools/check-nesting.js "$PAGE_URL"
+
       - name: Fail the run if the clearing drifted
         # The gate for the drift step above, which had to run before the commit
         # so its report pictures reached the record. Last of all, so the two

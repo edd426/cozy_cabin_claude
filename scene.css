@@ -480,13 +480,24 @@
    * just adrift" rather than sailing. ease-in-out softens the turn; per-cloud
    * duration/delay overrides below keep the pair off lockstep. A cloud has no
    * pointing direction (unlike the skein's V), so a gentle there-and-back drift
-   * isn't the "geese reversing" mistake — it's just air moving. */
+   * isn't the "geese reversing" mistake — it's just air moving.
+   *
+   * Day 133 (2026-09-18): and now it really is there-AND-back. This sway was
+   * written on Day 42 to be headless, and the keyframes only ever went one way —
+   * 0 to +15 and home again, every excursion rightward of rest. Since Day 62 the
+   * front overrides this with cloud-drift-wind, so the one-sided version has only
+   * been seen on the door face, which is precisely the face whose whole claim is
+   * that it shows the wind end-on and NOTHING on it leans to a side (the smoke
+   * standing straight, the near tree that does not sway). A headless drift has to
+   * be symmetric about its rest or it is a heading told quietly. Same total travel,
+   * split either side of 0 so the cloud hangs and shifts rather than leaning. */
   animation: cloud-drift 96s ease-in-out infinite;
 }
 
 @keyframes cloud-drift {
   0%, 100% { transform: translateX(0);    }
-  50%      { transform: translateX(15px); }
+  25%      { transform: translateX(7px);  }
+  75%      { transform: translateX(-7px); }
 }
 
 /* Day 62 (2026-07-09): the front clouds drift DOWNWIND, and only downwind.
@@ -512,7 +523,7 @@
  *
  * Front-scoped ON PURPOSE (.scene--exterior = home only; the door side is
  * .scene--around), exactly as the Day-61 smoke lean is. The around view looks
- * WEST, end-on into this east wind, and a wind coming straight at you carries a
+ * WEST, end-on into this west wind, and a wind coming straight at you carries a
  * cloud toward or away from you, not across the frame — so the door-side clouds
  * keep the shared, headless cloud-drift above (their tiny sway reads as far
  * clouds just hanging, no lateral wind visible from a face that looks down it).
@@ -809,7 +820,7 @@
  * theme.css's reduced-motion freeze holds each tree at its crisp drawn upright.
  *
  * Front-view-only by nature: the trees live only in scene.html (the home/south
- * face). That face looks north and sees this east wind BROADSIDE, so the crown
+ * face). That face looks north and sees this west wind BROADSIDE, so the crown
  * leans across the frame here — the same reason the front smoke leans and the
  * front clouds travel, while the door side (which looks end-on up the wind) shows
  * neither (RULES Art XIII). One wind, told true on every loose thing the face
@@ -955,7 +966,7 @@
  * planes back the other way, which is the one motion out here allowed to cross
  * upwind of itself (the flag and the crowns may not: a thing held out by a
  * steady breeze does not rock both ways, but a thing in free fall is not being
- * held by anything). The net drift is the YARD's one east wind: every leaf ends
+ * held by anything). The net drift is the YARD's one west wind: every leaf ends
  * further RIGHT than it began, the way the flag streams, the smoke leans, the
  * clouds ride and the crowns bend. And it drifts further, relative to how far it
  * falls, than anything else here moves — a leaf is the loosest thing this
@@ -1251,8 +1262,23 @@
  * flutters, so the one wind gets two honest answers (the same "a flag and a
  * column of smoke don't answer a breeze alike" the flag's own note already made).
  *
+ * WHICH WIND THIS IS (mended Day 133, 2026-09-18). From Day 60 to Day 132 every
+ * margin in this place called it an EAST wind, and the word was wrong from the
+ * morning it was written — the pictures were right the whole time. Work it
+ * against the map, which is the truth for anything geometric (RULES Art XIII,
+ * and CLAUDE.md "one geometry, every view"): north is up on the plan, the front
+ * is the viewpoint SOUTH of the cabin looking NORTH (map/map.css, .map__zone--front
+ * at top:71% with its eye pointing up), so standing in this frame your right hand
+ * points EAST. Every loose thing on this face departs its rest to the RIGHT — this
+ * column, the clouds, the falling leaves, the crowns' skew. Rightward is eastward,
+ * so the air is carrying them EAST, and air travelling east is a wind out of the
+ * WEST. The reasoning around it was never wrong either, only mislabelled: the door
+ * side looks west and meets this wind "coming straight at you", which is true of a
+ * westerly and impossible for an easterly. Nothing in the yard moved to mend this;
+ * only the name did.
+ *
  * Front-scoped ON PURPOSE. The around view shares this .smoke-puff but looks WEST,
- * end-on into this east wind — and a wind coming straight at you leans nothing
+ * end-on into this west wind — and a wind coming straight at you leans nothing
  * left or right, it only thins away — so the door-side smoke keeps the plain
  * vertical smoke-rise below. One wind, two vantages (RULES Art XIII): the same
  * rule the fog's lit edge (Day 56) and the hills' left↔right flip already obey,

@@ -806,7 +806,7 @@
  * named in `door-paint-lean`'s body list so it is actually weighed.
  *
  * NO SWAY, on purpose. The front crowns bend downwind because that face meets
- * the east wind broadside; this face looks straight up the wind's throat, which
+ * the west wind broadside; this face looks straight up the wind's throat, which
  * is why the door-side smoke stands straight (Day 61) and the door-side clouds
  * hang without travelling (Day 62). A wind coming at you leans nothing sideways.
  * The class is deliberately absent from scene.css's `tree-sway` rule.
@@ -990,7 +990,7 @@
  *
  * NO NET DRIFT. Every keyframe set below finishes in the same column it starts
  * in. On the front a leaf ends further right because that face takes the one
- * east wind broadside; this face looks straight up its throat, where a wind
+ * west wind broadside; this face looks straight up its throat, where a wind
  * leans nothing sideways — the same silence the door-side smoke keeps (Day 61),
  * the door-side clouds keep (Day 62) and this tree's own stillness keeps (Day
  * 120). The swing across each fall is the leaf's own and stays: a thing in free

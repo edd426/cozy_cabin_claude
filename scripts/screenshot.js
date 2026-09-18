@@ -395,7 +395,7 @@ const MOTION_CLIPS = [
   // Day 122 (2026-09-07) — the same fall on the door side (around.css
   // `leaf-fall-e-1`…`-3`), and the first clip in this mode to leave the home
   // view. It exists because of what it is FOR: the front leaf finishes further
-  // right than it began, because that face takes the one east wind broadside;
+  // right than it began, because that face takes the one west wind broadside;
   // this one finishes in the very column it let go from, because this face looks
   // straight up that wind's throat. That difference is the day's whole claim, and
   // a strip of the front can no more show it than a photograph of straight smoke

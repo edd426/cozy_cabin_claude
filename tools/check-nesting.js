@@ -231,7 +231,16 @@ function namesFrom(probes) {
     if (!p || !per[p.view]) continue;
     if (p.selector) add(p.view, p.selector, `${name}.selector`);
     if (typeof p.of === 'string') add(p.view, p.of, `${name}.of`);
-    if (Array.isArray(p.of)) for (const s of p.of) add(p.view, s, `${name}.of[]`);
+    // Day 133. A `drift` probe's `of` list carries a layer rather than a bare
+    // selector — a string, or `{ sel, claim }` where the claim says whether the
+    // thing is held out by the wind or in free fall. Reach through it: an
+    // object stringified into this map would register the key "[object Object]"
+    // and then look for an element by that name, which finds nothing and says
+    // nothing, and the selectors inside it would be watched by no one.
+    if (Array.isArray(p.of)) for (const s of p.of) {
+      const sel = typeof s === 'string' ? s : (s && s.sel);
+      if (sel) add(p.view, sel, `${name}.of[]`);
+    }
     if (Array.isArray(p.allow)) {
       for (const e of p.allow) {
         if (!e.where || e.where.indexOf(p.view) === -1) continue;

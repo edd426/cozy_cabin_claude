@@ -120,7 +120,7 @@
         'the chimney a touch fuller than the summer thread — the first fires',
         'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
         'the pot’s bloom wheel slowing out of the summer toward its middling pace, each bloom holding every state a little longer than it did in August',
-        'leaves coming down off the two crowns out front — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one east wind carries them the way it leans the smoke',
+        'leaves coming down off the two crowns out front — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one wind is out of the west and carries them the way it leans the smoke',
         'and three more off the near tree on the door side, the same leaves off the same crown, keeping the same swing and finishing in the very column each let go from — that face looks straight up the wind’s throat, and a wind coming at you leans nothing sideways',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
         'a fourth log in the armful by the hearth — the first fires being fed; the pile widens along the floor away from the hearth to take it, rather than growing a tier a two-wide base could not carry',
@@ -703,6 +703,89 @@
       reads: 'the same agreement asked of the bodies standing on the other face of the house',
     },
 
+    /* Day 133 — the wind, measured instead of named.
+     *
+     * From Day 60 to Day 132 every margin in this place called the yard's one
+     * wind an EAST wind, and the word was wrong the morning it was written. The
+     * pictures never were: work the frame against the map — north up, the front
+     * the viewpoint south of the cabin looking north — and the frame's right
+     * hand is EAST, and every loose thing on that face departs its rest to the
+     * right. Carried east is a wind out of the WEST. Nothing moved to mend it;
+     * only the name did. So the name is not asserted any more. It is read off
+     * the moving picture: here is which way the loose things go, and the map
+     * says what that side is called.
+     *
+     * `drift` takes each named LAYER, seeks each of its elements across its own
+     * round with the Web Animations API (Day 108: `Animation.currentTime`, never
+     * `animation-delay`, which only ever offsets from wherever the page had got
+     * to), and reads where the thing's own box actually sits at each phase. It
+     * measures the RENDERED position and not the transform, because these four
+     * layers do not move alike — the smoke and the clouds translate, the leaves
+     * animate `left` in per cent, and the crowns skew — and a reading that only
+     * understood one of those would be the Day-103 fault again.
+     *
+     * The yard makes two different claims about its loose things and each layer
+     * says which it is making. A thing HELD OUT by the wind may not rock back
+     * past its own rest (the flag, Day 60; the crowns, Day 63; the smoke, Day
+     * 61), so the smoke, the clouds and the crowns are read for one-sidedness.
+     * A thing in FREE FALL is held by nothing, so its swing is its own and it
+     * may cross upwind of itself as often as it likes; what the wind owns is
+     * only where it finishes (Day 116). So a leaf is read on its net travel
+     * from letting go to the last frame before it thins out.
+     *
+     * That distinction was not decoration. The first honest run of this read
+     * three agreeing layers out front in autumn where the check wanted four,
+     * because one of the four leaves dips left of its start before finishing
+     * well right of it — which the leaf is expressly allowed to do.
+     *
+     * Four reads off one measurement: `downwind` (layers that go only to the
+     * frame's right), `upwind` (only to its left), `returning` (falling layers
+     * that finish where they let go), and `moving` — the premise, how many of
+     * the listed layers shift horizontally at all. The premise is the Day-130
+     * lesson: a count of nought means "nothing leans" only if there was
+     * something there to lean.
+     *
+     * The mailbox flag is deliberately NOT on either list, and it is the one
+     * thing out here everybody would name first. Its keyframes rotate it about
+     * the staff, so what its animation does is LIFT the free tip; which way it
+     * streams is in its drawn geometry — the banner is pinned at the staff and
+     * extends rightward — and no reading of its motion can see that. */
+    'front-wind-lean': {
+      view: 'home', kind: 'drift', read: 'downwind',
+      of: ['.sprite--smoke .smoke-puff', '.cloud',
+           { sel: '.sprite--leaffall .leaf', claim: 'net' },
+           '.sprite--tree, .sprite--tree-small'],
+      reads: 'how many of the yard’s loose layers depart from their own rest to the frame’s right and never to its left — the side the map’s compass makes east',
+    },
+    'front-wind-against': {
+      view: 'home', kind: 'drift', read: 'upwind',
+      of: ['.sprite--smoke .smoke-puff', '.cloud',
+           { sel: '.sprite--leaffall .leaf', claim: 'net' },
+           '.sprite--tree, .sprite--tree-small'],
+      reads: 'how many of the same layers depart the other way instead',
+    },
+    'door-wind-lean': {
+      view: 'around', kind: 'drift', read: 'downwind',
+      of: ['.sprite--smoke .smoke-puff', '.cloud',
+           { sel: '.sprite--leaffall--e .leaf', claim: 'net' },
+           '.sprite--tree-near'],
+      reads: 'how many loose layers on the door face depart to one side only, on a face that meets the same wind end-on',
+    },
+    'door-wind-moving': {
+      view: 'around', kind: 'drift', read: 'moving',
+      of: ['.sprite--smoke .smoke-puff', '.cloud',
+           { sel: '.sprite--leaffall--e .leaf', claim: 'net' },
+           '.sprite--tree-near'],
+      reads: 'how many of them shift sideways at all — the premise under the line above, which would otherwise read nought just as happily on a face where nothing moved',
+    },
+    'door-leaf-returns': {
+      view: 'around', kind: 'drift', read: 'returning',
+      of: ['.sprite--smoke .smoke-puff', '.cloud',
+           { sel: '.sprite--leaffall--e .leaf', claim: 'net' },
+           '.sprite--tree-near'],
+      reads: 'whether the leaves falling on the door side finish in the very column each let go from, where a front leaf finishes further right',
+    },
+
     'flowers-standing': {
       view: 'home', kind: 'visible-count', selector: '.flower',
       reads: 'how many wildflower stems are standing at the wall’s foot',
@@ -1001,7 +1084,38 @@
     {
       probe: 'door-falling-leaves', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 3, winter: 0, spring: 0 },
-      guards: '“three more off the near tree on the door side” in autumn, and nothing falling on that face in the other three seasons. There is deliberately no second hour check here: both faces are opened by the one `[data-season="autumn"]` rule on the shared container, so asking the door side about the four bands as well would be putting the same line on the stand twice. What no check on this page holds is the thing that makes this face’s fall its own — that each leaf finishes in the column it let go from, where a front leaf finishes further right. A count cannot see a path.',
+      guards: '“three more off the near tree on the door side” in autumn, and nothing falling on that face in the other three seasons. There is deliberately no second hour check here: both faces are opened by the one `[data-season="autumn"]` rule on the shared container, so asking the door side about the four bands as well would be putting the same line on the stand twice. What makes this face’s fall its own — that each leaf finishes in the column it let go from, where a front leaf finishes further right — went unheld from Day 122 to Day 133, on the grounds that a count cannot see a path; `door-leaf-returns` below holds it now, not by seeing the path but by reading its two ends.',
+    },
+    /* Day 133. The wind's direction, held to the picture rather than to a
+     * sentence. The four counted layers are the smoke, the clouds, the falling
+     * leaves and the two crowns; the leaves are autumn's only, so the front's
+     * count is three in the other three seasons and four in that one — which
+     * makes this line hold the leaf gate a second time, from a different side
+     * than `falling-leaves` does. */
+    {
+      probe: 'front-wind-lean', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 3, autumn: 4, winter: 3, spring: 3 },
+      guards: 'every loose thing on the face that meets this wind broadside departing to the frame’s right and never to its left — the smoke’s lean, the clouds’ ride, the crowns’ bend, and in autumn the leaves’ drift. The frame’s right is east, because the map puts north up and stands this viewpoint south of the cabin looking north; a wind carrying things east is a wind out of the west. That is the whole of how the yard’s one wind is named now, and for a hundred and thirty-two mornings it was named the other way round in every margin here while the pictures said this',
+    },
+    {
+      probe: 'front-wind-against', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 0 },
+      guards: 'the other half of the same claim, which a count of the agreeing layers cannot make on its own: not one of them departs the other way. A layer that swings BOTH sides of its rest falls out of this count as well as out of the one above — so what this holds is that nothing here leans upwind, not that nothing here ever crosses its own rest, which the falling leaf is expressly allowed to do',
+    },
+    {
+      probe: 'door-wind-lean', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 0 },
+      guards: '“this face looks straight up the wind’s throat, and a wind coming at you leans nothing sideways” — held as a measurement for the first time. Nothing on the door face may depart to one side only: its smoke stands straight, its near tree does not sway, its leaves plane both ways about the column each let go from, and its clouds hang. This says nothing at all about where anything on that face ends up — an excursion is not an endpoint — which is `door-leaf-returns` below, reading the same walk for the other half of it',
+    },
+    {
+      probe: 'door-wind-moving', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 1, autumn: 2, winter: 1, spring: 1 },
+      guards: 'the premise under the line above. A count of nought leaning things reads exactly the same on a face where nothing moves at all, so this says how many of the four listed layers shift sideways whatever: the clouds all year, and the leaves with them in autumn',
+    },
+    {
+      probe: 'door-leaf-returns', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 1, winter: 0, spring: 0 },
+      guards: '“finishing in the very column each let go from” — the door side’s own half of the leaf-fall, which the check beside that sentence has said since Day 122 was held by nothing here, on the grounds that every reading this place takes is a count or a width and none of them can see a path. This is still not a path: it is two instants, the letting-go and the last frame before the leaf thins out, and a leaf could take any route at all between them. But the end of the journey is the whole of what that sentence ever claimed',
     },
     {
       probe: 'firefly-layer', axis: 'season', at: { tod: 'night' },

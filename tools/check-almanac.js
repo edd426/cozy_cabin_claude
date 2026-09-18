@@ -357,6 +357,11 @@ function measureInPage({ probes, forDate }) {
     // per body it isolates, so it too is filled in Node-side afterwards.
     if (probe.kind === 'paint-lean') continue;
 
+    // Day 133. `drift` pauses every animation on the page and walks it round,
+    // which is damage of the same kind the three above do — so it is taken on a
+    // page of its own after this evaluate returns.
+    if (probe.kind === 'drift') continue;
+
     // Day 111. An `attr` probe belongs to a hold check, which visits the page
     // itself on a stepped clock rather than in a forced state — so there is
     // nothing here for it, and reading it in a forced state would be a reading
@@ -1100,6 +1105,187 @@ async function measurePaintLean(page, probe) {
   return { reading: Math.round(Math.abs(num / den) * 1000), parts };
 }
 
+/* Day 133 — which way the yard's one wind blows, taken off the moving picture.
+ *
+ * The fault this exists for was a NAME. From Day 60 to Day 132 every margin in
+ * this place called the clearing's one wind an east wind, and the word was
+ * wrong from the morning it was first written: work the front frame against the
+ * map — north up, this viewpoint south of the cabin looking north — and the
+ * frame's right hand is east, and every loose thing on that face departs its
+ * rest rightward. Carried east is a wind out of the WEST. Nothing in the yard
+ * had to move; only the sentence did. Which is exactly the shape of fault Day
+ * 123 and Day 132 both ended on and neither could hold: a reason that was never
+ * true, green every morning because nothing ever read it against the thing it
+ * was about. The answer is not a cleverer guard. It is to stop asserting the
+ * sentence and derive it — the same move Day 124 made when it pulled the vows'
+ * chosen bars out and let the yard's own fullest month set them.
+ *
+ * The yard makes TWO claims about its loose things and they are not the same
+ * claim, so a layer says which of them it is making.
+ *
+ *   claim: 'lean' (the default) — the thing is HELD OUT by the wind, so it may
+ *     not rock back past its own rest. That is the flag's note (Day 60), the
+ *     crowns' (Day 63) and the smoke's (Day 61). Measured as one-sidedness: the
+ *     side of rest every sample falls on.
+ *
+ *   claim: 'net' — the thing is IN FREE FALL, held by nothing, so its swing is
+ *     its own and it may cross upwind of itself as often as it likes; what the
+ *     wind owns is only where it ENDS. That is Day 116 in as many words. So a
+ *     leaf is measured on its net travel across its visible life, from the
+ *     instant it lets go to the last frame before it thins out.
+ *
+ * Getting that distinction wrong is not hypothetical: the first honest run of
+ * this witness reported three agreeing layers out front in autumn where the
+ * check wanted four, because `leaf-fall-2` dips to 12.2% from a start of 13.5%
+ * before finishing at 18.4%. The leaf was right and the reading was too strict.
+ *
+ * The tolerance on a net reading is RELATIVE — a quarter of that same leaf's
+ * own widest swing, floored at the sub-pixel noise bar. An absolute one cannot
+ * work here, because a phase grid never lands exactly on a leaf's settle frame
+ * and a door-side leaf that honestly returns to its column comes back a fraction
+ * of a pixel short of it. A quarter of the swing is the honest question anyway:
+ * is what it has left at the end small against how far it went on the way.
+ *
+ * It reads the RENDERED box and not the transform, because the four layers do
+ * not move alike: the smoke and the clouds translate, the falling leaves
+ * animate `left` in per cent, and the crowns skew. A reading that understood
+ * only one of those would be Day 103's fault again — a guard that can parse one
+ * way of drawing a thing and walks past every other. `getBoundingClientRect`
+ * costs a forced layout per sample and does not care how the movement was
+ * written. The centre of that box is the point tracked, because a skew leaves
+ * one edge of a box where it was and carries the other.
+ *
+ * Phase is set with `Animation.currentTime`, never with `animation-delay`
+ * (Day 108: a delay only offsets from wherever the page had already got to).
+ * `currentTime` INCLUDES the delay, so landing at iteration progress p means
+ * `delay + duration * (1 + p)` — the `1 +` puts it safely inside the second
+ * iteration (Day 122). Every animation on the page is paused first so nothing
+ * else moves between samples.
+ *
+ * Four numbers off the one walk:
+ *
+ *   downwind  — layers whose every element goes to the frame's right only
+ *   upwind    — layers whose every element goes to its left only
+ *   moving    — layers that shift horizontally at all
+ *   returning — `net` layers whose every element finishes where it let go
+ *
+ * `moving` is the premise, and it is Day 130's lesson: a count of nought
+ * leaning things reads identically on a face where nothing moves, so the door
+ * side is asked both. `returning` is what finally holds the door face's own
+ * claim — that each leaf there finishes in the very column it let go from —
+ * which Day 122 wrote down in the check's own words as held by nothing here,
+ * on the grounds that every reading this place takes is a count or a width and
+ * none of them can see a path. A net displacement is not a path either, but it
+ * is the end of one, and the end is the whole of what that sentence claims.
+ *
+ * A listed selector matching nothing is NOT a failure here, because two of the
+ * four layers are season-gated on purpose (the leaves are autumn's, and winter
+ * adds a fourth smoke puff). What catches a layer that has quietly gone — the
+ * Day-118 addendum's renamed class — is that the checks state the count
+ * outright per season, so a layer falling out of the list drops the number and
+ * turns the line red.
+ *
+ * Blind, and written here beside it: it sees only what ANIMATES. The mailbox
+ * flag is the thing anybody would name first as this yard's wind-teller, and
+ * its keyframes rotate it about the staff, so what its motion does is lift the
+ * free tip; which way it streams is in its drawn geometry and nothing here can
+ * read that. And a `net` reading is two instants, not a path — a leaf could
+ * take any route at all between letting go and arriving, and this would say the
+ * same thing about it. */
+
+const DRIFT_PHASES = 24;      // samples across one round of each layer
+const DRIFT_TOL_PX = 0.25;    // below this a shift is sub-pixel noise, not a lean
+
+async function measureDrift(page, probe) {
+  return await page.evaluate(({ selectors, phases, tol }) => {
+    // Everything on the page stops, so nothing but the layer under the sample
+    // can move between one reading and the next.
+    for (const a of document.getAnimations()) {
+      try { a.pause(); } catch (e) { /* a finished transition may refuse */ }
+    }
+
+    // Where the element's own box sits, horizontally, right now.
+    const centreX = (el) => {
+      const r = el.getBoundingClientRect();
+      return (r.left + r.right) / 2;
+    };
+
+    // Only a frame the thing is actually visible in counts toward where it
+    // finishes: every leaf's keyframes step back to the top of the crown while
+    // transparent, and that step is not a journey anything took.
+    const showing = (el) => parseFloat(getComputedStyle(el).opacity) > 0.5;
+
+    const parts = [];
+    let downwind = 0, upwind = 0, moving = 0, returning = 0;
+
+    for (const layer of selectors) {
+      const sel = typeof layer === 'string' ? layer : layer.sel;
+      const claim = (typeof layer === 'string' ? 'lean' : layer.claim) || 'lean';
+
+      // A display:none element (winter's fourth puff out of winter) generates
+      // no boxes and is honestly absent, exactly as every count here treats it.
+      const els = Array.from(document.querySelectorAll(sel))
+        .filter((el) => el.getClientRects().length > 0);
+
+      if (els.length === 0) { parts.push(sel + ': absent'); continue; }
+
+      const verdicts = [];
+      for (const el of els) {
+        const anims = el.getAnimations()
+          .filter((a) => typeof a.animationName === 'string');
+        if (anims.length === 0) { verdicts.push('still'); continue; }
+
+        const seek = (p) => {
+          for (const a of anims) {
+            const t = a.effect.getComputedTiming();
+            // currentTime includes the delay, and the `1 +` lands safely inside
+            // the second iteration rather than on the boundary (Day 122).
+            a.currentTime = (t.delay || 0) + t.duration * (1 + p);
+          }
+        };
+
+        seek(0);                       // iteration progress 0 — the rest frame
+        const x0 = centreX(el);
+        let lo = 0, hi = 0, last = 0;
+        for (let i = 1; i < phases; i++) {
+          seek(i / phases);
+          const d = centreX(el) - x0;
+          if (d > hi) hi = d;
+          if (d < lo) lo = d;
+          if (claim === 'net' && showing(el)) last = d;
+        }
+
+        if (claim === 'net') {
+          // Relative bar: a quarter of this element's own widest swing, never
+          // below the sub-pixel floor. See the note above for why absolute
+          // cannot work when a phase grid never lands on the settle frame.
+          const bar = Math.max(tol, 0.25 * Math.max(hi, -lo));
+          if (last > bar) verdicts.push('right');
+          else if (last < -bar) verdicts.push('left');
+          else verdicts.push('returns');
+        } else if (hi > tol && lo < -tol) verdicts.push('both');
+        else if (hi > tol) verdicts.push('right');
+        else if (lo < -tol) verdicts.push('left');
+        else verdicts.push('still');
+      }
+
+      const all = (v) => verdicts.every((x) => x === v);
+      if (verdicts.some((v) => v !== 'still')) moving++;
+      if (all('right')) { downwind++; parts.push(sel + ': right'); }
+      else if (all('left')) { upwind++; parts.push(sel + ': left'); }
+      else if (all('returns')) { returning++; parts.push(sel + ': returns'); }
+      else if (all('still')) parts.push(sel + ': still');
+      else parts.push(sel + ': ' + verdicts.join('/'));
+    }
+
+    return { downwind, upwind, moving, returning, parts };
+  }, {
+    selectors: probe.of,
+    phases: DRIFT_PHASES,
+    tol: DRIFT_TOL_PX,
+  });
+}
+
 /* ------------------------------------------------------------------------ *
  * Day 131 — the seal a page carries, and what a witness says when it is
  * handed not nothing but another witness's damage.
@@ -1445,6 +1631,43 @@ async function readState(browser, base, view, state, probes) {
         }
       } finally {
         await leanPage.close();
+      }
+    }
+
+    // Day 133. `drift` pauses every animation on the page and drives each one
+    // round its own clock, which leaves the frame standing at an instant it
+    // would never otherwise be caught at — damage of the same kind the two
+    // above do, so it gets a page of its own for the same reason. The probes
+    // that share a view and a layer list share one walk between them (the
+    // frame-balance grouping of Day 130, and for the same reason: the walk is
+    // what wrecks the page, so asking for it twice would be asking a witness
+    // to read a page another copy of itself had already stopped).
+    const driftGroups = new Map();
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind !== 'drift') continue;
+      const key = JSON.stringify(probe.of || []);
+      if (!driftGroups.has(key)) driftGroups.set(key, { probe, names: [] });
+      driftGroups.get(key).names.push(name);
+    }
+    for (const { probe, names } of driftGroups.values()) {
+      const driftPage = await openForced();
+      try {
+        const taken = await takenOn(driftPage, names.join('+'), () =>
+          measureDrift(driftPage, probe));
+        const got = taken.value;
+        for (const name of names) {
+          const want = probes[name].read || 'downwind';
+          const v = got ? got[want] : null;
+          readings[name] = v === undefined ? null : v;
+        }
+        if (got) {
+          console.log(`check-almanac:   ${names.join('+')} ${keyOf(state)} = ` +
+                      `${got.downwind} downwind / ${got.upwind} upwind / ` +
+                      `${got.moving} moving / ${got.returning} returning ` +
+                      `(${got.parts.join(', ')})`);
+        }
+      } finally {
+        await driftPage.close();
       }
     }
 

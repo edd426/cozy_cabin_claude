@@ -158,6 +158,30 @@
  * It catches an exception that has gone off. It does not catch one that was
  * wrong to begin with. That is in the vow's blind note beside it.
  *
+ * Day 134 (2026-09-19): `naming`, and the `derives` check that uses it. The one
+ * thing on this page nothing had ever been asked to hold was the words. Force
+ * data-tod="dawn" and the yard wears the dawn wash whatever the clock thinks
+ * dawn is, so every state check above goes on passing through a sky.js with two
+ * of its four names swapped — which is exactly the fault caught in the wind's
+ * name on the hundred and thirty-third morning, a label wrong from the first
+ * morning and costing nothing for seventy days.
+ *
+ * `deriveNames` below therefore reads no element. It walks the clock and the
+ * year's swing, picks out each SLOT of each wheel by measurement — the band
+ * that holds midnight, the season holding the highest swing — and reports what
+ * this place calls it. The word each slot must carry is on /almanac/ with the
+ * check, not here.
+ *
+ * Note what it is not. That the part of a day holding midnight is called night
+ * is a fact about English; no walk of any clock derives it, and the page says
+ * so. What the check buys is that naming and measuring are two acts now instead
+ * of one. And note what nothing here can still do: a name wrong from the very
+ * first morning would have been baked into every kept frame as well, so even
+ * the drift witness — which would redden at a swap made today — would never
+ * have said a word about it. This catches a name that goes wrong, and it
+ * catches one that was wrong from the start only because the derivation was
+ * written after the names and disagreed with them.
+ *
  * States are forced exactly the way scripts/screenshot.js's gallery forces them
  * — set data-tod / data-season on every .scene after load, when sky.js and
  * season.js have already run and disconnected — then wait out the 1.6s washes
@@ -367,6 +391,11 @@ function measureInPage({ probes, forDate }) {
     // nothing here for it, and reading it in a forced state would be a reading
     // of the forcing.
     if (probe.kind === 'attr') continue;
+
+    // Day 134. A `naming` probe reads no element at all — it asks the reckoning
+    // itself, on dates it names, and a forced state is neither here nor there to
+    // it. Taken once, on a page of its own, in step 2c below.
+    if (probe.kind === 'naming') continue;
 
     // Day 113. `attr-number` is the same read with the string parsed, and it
     // IS taken here: it belongs to an `on` check, which forces nothing, and the
@@ -1497,6 +1526,146 @@ async function readHold(browser, base, check, probe) {
   return { arrived, stayed, arrivedLate };
 }
 
+/* ── Day 134: the names ───────────────────────────────────────────────────
+ *
+ * Runs in the page, against window.CabinSky and window.CabinSeason and nothing
+ * else — no scene, no forcing, no element. It works out which SLOT of each
+ * wheel is which by measurement, and reports what this place calls each slot.
+ * Which word each slot ought to carry is the check's business, on the almanac
+ * page; all this does is separate the naming from the measuring.
+ *
+ * The derivation lives here rather than on /almanac/ for the reason every
+ * figure on that page is asked of sky.js: a page that kept its own copy of a
+ * reckoning could be right on a morning the yard was wrong. This is the mirror
+ * of that — a checker that named the slots by its own arithmetic would be
+ * holding the page to a second hand rather than to the clearing's own.
+ *
+ * Both walks are cyclic: the order of DISTINCT labels round the wheel, starting
+ * at the slot the measurement picks out, with the wrap folded away. The length
+ * of that order is reported too, because two names collapsed into one is the
+ * other way this could go wrong and a four-name comparison would not see it. */
+function deriveNames(of) {
+  const sky = window.CabinSky;
+  const year = window.CabinSeason;
+  if (!sky || !year) return null;
+
+  // The distinct labels met walking forward from `start`, wrapped.
+  const roundFrom = (labels, start) => {
+    const order = [];
+    for (let k = 0; k < labels.length; k++) {
+      const label = labels[(start + k) % labels.length];
+      if (order[order.length - 1] !== label) order.push(label);
+    }
+    if (order.length > 1 && order[order.length - 1] === order[0]) order.pop();
+    return order;
+  };
+
+  if (of === 'hours') {
+    // A dozen dates so the answer is a fact about the year and not about one
+    // day: the edges slide with the swing, and a band could in principle be
+    // squeezed out at one end of the year without touching the other.
+    const dates = [];
+    for (let m = 0; m < 12; m++) dates.push([2026, m, 15]);
+
+    const perDate = dates.map(([y, m, d]) => {
+      const labels = [];
+      for (let min = 0; min < 1440; min++) {
+        labels.push(sky.phaseFor(new Date(y, m, d, Math.floor(min / 60), min % 60)));
+      }
+      const order = roundFrom(labels, 0);       // 0 = midnight
+      return {
+        on: `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`,
+        order,
+        noon: sky.phaseFor(new Date(y, m, d, 12, 0)),
+      };
+    });
+
+    // Every date must agree, and the report names the first that doesn't rather
+    // than averaging twelve answers into one.
+    const first = perDate[0];
+    const odd = perDate.find((p) =>
+      p.noon !== first.noon || p.order.join('|') !== first.order.join('|'));
+
+    return {
+      distinct: first.order.length,
+      slots: {
+        'the band that holds midnight': first.order[0] || null,
+        'the band that holds noon': first.noon,
+        'the band crossed leaving the midnight one': first.order[1] || null,
+        'the band crossed returning to it': first.order[first.order.length - 1] || null,
+      },
+      sampled: perDate.length,
+      disagreed: odd
+        ? `${odd.on} reads [${odd.order.join(' → ')}], noon "${odd.noon}", where ` +
+          `${first.on} reads [${first.order.join(' → ')}], noon "${first.noon}"`
+        : null,
+    };
+  }
+
+  if (of === 'seasons') {
+    // Two years, one of them a leap year, because yearSwing divides by 365.25
+    // and the day-of-year it works from is a whole number.
+    const years = [2026, 2028];
+    const perYear = years.map((y) => {
+      const days = [];
+      for (let i = 0; i < 366; i++) {
+        const d = new Date(y, 0, 1 + i);
+        if (d.getFullYear() !== y) break;
+        days.push({ swing: sky.yearSwing(d), name: year.seasonForDate(d) });
+      }
+      let hi = 0, lo = 0;
+      for (let i = 1; i < days.length; i++) {
+        if (days[i].swing > days[hi].swing) hi = i;
+        if (days[i].swing < days[lo].swing) lo = i;
+      }
+      const labels = days.map((x) => x.name);
+      return {
+        y,
+        order: roundFrom(labels, lo),
+        highest: days[hi].name,
+        lowest: days[lo].name,
+      };
+    });
+
+    const first = perYear[0];
+    const odd = perYear.find((p) =>
+      p.highest !== first.highest || p.lowest !== first.lowest ||
+      p.order.join('|') !== first.order.join('|'));
+
+    return {
+      distinct: first.order.length,
+      slots: {
+        'the season holding the year’s highest swing': first.highest,
+        'the season holding its lowest': first.lowest,
+        'the season crossed leaving the lowest': first.order[1] || null,
+        'the season crossed leaving the highest': first.order[first.order.length - 1] || null,
+      },
+      sampled: perYear.length,
+      disagreed: odd
+        ? `${odd.y} reads [${odd.order.join(' → ')}] where ${first.y} reads ` +
+          `[${first.order.join(' → ')}]`
+        : null,
+    };
+  }
+
+  return null;
+}
+
+/* One naming probe. The view is opened plainly — no forcing, no frozen clock —
+ * because nothing here reads the scene or the hour of the visit; what it needs
+ * is a page with sky.js and season.js on it, which every view is. */
+async function readNaming(browser, base, probe) {
+  const context = await browser.newContext({ viewport: VIEWPORT, timezoneId: 'UTC' });
+  try {
+    const page = await context.newPage();
+    await page.goto(new URL(VIEW_PATH[probe.view], base).toString(),
+                    { waitUntil: 'networkidle', timeout: 30000 });
+    return await page.evaluate(deriveNames, probe.of);
+  } finally {
+    await context.close();
+  }
+}
+
 /* Day 113. One view, opened on a clock frozen to one instant, with NOTHING
  * forced on it. That is the whole difference from readState below and it is the
  * point: the pot's wheel is gated on the date, so the only honest way to ask it
@@ -1738,6 +1907,44 @@ function verdictsForHold(check, taken) {
   ];
 }
 
+/* Day 134. A derives check, slot by slot. Each verdict is one measurement and
+ * the word it turned out to carry, so a red line reads as "the band that holds
+ * midnight is called dusk" rather than as a count of things wrong.
+ *
+ * Two verdicts come before the slots and both are premises rather than claims
+ * about the naming. If the wheel does not have four distinct names on it, the
+ * slot comparison below is meaningless — two names collapsed into one would let
+ * pairs of slots agree by accident. And if the sampled dates disagree with each
+ * other, there is no single answer to hold a name to at all. */
+function verdictsForDerives(check, taken) {
+  if (!taken) {
+    return [{ ok: false, detail: 'the reckoning published nothing to derive from' }];
+  }
+  const want = check.derives.want;
+  const names = Object.keys(want);
+
+  const out = [{
+    ok: taken.distinct === names.length,
+    detail: `${taken.distinct} distinct name(s) round the wheel, wanted ` +
+            `${names.length} — fewer and two slots could agree by collapsing`,
+  }, {
+    ok: !taken.disagreed,
+    detail: taken.disagreed
+      ? `the ${taken.sampled} sampled rounds do not agree: ${taken.disagreed}`
+      : `all ${taken.sampled} sampled rounds agree`,
+  }];
+
+  for (const slot of names) {
+    const got = taken.slots[slot];
+    out.push({
+      ok: got === want[slot],
+      detail: `${slot} is called "${got === null ? 'nothing' : got}", ` +
+              `and this place names it "${want[slot]}"`,
+    });
+  }
+  return out;
+}
+
 function verdictsFor(check, probeName, readings) {
   const read = (name) => {
     // Day 113. An `on` check's states are instants, keyed by their own date;
@@ -1918,6 +2125,19 @@ async function main() {
       console.log(`check-almanac: read ${view} on a clock frozen to ${iso}`);
     }
 
+    // 2c. The derives checks (Day 134) force no state either, and read no
+    // element — each asks the reckoning on a page of its own. Two checks, two
+    // probes, one page load apiece.
+    const derivations = new Map();
+    for (const check of CHECKS) {
+      if (!check.derives) continue;
+      const probe = PROBES[check.probe];
+      if (!probe) continue;
+      derivations.set(check, await readNaming(browser, base, probe));
+      console.log(`check-almanac: derived the ${probe.of === 'hours' ? 'band' : 'season'} ` +
+                  `names off the reckoning in ${probe.view}`);
+    }
+
     // 2b. The hold checks (Day 111) force no state, so workNeeded above never
     // asked for them. Each gets its own visits, on a clock the runner steps.
     const holds = new Map();
@@ -1935,7 +2155,9 @@ async function main() {
     for (const check of CHECKS) {
       const verdicts = check.hold
         ? verdictsForHold(check, holds.get(check))
-        : verdictsFor(check, check.probe, readings);
+        : check.derives
+          ? verdictsForDerives(check, derivations.get(check))
+          : verdictsFor(check, check.probe, readings);
       const held = verdicts.every((v) => v.ok);
       if (!held) failures++;
       console.log(`${held ? 'HELD' : 'BROKE'}  ${check.probe} — ${check.guards}`);

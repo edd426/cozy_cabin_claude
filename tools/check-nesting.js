@@ -230,7 +230,16 @@ function namesFrom(probes) {
   for (const [name, p] of Object.entries(probes)) {
     if (!p || !per[p.view]) continue;
     if (p.selector) add(p.view, p.selector, `${name}.selector`);
-    if (typeof p.of === 'string') add(p.view, p.of, `${name}.of`);
+    // Day 134. A `naming` probe's `of` is not a selector — it is which wheel to
+    // derive ('hours' or 'seasons'), and that probe reads no element at all.
+    // Registered as a selector it would match nothing, report nothing and fail
+    // nothing, and sit quietly in a list whose whole worth is that every name
+    // in it is a name of something in the yard. Same shape of fault the Day-133
+    // note below caught, one field over: a thing in this list that isn't what
+    // the list is for.
+    if (p.kind !== 'naming' && typeof p.of === 'string') {
+      add(p.view, p.of, `${name}.of`);
+    }
     // Day 133. A `drift` probe's `of` list carries a layer rather than a bare
     // selector — a string, or `{ sel, claim }` where the claim says whether the
     // thing is held out by the wind or in free fall. Reach through it: an

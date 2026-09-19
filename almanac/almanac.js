@@ -84,6 +84,30 @@
  * gets a witness of a new kind, `hold`; one is guarded by the vow standing over
  * it; two are held by nothing at all and say so.
  *
+ * Day 134 (2026-09-19): the NAMES. Everything above holds a sentence about what
+ * this place does; nothing had ever held the words the sentences are made of.
+ * The hundred and thirty-third morning found the yard's one wind had been called
+ * an east wind for seventy days while every picture of it showed a westerly — a
+ * label wrong from the morning it was written, costing nothing, because nothing
+ * in a yard is ever obliged to agree with a word. The four band names and the
+ * four season names are the same kind of thing and they decide more: force a tag
+ * by name and every state check on this page goes on passing whatever the clock
+ * thinks that name means.
+ *
+ * So `derives` — a check naming no state and no axis, the second such kind after
+ * `hold` — and the `naming` probe kind under it. The derivation names the SLOT
+ * by measurement (the band that holds midnight; the season holding the year's
+ * highest swing) and only then asks what this place calls it. The second half,
+ * that the word for the part of a day holding midnight is "night", is a fact
+ * about English and not about the clearing; it is written down as the given it
+ * is rather than dressed as a reading. What changed is that naming and
+ * measuring stopped being one act.
+ *
+ * The same survey turned up one name that cannot be made a reading at all, and
+ * it is the fifth given below: north. It is the mark everything spatial here is
+ * measured off — the faces, the wind, which side the hills wrap — and so the
+ * one thing there is nothing left to measure it against.
+ *
  * Note what the page is not: it does not render the clearing at the hour you
  * set. The scene still only ever shows the hour you actually arrived at — a
  * day that greets, not a day that turns. That was written here as a note about
@@ -834,6 +858,38 @@
       selector: '.sprite--flowers', attr: 'data-bloom-rate',
       reads: 'the pace the wildflower bed’s wheel is turning at, as a multiple of its middling one',
     },
+
+    /* Day 134 — the first probes here that read nothing in the scene at all.
+     * Every other witness on this page asks the yard what it looks like in a
+     * state the runner puts it in; these ask the RECKONING whether the names it
+     * hands out are the ones its own arithmetic earns.
+     *
+     * The fault they are for is the one the hundred and thirty-third morning
+     * caught in the wind's name: a label can be wrong from the first morning it
+     * is written and cost nothing for a hundred days, because nothing in the
+     * yard is ever obliged to agree with a word. Swap `dawn` and `dusk` in
+     * sky.js's four returns and not one other line on this page moves — every
+     * state check FORCES the tag by name, so a forced dawn is a forced dawn
+     * whatever the clock thinks. The names were the last thing here that decided
+     * what the clearing does and was held by nothing.
+     *
+     * `of: 'hours'` walks a day minute by minute on a dozen dates and reports
+     * the cyclic order of the four bands starting from the one that holds
+     * midnight, plus the band that holds noon. `of: 'seasons'` walks two whole
+     * years — one leap — and reports the season holding the year's highest
+     * swing, the one holding its lowest, and the order from the lowest round.
+     * The runner takes it from there; the derivation is in tools/check-almanac.js
+     * beside the check that uses it, not here, because this page must not keep
+     * a second copy of a reckoning (the whole reason every figure above is asked
+     * of window.CabinSky rather than restated). */
+    'hour-band-names': {
+      view: 'home', kind: 'naming', of: 'hours',
+      reads: 'the order the four bands come round in from midnight, and which one holds noon',
+    },
+    'season-names': {
+      view: 'home', kind: 'naming', of: 'seasons',
+      reads: 'which seasons hold the year’s highest and lowest swing, and the order from the lowest round',
+    },
   };
 
   /* ── the givens (Day 111) ───────────────────────────────────────────────
@@ -888,6 +944,12 @@
       says: 'Nobody is ever in the picture. Not in the yard, not at the door, not in the chair by the fire — no figure has ever been drawn in any view, on purpose, since the first morning. What the place has instead are the shapes a body leaves: a pair of boots on the grass, a cloak on its peg, a chair at the right height for someone reading. The welcome is unattended so that the one it is for could always be you.',
       found: 'Anything that measures a person — a scale on the threshold, a footprint in the path, a second chair. Each would report nothing, and nothing is the answer here rather than the omission it looks like.',
       unheld: 'Nothing holds this one either, and it is the harder of the two: a witness would have to know a drawn person when it saw one, and everything in this clearing is a few coloured boxes. The boots are a body’s shape already. Only an eye can tell the difference between the shape of a person and a person.',
+    },
+    {
+      key: 'north-is-declared',
+      says: 'North is declared, not found. The plan puts a small arrow in its top-left corner and the arrow points up, and that is the entire authority for every direction ever used here. The front is the south face because the plan sets the front viewpoint below the footprint; the door side is the east face because the plan sets that viewpoint to the right of it; and the yard’s one wind is a westerly because the loose things depart their rest to the right of a frame you meet looking north. All three are readings — each is measured off the plan — and all three are measured off a mark that answers to nothing. Turn the arrow round and every one of them turns with it, and not a pixel of any view would have to change.',
+      found: 'A compass. It needs a pole, and behind the pole an earth turning under a field. This place has an arrow instead — and the arrow is the origin the rest of the geometry is read from, which is exactly why it cannot itself be read.',
+      unheld: 'Nothing holds this one, and nothing can. The other two unheld givens are absences, and an absence is merely hard to witness: a rain gauge could in principle be watched. This is a different shape of un-holdable. A witness would have to measure north against something, and there is nothing here that is not already measured against north — the faces, the wind, the hills’ sides, the map’s own zones. Any check I wrote would be the arrow holding up a mirror. What can be said instead is said above: which claims here rest on it, so that if it were ever turned the reader knows what turns with it.',
     },
   ];
 
@@ -1551,6 +1613,48 @@
       hold: { arrive: '2026-12-21T15:25', stay: '2026-12-21T15:35' },
       guards: 'that the yard reads its hour once, at the moment you arrive, and then holds it — a midwinter afternoon crossing out of the plain day into dusk while somebody is standing in the front yard, and the front yard not noticing',
     },
+
+    /* Day 134 — the names, held to the reckoning that earns them.
+     *
+     * Everything above holds a sentence about what the clearing DOES. These two
+     * hold the words this page uses to say it. The table of edges up the page
+     * reads "the dark / dawn begins / the plain day begins / dusk begins / dark
+     * again", and the verdict line names a season; until this morning all nine
+     * of those words were assertions, true only because sky.js and season.js
+     * happen to spell them that way in a `return`.
+     *
+     * A `derives` check names no state and no axis — the second kind here to do
+     * that, after `hold`. The derivation supplies WHICH SLOT; the language
+     * supplies which word, and that second half is a given and is written down
+     * as one rather than dressed up as a measurement. What has changed is that
+     * the two are no longer the same act: the clock decides which band holds
+     * midnight, and only then is it asked what this place calls it. */
+    {
+      probe: 'hour-band-names',
+      derives: {
+        from: 'the clock the edges are cut on, walked minute by minute on the fifteenth of each month of 2026',
+        want: {
+          'the band that holds midnight': 'night',
+          'the band that holds noon': 'day',
+          'the band crossed leaving the midnight one': 'dawn',
+          'the band crossed returning to it': 'dusk',
+        },
+      },
+      guards: 'that the four band names are earned rather than declared — that the one this page calls night is the one holding midnight, the one it calls the plain day is the one holding noon, and dawn and dusk are the two edges crossed on the way out of the dark and back into it, in that order, on every month of the year',
+    },
+    {
+      probe: 'season-names',
+      derives: {
+        from: 'the year’s own swing — the cosine of the date that slides the band edges — walked day by day through 2026 and the leap year 2028',
+        want: {
+          'the season holding the year’s highest swing': 'summer',
+          'the season holding its lowest': 'winter',
+          'the season crossed leaving the lowest': 'spring',
+          'the season crossed leaving the highest': 'autumn',
+        },
+      },
+      guards: 'that the four season names are earned too, and by a reckoning that is not the one handing them out: the months are a table in season.js and the swing is a cosine in sky.js, and the two have never been obliged to agree about where midsummer falls. The season holding the highest swing must be the one called summer and the lowest the one called winter, with spring and autumn the crossings between them in that order',
+    },
   ];
 
   /* Named for the verdict line, which sets them out as a list after a colon —
@@ -1668,6 +1772,16 @@
              ', still there at ' + check.hold.stay.slice(-5) +
              '; arriving at ' + check.hold.stay.slice(-5) + ' instead — different';
     }
+    /* Day 134. A derives check states its slots and the word each must carry,
+     * which is the whole of the claim: the left of each pair is a measurement
+     * and the right is the name it has to have earned. */
+    if (check.derives) {
+      states = Object.keys(check.derives.want);
+      for (j = 0; j < states.length; j++) {
+        parts.push(states[j] + ' → ' + check.derives.want[states[j]]);
+      }
+      return parts.join(' · ');
+    }
     states = check.rising || check.falling;
     return states.join(check.rising ? ' < ' : ' > ');
   }
@@ -1683,8 +1797,14 @@
 
     var how = document.createElement('span');
     how.className = 'almanac-check__how';
-    how.textContent =
-      probe.reads + ', in ' + VIEW_NAME[probe.view] + ' — ' + readingOf(check);
+    // Day 134. Every other probe reads something standing in a view, so the
+    // view belongs in the sentence. A `naming` probe reads the reckoning — it
+    // wants a page with sky.js and season.js on it and touches nothing in the
+    // frame — so saying "in the front yard" would name a place the reading was
+    // never taken.
+    how.textContent = probe.kind === 'naming'
+      ? probe.reads + ', off the reckoning itself — ' + readingOf(check)
+      : probe.reads + ', in ' + VIEW_NAME[probe.view] + ' — ' + readingOf(check);
     li.appendChild(how);
 
     // Day 113. An `on` check's states are dates rather than tags, and a name
@@ -1700,6 +1820,16 @@
       }
       when.textContent = 'read on a clock frozen to ' + parts.join(', ');
       li.appendChild(when);
+    }
+
+    // Day 134. Where the derivation comes from, for the same reason: a slot
+    // named by a measurement is only a promise about a measurement until the
+    // measurement is on the page beside it.
+    if (check.derives) {
+      var from = document.createElement('span');
+      from.className = 'almanac-check__how';
+      from.textContent = 'derived from ' + check.derives.from;
+      li.appendChild(from);
     }
 
     return li;

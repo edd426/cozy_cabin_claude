@@ -1359,6 +1359,74 @@
   /* One-pixel darker band below each stone, stamped via box-shadow. */
   box-shadow: 0 1px 0 #6e4a3a;
 }
+
+/* ── Corners off the path stones (Day 136, 2026-09-21) ─────────────────────
+ * Day 36 took the corners off the river stone on the mantle indoors, and the
+ * reason it gave was not about that stone in particular: "the old flat 5×3
+ * rectangle read at phone size as a small brick, and a river stone is the one
+ * thing that should have no corners." That stone was carried in off THIS
+ * path in the first fortnight and is the same #c19465 as these. The rule was
+ * applied where it was thought of and never walked back to the five it came
+ * from, so from Day 3 to Day 135 the yard held one pebble with its corners
+ * gone and five bars with theirs on — the founder's material-truth note (the
+ * same thing is made of the same material everywhere) failing on a thing that
+ * is literally the same stone. Worth noting the plan had it right all along:
+ * `.map__stone` in map/map.css rounds its pebbles with `border-radius: 2px`,
+ * and the two elevations never caught up with it.
+ *
+ * ONE RULE, BOTH FACES. `.around-path__stone` is declared in around.css, but
+ * around/index.html loads this file too (it needs `.hill`, `.brick-course`,
+ * the washes), so naming both selectors here means the front's five stones
+ * and the door side's three can never be cut differently — the Day-122
+ * share-the-container move, applied to a silhouette rather than a container.
+ *
+ * WHY A STEPPED POLYGON AND NOT `border-radius`. The map may round its
+ * pebbles because a plan is a drawing; an elevation here is a few-pixel
+ * medium with `image-rendering: pixelated` set in theme.css, and a radius
+ * antialiases a corner into a soft smear at exactly the scale where the
+ * silhouette is the whole of the reading (Day 120). Every vertex below is
+ * axis-aligned, so each corner is a square cell taken out — the same "four
+ * corner cells left open" the mantle pebble uses.
+ *
+ * THE POLYGON. Ten vertices, clockwise from the top-left cut. The waist
+ * (y from 1px to height − 1px) keeps the full width; the crown and the base
+ * are inset by `--cut` on each side; and the path runs on to
+ * `calc(100% + 1px)` so it keeps the 1px darker box-shadow band under the
+ * stone, which clip-path would otherwise take away with everything else
+ * outside the border box. The band is inset with the base, because it is the
+ * stone's own near edge in shadow and must follow the silhouette.
+ *
+ * `--cut` grows with the stone (2px far, 4px near) so the corners come off by
+ * about the same fraction at either end of the path: 14→10, 18→14, 22→16,
+ * 27→19, 32→24. The insets are equal left and right — an asymmetric cut would
+ * be a lean nothing in this place would catch, since one small body barely
+ * moves the area-weighted mean the two weighings read (measured Day 120).
+ *
+ * Fixed px, like the stones themselves: they are the same size at both
+ * breakpoints (only `bottom`/`left` are rebased), so this needs no 2x twin. */
+.path-stone,
+.around-path__stone {
+  --cut: 2px;
+  clip-path: polygon(
+    var(--cut)             0,
+    calc(100% - var(--cut)) 0,
+    calc(100% - var(--cut)) 1px,
+    100%                   1px,
+    100%                   calc(100% - 1px),
+    calc(100% - var(--cut)) calc(100% - 1px),
+    calc(100% - var(--cut)) calc(100% + 1px),
+    var(--cut)             calc(100% + 1px),
+    var(--cut)             calc(100% - 1px),
+    0                      calc(100% - 1px),
+    0                      1px,
+    var(--cut)             1px
+  );
+}
+.path-stone--3,
+.around-path__stone--mid   { --cut: 3px; }
+.path-stone--4,
+.path-stone--5,
+.around-path__stone--front { --cut: 4px; }
 /* Stone 1 (back) — pressed against cabin's right edge at mid-cabin-
  * height, mostly hidden behind the cabin (cabin is at left: 50%, width
  * 144px at 3x, so its right edge is at 50% + 72px). Stone spans

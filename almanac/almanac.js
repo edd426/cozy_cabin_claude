@@ -712,12 +712,28 @@
      * body — a lean no gradient-reader can parse, that cancels out of the
      * weighing and that a mean is deaf to — and the same two read 123–149 and
      * 431–433. The ceiling is set at 60: several times what the yard honestly
-     * carries, and a fraction of what one painted lean costs. */
+     * carries, and a fraction of what one painted lean costs.
+     *
+     * Day 136 (2026-09-21) added `.sprite--path` to the FRONT list. It had been
+     * on the door side's since that list was written and never on this one, so
+     * one stretch of a path that runs through both frames was weighed and the
+     * other was weighed by nothing — the Day-118 gap (a body no probe names is
+     * a body nothing reads) sitting inside the probe that gap was written for.
+     * Measured on the day it was added: `.sprite--path` reads 0.189 and
+     * `.around-path` −0.302, both steady across all four seasons, and the two
+     * frames' weighted means stay at 5–5–2–1 and 16–17. The two signs are the
+     * two directions the one path runs: the stones step down-and-RIGHT out
+     * front and down-and-LEFT on the door side, and a shorter stone gives more
+     * of its own height to the dark band under it, so the darker end of each
+     * stretch is whichever end the small stones are at. That is the drawing's
+     * geometry and not a light, which is exactly why the vow is held on the
+     * AGREEMENT and never on one body: two bodies leaning oppositely is what
+     * an absent sun looks like. */
     'home-paint-lean': {
       view: 'home', kind: 'paint-lean', selector: '.scene',
       of: ['.front-cabin', '.sprite--tree', '.sprite--tree-small',
            '.sprite--bench', '.sprite--woodpile', '.sprite--mailbox',
-           '.sprite--flowers'],
+           '.sprite--flowers', '.sprite--path'],
       reads: 'how far the standing things agree about which of their own sides is the bright one, each read off its own pixels with the light lifted off',
     },
     'door-paint-lean': {
@@ -1593,7 +1609,7 @@
     {
       probe: 'home-paint-lean', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
       ceiling: 60, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'the standing things in the front yard never agreeing about which of their own sides is the bright one — the cabin, both trees, the bench, the rick, the box and the flowers, each read off its own pixels with the light taken off',
+      guards: 'the standing things in the front yard never agreeing about which of their own sides is the bright one — the cabin, both trees, the bench, the rick, the box, the flowers and the path stones, each read off its own pixels with the light taken off',
     },
     {
       probe: 'door-paint-lean', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',

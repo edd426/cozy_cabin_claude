@@ -425,6 +425,22 @@
       selector: '.sprite--smoke .smoke-puff',
       reads: 'how many puffs are climbing off the chimney',
     },
+    /* Day 137 — the skein, which until this morning nothing here had ever read.
+     * Every other drawn thing in this yard is named by some probe on this page;
+     * the birds were named by none, and had been for a hundred and sixteen
+     * days. They answer neither wheel — no season gates them and no hour does —
+     * and that is precisely how a layer ends up unwatched: a thing that varies
+     * gets a sentence written about it, and a thing that never varies gets
+     * nothing, and then nothing is what notices when it goes.
+     *
+     * A count and not a size, for the ordinary reason: `--s` is 3 on a desktop
+     * and 2 on a phone, so no check here may state a width (Day 98). A count is
+     * scale-free and may be stated outright. */
+    'skein-birds': {
+      view: 'home', kind: 'visible-count',
+      selector: '.sprite--birds .bird',
+      reads: 'how many birds are crossing the sky',
+    },
     /* Day 127 — the chimney's hour. Both read the same puff, and they are
      * deliberately two readings and not one: how much breath there is belongs
      * to the year (the count above), and these two are about how completely
@@ -1411,6 +1427,23 @@
       probe: 'smoke-puffs', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
       floor: 1, over: ['dawn', 'day', 'dusk', 'night'],
       guards: 'the chimney breathing at every hour — “someone’s always home, the fire never quite goes out”',
+    },
+    /* Day 137. The floor is FIVE and not one, which is the Day-124 lesson in a
+     * new place: a bar set at the least the vow could possibly mean is a bar
+     * that sits green through most of what it was written to catch. Nothing
+     * gates these birds on anything, so nothing may take one — a skein down to
+     * four is a bird lost, and “never below one” would not have a word to say
+     * about it. Where a thing genuinely varies a floor has to be set at its
+     * leanest; where nothing varies it may be set at the whole. */
+    {
+      probe: 'skein-birds', axis: 'season', at: { tod: 'day' }, vow: 'kept',
+      floor: 5, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'all five birds still crossing in every season — the skein answers no wheel, so no season may take one from it',
+    },
+    {
+      probe: 'skein-birds', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      floor: 5, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'and all five at every hour as well, the dark included — the one layer in this sky gated on neither wheel, and so the one nothing had ever been pointed at',
     },
     {
       probe: 'door-pot-blooms', vow: 'kept',

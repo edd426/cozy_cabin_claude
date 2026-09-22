@@ -2180,10 +2180,64 @@
  * (pixel art keeps its minimum feature spacing at either scale); only the
  * wrapper's anchor and the drift swing rebase for mobile-narrow below.
  *
- * No wing animation, still: a fast wing-beat would be the one frantic clock in
- * a scene whose register is slow-and-discovered (the same reason the bee's
- * wings are still). The V points the way it travels, so the formation reads as
- * "crossing" without animating a single feather.
+ * Day 137 (2026-09-22): THE SKEIN BEATS ITS WINGS. What stood here from Day 21
+ * to Day 136 was "no wing animation, still: a fast wing-beat would be the one
+ * frantic clock in a scene whose register is slow-and-discovered (the same
+ * reason the bee's wings are still)" — and that sentence was RETIRED on Day 29,
+ * indoors, in as many words. The founder's note asks that a drawn creature move
+ * the way its living cousin moves ("a moth flutters and darts; it doesn't glide
+ * in a smooth circle like a spider on a thread", CLAUDE.md "What reads / what
+ * doesn't"), the moth's identical still-wings-keep-one-slow-clock defence lost
+ * to it that morning, and inside/inside.css has said so ever since: "the old
+ * rationale is retired — the founder's note is the newer authority, and it asks
+ * for the beat." Nobody carried the verdict out of the room. So for a hundred
+ * and eight days a sentence this place had already struck down went on holding
+ * five geese rigid — which is the founder's own fault-shape, a thing given the
+ * one habit its living cousin does not have (Day 29's moth, Day 63's trees,
+ * Day 108's bee, and now the last of them).
+ *
+ * The beat is the moth's two-frame idiom at the skein's own scale: the wing
+ * tips snap between a raised V (frame A, row -1) and a spread-low V (frame B,
+ * row +1) about the unmoving body line. The silhouette is 5x2 in both frames —
+ * the tips mirror across the body rather than changing the mark's size — so a
+ * bird never swells or shrinks, it only opens and closes.
+ *
+ * Rate: 0.36s a full beat, which is a goose's own (~3 a second) and within a
+ * hundredth of the moth's 0.34s — this place has already accepted a true-to-life
+ * fast beat once, on the morning the tempo objection was struck down, and the
+ * record calls the result "the one quick thing in it, which is what a moth at a
+ * flame actually is". I reached first for something slower out of exactly the
+ * timidity Day 29 retired, and a measurement sent me back: the camera samples a
+ * wall-clock filmstrip every MOTION_INTERVAL_MS = 900ms (scripts/screenshot.js),
+ * so a 0.9s beat lands every frame on the SAME wing phase and the record would
+ * hold six identical birds for ever — a beat drawn and then made structurally
+ * invisible to the only thing that keeps it. 900ms against 0.36s advances the
+ * phase by half a round each frame, so the strip alternates up-stroke and
+ * down-stroke and the beat is the first thing in it. Check the sampling before
+ * choosing a period, not after (Day 108's rule, one turn on: there it was where
+ * in the round the camera stands, here it is how far it steps).
+ *
+ * The five do not beat together. Each carries its own negative delay so the
+ * stroke ripples BACKWARD from the lead bird along both arms, the way a beat
+ * travels down a real V — five marks flapping in lockstep is a strobe, and it
+ * is also not what a skein does. Each bird lags the one ahead of it by 0.08s,
+ * and the lower arm sits a further half-step behind the upper, since its two
+ * trail further back. A MORE negative delay stands further along the round, so
+ * the lead bird's is the largest.
+ *
+ * The spread that produces — 0.444 of a round, lead to last — is the
+ * load-bearing number, and it was worked rather than eyeballed. The up-stroke
+ * occupies half the round, so ANY spread under a half leaves instants when all
+ * five wings coincide, and five identical marks snapping together twice a beat
+ * is the strobe this is meant to avoid. Walked round the beat in twelfths, the
+ * count of raised wings runs 3-2-1-1-1-1-2-3-4-4-4-4 and never once touches 0
+ * or 5: at every instant of every beat this sky has both strokes in it. All
+ * delays are <= 0, so every bird is already mid-round at any instant a camera
+ * pins (tools/check-drift.js).
+ *
+ * The V still points the way it travels, so the formation went on reading as
+ * "crossing" without a feather moving; what it could not read as, and now does,
+ * is flying.
  *
  * Day 38 (2026-06-15): the skein now MIGRATES. Until today the drift carried
  * it leftward and then floated it back rightward while it held the same V —
@@ -2221,22 +2275,64 @@
   width: 1px;
   height: 1px;
   background: var(--c-wood-dark);
+  /* Static fallback = the up-stroke (frame A); @keyframes bird-flap overrides
+   * it, and its 100% frame is the up-stroke too, so a collapsed duration under
+   * prefers-reduced-motion holds the skein with its wings raised rather than
+   * wherever a frozen beat happened to land. */
   box-shadow:
      1px  0   0 var(--c-wood-dark),  /* body, col 1 */
      2px  0   0 var(--c-wood-dark),  /* body, col 2 */
      3px  0   0 var(--c-wood-dark),  /* body, col 3 */
     -1px -1px 0 var(--c-wood-dark),  /* left wing tip, row -1 col -1 */
      4px -1px 0 var(--c-wood-dark);  /* right wing tip, row -1 col 4 */
+  animation: bird-flap 0.36s infinite;
+}
+
+/* Wing-beat: snap between the up-stroke (A, tips at row -1) and the
+ * down-stroke (B, tips at row +1). The four body cells are identical in both
+ * frames; only the two tips move, and they move symmetrically about the body
+ * line so the mark keeps its weight. Each frame holds across its half and
+ * crosses in a 1% window (~9ms at 0.9s), so the wings switch crisply instead of
+ * sliding through sub-pixel positions that `image-rendering: pixelated` cannot
+ * mend (Day 120). */
+@keyframes bird-flap {
+  0%, 49% {
+    box-shadow:
+       1px  0   0 var(--c-wood-dark),
+       2px  0   0 var(--c-wood-dark),
+       3px  0   0 var(--c-wood-dark),
+      -1px -1px 0 var(--c-wood-dark),  /* L tip high */
+       4px -1px 0 var(--c-wood-dark);  /* R tip high */
+  }
+  50%, 99% {
+    box-shadow:
+       1px  0   0 var(--c-wood-dark),
+       2px  0   0 var(--c-wood-dark),
+       3px  0   0 var(--c-wood-dark),
+      -1px  1px 0 var(--c-wood-dark),  /* L tip low */
+       4px  1px 0 var(--c-wood-dark);  /* R tip low */
+  }
+  100% {
+    box-shadow:
+       1px  0   0 var(--c-wood-dark),
+       2px  0   0 var(--c-wood-dark),
+       3px  0   0 var(--c-wood-dark),
+      -1px -1px 0 var(--c-wood-dark),
+       4px -1px 0 var(--c-wood-dark);
+  }
 }
 
 /* The leaning V. Lead bird (--1) at the point, lower-left; an upper arm
  * (--2, --3) climbing back-and-right more steeply, and a lower arm (--4, --5)
  * trailing back-and-right more gently — an uneven, leaning skein. */
-.bird--1 { left:  0;    bottom:  8px; }
-.bird--2 { left:  8px;  bottom: 12px; }
-.bird--3 { left: 16px;  bottom: 16px; }
-.bird--4 { left:  9px;  bottom:  4px; }
-.bird--5 { left: 18px;  bottom:  1px; }
+/* The beat, rippling backward from the lead bird down both arms — see the note
+ * above for why the spread is 0.444 of a round and not less. Offsets, as
+ * fractions of the 0.36s beat: --1 .667, --4 .556, --2 .444, --5 .333, --3 .222. */
+.bird--1 { left:  0;    bottom:  8px; animation-delay: -0.24s; }
+.bird--2 { left:  8px;  bottom: 12px; animation-delay: -0.16s; }
+.bird--3 { left: 16px;  bottom: 16px; animation-delay: -0.08s; }
+.bird--4 { left:  9px;  bottom:  4px; animation-delay: -0.20s; }
+.bird--5 { left: 18px;  bottom:  1px; animation-delay: -0.12s; }
 
 /* One migrating pass: the skein enters off the right edge, crosses, and exits
  * off the left. The horizontal offset decreases monotonically (360 -> -380) so

@@ -421,6 +421,44 @@ const MOTION_CLIPS = [
     },
     crop: { around: ['.sprite--tree-near', '.leaf--e-1', '.leaf--e-2'], margin: 6, scale: 3 },
   },
+  // Day 137 (2026-09-22) — the skein's wing-beat (scene.css `bird-flap`), the
+  // last of the drawn creatures to get the motion its living cousin has. The
+  // round is 0.36s, which is the opposite problem from the bee's and the
+  // leaves': not too slow for a wall-clock strip but far too FAST for one, and
+  // a beat this quick is the sort of thing a single frame is most confident and
+  // most wrong about — every still ever taken of this sky shows five birds with
+  // their wings held in one fixed attitude, which is exactly the lie the beat
+  // was built to end.
+  //
+  // The six moments are evenly spaced round one beat on purpose, unlike the
+  // bee's, which were chosen for what each said. Here the evenness IS what each
+  // says: the five birds are staggered so the stroke ripples backward from the
+  // lead, and an even walk round the round is the only sampling that shows the
+  // wave travelling rather than five wings agreeing. Read the count of raised
+  // wings down the row — it runs 3, 1, 1, 2, 4, 4 and never reaches nought or
+  // five, which is the claim the stagger makes.
+  //
+  // Cropped to the five birds and redrawn at 6×: each is a 5×2 native
+  // silhouette and the whole flock spans under twenty native px, the smallest
+  // subject any clip here has had. `bird-cross` is pinned by the same seek, so
+  // the flock holds its place in the sky and only the wings move.
+  {
+    name: 'skein',
+    tod: 'day',
+    season: 'summer',
+    seek: {
+      animation: 'bird-flap',
+      at: [
+        { frac: 0.000, label: '3 up' },
+        { frac: 0.167, label: '1 up' },
+        { frac: 0.333, label: '1 up' },
+        { frac: 0.500, label: '2 up' },
+        { frac: 0.667, label: '4 up' },
+        { frac: 0.833, label: '4 up' },
+      ],
+    },
+    crop: { around: ['.bird'], margin: 5, scale: 6 },
+  },
 ];
 
 // --motion-cross mode config. One forced state (the wind is a day-story, and the
@@ -796,9 +834,14 @@ async function captureMotion(browser, fullUrl, outPath, clip) {
         durationMs = at.durationMs;
         const buf = await sceneEl.screenshot();
         frames.push(`data:image/png;base64,${buf.toString('base64')}`);
-        labels.push(`t=${(at.atMs / 1000).toFixed(1)}s · ${phase.label}`);
+        // Day 137: a round shorter than a second needs hundredths. The skein's
+        // beat is 0.36s, and in tenths four of its six moments print the same
+        // `t=0.1s` — a clock that cannot tell its own frames apart.
+        labels.push(`t=${(at.atMs / 1000).toFixed(at.durationMs < 1000 ? 2 : 1)}s · ${phase.label}`);
       }
-      const roundS = (durationMs / 1000).toFixed(0);
+      const roundS = durationMs < 1000
+        ? (durationMs / 1000).toFixed(2)
+        : (durationMs / 1000).toFixed(0);
       title = `motion — ${viewLabel} / ${clip.name} · ${phases.length} moments aimed at across one ${roundS}s ${clip.seek.animation} round (read left → right)`;
     } else {
       // Wall-clock clip: the perpetual animations run on their own clocks; sample

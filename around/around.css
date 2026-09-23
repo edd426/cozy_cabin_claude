@@ -384,9 +384,28 @@
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
-/* Pot body: terracotta, lit down the left edge and shadowed at the base, so the
- * clay reads as a round vessel and not a flat chip. Centred under the 9-wide
- * rim ((9−7)/2 = 1 native inset). */
+/* Pot body: terracotta, shadowed at the base, centred under the 9-wide rim
+ * ((9−7)/2 = 1 native inset).
+ *
+ * Day 138 (2026-09-23): the lit left edge came off — the twin of the mailbox
+ * post's, mended the same morning for the same reason (scene.css, .mailbox__post).
+ * It had run down this pot's LEFT flank since Day 66. The rule against it is the
+ * one written for the falling leaf (scene.css, Day 116, "NO LIT SIDE") and
+ * honoured by every sprite drawn since — the near tree's mirrored mottle (Day
+ * 120), the path stones' silhouette-only cut (Day 136). Both flanks predate it
+ * and neither was ever walked back.
+ *
+ * The two of them were worse together than either alone. This face is met from
+ * the east looking west, so screen-left here is SOUTH; the front is met from the
+ * south looking north, so screen-left there is WEST. Two bodies lit down their
+ * left in two frames are not one light in the wrong place — they are two, in
+ * different quarters of a sky that is supposed to hold none.
+ *
+ * What stays is everything that runs the other way. The base band is vertical
+ * (`inset 0 -1px 0`) and low is low from everywhere in the frame at once; the
+ * rim above is a full-width top highlight and names no side either. Between the
+ * pale rim, the terracotta body and the dark foot the clay still reads as a
+ * vessel — the roundness was never in the flank. */
 .door-plant__pot {
   position: absolute;
   left: calc(1px * var(--s));
@@ -394,9 +413,7 @@
   width: calc(7px * var(--s));
   height: calc(5px * var(--s));
   background: #c19465;
-  box-shadow:
-    inset 0 calc(-1px * var(--s)) 0 var(--c-wood-dark),      /* base shadow */
-    inset calc(1px * var(--s)) 0 0 var(--c-wood-light);      /* lit left edge */
+  box-shadow: inset 0 calc(-1px * var(--s)) 0 var(--c-wood-dark);   /* base shadow */
 }
 /* Rim: a 1-native lip overhanging the body a pixel each side, the paler wood-
  * light tone so the mouth of the pot catches the light. Sits atop the 5-tall pot. */
@@ -410,8 +427,17 @@
 }
 /* Foliage: a 3×3 sage core on the rim, with box-shadow lumps stamped ±2 native
  * around it (they overlap, so no gaps) to build a ~7×5 bushy mound — lit greens
- * (--c-grass-light) on the top where the light lands, mid --c-grass to the
- * sides, and --c-grass-shadow settling down where the leaves meet the pot. */
+ * (--c-grass-light) across the crown, mid --c-grass to the sides, and
+ * --c-grass-shadow settling down where the leaves meet the pot.
+ *
+ * Day 138 (2026-09-23): the crown was lit at (0,−2) and (−1,−2) and nowhere
+ * else, so the pale band sat off to one side of the mound's own centre line —
+ * the same unpaired flank the pot below it wore, drawn in stamped cells instead
+ * of an inset edge. A third lit cell at (+1,−2) makes the crown symmetric about
+ * the centre, which is Day 120's rule for the near tree's mottle said again:
+ * every fleck a mirrored pair about the box's centre line, or centred on it.
+ * The shade pair at (±1,+1) was already mirrored and is untouched. A lit crown
+ * that runs the full width of the mound is a TOP, and a top names no side. */
 .door-plant__foliage {
   position: absolute;
   /* Day 112: the season's filter eases in on the trees' own 1.6s, so both faces
@@ -425,8 +451,9 @@
   box-shadow:
     calc(-2px * var(--s)) 0                    0 var(--c-grass),         /* left lump  */
     calc( 2px * var(--s)) 0                    0 var(--c-grass),         /* right lump */
-    0                     calc(-2px * var(--s)) 0 var(--c-grass-light),  /* lit crown  */
-    calc(-1px * var(--s)) calc(-2px * var(--s)) 0 var(--c-grass-light),  /* lit upper-left */
+    0                     calc(-2px * var(--s)) 0 var(--c-grass-light),  /* lit crown, centre */
+    calc(-1px * var(--s)) calc(-2px * var(--s)) 0 var(--c-grass-light),  /* crown, left  */
+    calc( 1px * var(--s)) calc(-2px * var(--s)) 0 var(--c-grass-light),  /* crown, right */
     calc( 1px * var(--s)) calc( 1px * var(--s)) 0 var(--c-grass-shadow), /* shade at the pot, right */
     calc(-1px * var(--s)) calc( 1px * var(--s)) 0 var(--c-grass-shadow); /* shade at the pot, left  */
 }

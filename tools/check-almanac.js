@@ -366,6 +366,69 @@ function measureInPage({ probes, forDate }) {
     return widest;
   };
 
+  // Day 138. A LIT FLANK — the other way a body can name a side, and the one
+  // `sideways` above is structurally blind to, because it reads gradients and a
+  // flank out here is drawn as an inset box-shadow.
+  //
+  // The whole difficulty is that box-shadow is also this place's pixel-stamping
+  // idiom: every bird, every flower head, every log end is a stack of offset
+  // shadows, and a blanket "no horizontal offset" reading counts 178 layers on
+  // the front yard alone with nothing whatever wrong. Two things separate a lit
+  // edge from a stamped cell, and both are needed:
+  //
+  //   INSET. A stamped cell is an outset shadow — you cannot stamp a
+  //     neighbouring pixel with `inset`. An inset layer with a horizontal
+  //     offset is a band drawn down one edge of the box, which is the only way
+  //     a flank is ever drawn here.
+  //   UNANSWERED. An inset band matched by an identical band at the exact
+  //     negation of its offset is an outline, not a lean — both edges of the
+  //     thing, the same colour, naming no side. The cabin walls, the side door
+  //     and the near tree's trunk and root all wear such pairs on purpose.
+  //
+  // So the reading is the count of inset horizontal bands that no twin answers.
+  // Note what that buys: this sweep subtracts NOTHING written by hand. Day 123
+  // had to hold `lean-sweep`'s six named exceptions to their own reasons
+  // because a hand-written minus is the part that rots; here the exception is
+  // computed off the drawing itself — a flank with a mirror is not a flank —
+  // so there is no list to go stale.
+  const unansweredFlanks = (shadow) => {
+    if (!shadow || shadow === 'none') return 0;
+    const layers = [];
+    let depth = 0, cur = '';
+    for (const ch of shadow) {
+      if (ch === '(') depth++;
+      else if (ch === ')') depth--;
+      if (ch === ',' && depth === 0) { layers.push(cur); cur = ''; } else cur += ch;
+    }
+    if (cur.trim()) layers.push(cur);
+
+    const bands = [];
+    for (const layer of layers) {
+      if (!/\binset\b/.test(layer)) continue;
+      const colour = /rgba?\(([^)]*)\)/.exec(layer);
+      if (!colour) continue;
+      const nums = layer.replace(/rgba?\([^)]*\)/, ' ').replace(/\binset\b/, ' ')
+        .trim().split(/\s+/).map(parseFloat).filter(Number.isFinite);
+      if (nums.length < 2) continue;
+      if (nums[0] === 0) continue;                       // vertical: names no side
+      bands.push({ key: colour[1] + '|' + nums.slice(1).join(' '), x: nums[0] });
+    }
+
+    let unanswered = 0;
+    const used = bands.map(() => false);
+    for (let i = 0; i < bands.length; i++) {
+      if (used[i]) continue;
+      let twin = -1;
+      for (let j = 0; j < bands.length; j++) {
+        if (j === i || used[j]) continue;
+        if (bands[j].key === bands[i].key && bands[j].x === -bands[i].x) { twin = j; break; }
+      }
+      if (twin === -1) { unanswered++; used[i] = true; }
+      else { used[i] = true; used[twin] = true; }
+    }
+    return unanswered;
+  };
+
   for (const [name, probe] of Object.entries(probes)) {
     // Day 104. Measured Node-side (it needs two screenshots of the frame, one
     // with the wash and one without), so it is filled in by measureFrameBalance
@@ -433,6 +496,34 @@ function measureInPage({ probes, forDate }) {
           if (excused(el)) continue;
           for (const pseudo of [null, '::before', '::after']) {
             total += sideways(getComputedStyle(el, pseudo).backgroundImage);
+          }
+        }
+      }
+      readings[name] = total;
+      continue;
+    }
+
+    // Day 138. The same shape of sweep as `lean-sweep` above, pointed at the
+    // other way a side gets named: every element under the root and both its
+    // pseudos, counting inset horizontal bands no twin answers (see
+    // `unansweredFlanks`). A total rather than a maximum, for the same reason —
+    // two lit flanks are worse than one, and the number is the only clue to how
+    // many places to go and look.
+    //
+    // Asked of the two OUTDOOR faces only, and that boundary is Day 90's rule
+    // rather than a convenience: a flank is legal wherever the light that makes
+    // it is drawn in the frame. In the room the fire is in the picture, so the
+    // jar's lit left, the glass's lit left and the cloak's shaded left all obey
+    // something a visitor can see burning. Out here there is no drawn light at
+    // all (the first `given`), so a lit flank obeys nothing and invents a sun.
+    if (probe.kind === 'flank-sweep') {
+      const roots = document.querySelectorAll(probe.selector);
+      if (roots.length === 0) { readings[name] = null; continue; }
+      let total = 0;
+      for (const root of roots) {
+        for (const el of [root, ...root.querySelectorAll('*')]) {
+          for (const pseudo of [null, '::before', '::after']) {
+            total += unansweredFlanks(getComputedStyle(el, pseudo).boxShadow);
           }
         }
       }

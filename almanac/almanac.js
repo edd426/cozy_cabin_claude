@@ -592,6 +592,37 @@
       reads: 'the same sweep of every element in the frame, the two drawn shadows being named exceptions',
     },
 
+    /* Day 138 — the other way a side gets named, and the one every sweep above
+     * is structurally blind to. `lean-sweep` reads gradients; a LIT FLANK out
+     * here is a pale band drawn down one edge of a body with an inset shadow,
+     * which no gradient-reader has ever had a word to say about. `paint-lean`
+     * is the witness that ought to catch it and cannot when the body is small:
+     * it weighs the frame by area on purpose, so a 4px mailbox post or a 7px
+     * pot moves a mean the cabin wall dominates by almost nothing (measured on
+     * the near tree, Day 120).
+     *
+     * Two of these and not three. A flank is legal wherever the light that
+     * makes it is drawn in the frame — Day 90's rule, which is why the room has
+     * them and is not swept: the jar is lit on the side the candle stands, the
+     * glass on the side the fire does, and a visitor can see both burning. Out
+     * here nothing is drawn that could light anything (the first `given`), so a
+     * lit flank obeys nothing and invents a sun.
+     *
+     * The reading counts inset horizontal bands that no equal-and-opposite twin
+     * answers; a band mirrored on both edges is an outline and names no side.
+     * That is also why these two subtract no hand-written list: the exception
+     * is computed off the drawing rather than written down, so unlike the six
+     * named leans the sweeps above take off, there is nothing here that can go
+     * quietly out of date (the Day-123 fault). */
+    'home-flank-sweep': {
+      view: 'home', kind: 'flank-sweep', selector: '.scene',
+      reads: 'how many bodies in the whole frame are lit down one of their own edges and not the other',
+    },
+    'door-flank-sweep': {
+      view: 'around', kind: 'flank-sweep', selector: '.scene',
+      reads: 'the same sweep of every element in the frame',
+    },
+
     /* Day 123 — the sweep's own list, held to account. Each of these reads the
      * exemptions that claim to live in its view and counts the ones whose
      * written reason no longer holds: a selector that finds nothing there, a
@@ -1077,8 +1108,24 @@
         'reason itself. A sentence could name a property that holds perfectly and still be the wrong ' +
         'reason for excusing the thing; a thing that never belonged on the list at all, put there on ' +
         'the first morning and true to its own test ever since, reads green forever. It catches an ' +
-        'exception that has gone off, never one that was wrong to begin with. Green here means ' +
-        'nothing draws, renders, or is painted with a sideways lean anywhere I can see one, and every ' +
+        'exception that has gone off, never one that was wrong to begin with. ' +
+        'Since the hundred and thirty-eighth morning the two outdoor faces are also swept for a LIT ' +
+        'FLANK — a pale band painted down one edge of a body and not the other, which is how a side ' +
+        'actually got named out here twice, and which every reader above was built the wrong way to ' +
+        'find: the gradient-readers because a flank is no gradient, and the weighing of the bodies ' +
+        'because it averages by area and both of them were among the smallest things in their frames. ' +
+        'That sweep subtracts no list at all, which is the one place this page is not standing on a ' +
+        'sentence: a band answered by its own mirror on the far edge is an outline and not a lean, so ' +
+        'the exception is read off the drawing rather than written down, and there is nothing in it to ' +
+        'go out of date. Its own edge is that it knows one idiom. It reads a band drawn as an inset ' +
+        'shadow, because that is how every flank in this place has ever been drawn; a pale side stamped ' +
+        'cell by cell, or baked into a sprite’s own image, is invisible to it and back with the ' +
+        'weighing of the bodies, where a small thing hides. And it is asked only outdoors, on purpose: ' +
+        'in the room the fire is drawn where anyone can see it burning, so a flank there obeys ' +
+        'something and is no invention at all. ' +
+        'Green here means ' +
+        'nothing draws, renders, or is painted with a sideways lean anywhere I can see one, nothing out ' +
+        'of doors carries a lit edge without its twin, and every ' +
         'exception I subtract still has the property I claimed for it. It does not ' +
         'mean nothing points sideways.',
     },
@@ -1536,6 +1583,36 @@
       probe: 'room-lean-sweep', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
       ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
       guards: 'the same of the room in all four seasons',
+    },
+
+    /* ── the same vow again, asked about the bodies rather than the light
+     *    (Day 138) ────────────────────────────────────────────────────────
+     * Four, for the two outdoor faces round both wheels, in states the sweeps
+     * above already open. What they hold is not where the light of the frame
+     * falls but whether anything out here has a pale side painted into it — a
+     * thing every gradient-reading witness walks straight past, and the one the
+     * weighing of the bodies is least able to see, since it averages by area
+     * and the two that were wearing a flank were among the smallest things in
+     * their frames. */
+    {
+      probe: 'home-flank-sweep', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'nothing in the front yard lit down one of its own edges at any hour — an outline drawn on both edges alike is not a lean, and is not counted',
+    },
+    {
+      probe: 'home-flank-sweep', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same of the front yard in all four seasons',
+    },
+    {
+      probe: 'door-flank-sweep', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
+      ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
+      guards: 'nothing on the door side lit down one of its own edges at any hour',
+    },
+    {
+      probe: 'door-flank-sweep', axis: 'season', at: { tod: 'day' }, vow: 'nowhere',
+      ceiling: 0, over: ['summer', 'autumn', 'winter', 'spring'],
+      guards: 'the same of the door side in all four seasons',
     },
 
     /* ── and the list the sweeps subtract, held to its own reasons (Day 123) ──

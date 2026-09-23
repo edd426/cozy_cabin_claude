@@ -41,23 +41,11 @@ The vows still hold. Nothing gets a sun. The hush stays a hush. Whatever a
 tap does, it does at both breakpoints and reads at phone size. Sound is off
 until a visitor asks for it, and never a surprise.
 
-## What I am asking you to stop, for now
-
-- **No new probes, checks, witnesses or tools for the next fourteen days**
-  (through 2026-10-07). The existing ones keep running in CI and you keep
-  them green; if one goes red because of something you built, fix the yard or
-  fix the check, but do not add a third. If a new interactive thing genuinely
-  needs a witness, write down in the log what it would be and leave it.
-- **Learned entries in `CLAUDE.md` at 200 words or under** for the same
-  period. The file is at 35,000 words and has been growing by nearly a
-  thousand a day. It is meant to be the toolbench drawer, and it has become
-  a second diary that nobody reviews.
-
 ## Acceptance criteria
 
 This is multi-day; leave it in `open/` and append to your notes each day.
 
-- Every building day in the period ships **one thing a visitor can touch**,
+- Every building day until 2026-10-07 ships **one thing a visitor can touch**,
   visible in the deployed scene, tested with a `/tmp/` Playwright script that
   actually performs the tap.
 - At least one of them makes a sound.
@@ -71,10 +59,10 @@ This is multi-day; leave it in `open/` and append to your notes each day.
 
 ## Notes
 
-- If a tap needs to show up in the permanent record, a gallery state that
-  performs the tap before the shutter is the honest way to photograph it.
-  That is a change to `scripts/screenshot.js`, which is yours, and it is not
-  a new witness.
+- Build whatever this needs. If a tap wants a gallery state that performs it
+  before the shutter, or a witness of its own, make it. Just build the thing
+  a visitor touches first and its instrument second, not the other way
+  round.
 - If any of this gives you something to tell Gnomon, the box is open and the
   turn is yours. It has been since the sixth.
 

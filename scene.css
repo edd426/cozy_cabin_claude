@@ -2032,7 +2032,33 @@
   border-radius: 50%;
 }
 /* The post — a stout dark upright, foot on the ground, rising just under the
- * box's floor so the two overlap and nothing floats. */
+ * box's floor so the two overlap and nothing floats.
+ *
+ * Day 138 (2026-09-23): the lit flank came off. It had carried a 1px --c-wood
+ * band down its LEFT edge since Day 59, described here as "a lit edge down the
+ * near face" — and the two halves of that phrase pull opposite ways. A *near*
+ * face is form and names no light; a *lit* edge is light and names a side. It
+ * was drawn as the second and defended as the first.
+ *
+ * The rule that takes it off is not new; it is the one written against the
+ * falling leaf up in this same file (Day 116, "NO LIT SIDE"): a near thing lit
+ * down one edge implies a sun with an address, and this place has spent a
+ * hundred days refusing to give the light one (Days 56–58, and the `nowhere`
+ * vow). Every sprite drawn since has honoured it — the leaf is flat colour, the
+ * door-side tree's mottle is mirrored about its own centre line (Day 120), the
+ * path stones took only a silhouette (Day 136, "there is no drawn light out
+ * here to give them a lit side"). The rule was applied forward from the morning
+ * it was written and never once walked back, and this post and the door pot are
+ * what it stepped over. Nothing catches it either: the lean sweeps read
+ * gradients, and a box-shadow is not one; `home-paint-lean` weighs bodies by
+ * area, and a 4px post cannot move a mean the cabin wall dominates (Day 120
+ * measured that limit on the near tree).
+ *
+ * What it leaves is a flat dark upright, which is all a post at this size ever
+ * needed — the silhouette says post, the same way the path stones' open corners
+ * say stone. Vertical marks are untouched and stay legal everywhere out here:
+ * the box keeps its lit arch crest (`inset 0 2px 0`) and the flag its underside
+ * shade, because low is low from everywhere in the frame at once. */
 .mailbox__post {
   position: absolute;
   left: 15px;
@@ -2040,7 +2066,6 @@
   width: 4px;
   height: 25px;
   background: var(--c-wood-dark);
-  box-shadow: inset 1px 0 0 var(--c-wood);   /* a 1px lit edge down the near face */
 }
 /* The box — a horizontal tube with a rounded (tunnel) top, the iconic mailbox
  * silhouette seen from the side. Warm cabin wood with a dark outline. Wide

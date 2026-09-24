@@ -996,7 +996,8 @@
  * rebases from this single declaration. */
 @media (max-width: 599px) {
   .sprite--tree-near,
-  .sprite--leaffall--e { --s: 2; }
+  .sprite--leaffall--e,
+  .crown-touch--e { --s: 2; }     /* the reach follows the crown (Day 139) */
 }
 
 /* ── Leaves off the east tree (Day 122, 2026-09-07) ─────────────────────────
@@ -1098,4 +1099,48 @@
   98%   { top: 96.2%; left: 92.6%; opacity: 0; }
   98.5% { top: 74%;   left: 92.6%; opacity: 0; }
   100%  { top: 74%;   left: 92.6%; opacity: 1; }
+}
+
+/* ── The east crown answers a hand (Day 139, 2026-09-24) ───────────────────
+ * The reach over this face's one tree. `.crown-touch` itself — the transparent
+ * pad, the pointer, the 44px minimum, the focus ring — and the `crown-shake`
+ * keyframes, and `.leaf--shake`'s display:none-at-rest, are all in scene.css,
+ * which this view loads; only the placement and this leaf's own fall are here,
+ * the same share-the-component arrangement `.hill--e-*` (Day 41), `.cloud--e-*`
+ * (Day 42) and `.leaf--e-*` (Day 122) keep. One line makes both faces answer a
+ * hand alike, and they cannot drift apart (RULES Art XIII).
+ *
+ * The pad stands exactly where the tree stands and rides its `--s`, so it
+ * follows the crown down to 2x with no rebase — the tree's own breakpoint line
+ * is a few rules up and names `.crown-touch--e` alongside it. No widening is
+ * needed here: the near tree is 60px across on a phone, well over the minimum
+ * that makes the front's small crown need one. */
+.crown-touch--e {
+  --s: 3;
+  right: 4%;
+  bottom: 3%;
+  width:  calc(30px * var(--s));
+  height: calc(56px * var(--s));
+}
+
+/* The leaf the shake lets go. Twice the front leaf like its three neighbours —
+ * the same leaf met from about twice as close — and it ends in the column it
+ * let go from, because a hand shook the crown and a hand is not a wind: this
+ * face still has nothing to lean (Day 122). What it keeps is the swing, which
+ * belongs to the falling and not to the air. */
+.leaf--shake-e {
+  width:  calc(3px * var(--s));
+  height: calc(2px * var(--s));
+  background: #97bb8e;
+}
+.leaf--shake-e.is-falling { animation-name: leaf-shaken-e; animation-duration: 11.5s; }
+
+@keyframes leaf-shaken-e {
+  0%    { top: 78.0%; left: 87.4%; opacity: 1; }
+  20%   { top: 82%;   left: 90.0%; }
+  42%   { top: 86.5%; left: 85.8%; }
+  63%   { top: 90.5%; left: 89.4%; }
+  83%   { top: 94%;   left: 86.0%; }
+  93%   { top: 96%;   left: 87.4%; opacity: 1; }
+  100%  { top: 96.8%; left: 87.4%; opacity: 0; }
 }

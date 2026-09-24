@@ -69,3 +69,63 @@ This is multi-day; leave it in `open/` and append to your notes each day.
 — Evan
 
 ## Wren's notes (appended by the agent)
+
+### Day 139 — 2026-09-24 — the crowns answer a hand
+
+Shipped: **tap a crown and it shakes; in autumn it lets one leaf go.** All three
+drawn crowns take it — the two on the front face and the near one on the door
+side — so a hand gets the same answer whichever face a visitor is standing at
+(Art XIII).
+
+- **What a visitor can do that they could not yesterday.** Press (or tab to, and
+  press Enter or Space on) any tree in the clearing. The crown swings four
+  degrees and rings back through its own rest, five crossings, dying away over
+  about nine tenths of a second — much harder and much shorter than the wind's
+  own 1.2° over nine seconds, which is the whole reading: at this size you
+  cannot see what pushed a crown, only how hard and how briefly. A hand is the
+  one thing out here in a hurry. And because it is autumn, one extra leaf lets
+  go of the crown you touched and takes eleven seconds to reach the grass.
+- **The season is half the answer.** The shaken leaf lives inside
+  `.sprite--leaffall`, which is `display: none` outside autumn — so the tap
+  gives a shake all year and a leaf only in the months that have one to give.
+  No month is tested in the new code; `season.js` owns the year.
+- **Why the door-side crown too, when the wind cannot move it.** That face looks
+  straight up the west wind's throat, which is why its smoke stands straight
+  (Day 61) and its tree does not sway (Day 120). A hand is not a wind. It
+  reaches a tree from wherever the hand is, so the one crown the weather can
+  never move here is the one a visitor can — which is the first thing this
+  place has that a *person* can do and the clearing cannot do to itself.
+- **Nothing in the drawing moved.** The reach is a transparent pad
+  (`.crown-touch`), needed because the front crowns are `<img>` elements and a
+  replaced element renders no `::before`, so the mailbox's Day-81 tap-pad trick
+  cannot be played on them directly — and because the small right crown is 30px
+  wide on a phone, under the 44px minimum. `check-drift` reported 0 px on all
+  five frames the change could have touched, so no baseline was removed.
+- **Tested.** `/tmp/test-crown-touch.js` performs the tap — click, Enter, Space
+  and a real coarse-pointer `tap()` — on all three crowns at 375, 390 and 900,
+  and asserts the reach clears 44×44, that the crown crosses rest every swing
+  and each swing is smaller than the last, that it ends exactly at rest, that
+  the leaf leaves the canopy and is lower a second later, that summer starts no
+  fall at all, and that the mailbox and the map card still open. Break-tested
+  two ways: dropping the pad's widening reddens only the small crown and only at
+  the two phone widths, and making the shake lean one way only reddens the
+  crossing assertion everywhere.
+
+**Still open on this mission** (the list, so the next morning does not have to
+rebuild it): a **sound**, which nothing here has ever made; something
+**unsignposted**, which this is deliberately not (`cursor: pointer` is a mild
+signpost and meant to be); and the two you named that I have not reached —
+something that *holds* a state for a visitor, and a thing that answers a tap
+without moving, which is what a visitor who has asked for reduced motion is
+owed and currently gets nothing of.
+
+**One thing I could not build and want to name rather than leave as a silence.**
+Nothing in this place can witness a tap. Every check on the almanac varies on a
+season or an hour, and a hand is neither — it is the same slot the bee's round
+has never had (Day 108). The honest witness would have to *perform* the
+interaction, which is a different kind of instrument from anything standing
+here. Today the disposable test is the only thing that has ever pressed one of
+these, and it goes in the bin with the session. You said to build the thing a
+visitor touches first and its instrument second; I have done the first and I am
+writing down that the second does not exist yet, so it does not become the kind
+of silence Day 120 and Day 133 went looking for.

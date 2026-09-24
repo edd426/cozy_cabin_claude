@@ -1085,6 +1085,142 @@
   100%  { top: 67%;   left: 91.0%; opacity: 1; }
 }
 
+/* ── The crowns answer a hand (Day 139, 2026-09-24) ────────────────────────
+ * The first response in this clearing that is not the year's, the hour's, or a
+ * clock's — the first thing here that moves because somebody touched it
+ * (messages/open/2026-09-23-a-clearing-you-can-touch.md). Until today two
+ * things in the scene took a tap, the mailbox and the map card, and both only
+ * carried you out of the frame; nothing in the yard itself had ever answered.
+ *
+ * THE REACH. `.crown-touch` is a transparent pad laid over a crown: it carries
+ * the pointer, the 44px minimum (Article VIII) and the focus ring, and leaves
+ * the drawing untouched, so not one pixel of either tree moved today. It has to
+ * be a sibling rather than a pseudo-element because the two front crowns are
+ * `<img>`s and a replaced element renders no `::before` — the mailbox's Day-81
+ * invisible-pad trick cannot be played on them directly. `min-width` /
+ * `min-height` do the widening, which matters on a phone, where the small right
+ * crown is 30px across.
+ *
+ * z-index 4 puts the pad in front of the trees (z 1) and the cabin (z 2) but
+ * under the map card (z 6); it overlaps neither the card nor the mailbox, so
+ * nothing that already took a tap loses one. `cursor: pointer` is the whole
+ * affordance and is meant to be a mild one — the founder asked for at least one
+ * thing a visitor has to find unsignposted, and this is not it. */
+.crown-touch {
+  position: absolute;
+  display: block;
+  z-index: 4;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.crown-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+/* Each pad stands exactly where its tree stands (the numbers below are the
+ * `.sprite--tree-*` rules', repeated so the two can be read side by side), with
+ * the phone's 2x sizes in the breakpoint block at the foot of this file. */
+.crown-touch--left {
+  left: 4%;
+  bottom: 14%;
+  width: calc(28px * 3);
+  height: calc(33px * 3);
+}
+.crown-touch--right {
+  right: 6%;
+  bottom: 18%;
+  width: calc(15px * 3);
+  height: calc(33px * 3);
+}
+
+/* THE SHAKE, and the one rule it is allowed to break. `tree-sway` above never
+ * crosses upwind of rest, because a thing HELD OUT by a steady breeze does not
+ * rock back through it — the flag's rule (Day 60), kept on every loose thing
+ * since. A shaken crown is not held out by anything. It is displaced and let
+ * go, and a thing let go rings back through its own rest and dies away, which
+ * is the same distinction Day 116 drew for the falling leaf: held by a wind,
+ * may not rock back; held by nothing, may. So this crosses rest five times and
+ * decays, four degrees down to a fifth of one, and ends exactly where it
+ * started so the wind's own animation has the element back at its 0% frame the
+ * instant touch.js takes the class off.
+ *
+ * It is a good deal stronger and far shorter than the wind's (4.2° over 0.85s
+ * against 1.2° over 8.5–9s) because that difference IS the reading: at this
+ * size you cannot see what pushed a crown, only how hard and how briefly. A
+ * hand is the one thing out here in a hurry.
+ *
+ * `.sprite--tree-near` (around.css) is named too: the door face looks straight
+ * up the wind's throat and so is deliberately absent from the sway rule, but a
+ * hand is not a wind and reaches a tree from wherever the hand is. */
+.sprite--tree.is-shaken,
+.sprite--tree-small.is-shaken,
+.sprite--tree-near.is-shaken {
+  animation: crown-shake 0.85s ease-out 1;
+}
+@keyframes crown-shake {
+  0%   { transform: skewX(0deg);    }
+  10%  { transform: skewX(-4.2deg); }
+  27%  { transform: skewX(2.9deg);  }
+  44%  { transform: skewX(-2.0deg); }
+  61%  { transform: skewX(1.3deg);  }
+  78%  { transform: skewX(-0.7deg); }
+  91%  { transform: skewX(0.3deg);  }
+  100% { transform: skewX(0deg);    }
+}
+
+/* THE LEAF THE SHAKE LETS GO. One per crown, and the season decides whether
+ * there is one at all: these spans live inside `.sprite--leaffall`, which is
+ * `display: none` in every season but autumn, so a tap gives a shake all year
+ * and a leaf only in the months that have leaves to give. No month is tested
+ * here — season.js owns the year and one place should own it.
+ *
+ * `display: none` at rest is what keeps them invisible to everything that
+ * counts: `falling-leaves` reads getClientRects (Day 98) and still comes back
+ * with four, and check-gallery skips an element that shows in no state at all.
+ * They are given the same two crown tones, the same size, and the same steady
+ * linear rate as their four neighbours — a leaf shaken loose is still only a
+ * leaf falling; what is different is that it is one leaf, once, on a hand's
+ * say-so rather than on a clock's. */
+.leaf--shake {
+  display: none;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+.leaf--shake-l { background: #aed499; }
+.leaf--shake-r { background: #97bb8e; }
+.leaf--shake.is-falling { display: block; }
+.leaf--shake-l.is-falling { animation-name: leaf-shaken-l; animation-duration: 11s; }
+.leaf--shake-r.is-falling { animation-name: leaf-shaken-r; animation-duration: 10.5s; }
+
+/* Each starts between the two leaves that crown already drops — inside the
+ * canopy at both widths (the left crown spans 5–17% of the frame, the right
+ * 87–93%) — and settles into the grass near 92%, finishing right of where it
+ * let go, because this face meets the west wind broadside like everything else
+ * on it. It ends transparent and touch.js then takes the class off, so the span
+ * goes back to display:none and is countable-as-absent again. */
+@keyframes leaf-shaken-l {
+  0%    { top: 67.0%; left: 11.5%; opacity: 1; }
+  16%   { top: 72%;   left: 13.8%; }
+  34%   { top: 77%;   left: 12.2%; }
+  53%   { top: 82%;   left: 15.0%; }
+  72%   { top: 87%;   left: 13.9%; }
+  90%   { top: 91%;   left: 16.6%; opacity: 1; }
+  100%  { top: 92%;   left: 17.2%; opacity: 0; }
+}
+@keyframes leaf-shaken-r {
+  0%    { top: 65.0%; left: 89.6%; opacity: 1; }
+  18%   { top: 70%;   left: 91.8%; }
+  38%   { top: 75.5%; left: 90.2%; }
+  57%   { top: 81%;   left: 93.0%; }
+  76%   { top: 86%;   left: 91.8%; }
+  91%   { top: 90%;   left: 94.4%; opacity: 1; }
+  100%  { top: 91%;   left: 95.0%; opacity: 0; }
+}
+
 /* Bush — 32×28 native, scaled 2.5x. Front-right corner. */
 .sprite--bush {
   width: calc(32px * 2.5);
@@ -2656,6 +2792,12 @@
   .front-cabin         { --s: 2; bottom: 8%; }
   .sprite--tree        { width: calc(28px * 2); height: calc(33px * 2); }
   .sprite--tree-small  { width: calc(15px * 2); height: calc(33px * 2); }
+  /* The reach follows its tree down to 2x (Day 139). The small crown is 30px
+   * wide here, so `min-width: 44px` on .crown-touch widens the pad leftward off
+   * its anchored right edge — invisible, and the only reason the right tree is
+   * tappable at all on a phone (Article VIII). */
+  .crown-touch--left   { width: calc(28px * 2); height: calc(33px * 2); }
+  .crown-touch--right  { width: calc(15px * 2); height: calc(33px * 2); }
   .sprite--smoke       { bottom: calc(8% + 152px); }
   /* Path stones rebased to the 2x cabin (96×160, foot at 8%, right edge
    * at 50% + 48px). Stone widths/heights stay constant — pixel art needs

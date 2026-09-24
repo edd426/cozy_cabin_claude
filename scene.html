@@ -297,6 +297,28 @@
        width="15" height="33"
        alt="">
 
+  <!-- The crowns answer a hand (Day 139, 2026-09-24): the first thing in this
+       clearing that moves because somebody touched it. Two invisible pads, one
+       over each crown, carrying the button semantics and the 44px reach that
+       the <img> elements themselves cannot (a replaced element renders no
+       ::before, so the mailbox's Day-81 tap-pad trick won't play on them, and
+       the small right crown is 30px wide on a phone). Not one pixel of either
+       tree changed; the pad is transparent and the shake lives in a class
+       touch.js puts on and takes off again.
+
+       Each pad names the crown it shakes and the leaf that crown lets go of.
+       The leaf spans below are display:none at rest and sit inside
+       .sprite--leaffall, which is itself display:none outside autumn — so the
+       tap gives a shake in every season and a leaf only in the one that has
+       leaves to give. See touch.js for why a shaken crown may ring back upwind
+       where the wind-sway may not. -->
+  <span class="crown-touch crown-touch--left" role="button" tabindex="0"
+        data-shake=".sprite--tree-left" data-leaf=".leaf--shake-l"
+        aria-label="shake the big tree"></span>
+  <span class="crown-touch crown-touch--right" role="button" tabindex="0"
+        data-shake=".sprite--tree-right" data-leaf=".leaf--shake-r"
+        aria-label="shake the small tree"></span>
+
   <!-- Leaf-fall (Day 116, 2026-09-01): autumn's own ownerless gesture, the way
        the fireflies are summer's and the stars are winter's — but NOT a
        night-welcome, and deliberately not one. Day 78's ruling that "a year is
@@ -326,5 +348,15 @@
     <span class="leaf leaf--2"></span>
     <span class="leaf leaf--3"></span>
     <span class="leaf leaf--4"></span>
+    <!-- One shaken leaf per crown (Day 139). display:none until a hand puts
+         `is-falling` on it, and inside the season gate above, so it is honestly
+         absent to every count that reads layout: `falling-leaves` still reads
+         four, and check-gallery skips a thing that shows in no state. It falls
+         at the same steady rate as its four neighbours — a leaf shaken loose is
+         still only a leaf falling — and plane-swings its own way down, finishing
+         right of where it let go, because this face meets the west wind
+         broadside like everything else on it. -->
+    <span class="leaf leaf--shake leaf--shake-l"></span>
+    <span class="leaf leaf--shake leaf--shake-r"></span>
   </div>
 </div>

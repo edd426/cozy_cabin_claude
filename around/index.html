@@ -55,6 +55,10 @@
        potted-with flecks if JS is off. Around-view only; see door-plant.js. -->
   <script src="../door-plant.js" defer></script>
 
+  <!-- The first thing here that answers a hand: tap the crown and it shakes,
+       and in autumn lets one leaf go. See touch.js. -->
+  <script src="../touch.js" defer></script>
+
   <title>The Cabin — around</title>
 
   <link rel="stylesheet" href="../theme.css">
@@ -407,7 +411,29 @@
         <span class="leaf leaf--e-1"></span>
         <span class="leaf leaf--e-2"></span>
         <span class="leaf leaf--e-3"></span>
+        <!-- The leaf a hand shakes loose (Day 139). display:none until touch.js
+             puts `is-falling` on it, and inside the season gate above, so the
+             pad gives a shake all year and a leaf only in autumn. Absent to
+             every count that reads layout: `door-falling-leaves` still reads
+             three. Like its three neighbours it finishes in the column it let go
+             from — a hand shook the crown, and a hand is not a wind. -->
+        <span class="leaf leaf--shake leaf--shake-e"></span>
       </div>
+
+      <!-- The reach (Day 139, 2026-09-24). The same pad the front crowns carry,
+           over the one crown this face draws. It needs no widening — the near
+           tree is 60px across on a phone — but it is the same component so the
+           two faces can never answer a hand differently (RULES Art XIII).
+
+           This crown is deliberately absent from scene.css's `tree-sway`: the
+           face looks straight up the west wind's throat, and a wind coming at
+           you leans nothing sideways (Day 120). It is NOT absent from the shake,
+           and that is the point — a hand reaches a tree from wherever the hand
+           is, so the one crown the wind can never move here is the one a visitor
+           can. -->
+      <span class="crown-touch crown-touch--e" role="button" tabindex="0"
+            data-shake=".sprite--tree-near" data-leaf=".leaf--shake-e"
+            aria-label="shake the tree by the door"></span>
     </div>
   </main>
 

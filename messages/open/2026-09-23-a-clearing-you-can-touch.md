@@ -129,3 +129,88 @@ these, and it goes in the bin with the session. You said to build the thing a
 visitor touches first and its instrument second; I have done the first and I am
 writing down that the second does not exist yet, so it does not become the kind
 of silence Day 120 and Day 133 went looking for.
+
+### Day 140 — 2026-09-25 — the fire answers a prod, and the clearing makes a sound
+
+Shipped: **press the fire on the hearth and the bed of coals flares, five sparks
+go up the flue, and the hearth cracks** — the first sound this place has ever
+made. That closes the "at least one of them makes a sound" criterion.
+
+- **What a visitor can do that they could not yesterday.** Go inside and press
+  (or tab to and press Enter or Space on) the firebox. The bed opens and
+  brightens, the flame warms a shade paler for a beat, five pale cells lift off
+  the coals and climb through the flame and wink out before the lintel — and you
+  hear it: a low thud, the poker meeting the bed, then a run of three to five
+  short cracks over the next third of a second, quieter and duller as they go.
+  Under a second altogether, and then the fire stands exactly where it stood.
+
+- **Nothing is vendored and nothing is fetched.** Every sound is built at run
+  time out of a half-second of white noise made once in memory and shaped by
+  filters and envelopes — which is what a fire's crack physically *is*, a burst
+  of broadband noise from a pocket letting go, so the synthesis is the thing
+  itself and not a stand-in for a recording. `ASSETS.md` has its row, so the
+  licence condition you set stays checkable even though there is nothing to
+  license.
+
+- **Four rules are written into `sound.js` and they are the whole design.**
+  Nothing ever plays on its own: there is no ambient bed, no loop, and no timer
+  anywhere in the file, and the audio context is built lazily inside the call
+  stack of a real press, so if nobody ever presses, nothing is ever built. Every
+  sound is under a second. `PEAK` is a hard ceiling on the master gain and the
+  day's test reads it back off the live page rather than taking the file's word.
+  And a sound may never be the *only* answer — it is the one thing here that can
+  fail completely and invisibly (a muted tab, a device with no output, a refused
+  context), so the flare is put up first and the crack is asked for second, in a
+  `try`, defensively.
+
+- **Why this closes the reduced-motion gap I named yesterday.** Day 139's note
+  ended on a thing the crowns could not do: `theme.css` collapses every duration
+  under `prefers-reduced-motion`, so a shaken tree gives a visitor who has asked
+  for stillness precisely nothing, and "a tap that must speak to such a visitor
+  will have to speak in something other than movement." A sound is not motion.
+  It is the first answer here that does not depend on anything moving in order
+  to arrive, and the day's test asserts it under `reducedMotion: 'reduce'`: the
+  sparks are born and gone inside a frame, the flare is instant both ways, and
+  the crack still comes.
+
+- **What a prod may NOT do, which is the line I care most about.** It may not
+  feed the fire. The armful beside the hearth holds the count the season gave it
+  (Day 125) and the flame stands the tiers the hour gave it (Day 126); a hand is
+  neither a season nor an hour. Nothing is spent and nothing is gained — the
+  shape of every other turn here.
+
+- **Nothing in the drawing moved.** The sparks are `display: none` at rest, so
+  the frame is unchanged and no drift baseline was removed today; the gallery
+  guard skips an element that shows in no state, and every count reads the
+  firebox exactly as it always has.
+
+- **Tested.** `/tmp/test-fire-prod.js` performs the prod at 375, 390 and 900,
+  with click, Enter, Space and a real coarse-pointer tap, and counts what the
+  page *actually* schedules — it wraps the real `AudioContext` rather than
+  asking `sound.js` how it feels, so it can assert that no context exists before
+  the first press, that one exists after it, that four to six sources are
+  started, and that the master gain is exactly the declared `PEAK`. It also
+  asserts the reach clears 44×44 and sits centred on the firebox, that every
+  spark rises and none ever leaves the jambs or the lintel, that the flare
+  settles and the sparks are gone, that the tier count and the armful are
+  unchanged by the touch, and that the Day-139 crown shake and the map card
+  still work. Four break-tests, each red where it should be: a silent
+  `crackle()`, a pad without its widening, the flare written as a one-shot
+  animation (which stops the tiers' own flicker), and a prod that adds a log.
+
+- **One thing the break-testing taught that I had assumed wrong.** The crown pad
+  only needed `min-width`/`min-height` on a phone; this one needs it at *every*
+  width — the firebox is 36×42 at the desktop scale and 24×28 on a phone, so it
+  is under the 44px minimum everywhere. Dropping the widening reddens all three.
+
+**Still open on this mission** (the running list): something **unsignposted**,
+which neither of the two built so far is — both wear `cursor: pointer` on
+purpose; and something that **holds a state** for the visitor across a visit.
+
+**And still no witness.** Yesterday I wrote that nothing here can hold a tap,
+because every check on the almanac varies on a season or an hour and a hand is
+neither. That is unchanged, and a sound makes it sharper rather than better: a
+crack is not merely unphotographed, it is unphotographable — the whole record
+here is stills, and no still can ever carry it. The day's disposable test is the
+only thing that has ever heard this place, and it goes in the bin with the
+session.

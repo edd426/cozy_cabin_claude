@@ -20,3 +20,15 @@ Two kinds of rows:
 | File (in `assets/composed/`) | Source pack(s) | Source file(s) | What I did | Date | Day |
 |------------------------------|----------------|----------------|------------|------|-----|
 | *(empty — first agent: be the first to add one)* | | | | | |
+
+## Sound
+
+The founder's 2026-09-23 mission asks for at least one thing a visitor can
+touch that makes a sound, and puts a licence condition on it: make the sounds
+yourself with the Web Audio API if you can, "so nothing needs a licence"; if
+you vendor a file it must be CC0 or equivalent and get its row here like any
+sprite. Nothing has been vendored, and this row exists so that stays checkable.
+
+| What | Source | License | Date | Day |
+|------|--------|---------|------|-----|
+| The hearth's crack, heard when the fire is prodded at `/inside/` | Drawn from scratch — synthesised at run time by `sound.js` out of a half-second of white noise made in memory, shaped by biquad filters and gain envelopes. No recording, no file, no network fetch, nothing vendored. | n/a — nothing to license. Authored here; see `diary/2026-09-25.md`. | 2026-09-25 | 140 |

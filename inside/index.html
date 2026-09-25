@@ -219,6 +219,15 @@
        Day 43 and only tinted its glass at Day 46. -->
   <script src="../season.js" defer></script>
 
+  <!-- Day 140 (2026-09-25): the room answers a hand. touch.js has carried the
+       crowns' shake since Day 139 and now carries the fire's prod as well;
+       sound.js is the synth it asks for the crack, and is loaded first so the
+       handler never has to wonder whether it is there. Both are safe on a page
+       with no pads — touch.js delegates from `document` and simply never
+       matches, and sound.js builds nothing at all until a press asks it to. -->
+  <script src="../sound.js" defer></script>
+  <script src="../touch.js" defer></script>
+
   <title>The Cabin — inside</title>
 
   <link rel="stylesheet" href="../theme.css">
@@ -251,7 +260,7 @@
       </a>
 
       <div class="hearth" role="img"
-           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from a low foot on the floor up and off the top of the frame as the chimney passes through the ceiling, with a fire opening down near the middle of the floor where a small fire rests on a glowing bed of coals, and a dark wood mantle higher up the column holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right. The fire lays a soft pool of warm light on the floorboards around the hearth's foot — small in summer, reaching as far as the chair and the woodpile in the cold months — and climbs the brick breast above its own opening, warming the wall from the firebox lintel up to the underside of the mantle, further up in the cold months than in the warm. The mantle blocks that climb: the brick just above the shelf lies in its shadow, deepest straight over the fire and softening toward the shelf's two ends, and rising further as the winter fire reaches further. The candle lays a smaller glow of its own on that shaded brick, about the width of the shelf, sinking down the wall as the wax spends through the evening; the stone and the jar each catch that light on the side facing it, the stone lit along its right flank and the jar along its left.">
+           aria-label="A brick hearth built into the cabin's south wall — a column of warm peach brick laid in running bond, the same brick you glimpse through the front window from outside, rising from a low foot on the floor up and off the top of the frame as the chimney passes through the ceiling, with a fire opening down near the middle of the floor where a small fire rests on a glowing bed of coals, and a dark wood mantle higher up the column holding three small things: a smooth river stone on the left, a short lit candle in the middle, and a small terracotta jar with a green sprig on the right. The fire lays a soft pool of warm light on the floorboards around the hearth's foot — small in summer, reaching as far as the chair and the woodpile in the cold months — and climbs the brick breast above its own opening, warming the wall from the firebox lintel up to the underside of the mantle, further up in the cold months than in the warm. The mantle blocks that climb: the brick just above the shelf lies in its shadow, deepest straight over the fire and softening toward the shelf's two ends, and rising further as the winter fire reaches further. The candle lays a smaller glow of its own on that shaded brick, about the width of the shelf, sinking down the wall as the wax spends through the evening; the stone and the jar each catch that light on the side facing it, the stone lit along its right flank and the jar along its left. The fire can be prodded: press it and the bed of coals flares, a run of sparks goes up the flue and winks out before the lintel, and the hearth cracks — then it settles back to exactly the fire it was.">
         <div class="hearth__column">
           <!-- Brick body: running-bond courses (4 native each), the same
                .brick-course / .brick-course--b rows the front-view window uses
@@ -340,6 +349,20 @@
         <div class="hearth__fire hearth__fire--flame"></div>
         <div class="hearth__fire hearth__fire--tip"></div>
 
+        <!-- Day 140 (2026-09-25): the sparks a prod lets go. `display: none`
+             at rest and shown only while `.hearth` carries `is-prodded`, so
+             the firebox is unchanged in every kept picture and every count.
+             They rise off the bed and wink out before the lintel because that
+             is where a spark off a coal bed goes — up the flue; one reaching
+             the room would be a thing that lands, and nothing in this clearing
+             ever lands (the leaves thin out a hand's width above the grass for
+             the same reason). Decorative; the hearth's label above names them. -->
+        <span class="ember-spark ember-spark--1" aria-hidden="true"></span>
+        <span class="ember-spark ember-spark--2" aria-hidden="true"></span>
+        <span class="ember-spark ember-spark--3" aria-hidden="true"></span>
+        <span class="ember-spark ember-spark--4" aria-hidden="true"></span>
+        <span class="ember-spark ember-spark--5" aria-hidden="true"></span>
+
         <div class="mantle-item mantle-item--stone"></div>
 
         <div class="mantle-item mantle-item--candle">
@@ -351,6 +374,22 @@
           <div class="jar__sprig"></div>
         </div>
       </div>
+
+      <!-- Day 140 (2026-09-25): the reach that lets a visitor prod the fire.
+           A transparent sibling of `.hearth` rather than a pseudo-element on
+           it, because the column carries `pointer-events: none` for all
+           forty-four of its brick courses. Press it (or tab to it and press
+           Enter or Space) and the bed flares, five sparks go up the flue, and
+           the clearing makes the first sound it has ever made — a low thud and
+           a run of cracks, built out of noise by `sound.js`, never a file and
+           never a loop. Nothing is fed and nothing is spent: the armful keeps
+           the count the season gave it and the flame keeps the tiers the hour
+           gave it, and half a second later the fire stands exactly where it
+           stood. -->
+      <span class="fire-touch"
+            role="button"
+            tabindex="0"
+            aria-label="prod the fire"></span>
 
       <div class="chair" role="img"
            aria-label="A small wooden chair on the floor to the left of the hearth, side-view, angled toward the fire — the first piece of the room beyond the hearth wall. The firelight lays its shadow along the boards to its left, away from the flame, longer in the cold months.">

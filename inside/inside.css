@@ -2295,3 +2295,219 @@
     100% { transform: translate( 0px,  0px); }
   }
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * THE FIRE ANSWERS A PROD — Day 140 (2026-09-25)
+ *
+ * The founder's mission of 2026-09-23 asks for one thing a visitor can touch
+ * every building day, and names four of them: things that answer when pressed,
+ * sound, motion that changes when touched, and something unsignposted. Day 139
+ * gave the crowns a hand. This gives the fire one, and it is the first thing
+ * here that makes a NOISE (sound.js) — so it is also the first answer in this
+ * clearing that does not need anything to move in order to arrive.
+ *
+ * That last part is the reason it is the fire and not another tree. touch.js's
+ * Day-139 note ends on a gap it could not close: theme.css collapses every
+ * duration to 0.001ms under `prefers-reduced-motion`, so a shaken crown gives a
+ * visitor who has asked for stillness precisely nothing, and "a tap that must
+ * speak to such a visitor will have to speak in something other than movement."
+ * A sound is not motion. Under reduced motion the sparks below are born and
+ * gone inside a frame, the flare is instant in both directions, and the crack
+ * is the whole of the answer — which is a smaller answer, and not an empty one.
+ *
+ * WHY THE FIRE CAN BE PRODDED AT ALL, when the crowns needed an argument about
+ * wind: a fire is the one thing in this house that a person is *expected* to
+ * interfere with. You do not shake a tree in the ordinary course of things; you
+ * absolutely do take a poker to a bank of coals, and every hour of every day
+ * this hearth has been burning, somebody has been implied doing exactly that.
+ * The prod is the first touch here that the place was already assuming.
+ *
+ * WHAT IT MAY NOT DO, and the line matters. Prodding a fire does not FEED it.
+ * The armful beside the hearth holds exactly the count the season says (Day
+ * 125) and the flame stands exactly the tiers the hour says (Day 126); a hand
+ * changes neither, because the wood a fire eats is the year's business and how
+ * hard it burns is the hour's, and a visitor is neither. What a prod does is
+ * let a bank of coals go for half a second — the bed flares, a run of sparks
+ * goes up the flue, and it settles back to exactly where it stood. Nothing is
+ * spent and nothing is gained. It is the same shape as every other turn here.
+ *
+ * WHAT THE WITNESSES SEE. Nothing, again on purpose and for the same reasons
+ * Day 139 wrote out. `.ember-spark` is `display: none` at rest, so
+ * `visible-count` reads the firebox exactly as it always has,
+ * `tools/check-gallery.js` skips an element that shows in no state, and
+ * `tools/check-drift.js` finds the frame unmoved (no baseline was removed
+ * today). Nothing on the almanac can hold a tap: every check there varies on a
+ * season or an hour and a hand is neither.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/* THE REACH. A transparent sibling of `.hearth`, not a pseudo-element on it,
+ * because `.hearth` carries `pointer-events: none` for the whole column and
+ * lifting that would hand a pointer to forty-four brick courses. The firebox
+ * itself is 12x14 native — 36x42 at the 3x scale and 24x28 on a phone — so both
+ * are under the 44px minimum (Article VIII) and `min-width` / `min-height` do
+ * the widening, the same way they do for the small right crown out front. It is
+ * anchored on the firebox's own centre (x = half the column, y = 19 native off
+ * the floor) and grown outward from there, so the pad stays centred on what it
+ * names at either scale.
+ *
+ * z-index 6 puts it over the hearth (z 2) and its fire (z 4). It sits wholly
+ * within the column's own width at the 3x scale and exactly matches it at 2x,
+ * so it overlaps neither the chair nor the woodpile and nothing that already
+ * took a tap loses one. `cursor: pointer` is the whole affordance and is meant
+ * to be mild — the founder asked for one thing a visitor has to find
+ * unsignposted, and this is not it either. */
+.fire-touch {
+  --s: 3;
+  position: absolute;
+  display: block;
+  left: 50%;
+  bottom: calc(19px * var(--s));
+  transform: translate(-50%, 50%);
+  width: calc(12px * var(--s));
+  height: calc(14px * var(--s));
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  z-index: 6;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(232, 119, 42, 0.3);
+}
+.fire-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
+/* THE FLARE. A transition and not an animation, which is the one piece of
+ * craft in this block worth keeping. The three `.hearth__fire` tiers already
+ * carry infinite `fire-flicker-*` animations on `opacity` and `transform`, and
+ * the `animation` shorthand resets `animation-name` — so a one-shot flare
+ * written as an animation would have to restate each tier's own flicker or
+ * silently stop the fire breathing for the length of the prod. `filter` is a
+ * property the flicker does not touch, so a transition on it composes with the
+ * running animation instead of replacing it, and needs no per-tier rule.
+ *
+ * Fast in, slow out: the coals let go at once and settle back over most of a
+ * second, which is the asymmetry that makes it read as an event rather than a
+ * pulse. The ember bed goes with them — brighter and with its whole 2-native
+ * depth alight for the length of the flare, whatever the hour had it at, since
+ * a prod opens the bed no matter how banked the fire was. */
+.hearth__fire {
+  transition: filter 0.75s ease-out;
+}
+/* The bed's `box-shadow` carries --ember-lit, so it is transitioned too: the
+ * depth of alight coal comes back down over the same three quarters of a
+ * second the brightness does, rather than snapping back the instant the class
+ * is taken off. */
+.hearth__embers {
+  transition: filter 0.75s ease-out, box-shadow 0.75s ease-out;
+}
+.hearth.is-prodded .hearth__fire {
+  /* Toward white, and only a little: a fire given air burns hotter and a
+   * hotter flame is a paler one, and on an already-saturated orange plain
+   * brightness alone clips and reads as nothing. But the first pass at this
+   * took the saturation down to 0.62 and the whole hearth went beige — a fire
+   * that has stopped looking like fire is a worse answer than no flare, and
+   * with the sparks now carrying the reading the flare does not have to do the
+   * work. Barely a lift, and it stays orange. */
+  filter: brightness(1.22) saturate(0.93);
+  transition-duration: 0.07s;
+}
+.hearth.is-prodded .hearth__embers {
+  filter: brightness(1.45);
+  transition-duration: 0.07s;
+  --ember-lit: 2px;
+}
+
+/* THE SPARKS. Five 1-native cells that rise off the bed and wink out before
+ * the lintel, which is not a fade for prettiness — it is where they go. A spark
+ * off a coal bed goes UP THE FLUE; one that made it out into the room would be
+ * a thing landing on a floor, and nothing in this clearing ever lands on the
+ * floor (diary 2026-09-13, on the leaves that thin out a hand's width above the
+ * grass because there is no litter anywhere here and never will be).
+ *
+ * The firebox cavity runs y = 12..25 native and the fire's base sits at y = 16,
+ * so each spark is born on the bed between the jambs (x = 7..17) and climbs
+ * eight or nine native px. They are flat colour with no gradient anywhere —
+ * `room-lean-sweep` walks every element in this view for a horizontal gradient
+ * and reads hidden ones too, so a gradient here would be a lean drawn into the
+ * one frame the vow is hardest to hold in.
+ *
+ * Sizes and offsets are native px * var(--s), so the 2x block at the foot of
+ * this file needs no rule of its own. Each has its own drift, its own duration
+ * and its own delay: five sparks going up together on one clock is a firework,
+ * and what a prodded bed actually does is let pockets go one after another as
+ * the draught reaches them — which is the same run of events the crack in
+ * sound.js is built out of, so the eye and the ear are describing one thing. */
+.ember-spark {
+  position: absolute;
+  display: none;
+  width: calc(1px * var(--s));
+  height: calc(1px * var(--s));
+  /* Paler than the flame's own tip (#ffd070), and that is the reading rather
+   * than a preference: an ejected ember is the hottest thing in the picture,
+   * and it has to clear the blaze it climbs through. Measured against the
+   * layers it crosses — #e8772a base, #f0a040 flame — this sits ninety-odd
+   * units of luminance clear of both, where the tip's own colour was barely
+   * thirty clear of the flame and simply vanished into it in a summer day's
+   * fire (Day 136: compute the gap before drawing a tone you need to read). */
+  background: #fff0c4;
+  z-index: 5;
+  pointer-events: none;
+}
+.hearth.is-prodded .ember-spark {
+  display: block;
+}
+
+.ember-spark--1 { left: calc(8px  * var(--s)); bottom: calc(14px * var(--s)); animation: ember-rise-1 0.80s ease-out 0.00s 1; }
+.ember-spark--2 { left: calc(10px * var(--s)); bottom: calc(14px * var(--s)); animation: ember-rise-2 0.66s ease-out 0.05s 1; }
+.ember-spark--3 { left: calc(12px * var(--s)); bottom: calc(14px * var(--s)); animation: ember-rise-3 0.90s ease-out 0.03s 1; }
+.ember-spark--4 { left: calc(14px * var(--s)); bottom: calc(14px * var(--s)); animation: ember-rise-4 0.72s ease-out 0.12s 1; }
+.ember-spark--5 { left: calc(15px * var(--s)); bottom: calc(14px * var(--s)); animation: ember-rise-5 0.84s ease-out 0.08s 1; }
+
+/* Each rises 8–9 native and drifts one or two sideways on the way. The drift
+ * is NOT a wind: there is no wind in this room, and a draught up a flue pulls
+ * a spark toward the middle of the throat rather than downwind — so the two
+ * born nearest the jambs lean inward and the middle three wander, which is a
+ * convergence and not a heading. Every one ends at `opacity: 0`, so nothing is
+ * left standing when the class comes off; `translate` in px * var(--s) rather
+ * than in per cent, because the box these sit in is the whole hearth column and
+ * a percentage of a 1px box is nothing. */
+@keyframes ember-rise-1 {
+  0%   { opacity: 0;   transform: translate(0, 0); }
+  12%  { opacity: 1;   transform: translate(calc(0.3px * var(--s)), calc(-1px * var(--s))); }
+  70%  { opacity: 0.85; transform: translate(calc(1.4px * var(--s)), calc(-7px * var(--s))); }
+  100% { opacity: 0;   transform: translate(calc(2px * var(--s)), calc(-11px * var(--s))); }
+}
+@keyframes ember-rise-2 {
+  0%   { opacity: 0;   transform: translate(0, 0); }
+  15%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
+  65%  { opacity: 0.8; transform: translate(calc(0.6px * var(--s)), calc(-6px * var(--s))); }
+  100% { opacity: 0;   transform: translate(calc(0.2px * var(--s)), calc(-10px * var(--s))); }
+}
+@keyframes ember-rise-3 {
+  0%   { opacity: 0;   transform: translate(0, 0); }
+  10%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
+  60%  { opacity: 0.9; transform: translate(calc(-0.8px * var(--s)), calc(-6px * var(--s))); }
+  100% { opacity: 0;   transform: translate(calc(0.4px * var(--s)), calc(-11px * var(--s))); }
+}
+@keyframes ember-rise-4 {
+  0%   { opacity: 0;   transform: translate(0, 0); }
+  14%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
+  68%  { opacity: 0.8; transform: translate(calc(-1px * var(--s)), calc(-6px * var(--s))); }
+  100% { opacity: 0;   transform: translate(calc(-1.6px * var(--s)), calc(-10px * var(--s))); }
+}
+@keyframes ember-rise-5 {
+  0%   { opacity: 0;   transform: translate(0, 0); }
+  12%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
+  66%  { opacity: 0.85; transform: translate(calc(-1.6px * var(--s)), calc(-7px * var(--s))); }
+  100% { opacity: 0;   transform: translate(calc(-2.4px * var(--s)), calc(-11px * var(--s))); }
+}
+
+/* The pad is a sibling of `.hearth` and so does not inherit the scale swap the
+ * 2x block above makes there. Its own swap, and the whole of its override — the
+ * anchor and the size are native px * var(--s) throughout, and the sparks are
+ * children of `.hearth` and already carry that block's --s. */
+@media (max-width: 599px) {
+  .fire-touch { --s: 2; }
+}

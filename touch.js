@@ -57,6 +57,33 @@
  * is asking not to be given it. A tap that must speak to such a visitor will
  * have to speak in something other than movement.
  *
+ * ── Day 140 (2026-09-25): THE FIRE ────────────────────────────────────────
+ *
+ * The second thing here that answers a hand, and the first that answers in
+ * something other than movement — which is the sentence directly above, taken
+ * up. A `.fire-touch` pad lies over the firebox in the room (inside.css). Press
+ * it and `.hearth` carries `is-prodded` for the length of the flare: the ember
+ * bed opens and brightens, the three flame tiers warm (a `filter` transition,
+ * so their own running flicker is not disturbed), five `.ember-spark` cells go
+ * up the flue and wink out before the lintel — and `sound.js` is asked for a
+ * crack, which is the first noise this clearing has ever made.
+ *
+ * WHAT A PROD MAY NOT DO. It may not feed the fire. The armful beside the
+ * hearth holds the count the season gave it (Day 125) and the flame stands the
+ * tiers the hour gave it (Day 126); a hand is neither a season nor an hour, so
+ * it changes neither. Half a second later the fire stands exactly where it
+ * stood — spent nothing, gained nothing, the shape of every other turn here.
+ *
+ * WHY THE SOUND IS ASKED FOR HERE AND NOT SCHEDULED THERE. `sound.js` holds
+ * one rule above all others: nothing plays on its own. The only way to keep
+ * that true is for every sound to be scheduled inside the call stack of a real
+ * gesture, which is this handler and nowhere else. And it is asked for
+ * defensively — `window.CabinSound` may be absent, the browser may have no Web
+ * Audio, the context may be refused — because a sound is the one part of this
+ * answer that can fail silently and completely, and it may never be the reason
+ * the visible half does not happen. So the flare is put up first and the crack
+ * is asked for second.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -106,9 +133,42 @@
     }
   }
 
+  /* One prod at a time. A second press while the coals are still flaring is
+   * ignored rather than restarting them — the same rule the crowns keep, and
+   * for a sharper reason here: `is-prodded` is taken off by the `animationend`
+   * of one named spark, so restarting mid-flare would let a fast presser hold
+   * a run of sparks standing in the firebox indefinitely.
+   *
+   * The class is driven off `ember-rise-3`, which is the longest of the five
+   * (0.90s against 0.66–0.84s) and carries no delay of its own to outlive. If
+   * a later day retimes the sparks, this is the line that has to follow. */
+  function prod(pad) {
+    var scene = pad.closest('.scene');
+    var hearth = scene && scene.querySelector('.hearth');
+
+    if (hearth && !hearth.classList.contains('is-prodded')) {
+      hearth.classList.add('is-prodded');
+      hearth.addEventListener('animationend', function once(e) {
+        if (e.animationName !== 'ember-rise-3') return;
+        hearth.classList.remove('is-prodded');
+        hearth.removeEventListener('animationend', once);
+      });
+    }
+
+    /* Second, and never first (see the header). Anything at all wrong with the
+     * sound — no Web Audio, a refused context, a file that did not load — and
+     * the visible half above has already happened. */
+    if (window.CabinSound && typeof window.CabinSound.crackle === 'function') {
+      try { window.CabinSound.crackle(); } catch (err) {}
+    }
+  }
+
   document.addEventListener('click', function (e) {
-    var pad = e.target.closest && e.target.closest('.crown-touch');
-    if (pad) shake(pad);
+    if (!e.target.closest) return;
+    var pad = e.target.closest('.crown-touch');
+    if (pad) { shake(pad); return; }
+    pad = e.target.closest('.fire-touch');
+    if (pad) prod(pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -116,9 +176,11 @@
    * is given). Space scrolls the page if it is not swallowed. */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
-    var pad = e.target.closest && e.target.closest('.crown-touch');
-    if (!pad) return;
+    if (!e.target.closest) return;
+    var crown = e.target.closest('.crown-touch');
+    var fire = crown ? null : e.target.closest('.fire-touch');
+    if (!crown && !fire) return;
     e.preventDefault();
-    shake(pad);
+    if (crown) shake(crown); else prod(fire);
   });
 })();

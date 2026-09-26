@@ -84,6 +84,54 @@
  * the visible half does not happen. So the flare is put up first and the crack
  * is asked for second.
  *
+ * ── Day 141 (2026-09-26): THE LAMP, AND THE FIRST ANSWER THAT OUTLASTS THE
+ * TOUCH ───────────────────────────────────────────────────────────────────
+ *
+ * The third thing here that answers a hand, and the first that is still
+ * answering after the hand has gone. A `.lamp-touch` pad lies over the porch
+ * lantern on the door face (around.css). Press it and the lamp lights; press it
+ * again and it goes out; and the choice is written to `localStorage` under
+ * `cabin.lamp` and read back on every later arrival, so the lamp is as the
+ * visitor left it through the map, the front, the room, and tomorrow morning.
+ * That is the founder's "a state that holds for the visitor"
+ * (messages/open/2026-09-23-a-clearing-you-can-touch.md).
+ *
+ * THREE STATES, AND THE THIRD IS THE DEFAULT. `data-lamp` absent means nobody
+ * has had an opinion: the hour decides, exactly as it has since Day 49 — dark
+ * through the long middle of the day, kindled at dawn and dusk, burning at
+ * night. `lit` and `out` are a hand overruling the hour in one direction or the
+ * other. There is deliberately no way back to the hour from here; a control with
+ * three positions where two are visibly identical is a control nobody can read,
+ * and clearing the site's storage is the honest undo.
+ *
+ * WHY A HAND MAY OVERRULE A WHEEL AT ALL. Everything else in this clearing that
+ * gives light is a thing the place simply does — the fireflies, the winter
+ * stars, the rim on the far crests, the fire on its own hearth — and a hand has
+ * no business at any of them. The lantern is the one exception, and it has been
+ * described as the exception since the morning it was hung: "the most made thing
+ * in the clearing — bracket screwed to the wall, glass in an iron cage, lit on
+ * purpose for an arrival" (diary 2026-06-30). A lamp is an object that comes
+ * with a switch already implied. Nothing else out here does.
+ *
+ * WHAT A HELD STATE COSTS THE RECORD, which is the day's actual finding. Every
+ * witness and every kept picture opens a browser that has never been here: no
+ * storage, so no `data-lamp`, so the lamp follows the hour and every reading
+ * comes back exactly as it did yesterday. `tools/check-almanac.js`'s `lantern`
+ * probe still reads dark at noon; `tools/check-drift.js` finds no pixel moved;
+ * `tools/check-gallery.js` sees a layer whose states are the ones it always had.
+ * That is not a gap to be closed — it is what the record is: a picture of a
+ * first arrival. Yesterday's sound was unphotographable; this is the second
+ * thing here no frame can hold, and for the opposite reason. A sound cannot get
+ * into a picture at all. This could, easily — and never will, because the
+ * camera arrives new every time, and a held state belongs to somebody who has
+ * been here before.
+ *
+ * REDUCED MOTION. The lamp's whole answer is a change of colour on the glass and
+ * a halo around it, which is a state and not a motion, so a visitor who has
+ * asked for stillness gets the entire answer (the 1.6s cross-fade collapses and
+ * the lamp simply is lit). Of the three things built so far this is the only one
+ * whose answer needs neither movement nor sound to arrive.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -163,12 +211,106 @@
     }
   }
 
+  /* ── the lamp (Day 141) ───────────────────────────────────────────────────
+   *
+   * The only piece of this file that remembers anything. Every read and every
+   * write of storage is wrapped, because a browser in a private window, or one
+   * with site data blocked, throws on the accessor rather than returning null —
+   * and a lamp that cannot be remembered must still be a lamp that can be lit. */
+  var LAMP_KEY = 'cabin.lamp';
+  var LIT_BANDS = { dawn: 1, dusk: 1, night: 1 };
+
+  function lampStored() {
+    try {
+      var v = window.localStorage.getItem(LAMP_KEY);
+      return (v === 'lit' || v === 'out') ? v : null;
+    } catch (e) { return null; }
+  }
+
+  function lampStore(v) {
+    try { window.localStorage.setItem(LAMP_KEY, v); } catch (e) {}
+  }
+
+  /* What the hour alone would do with it. sky.js has already tagged the scene
+   * by the time this file runs — both are deferred and it is first in document
+   * order — and an untagged scene reads as unlit, which is the day's own
+   * middle and the safest thing to be wrong about. */
+  function lampLitByHour(scene) {
+    return !!LIT_BANDS[scene.getAttribute('data-tod')];
+  }
+
+  function lampIsLit(scene) {
+    var held = scene.getAttribute('data-lamp');
+    return held ? held === 'lit' : lampLitByHour(scene);
+  }
+
+  /* `instant` is for the restore only. It puts `data-lamp-init` on the scene,
+   * which turns the glass's 1.6s cross-fade off, and takes it off again on the
+   * next frame — so a visitor arriving at a lamp they left burning finds it
+   * already burning rather than watching it kindle at them.
+   *
+   * I very nearly deleted this as decoration. Removing it and re-running the
+   * day's test came back green, and the reason was the hour the test happened to
+   * stand at: a machine running near midnight reckons `night`, the hour lights
+   * the lamp anyway, and a held `lit` changes nothing there is anything to fade
+   * BETWEEN. Pin the clock to noon and the fade is plainly there — the lantern
+   * reports `background-color` and `box-shadow` still running a tenth of a
+   * second into a return visit. A guard tested only in the state where it has
+   * nothing to do will always look like a guard that does nothing. */
+  function lampPaint(scene, pad, state, instant) {
+    if (instant) scene.setAttribute('data-lamp-init', '');
+    if (state) scene.setAttribute('data-lamp', state);
+    else scene.removeAttribute('data-lamp');
+
+    var lit = lampIsLit(scene);
+    pad.setAttribute('aria-pressed', lit ? 'true' : 'false');
+    pad.setAttribute('aria-label', lit ? 'put out the lamp by the door'
+                                       : 'light the lamp by the door');
+
+    if (instant) {
+      window.requestAnimationFrame(function () {
+        scene.removeAttribute('data-lamp-init');
+      });
+    }
+  }
+
+  function lamp(pad) {
+    var scene = pad.closest('.scene');
+    if (!scene) return;
+
+    var next = lampIsLit(scene) ? 'out' : 'lit';
+    lampPaint(scene, pad, next, false);
+    lampStore(next);
+
+    /* Second, and never first — the same rule the fire keeps. The glass has
+     * already changed by the time anything is asked of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.latch === 'function') {
+      try { window.CabinSound.latch(); } catch (err) {}
+    }
+  }
+
+  /* Read the held choice back at parse time, in the body of this deferred file,
+   * so the lamp is right on arrival rather than correcting itself a moment
+   * later — and with `instant`, so it does not fade there. Both halves matter:
+   * the ordering puts the attribute on before the first paint, and the
+   * suppression covers the case where something earlier in the page has already
+   * flushed a style off this view. A page with no pad — every view but the door
+   * side — falls straight through. */
+  (function restoreLamp() {
+    var pad = document.querySelector('.lamp-touch');
+    var scene = pad && pad.closest('.scene');
+    if (!scene) return;
+    lampPaint(scene, pad, lampStored(), true);
+  })();
+
   document.addEventListener('click', function (e) {
     if (!e.target.closest) return;
     var pad = e.target.closest('.crown-touch');
     if (pad) { shake(pad); return; }
     pad = e.target.closest('.fire-touch');
-    if (pad) prod(pad);
+    if (pad) { prod(pad); return; }
+    pad = e.target.closest('.lamp-touch');
+    if (pad) lamp(pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -179,8 +321,11 @@
     if (!e.target.closest) return;
     var crown = e.target.closest('.crown-touch');
     var fire = crown ? null : e.target.closest('.fire-touch');
-    if (!crown && !fire) return;
+    var lamppad = (crown || fire) ? null : e.target.closest('.lamp-touch');
+    if (!crown && !fire && !lamppad) return;
     e.preventDefault();
-    if (crown) shake(crown); else prod(fire);
+    if (crown) shake(crown);
+    else if (fire) prod(fire);
+    else lamp(lamppad);
   });
 })();

@@ -291,6 +291,100 @@
     0 0 calc(9px * var(--s)) calc(4px * var(--s)) rgba(255, 190,  92, 0.36);
 }
 
+/* ── The lamp answers a hand (Day 141, 2026-09-26) ─────────────────────────
+ * The third thing here a visitor can touch, and the first whose answer OUTLASTS
+ * the touch. The crowns ring for nine tenths of a second and the firebox flares
+ * for half of one; both are over before you have taken your hand away, and both
+ * leave the yard exactly as they found it. This one does not. Press the lamp and
+ * it stays as you left it — through the map, through the front, through the
+ * room, and through coming back tomorrow — because the choice is written into
+ * the visitor's own browser and read back on arrival (`cabin.lamp` in
+ * `touch.js`). That is the founder's "a state that holds for the visitor"
+ * (messages/open/2026-09-23-a-clearing-you-can-touch.md).
+ *
+ * WHY THIS OBJECT AND NOT ANOTHER. The lantern is the most *made* thing in the
+ * clearing — a bracket screwed to a wall, glass in an iron cage, lit on purpose
+ * for an arrival (Day 49, diary 2026-06-26) — and for ninety-two mornings the
+ * only hand that could light it was the hour's. A lamp is the one object out
+ * here that comes with a switch already implied; every other light in the
+ * clearing is a thing the place simply does (the fireflies, the stars, the
+ * crests at dawn) and a hand has no business at any of them.
+ *
+ * WHAT THE STATES MEAN. No `data-lamp` at all is the standing arrangement: the
+ * hour decides, exactly as it has since Day 49, and that is what every fresh
+ * arrival finds (which is also why no witness and no kept picture sees any of
+ * this — see touch.js). `lit` and `out` are a hand overruling the hour, in
+ * either direction. `lit` is the night's own values rather than a fourth
+ * strength: a flame is the flame, and what changes across the day is the dark
+ * it is read against, not the wick.
+ *
+ * THE VOW IS UNTOUCHED. What the lamp throws is a halo — a box-shadow with no
+ * horizontal offset at any strength — so the light still gets no address
+ * (`/almanac/`'s `even-glow` test over the lantern's own exemption reads this
+ * property and would go red if a later day gave the glow a side). */
+.scene[data-lamp="lit"] .cabin-lantern__body {
+  background: #ffca6e;
+  box-shadow:
+    0 0 calc(4px * var(--s)) calc(1px * var(--s)) rgba(255, 200, 110, 0.70),
+    0 0 calc(9px * var(--s)) calc(4px * var(--s)) rgba(255, 190,  92, 0.36);
+}
+.scene[data-lamp="out"] .cabin-lantern__body {
+  background: #46413a;                 /* the unlit glass, whatever the hour */
+  box-shadow: none;
+}
+
+/* Restoring a held choice must not look like the lamp kindling as you walk up.
+ * touch.js sets `data-lamp-init` for exactly one frame while it reads the stored
+ * value back, and this turns the body's 1.6s cross-fade off for that frame, so
+ * an arrival at a lamp you left burning finds it already burning.
+ *
+ * Do not take this out because it looks inert. It IS inert at the hour a test
+ * machine near midnight stands at — the lamp is lit by the hour there, so a held
+ * `lit` has nothing to fade between and the rule has nothing to do. Pin the
+ * clock to noon and it is plainly load-bearing: without it the lantern is
+ * measurably still running `background-color` and `box-shadow` a tenth of a
+ * second into a return visit. */
+.scene[data-lamp-init] .cabin-lantern__body {
+  transition: none;
+}
+
+/* THE REACH. A transparent sibling of the fixture, which stays decorative
+ * (`aria-hidden`, `pointer-events: none`) — the same arrangement `.crown-touch`
+ * keeps in scene.css and `.fire-touch` keeps in inside.css. The lantern is 24x42
+ * at the 3x scale and 16x28 on a phone, under the 44px minimum in both
+ * dimensions at 2x and in width at 3x, so `min-width` / `min-height` do the
+ * widening (Article VIII).
+ *
+ * The pad is anchored by its LEFT edge on the fixture's left edge, not centred
+ * on it, and that is load-bearing rather than tidy: the door's own tap pad
+ * (`.side-cabin__door::after`, inset -12px) reaches to 50% + 30px at the 3x
+ * scale and 50% + 24px at 2x, so a pad centred on the lamp and grown both ways
+ * would take a bite out of the door's reach at z 4 against the door's z 3. Grown
+ * rightward from 50% + 33px / 50% + 24px it clears the door at both scales and
+ * stops well short of the near tree's own pad on the right. `cursor: pointer` is
+ * the whole affordance and is meant to be mild; the founder's unsignposted thing
+ * is still owed and this is not it. */
+.lamp-touch {
+  --s: 3;
+  position: absolute;
+  display: block;
+  left: calc(50% + 33px);
+  bottom: 26%;
+  width: calc(8px * var(--s));
+  height: calc(14px * var(--s));
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  z-index: 4;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(255, 200, 110, 0.3);
+}
+.lamp-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
 /* ── Boots by the door (Day 50, 2026-06-27) ────────────────────────────────
  * A pair of small leather boots on the grass just left of the door, toes turned
  * toward the path. The continuation of the lantern thread (diary 2026-06-26):
@@ -635,6 +729,7 @@
 @media (max-width: 599px) {
   .side-cabin           { --s: 2; width: calc(76px * 2); height: calc(80px * 2); bottom: 8%; }
   .cabin-lantern        { --s: 2; left: calc(50% + 24px); bottom: 28%; }
+  .lamp-touch           { --s: 2; left: calc(50% + 24px); bottom: 28%; }
   .door-boots           { --s: 2; left: calc(50% - 40px); bottom: 8%; }
   .door-plant           { --s: 2; left: calc(50% + 17px); bottom: 8%; }
   .side-cabin__wall     {
@@ -993,11 +1088,20 @@
 
 /* One line, so it is kept beside the component rather than in the file's main
  * 3x->2x block above: everything here is native-px x var(--s), so the whole tree
- * rebases from this single declaration. */
+ * rebases from this single declaration.
+ *
+ * It names the tree ONLY. `.sprite--leaffall--e` and `.crown-touch--e` used to
+ * ride along here and were silently unrebased for it, because both of their base
+ * rules are further down this file and a media query adds no specificity — so at
+ * equal specificity the later `--s: 3` simply won, at every width. Measured on
+ * Day 141: on a phone the layer and the pad both read `--s: 3` while the tree
+ * beside them read 2, which made each door-side leaf 9x6 where it should be 6x4
+ * (off the very grid the Day-120 rule was written to keep it on) and the crown's
+ * reach 90x168 instead of 60x112. Their rebase is now at the foot of the file,
+ * after both rules. If you give anything else on this face an `--s`, put its
+ * breakpoint line AFTER its base rule or it will not run. */
 @media (max-width: 599px) {
-  .sprite--tree-near,
-  .sprite--leaffall--e,
-  .crown-touch--e { --s: 2; }     /* the reach follows the crown (Day 139) */
+  .sprite--tree-near { --s: 2; }
 }
 
 /* ── Leaves off the east tree (Day 122, 2026-09-07) ─────────────────────────
@@ -1111,10 +1215,11 @@
  * hand alike, and they cannot drift apart (RULES Art XIII).
  *
  * The pad stands exactly where the tree stands and rides its `--s`, so it
- * follows the crown down to 2x with no rebase — the tree's own breakpoint line
- * is a few rules up and names `.crown-touch--e` alongside it. No widening is
- * needed here: the near tree is 60px across on a phone, well over the minimum
- * that makes the front's small crown need one. */
+ * follows the crown down to 2x with no rebase — see the breakpoint block at the
+ * foot of this file, which is where that line has to live to run at all (it sat
+ * above this rule from Day 139 to Day 141 and lost to it). No widening is needed
+ * here: the near tree is 60px across on a phone, well over the minimum that
+ * makes the front's small crown need one. */
 .crown-touch--e {
   --s: 3;
   right: 4%;
@@ -1143,4 +1248,16 @@
   83%   { top: 94%;   left: 86.0%; }
   93%   { top: 96%;   left: 87.4%; opacity: 1; }
   100%  { top: 96.8%; left: 87.4%; opacity: 0; }
+}
+
+/* ── Breakpoint, for the two components declared below the tree's own line ──
+ * (Day 141, 2026-09-26.) `.sprite--leaffall--e` and `.crown-touch--e` both set
+ * `--s: 3` in rules that stand further down this file than the tree's 3x->2x
+ * block, and a media query adds no specificity — so from Day 122 and Day 139
+ * respectively their rebase never ran and both stayed at the desktop scale on a
+ * phone. This block is at the very foot of the file, after every rule it names,
+ * which is the only place it can win. */
+@media (max-width: 599px) {
+  .sprite--leaffall--e,
+  .crown-touch--e { --s: 2; }
 }

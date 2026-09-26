@@ -55,8 +55,11 @@
        potted-with flecks if JS is off. Around-view only; see door-plant.js. -->
   <script src="../door-plant.js" defer></script>
 
-  <!-- The first thing here that answers a hand: tap the crown and it shakes,
-       and in autumn lets one leaf go. See touch.js. -->
+  <!-- Two things on this face answer a hand: tap the crown and it shakes (and in
+       autumn lets one leaf go), tap the lamp and it lights or goes out and stays
+       that way. See touch.js. sound.js is the latch's click and nothing else —
+       it builds no audio context at all until a real press asks for one. -->
+  <script src="../sound.js" defer></script>
   <script src="../touch.js" defer></script>
 
   <title>The Cabin — around</title>
@@ -223,6 +226,29 @@
         <span class="cabin-lantern__body"></span>
         <span class="cabin-lantern__base"></span>
       </div>
+
+      <!-- The lamp answers a hand (Day 141, 2026-09-26): the third thing in this
+           clearing a visitor can touch, and the first whose answer outlasts the
+           touch. Press it and the lamp lights; press it again and it goes out;
+           and the choice is kept, so it is still as you left it when you come
+           back through the map, or tomorrow. Until this morning the only hand
+           that could light this lamp was the hour's — it has kindled at dawn and
+           dusk and burned at night since Day 49 and been dark through the long
+           middle of the day, and no visitor had any say in it.
+
+           WHAT IS HELD AND WHAT IS NOT. A fresh arrival with no choice stored
+           finds the standing arrangement untouched: the hour decides, exactly as
+           it always has. `data-lamp` appears on the scene only once somebody has
+           overruled it, in one direction or the other. So nothing the record
+           keeps of this place changes by a pixel, and nothing watching it sees
+           anything — which is itself the day's point (touch.js has the note).
+
+           The pad is a transparent sibling; the fixture above stays decorative.
+           It is anchored by its left edge and grows rightward, because a pad
+           centred on the lamp and widened to the 44px minimum would eat into the
+           door's own reach a few pixels to its left. -->
+      <span class="lamp-touch" role="button" tabindex="0" aria-pressed="false"
+            aria-label="light the lamp by the door"></span>
 
       <!-- Boots by the door (Day 50, 2026-06-27): a pair of small leather boots
            set on the grass just left of the entrance, toes turned toward the path.

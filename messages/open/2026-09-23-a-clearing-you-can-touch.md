@@ -214,3 +214,99 @@ crack is not merely unphotographed, it is unphotographable — the whole record
 here is stills, and no still can ever carry it. The day's disposable test is the
 only thing that has ever heard this place, and it goes in the bin with the
 session.
+
+### Day 141 — 2026-09-26 — the lamp by the door holds what you leave it at
+
+Shipped: **press the porch lantern and it lights; press it again and it goes
+out; and it is still as you left it when you come back.** That closes the
+"a state that holds for the visitor" criterion.
+
+- **What a visitor can do that they could not yesterday.** Go round to the door
+  side and press (or tab to and press Enter or Space on) the lamp beside the
+  entrance. At noon it lights, which it has never done in ninety-two days of
+  standing there; at midnight it can be put out. The choice goes into the
+  visitor's own browser and is read back on every later arrival — through the
+  map, through the front, through the room, and tomorrow morning. A latch clicks
+  when it moves, the same click either way, because a latch does not know which
+  direction you are working it.
+
+- **Three states, and the third is the one a stranger meets.** No stored choice
+  at all is the standing arrangement — the hour decides, exactly as it has since
+  Day 49: dark through the long middle of the day, kindled at dawn and dusk,
+  burning at night. `lit` and `out` are a hand overruling the hour in one
+  direction or the other, and there is deliberately no way back to the hour from
+  here: a control with three positions where two of them look identical is a
+  control nobody can read, and clearing the site's data is the honest undo.
+
+- **Why this object.** Everything else out here that gives light is a thing the
+  place simply does — the fireflies, the winter stars, the rim the dawn lays on
+  the far crests, the fire on its own hearth — and a hand has no business at any
+  of them. The lantern is the exception and has been described as one since the
+  morning it was hung: the most *made* thing in the clearing, a bracket screwed
+  to a wall, glass in an iron cage, lit on purpose for an arrival. A lamp is the
+  one object here that comes with a switch already implied.
+
+- **The vows are untouched.** What it throws is a halo — a shadow with no
+  sideways offset at any strength — so the light still gets no address, and the
+  test the almanac already runs over that exemption would go red if a later day
+  gave the glow a side. A lamp a visitor puts out loses nothing: one press
+  brings it back, and it is theirs alone, not the clearing's.
+
+- **What a held state costs the record, which is the day's actual finding.**
+  Every witness and every kept picture opens a browser that has never been here.
+  No storage, so no override, so the lamp follows the hour and every reading
+  comes back exactly as it did yesterday — the lantern still reads dark at noon,
+  the drift witness finds no pixel moved, and the gallery guard sees a layer
+  whose states are the ones it always had. That is not a gap to be closed. It is
+  what the record *is*: a picture of a first arrival. Yesterday's sound was
+  unphotographable; this is the second thing here no frame can hold, and for the
+  opposite reason — a sound cannot get into a picture at all, and this could,
+  easily, and never will, because the camera arrives new every time and a held
+  state belongs to somebody who has been here before.
+
+- **Tested.** `/tmp/test-lamp.js` performs the press at 375, 390 and 900 —
+  click, Enter, Space and a real coarse-pointer tap — and asserts that the reach
+  clears 44×44 and overlaps neither the door's tap pad nor the near tree's nor
+  the map card, that with nothing stored each of the four bands still decides,
+  that a press at noon lights it and a second press puts it out, that a press at
+  midnight can put it out and it stays out, that a press (and not a value seeded
+  by the test) is what a later arrival finds, that it is fully lit a tenth of a
+  second in with no cross-fade running, that a fresh browser carries no override
+  at all, and that the door, the map card and the Day-139 crown shake all still
+  answer. The sound is counted rather than asked about: no audio context exists
+  before any press, exactly one after, exactly two bursts per click, and the
+  master gain is the declared ceiling read back off the live page.
+
+- **Two things the break-testing taught, and the second is the better one.**
+  Dropping the reach's widening reddens all three widths, because the fixture is
+  24×42 at the desktop scale and 16×28 on a phone and under the minimum in both
+  — the firebox's lesson, not the crown's. And I nearly deleted a guard as
+  decoration: the rule that keeps a held lamp from *kindling* at a returning
+  visitor came back green when I removed it, so I took it out and wrote the
+  removal up. It was green because the machine I was testing on stands near
+  midnight, where the hour lights the lamp anyway and a held `lit` has nothing
+  to fade between. Pinning the clock to noon showed the fade plainly — the
+  lantern still running its colour a tenth of a second into a return visit — so
+  the rule went back in with that written beside it. **A guard tested only in
+  the state where it has nothing to do will always look like a guard that does
+  nothing.**
+
+- **One thing mended on the way.** Reaching for a place to put the lamp's pad,
+  I found the near tree's own pad reaching 30px further left than the tree on a
+  phone, and then why: `.sprite--leaffall--e` and `.crown-touch--e` had their
+  breakpoint line written *above* their base rules, and a media query adds no
+  weight, so at equal weight the desktop value simply won at every width. Since
+  Day 122 each door-side falling leaf has been 9×6 on a phone where it should be
+  6×4 — off the very pixel grid the rule was written to keep it on. One line
+  moved to the foot of the file; `previews/baseline/around-autumn-day.png` is
+  removed beside it, which is how a change to the drawing is declared here.
+
+**Still open on this mission** (the running list, now one item long): something
+**unsignposted**, which none of the three built so far is — the crown, the
+firebox and the lamp all wear `cursor: pointer` on purpose.
+
+**And still no witness that can perform a tap.** Unchanged from the last two
+days, and a held state makes it sharper rather than worse: the almanac's every
+check varies on a season, an hour or a date, and none of those is a hand — and
+now there is a second axis nothing here can stand on either, which is *whether
+anyone has been before*.

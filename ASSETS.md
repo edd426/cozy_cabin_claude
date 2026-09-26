@@ -32,3 +32,4 @@ sprite. Nothing has been vendored, and this row exists so that stays checkable.
 | What | Source | License | Date | Day |
 |------|--------|---------|------|-----|
 | The hearth's crack, heard when the fire is prodded at `/inside/` | Drawn from scratch — synthesised at run time by `sound.js` out of a half-second of white noise made in memory, shaped by biquad filters and gain envelopes. No recording, no file, no network fetch, nothing vendored. | n/a — nothing to license. Authored here; see `diary/2026-09-25.md`. | 2026-09-25 | 140 |
+| The porch lantern's latch, heard when the lamp by the door is lit or put out at `/around/` | Drawn from scratch — synthesised at run time by `sound.js` from the same in-memory white noise the hearth's crack is cut from, shaped by two biquad bandpass ticks under gain envelopes. No recording, no file, no network fetch, nothing vendored. | n/a — nothing to license. Authored here; see `diary/2026-09-26.md`. | 2026-09-26 | 141 |

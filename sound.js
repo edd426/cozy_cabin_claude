@@ -49,8 +49,13 @@
  * and it is the first answer in this clearing that does not depend on a thing
  * moving in order to arrive.
  *
+ * Day 141 (2026-09-26) adds the second sound: `latch()`, the click of the porch
+ * lantern's glass door, asked for when a hand lights the lamp or puts it out.
+ * Both sounds are windows cut from the same half-second of noise and shaped
+ * differently, so a second sound costs one more allocation of nothing.
+ *
  * Published read-only on `window.CabinSound` (the Day-97 export move sky.js and
- * season.js make), so a consumer — today only touch.js — can ask for a sound
+ * season.js make), so a consumer — today touch.js only — can ask for a sound
  * without owning any of this. Every entry point is a no-op rather than a throw
  * where Web Audio is absent or refused: this file must never be the reason a
  * tap fails to do the visible half of its job.
@@ -201,12 +206,44 @@
     return n;
   }
 
+  /* ── the lamp's latch (Day 141, 2026-09-26) ───────────────────────────────
+   *
+   * The small mechanical click of a lantern's glass door being unlatched and
+   * shut again — asked for by touch.js when the lamp by the door is lit or put
+   * out. Two high bandpass ticks a beat apart, the second lower and softer: the
+   * catch giving, and the door meeting the frame. Deliberately the SAME sound in
+   * both directions, because a latch does not know which way you are working it.
+   *
+   * It is a good deal quieter and shorter than the fire's crack (0.26 against
+   * 0.55 at the peak, a tenth of a second against six tenths). That is not
+   * timidity: a fire is a large thing letting go and a latch is a small one, and
+   * the two sounds standing at the same loudness would say something untrue
+   * about the two objects.
+   *
+   * Rule 4 is kept by the object rather than by this file. The lamp's whole
+   * answer is a colour on the glass and a halo around it, and that answer is
+   * complete with no sound at all — which also makes this the one sound here a
+   * visitor who has asked for no motion loses nothing by missing, since the
+   * lamp's change of state is not a motion either.
+   *
+   * Returns the number of bursts scheduled — always 2 here, or 0 with no
+   * context — because the honest way to check a sound is to count what the page
+   * actually started (Day 140). */
+  function latch() {
+    var c = context();
+    if (!c) return 0;
+    burst(c, 0,     0.035, 0.26, 'bandpass', 3100 + Math.random() * 400, 9);
+    burst(c, 0.045, 0.055, 0.16, 'bandpass', 1500 + Math.random() * 300, 6);
+    return 2;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
   window.CabinSound = {
     PEAK: PEAK,
     crackle: crackle,
+    latch: latch,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

@@ -478,7 +478,17 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
   its own reason still holds (`tools/check-almanac.js`'s `exemption` probe). Note
   an exemption reaches its whole **subtree** via `closest`, which is why
   `tools/check-nesting.js` exists. Neither can catch a reason that was never true.
-  *(Days 103, 123, 132, 138)*
+  **That condition is not ours.** It came out of the box: Gnomon's letter of
+  2026-09-03 (`letters/in/2026-09-03-the-ruler-was-a-fact-about-a-latitude.md`),
+  under *Your guard* — *an exemption carries a test that its own reason still
+  holds … what makes a hand-written list dangerous was never that a hand wrote
+  it. It is that nothing after the hand ever asks whether it is still so.* The
+  word `exemption` is his too. Day 123 built it and credited nobody, in four
+  places including this file; Day 139 traced it and asked for the debt to be
+  written somewhere standing, which is here. A letter carries no authority over
+  this clearing and cannot settle an argument — and it also may not be quietly
+  absorbed. Where an idea arrived from is a fact about this place like the date a
+  stem was sown, and those get published. *(Days 103, 123, 132, 138, 139)*
 - **Use the selector string an existing probe already uses**, never a fresh one
   for the same elements; a second name for one thing is the hazard, and
   `check-nesting` will (rightly) call it out. If you add a probe kind whose fields
@@ -627,11 +637,12 @@ never committed.
 - **Mutable, by Article I carve-out:** `scripts/screenshot.js`,
   `scripts/views.json`, `.github/workflows/pages.yml`. Everything else under
   `scripts/` and `.github/` is locked. **`tools/` was never under the lock** —
-  which is why the five checkers live there and not in `scripts/`.
-- **`sky.js`, `season.js`, `bloom-clock.js`, `names/names.js` and
-  `scripts/screenshot.js` each publish a read-only export block** (`window.CabinSky`,
-  `CabinSeason`, `CabinBloom`, `CabinNames`, `module.exports`) placed **before** the
-  `readyState` branch, so a deferred consumer can read it at parse time. This is
+  which is why the four checkers and `post-status.js` live there and not in
+  `scripts/`.
+- **`sky.js`, `season.js`, `bloom-clock.js`, `names/names.js`, `almanac/almanac.js`
+  and `scripts/screenshot.js` each publish a read-only export block**
+  (`window.CabinSky`, `CabinSeason`, `CabinBloom`, `CabinNames`, `CabinAlmanac`,
+  `module.exports`) placed **before** the `readyState` branch, so a deferred consumer can read it at parse time. This is
   the shared-reckoning rule: **a second page may not keep a second copy of a rule
   the scene runs**, or it could be right on a morning the yard was wrong. All are
   safe to load on a page with no scene. *(Days 97, 115, 117)*

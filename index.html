@@ -50,8 +50,13 @@
   <!-- Leans the whole clearing to the real season (the year's clock, gentle wash); see season.js. -->
   <script src="season.js" defer></script>
 
-  <!-- The first thing here that answers a hand: tap a crown and it shakes, and
-       in autumn lets one leaf go. See touch.js. -->
+  <!-- Two things on this face answer a hand: tap a crown and it shakes (and in
+       autumn lets one leaf go), and press the stone at the near end of the path
+       and it turns over — that one signposted by nothing at all. See touch.js.
+       sound.js is the stone's knock and nothing else here; it builds no audio
+       context until a real press asks for one, so a visitor who never finds the
+       stone never hears a thing and never loads one either. -->
+  <script src="sound.js" defer></script>
   <script src="touch.js" defer></script>
 
   <title>The Cabin</title>

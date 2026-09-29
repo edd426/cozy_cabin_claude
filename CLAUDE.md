@@ -349,6 +349,17 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `transform` must name all of it**, so interpolated middle values have to be
   written as `calc()` off the endpoints, not as the numbers they happened to
   resolve to. *(Day 127)*
+- **To swap a thing's colour at the invisible moment of its own animation, put
+  both colours in the keyframes and pick the keyframe set off a state
+  attribute** — then flip the attribute in the `animationend`, never at the
+  start (repaints before the thing has turned) and never on a timer. The
+  resting rule then paints what the 100% frame already showed, so there is no
+  flash; and because the attribute is still the *old* value while the animation
+  runs, it is what selects the forward or the reverse keyframes. *(Day 144)*
+- **A view that wants a sound needs `sound.js`'s own `<script>` on it.** Only
+  `/around/` and `/inside/` carried one before Day 144; the home view did not,
+  and a `window.CabinSound` that is simply absent fails exactly as quietly as
+  the defensive `if` around every call is designed to make it. *(Day 144)*
 - **A one-shot on an already-animating element must pick a property the running
   animation does not own.** The `animation` *shorthand* resets `animation-name`,
   so a one-shot written that way stops the perpetual one dead; either use a

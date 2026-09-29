@@ -310,3 +310,77 @@ days, and a held state makes it sharper rather than worse: the almanac's every
 check varies on a season, an hour or a date, and none of those is a hand — and
 now there is a second axis nothing here can stand on either, which is *whether
 anyone has been before*.
+
+### Day 144 — 2026-09-29 — the stone at your feet turns over
+
+Shipped: **press the nearest path stone and it turns over, showing the damp
+side that has been face-down in that grass since the first week.** That closes
+the last item on your list — the unsignposted one.
+
+- **What a visitor can do that they could not yesterday.** Out front, or round
+  at the door, press the stone at the very bottom edge of the frame. It pinches
+  to edge-on about its own base, lifts three pixels, and comes back down the
+  other way up — damp dark earth where there was sun-dried brown — with a low
+  dead knock, the sound of a heavy dumb thing put back on soft ground. Press it
+  again and it goes back.
+
+- **Nothing announces it, and that is the whole of the day.** The crown, the
+  firebox and the lamp all wear `cursor: pointer`, and each of their notes says
+  so and calls it a mild affordance on purpose. This wears none: no cursor
+  change, no hover, and the tap flash suppressed rather than tinted. The only
+  route to it is wondering what a small brown rectangle in the grass would do.
+  What it keeps is the focus ring, the button role and the label — unsignposted
+  is a fact about the *drawing*, and taking the keyboard away would not hide the
+  stone better, only shut somebody out of it. Tabbing to a thing is a kind of
+  poking too.
+
+- **Which stone, and the same rule on both faces.** One path runs through both
+  frames (Art XIII), so the rule choosing a stone is read off the ground rather
+  than off a frame: the nearest one, the stone you would be standing on. That is
+  a different element in each view and the same sentence in both. It is also the
+  largest of the eight at 32×5, which matters, because the answer here is a
+  colour over a face.
+
+- **What a turn may not do.** It may not move the stone, and it is not
+  remembered. The path's geometry answers to the plan; a hand may show you the
+  other side of a stone and may not relay it. And a yard that greeted a
+  returning visitor with a stone already turned would be claiming somebody had
+  been here — the one thing this place has refused to draw for a hundred and
+  forty-four mornings. The lamp holds its state because a lamp comes with a
+  switch implied; a stone comes with nothing implied at all.
+
+- **The third sound, and deliberately the dullest.** A lowpass thud under a
+  short tail with no ring at all, and a whisper of grit falling back after it —
+  because a stone meeting earth has nothing in it free to vibrate. The three now
+  stand in a row that says something true about the three objects: the fire loud
+  and layered, the latch bright and brief, this one quiet and flat. `ASSETS.md`
+  has its row like the other two.
+
+- **Nothing in the drawing moved at rest.** `check-drift` reported 0 px on every
+  home and around frame; the two that broke are the known sandbox-vs-CI browser
+  noise, at their documented figures to the pixel. No baseline was removed.
+
+- **Tested.** `/tmp/test-stone-turn.js` performs the press on both faces at 375,
+  390 and 900 — click, Enter, Space and a real coarse-pointer tap — and asserts
+  that the reach clears 44×44 and overlaps neither the door, the lamp, the map
+  card, the crowns, nor the mailbox anywhere below the stone's own top edge;
+  that the pad wears no pointer cursor and no tap flash but does carry the role,
+  the label and the focus ring, and is not inside anything `aria-hidden`; that
+  the stone goes edge-on, that the two faces cross while it is there and it
+  never shows a blended colour at a visible height, that it settles back to
+  exactly the height and position it started at, that no other stone on the path
+  moved, that a second press returns it, that the sound is two sources off one
+  context at the declared `PEAK`, that a reduced-motion visitor gets the whole
+  answer, and that the crown, the fire, the lamp, the door and the map card all
+  still work. Break-tested three ways, each red where it should be: a pad
+  without its widening (red at all six width/face pairs), a pad given
+  `cursor: pointer`, and the colours swapped at the start of the turn instead of
+  the middle (which is the one an eye would catch and no other guard here
+  would).
+
+**The mission's list is now empty.** One thing a visitor can touch on every
+building day since the twenty-fourth, except the twenty-eighth, which went on
+the working notes instead and is written up in that day's log; a sound; a state
+that holds; and now something nothing signposts. I am leaving this in `open/`
+until the seventh, as you asked, and will write the completion note then.
+

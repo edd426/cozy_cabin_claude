@@ -132,6 +132,49 @@
  * the lamp simply is lit). Of the three things built so far this is the only one
  * whose answer needs neither movement nor sound to arrive.
  *
+ * ── Day 144 (2026-09-29): THE STONE, AND THE FIRST THING NOTHING ANNOUNCES ──
+ *
+ * The fourth thing here that answers a hand, and the first that no part of the
+ * page admits to. A `.stone-touch` pad lies over the nearest path stone on each
+ * outdoor face — `.path-stone--5` out front, `.around-path__stone--front` at the
+ * door — and pressing one turns the stone over: it pinches to edge-on about its
+ * own base, lifts three pixels, and comes back down the other way up, showing
+ * the damp dark underside that has been face-down in that grass since the first
+ * week. Press it again and it goes back. That closes the last of the founder's
+ * 2026-09-23 list: "Easter eggs. Things a visitor finds by poking… Not
+ * signposted."
+ *
+ * WHAT UNSIGNPOSTED MEANS HERE, and what it does not. The crown, the firebox
+ * and the lamp all carry `cursor: pointer`, and each of their notes says so and
+ * calls it a mild affordance. This one carries none — no cursor, no hover
+ * change, and the tap flash suppressed rather than tinted — so the only route to
+ * it is wondering what a small brown rectangle in the grass would do. What it
+ * keeps is the focus ring, the button role and the label, because unsignposted
+ * is a fact about the *drawing*: nothing on the page says press me, and taking
+ * the keyboard away would not hide the stone any better, only shut somebody out
+ * of it. Tabbing to a thing is a kind of poking too.
+ *
+ * WHICH STONE, AND WHY THE SAME ONE ON BOTH FACES. One path runs through the
+ * two frames (RULES Art XIII), so the rule choosing a stone has to be read off
+ * the ground rather than off a frame: the nearest one, the stone you would be
+ * standing on — which is a different element in each view and the same sentence
+ * in both. It is also the largest of the eight at 32×5, and the answer here is
+ * a colour over a face, so size is legibility.
+ *
+ * WHAT A TURN MAY NOT DO. It may not move the stone. The path is a record of
+ * walking and its geometry answers to the plan (Day 136); a hand may show you
+ * the other side of a stone and may not relay it. Nothing is spent and nothing
+ * gained — the same stone, the other way up, and a second press puts it back,
+ * which is the shape of the candle, the blooms and the rick, and the vow under
+ * all three.
+ *
+ * WHY IT IS NOT REMEMBERED, where the lamp is. The lamp is the one made thing
+ * out here and a lamp comes with a switch implied (Day 141); a stone comes with
+ * nothing implied at all, and a yard that greeted a returning visitor with a
+ * stone already turned would be claiming somebody had been here — the one thing
+ * this clearing has refused to draw for a hundred and forty-four mornings. So
+ * the turn lasts the visit and the next arrival finds the path as it was laid.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -289,6 +332,48 @@
     }
   }
 
+  /* ── the stone (Day 144) ──────────────────────────────────────────────────
+   *
+   * One turn at a time, the rule every pad here keeps: a second press while the
+   * stone is still edge-on is ignored rather than restarting it. That matters
+   * more here than on the crowns, because the two faces cross at the middle of
+   * the round and a restart would let a fast presser hold the stone at the
+   * crossing — turning it, visually, into a stone that flickers.
+   *
+   * The face is flipped at `animationend` and not before. Until then the
+   * stone still carries (or still lacks) `data-face="under"`, which is what
+   * picks `stone-turn-up` over `stone-turn-down` in scene.css, so the keyframes
+   * always run the direction the stone is actually going. `wasUnder` is read
+   * once, before the class goes on, because the attribute it reads is about to
+   * be the thing that changes.
+   *
+   * Under `prefers-reduced-motion` the duration collapses to 0.001ms and the
+   * handler fires on the next frame, so the stone is simply turned. */
+  function turn(pad) {
+    var scene = pad.closest('.scene');
+    var sel = pad.dataset.turn;
+    var stone = (scene && sel) ? scene.querySelector(sel) : null;
+    if (!stone || stone.classList.contains('is-turning')) return;
+
+    var wasUnder = stone.getAttribute('data-face') === 'under';
+    stone.classList.add('is-turning');
+    stone.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'stone-turn-down' &&
+          e.animationName !== 'stone-turn-up') return;
+      stone.classList.remove('is-turning');
+      if (wasUnder) stone.removeAttribute('data-face');
+      else stone.setAttribute('data-face', 'under');
+      pad.setAttribute('aria-pressed', wasUnder ? 'false' : 'true');
+      stone.removeEventListener('animationend', once);
+    });
+
+    /* Second, and never first — the rule the fire and the lamp keep. The tip
+     * is already running by the time anything is asked of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.knock === 'function') {
+      try { window.CabinSound.knock(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -310,7 +395,9 @@
     pad = e.target.closest('.fire-touch');
     if (pad) { prod(pad); return; }
     pad = e.target.closest('.lamp-touch');
-    if (pad) lamp(pad);
+    if (pad) { lamp(pad); return; }
+    pad = e.target.closest('.stone-touch');
+    if (pad) turn(pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -322,10 +409,12 @@
     var crown = e.target.closest('.crown-touch');
     var fire = crown ? null : e.target.closest('.fire-touch');
     var lamppad = (crown || fire) ? null : e.target.closest('.lamp-touch');
-    if (!crown && !fire && !lamppad) return;
+    var stonepad = (crown || fire || lamppad) ? null : e.target.closest('.stone-touch');
+    if (!crown && !fire && !lamppad && !stonepad) return;
     e.preventDefault();
     if (crown) shake(crown);
     else if (fire) prod(fire);
-    else lamp(lamppad);
+    else if (lamppad) lamp(lamppad);
+    else turn(stonepad);
   });
 })();

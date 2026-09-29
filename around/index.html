@@ -55,10 +55,12 @@
        potted-with flecks if JS is off. Around-view only; see door-plant.js. -->
   <script src="../door-plant.js" defer></script>
 
-  <!-- Two things on this face answer a hand: tap the crown and it shakes (and in
-       autumn lets one leaf go), tap the lamp and it lights or goes out and stays
-       that way. See touch.js. sound.js is the latch's click and nothing else —
-       it builds no audio context at all until a real press asks for one. -->
+  <!-- Three things on this face answer a hand: tap the crown and it shakes (and
+       in autumn lets one leaf go), tap the lamp and it lights or goes out and
+       stays that way, and press the stone at the near end of the path and it
+       turns over. See touch.js. sound.js carries the latch's click and the
+       stone's knock — it builds no audio context at all until a real press asks
+       for one. -->
   <script src="../sound.js" defer></script>
   <script src="../touch.js" defer></script>
 
@@ -302,6 +304,16 @@
         <span class="around-path__stone around-path__stone--mid"></span>
         <span class="around-path__stone around-path__stone--back"></span>
       </div>
+
+      <!-- The stone at your feet, this face's half (Day 144, 2026-09-29). One
+           path runs through both frames, so the rule that decides which stone
+           answers a hand has to be read off the ground and not off a frame:
+           the nearest one, the stone you would be standing on. Out front that
+           is .path-stone--5; here it is the front stone above. Unsignposted
+           on both — no cursor, no hover, no tap flash. -->
+      <span class="stone-touch stone-touch--e" role="button" tabindex="0"
+            aria-pressed="false" data-turn=".around-path__stone--front"
+            aria-label="turn over the stone at the near end of the path"></span>
 
       <!-- Stray fireflies on the door side (Day 53, 2026-06-30): the edge of the
            FRONT yard's meadow reaching round the corner. Day 52 (diary 2026-06-29)

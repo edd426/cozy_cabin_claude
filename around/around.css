@@ -845,6 +845,32 @@
  * leaning curve. At the bottom edge of the scene, partly off-frame. */
 .around-path__stone--front { width: 32px; height: 5px; bottom: 0;               margin-left: -50px; }
 
+/* THE REACH over this face's nearest stone (Day 144, 2026-09-29). The base
+ * `.stone-touch` — transparent, z 3, the 44px minimum, the focus ring, and
+ * deliberately no cursor and no tap flash — is declared in scene.css, which
+ * this view loads; only the geometry belongs here, the same division
+ * `.crown-touch--e` keeps.
+ *
+ * It is anchored by its RIGHT edge rather than its left, so the 44px minimum
+ * widens it LEFTWARD, out over the open grass and away from the door. That is
+ * the mirror of the front's pad, which widens rightward away from the
+ * mailbox, and it is the same reasoning in both places: the reach grows into
+ * whatever the frame has spare, never into something that already took a tap.
+ * The stone spans 50%−50px to 50%−18px, so `right: 50%; margin-right: 18px`
+ * stands the pad's right edge exactly on the stone's. Measured at 375 and
+ * 900, it clears the door, the lamp's pad and the crown's pad on both.
+ *
+ * No breakpoint twin: these three stones are the same size and at the same
+ * offsets at 2x and 3x (only the front face's rebase), so the pad needs none
+ * either. */
+.stone-touch--e {
+  width: 32px;
+  height: 5px;
+  bottom: 0;
+  right: 50%;
+  margin-right: 18px;
+}
+
 /* ── Distant hills on the eastern horizon (Day 41) ─────────────────────────
  * The side face's own far edge. Day 40 gave the SOUTH skyline a low range (the
  * bench's view, in scene.css); the diary that day asked whether the other faces

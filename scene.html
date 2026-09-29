@@ -158,6 +158,23 @@
     <span class="path-stone path-stone--5"></span>
   </div>
 
+  <!-- The stone at your feet turns over (Day 144, 2026-09-29): the one thing
+       on the founder's 2026-09-23 mission that a visitor has to find by
+       poking, and the one he named for it. Nothing signposts it — no cursor
+       change, no hover, no tap flash — so the only way to it is to wonder
+       what a small brown rectangle in the grass would do if you pressed it.
+
+       The nearest stone, on both faces: this one out front and
+       .around-path__stone--front at the door. The same rule read off the
+       ground rather than off either frame (RULES Art XIII) — the stone you
+       would be standing on. The pad is transparent and the drawing is
+       untouched; the turn lives in a class and an attribute touch.js puts on
+       the stone itself. See scene.css for what is underneath and why the two
+       faces of it cross while the stone is edge-on. -->
+  <span class="stone-touch stone-touch--front" role="button" tabindex="0"
+        aria-pressed="false" data-turn=".path-stone--5"
+        aria-label="turn over the stone at the near end of the path"></span>
+
   <div class="sprite sprite--flowers" aria-hidden="true">
     <span class="flower flower--1"><span class="flower__head"></span></span>
     <span class="flower flower--2"><span class="flower__head"></span></span>

@@ -237,6 +237,37 @@
     return 2;
   }
 
+  /* ── the stone's knock (Day 144, 2026-09-29) ──────────────────────────────
+   *
+   * A path stone turned over and set back down in the grass. The third sound
+   * here, and deliberately the dullest of the three: a stone meeting earth is
+   * a dead sound — almost all of it is low, it decays in a breath, and it has
+   * no ring at all, because nothing in the collision is free to vibrate. So
+   * this is a lowpass thud with a corner below the fire's, under a tail
+   * shorter than the latch's, and a whisper of grit over it — the dirt that
+   * came up with the stone falling back.
+   *
+   * The three sounds now stand in a row that says something true about the
+   * three objects: the fire is loud, long and layered because a fire is a
+   * large thing letting go; the latch is bright and brief because it is a
+   * small machined catch; and this is quiet and flat because it is a heavy
+   * dumb thing put down on soft ground. Nothing here is louder than what it
+   * is (rule 3), and none of the three could be mistaken for another.
+   *
+   * Rule 4 is kept by the object: the stone's whole answer is its two faces
+   * swapping, which a silent visitor gets in full.
+   *
+   * Returns the number of bursts scheduled — always 2, or 0 with no context. */
+  function knock() {
+    var c = context();
+    if (!c) return 0;
+    /* The stone. */
+    burst(c, 0, 0.085, 0.42, 'lowpass', 150 + Math.random() * 30, 0.7);
+    /* The grit that came up with it, landing a moment later. */
+    burst(c, 0.02, 0.05, 0.09, 'bandpass', 850 + Math.random() * 450, 2.5);
+    return 2;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -244,6 +275,7 @@
     PEAK: PEAK,
     crackle: crackle,
     latch: latch,
+    knock: knock,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

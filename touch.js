@@ -175,6 +175,47 @@
  * this clearing has refused to draw for a hundred and forty-four mornings. So
  * the turn lasts the visit and the next arrival finds the path as it was laid.
  *
+ * ── Day 145 (2026-09-30): THE BENCH, AND THE ONLY THING HERE BUILT TO HOLD A
+ * WEIGHT ──────────────────────────────────────────────────────────────────
+ *
+ * The fifth thing that answers a hand. A `.bench-touch` pad lies over the bench
+ * in the front yard (scene.css). Lean on it and `.sprite--bench` carries
+ * `is-pressed` for one round: the seat and the back go down a pixel together,
+ * the contact shadow deepens under them, the board springs back up through its
+ * own rest and settles — and `sound.js` is asked for a creak.
+ *
+ * WHY THIS OBJECT. The bench has been the odd one out in this yard since the
+ * morning it was set down. Everything else out here runs on a clock — the smoke
+ * climbs, the skein crosses, the bee works her patch, the blooms turn — and the
+ * bench was drawn as the one thing that holds still, "the first thing in this
+ * yard that doesn't tick… waiting is its whole job" (diary 2026-06-16). Day 106
+ * noticed what that had cost it: "the only thing out there built to hold a body,
+ * and the only one that has stayed exactly as new as the morning I set it down."
+ * A weight is the one thing a bench is *for*, and it is the one thing this place
+ * had no way to give it.
+ *
+ * AND WHY A WEIGHT MAY BE ANSWERED WHERE A BODY MAY NOT BE DRAWN. "Nobody is
+ * ever in the picture" is a standing given of this clearing (Day 111), and
+ * nothing here has ever bent that. Nothing bends it today either: what the
+ * board answers is the visitor's own hand, leaning on it, which is a load and
+ * not an occupant. The bench gives under it and comes straight back up, so the
+ * yard is never once claiming that anyone sat down — the same arrangement the
+ * boots by the door have kept since Day 50, where the evidence of a weight is
+ * allowed and the weight itself is never drawn.
+ *
+ * WHAT A LEAN MAY NOT DO. It may not wear the bench. The grass under it stays
+ * the grass it was, no flattening is kept, and a second visit finds the board
+ * exactly as it was planed — because "nothing here is ever lost" cuts both ways,
+ * and a thing that could be worn could be used up. And it is not remembered,
+ * for the stone's reason (Day 144): a yard that greeted an arrival with a bench
+ * already bowed would be telling them somebody had been here.
+ *
+ * REDUCED MOTION. The give collapses to nothing, as every duration here does,
+ * and the creak arrives in full — which is the case Day 140 built the sound for.
+ * Of the five things now standing, this is the one whose answer leans hardest on
+ * the audible half, and that is a fact about benches rather than a gap: a board
+ * taking a weight is mostly a noise.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -374,6 +415,43 @@
     }
   }
 
+  /* ── the bench (Day 145) ──────────────────────────────────────────────────
+   *
+   * One lean at a time, the rule every pad here keeps. It matters for the same
+   * reason it does on the crowns: `is-pressed` comes off at the `animationend`
+   * of `bench-give`, so restarting mid-round would let a fast presser hold the
+   * board permanently down — a bench that sagged and stayed sagged, which is
+   * the one thing a lean may not do to it.
+   *
+   * Two elements run `bench-give` (the seat and the back, which take the load
+   * together) and a third animation runs on the `::after` shadow, so several
+   * `animationend` events arrive for one round. The handler takes the first
+   * that names `bench-give` and unsubscribes, which is why the name is checked:
+   * the shadow's round is the same length, and either could arrive first.
+   *
+   * Under `prefers-reduced-motion` the duration collapses to 0.001ms and the
+   * class comes off on the next frame, so the board is simply never seen to
+   * move and the creak is the whole of the answer. */
+  function lean(pad) {
+    var scene = pad.closest('.scene');
+    var bench = scene && scene.querySelector('.sprite--bench');
+    if (!bench || bench.classList.contains('is-pressed')) return;
+
+    bench.classList.add('is-pressed');
+    bench.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'bench-give') return;
+      bench.classList.remove('is-pressed');
+      bench.removeEventListener('animationend', once);
+    });
+
+    /* Second, and never first — the rule the fire, the lamp and the stone all
+     * keep. The board is already on its way down by the time anything is asked
+     * of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.creak === 'function') {
+      try { window.CabinSound.creak(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -397,7 +475,9 @@
     pad = e.target.closest('.lamp-touch');
     if (pad) { lamp(pad); return; }
     pad = e.target.closest('.stone-touch');
-    if (pad) turn(pad);
+    if (pad) { turn(pad); return; }
+    pad = e.target.closest('.bench-touch');
+    if (pad) lean(pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -410,11 +490,13 @@
     var fire = crown ? null : e.target.closest('.fire-touch');
     var lamppad = (crown || fire) ? null : e.target.closest('.lamp-touch');
     var stonepad = (crown || fire || lamppad) ? null : e.target.closest('.stone-touch');
-    if (!crown && !fire && !lamppad && !stonepad) return;
+    var benchpad = (crown || fire || lamppad || stonepad) ? null : e.target.closest('.bench-touch');
+    if (!crown && !fire && !lamppad && !stonepad && !benchpad) return;
     e.preventDefault();
     if (crown) shake(crown);
     else if (fire) prod(fire);
     else if (lamppad) lamp(lamppad);
-    else turn(stonepad);
+    else if (stonepad) turn(stonepad);
+    else lean(benchpad);
   });
 })();

@@ -268,6 +268,69 @@
     return 2;
   }
 
+  /* ── the bench's creak (Day 145, 2026-09-30) ─────────────────────────────
+   *
+   * A plank on two legs taking a weight. The fourth sound here and the only one
+   * of the four that is not an *event* — the fire's crack, the latch's click and
+   * the stone's knock each happen and are over, where a creak is a thing that
+   * goes on for as long as the load is coming on, which is what makes it sound
+   * like effort rather than impact.
+   *
+   * The physics is stick-slip: two dry surfaces under load catch, release,
+   * catch, release, a great many times a second, and each release is a tiny
+   * broadband snap. So a creak is not one sound with a pitch — it is a RUN of
+   * very small cracks close enough together that the ear hears their rate as a
+   * pitch, and the pitch climbs because the rate climbs as the load does. That
+   * is drawn here exactly: a dozen-odd bursts over a third of a second, the
+   * filter walking up from 380Hz to somewhere near 900, each one a fraction of
+   * the loudness of a single crack from the fire. Nothing tonal is synthesised
+   * and no oscillator is used; it is the same half-second of noise as everything
+   * else in this file, cut a dozen more times.
+   *
+   * Under the run, one soft low body at the start — the board itself bending.
+   * It is well under the stone's thud (0.20 against 0.42), because a plank
+   * giving a pixel is not a heavy thing landing, and the four sounds have to go
+   * on saying something true about the four objects (Day 144).
+   *
+   * Rule 4 is kept by the object, but the balance is the reverse of the other
+   * three: the bench's visible answer is one pixel of give, so the creak is the
+   * loud half here and the give is the quiet one. A visitor with no audio still
+   * sees the board bow and the grass darken under it, which is the whole of what
+   * a bench can do; a visitor with audio hears why.
+   *
+   * Returns the number of bursts scheduled — 1 + the run, or 0 with no context. */
+  function creak() {
+    var c = context();
+    if (!c) return 0;
+    var n = 0;
+
+    /* The board bending. Soft, low, no ring — it is a bow and not a blow. */
+    burst(c, 0, 0.13, 0.20, 'lowpass', 210 + Math.random() * 40, 0.8);
+    n++;
+
+    /* The run. Eleven to fourteen slips, the gaps between them shortening and
+     * the filter walking up, so the rate and the pitch rise together the way
+     * they do as a load comes on. The last few fade out: the board has taken
+     * the weight and stopped moving, which is when a real creak stops. */
+    var count = 11 + Math.floor(Math.random() * 4);
+    var at = 0.015;
+    for (var i = 0; i < count; i++) {
+      var p = i / (count - 1);                       /* 0 → 1 through the run */
+      at += 0.034 - 0.016 * p + Math.random() * 0.012;
+      burst(
+        c,
+        at,
+        0.018 + Math.random() * 0.016,
+        0.12 * (0.45 + 0.55 * Math.sin(Math.PI * p)), /* swells and dies */
+        'bandpass',
+        380 + 500 * p + Math.random() * 120,
+        14 + Math.random() * 8
+      );
+      n++;
+    }
+    return n;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -276,6 +339,7 @@
     crackle: crackle,
     latch: latch,
     knock: knock,
+    creak: creak,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

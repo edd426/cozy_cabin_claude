@@ -2111,6 +2111,92 @@
 .bench__leg--l { left: 3px;  }
 .bench__leg--r { left: 15px; }
 
+/* ── The bench answers a weight (Day 145, 2026-09-30) ──────────────────────
+ *
+ * The fifth thing in this clearing that answers a hand, and the first that
+ * answers by being *loaded* rather than by being moved, lit, or turned over.
+ * Lean on the seat and the board gives one pixel, creaks, and springs back
+ * through its own rest — which is all a plank on two legs can ever say.
+ *
+ * WHY ONE PIXEL AND NOT THREE. The legs are 6px tall and the seat sits 6px off
+ * the grass; two pixels of give would be a third of the leg and read as a bench
+ * collapsing rather than a board bowing. One is what a plank does. The sound is
+ * the loud half of this answer and the give is the visible half, which is the
+ * reverse of the crown and the stone and is honest about the object: wood under
+ * a weight is mostly a noise.
+ *
+ * WHAT MOVES AND WHAT DOES NOT. The seat and the back go down together — they
+ * are the part a weight is on — and the two legs stay planted, because a leg
+ * takes its load along its own length and has nowhere to go. The contact shadow
+ * deepens through the dip, the way a thing pressed into grass presses harder.
+ * Every step is a whole pixel: `image-rendering: pixelated` is set in the locked
+ * theme.css, and a fractional `scaleY` on a 14px sprite would smear the very
+ * edges the drawing is made of.
+ *
+ * WHY IT MAY SPRING BACK PAST REST, where the wind-swayed things may not. The
+ * standing rule (Days 60–63) holds a thing HELD OUT by a steady breeze to one
+ * side of its rest. A pressed board is not held out by anything: it is loaded
+ * and let go, and a thing let go rings back through its rest and dies away —
+ * the falling leaf's distinction (Day 116), spent on the crowns on Day 139 and
+ * spent again here. */
+@keyframes bench-give {
+  0%   { transform: translateY(0);     }   /* the hand arrives */
+  20%  { transform: translateY(1px);   }   /* the board takes it */
+  60%  { transform: translateY(1px);   }   /* and holds while it is leant on */
+  80%  { transform: translateY(-1px);  }   /* let go: back up through rest */
+  100% { transform: translateY(0);     }   /* and down to it again */
+}
+
+/* The grass under a loaded bench is pressed harder. Rides the same round as the
+ * give above, so the shadow is deepest exactly while the seat is down. */
+@keyframes bench-press-shadow {
+  0%, 100% { opacity: 0.5;  }
+  20%, 60% { opacity: 0.78; }
+}
+
+.sprite--bench.is-pressed .bench__seat,
+.sprite--bench.is-pressed .bench__back {
+  animation: bench-give 0.55s ease-in-out 1;
+}
+.sprite--bench.is-pressed::after {
+  animation: bench-press-shadow 0.55s ease-in-out 1;
+}
+
+/* THE REACH. The same arrangement `.crown-touch` uses and for the same reason:
+ * the bench is 20x14 at BOTH breakpoints (it is fixed-native, like the bee and
+ * the flowers), so it is under the 44px minimum everywhere, which is the
+ * firebox's lesson and not the small crown's. `margin-left: -22px` centres the
+ * widened pad on the scene's middle, where the bench itself is centred, so the
+ * growth is even rather than reaching off one edge; `bottom` is the bench's own,
+ * so the pad grows upward into the air a hand would come down through.
+ *
+ * z-index 5 puts the pad over the bench (z 4) and under the map card (z 6). It
+ * overlaps no other pad at 375, 390 or 900 — the stone's reach begins 70px to
+ * its right — and the only drawn thing it covers besides the bench is the
+ * bottom-left corner of the rick, which has never taken a tap and loses none.
+ * `cursor: pointer` is the affordance, a mild one and meant to be: the founder's
+ * unsignposted thing is the path stone (Day 144), and this is not it. */
+.bench-touch {
+  position: absolute;
+  display: block;
+  z-index: 5;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  left: 50%;
+  margin-left: -22px;
+  bottom: 4%;
+  width: 20px;
+  height: 14px;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.bench-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
 /* ── Woodpile against the front wall (Day 76, 2026-07-23) ──────────────────
  * The first link of the fire the whole clearing has been about: the chimney
  * has smoked every hour I've drawn and the inside shows a fire with a little
@@ -2948,6 +3034,10 @@
    * clear of the flowers (left) and the path (right); fixed-size, so only the
    * baseline moves up to the 2x mobile floor. */
   .sprite--bench       { bottom: 3%; }
+  /* The reach follows its bench (Day 145). Only `bottom` rebases — the pad's
+   * own 20x14 box and the 44px minimum that widens it are the same at both
+   * scales, exactly as the bench's own parts are. */
+  .bench-touch         { bottom: 3%; }
   /* Mailbox rebased to the 2x scene: stands at the path's mouth on the viewer's
    * side, foot on the front grass, clear of the bench (centre) and the path
    * stones (right). Fixed-size parts, so only the container baseline moves. */

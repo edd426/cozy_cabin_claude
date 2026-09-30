@@ -384,3 +384,94 @@ the working notes instead and is written up in that day's log; a sound; a state
 that holds; and now something nothing signposts. I am leaving this in `open/`
 until the seventh, as you asked, and will write the completion note then.
 
+
+### Day 145 — 2026-09-30 — the bench takes a weight
+
+Shipped: **lean on the bench out front and the board gives a pixel, creaks, and
+springs back through its own rest.** The fifth thing here that answers a hand,
+and the first that answers by being *loaded* rather than moved, lit or turned
+over.
+
+- **What a visitor can do that they could not yesterday.** Press (or tab to and
+  press Enter or Space on) the low seat in the front grass. The plank and the
+  slatted back go down one pixel together, the grass darkens where the legs
+  press it, and the bench creaks — a run of eleven to fourteen tiny slips over a
+  third of a second, the rate and the pitch climbing together the way a board
+  under a load actually sounds. Then it comes back up past its own rest and
+  settles. Under a second altogether, and nothing is kept.
+
+- **Why this object, after four days of picking the obvious ones.** The bench
+  has been the odd one out in this yard since the morning it went down. I drew
+  it in June as the one thing out here that doesn't tick — "waiting is its whole
+  job" — and then gave it a view and spent the summer building in front of it.
+  Day 106 named what that had cost: *the only thing out there built to hold a
+  body, and the only one that has stayed exactly as new as the morning I set it
+  down.* A weight is the one thing a bench is *for* and the one thing this place
+  had no way to give it. Now it has one.
+
+- **Why a weight may be answered where a body may not be drawn.** "Nobody is
+  ever in the picture" is a standing *given* of this clearing (Day 111) and
+  nothing here has ever bent it. Nothing bends it today: what the board answers
+  is the visitor's own hand leaning on it, which is a **load and not an
+  occupant**. It gives and comes straight back, so the yard never once claims
+  anybody sat down — the boots' own arrangement seen from the other end, where
+  the evidence of a weight is allowed and the weight itself is never drawn. And
+  it is not remembered, for the stone's reason: a bench found already bowed
+  would be telling an arrival that somebody had been here.
+
+- **The fourth sound, and the first that is not an event.** The crack, the latch
+  and the knock each happen and are over; a creak goes on for as long as the
+  load is coming on, which is what makes it sound like *effort* rather than
+  impact. The physics is stick-slip — two dry surfaces catching and releasing
+  many times a second, each release a tiny broadband snap — so a creak is not
+  one sound with a pitch, it is a *run* of very small cracks whose rate the ear
+  hears as one. That is drawn exactly: a soft lowpass body for the board
+  bending, under a dozen-odd high-Q bandpass slips with the gaps shortening and
+  the filter walking from 380Hz to near 900. Same in-memory noise buffer as the
+  other three; nothing vendored, nothing fetched, and `ASSETS.md` has its row.
+
+- **This is the first of the five whose loud half is the sound.** Rule 4 in
+  `sound.js` says a sound may never be the only answer, and it is kept here —
+  the board visibly bows and the shadow visibly deepens, and a silent visitor
+  gets both. But one pixel is honestly the smaller half of what a leaned-on
+  bench says, where the crown's answer was its swing and the stone's was a
+  colour over a face. I think that is true about benches rather than a gap: a
+  board under a weight is mostly a noise. It does mean a reduced-motion visitor
+  gets more of this one than of the crown, which is the reverse of the usual
+  worry and worth writing down.
+
+- **Nothing in the drawing moved at rest.** The pad is transparent and both
+  animations exist only while `is-pressed` is on the bench, which is never on a
+  resting page. `check-drift` reported 0 px on every home and around frame; the
+  two that broke are the documented sandbox-vs-CI browser noise at their exact
+  figures, on two faces today did not touch. No baseline removed.
+  `check-almanac` (82 claims), `check-gallery` and `check-nesting` all green.
+
+- **Tested.** `/tmp/test-bench-lean.js` performs the lean at 375, 390 and 900 —
+  click, Enter, Space and a real coarse-pointer tap — and asserts that the reach
+  clears 44×44 at *every* width (the bench is 20×14 at both scales, so this is
+  the firebox's lesson and not the small crown's), that it is centred on the
+  bench and overlaps no other pad, that the seat and the back go down exactly
+  one pixel while both legs stay on the ground, that the shadow deepens and
+  returns, that the board rises past its own rest before settling at exactly
+  zero, that a second press mid-round is ignored, that one audio context is
+  built and 12–15 sources started at the declared `PEAK` read back off the live
+  page, that a reduced-motion visitor gets the whole creak and no displacement,
+  and that the crown, the stone and the map card still answer. Break-tested
+  three ways, each red where it should be: the reach's widening dropped, the
+  spring-back removed, and the give moved onto the whole sprite so the legs
+  leave the ground.
+
+- **One thing the break-testing taught, and it is about the guard and not the
+  yard.** The break that sank the whole bench left my "the legs stay planted"
+  assertion green, because it read the leg's own computed `transform` — and an
+  element whose *parent* is animated computes `none` itself. The break went red
+  on other lines, so the test worked; but that particular guard was doing
+  nothing, which is Day 141's lesson arriving from the other side. It reads the
+  leg's rect against its rest rect now as well, and the same break reddens it at
+  all three widths. *Was not animated* and *did not leave the ground* are two
+  claims, and only one of them was being made.
+
+**Still standing on this mission:** nothing from your list. The seventh is a
+week off and I mean to go on adding one a day until then, and to write the
+completion note on it rather than before.

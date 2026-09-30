@@ -579,7 +579,11 @@ never committed.
   `getBoundingClientRect()` carries ~0.05px of sample noise;
   `getComputedStyle(el).transform` is exactly what the keyframes set. Parse a CSS
   matrix with an exponent-aware regex — a near-rest skew computes to
-  `matrix(1, 0, 1.20637e-06, …)` and `/-?[\d.]+/g` splits it in two. *(Days 108, 139)*
+  `matrix(1, 0, 1.20637e-06, …)` and `/-?[\d.]+/g` splits it in two. But for
+  **"did this thing STAY PUT?" the property reading is blind to a parent that
+  moved** — an element whose ancestor is animated computes `transform: none`
+  itself — so assert the rect as well. Both, and they are different claims:
+  *was not animated* against *did not leave the ground*. *(Days 108, 139, 145)*
 - **Testing a tap:** headless Chromium reports `(hover: hover) and (pointer:
   fine)` as **true**, so the touch path needs its own
   `browser.newContext({ hasTouch: true, isMobile: true })` — test both or you have
@@ -590,7 +594,10 @@ never committed.
   all three. *(Days 106, 139, 140, 141)*
 - **Testing a sound:** wrap the real `AudioContext` in `addInitScript` and count
   what the page actually schedules — never ask the module how it feels. Read a
-  gain's `.value` at assert time, not at creation. *(Day 140)*
+  gain's `.value` at assert time, not at creation — and compare it with a
+  tolerance, because `AudioParam.value` is a **float32**: `sound.js`'s declared
+  `PEAK` of `0.11` reads back as `0.10999999940395355` and `===` fails.
+  *(Days 140, 145)*
 - **`page.addStyleTag()` takes only `content`/`path`/`url`** — there is no `id`,
   so a later `getElementById(...).textContent = …` throws. **`locator.screenshot()`
   returns a Buffer** and has no `encoding` option; base64-encode it yourself for a

@@ -475,3 +475,81 @@ over.
 **Still standing on this mission:** nothing from your list. The seventh is a
 week off and I mean to go on adding one a day until then, and to write the
 completion note on it rather than before.
+
+### Day 146 — 2026-10-01 — the bed takes a hand, and the bee leaves it
+
+Shipped: **brush the wildflower bed out front and every stem dips a pixel — and
+the bee bolts seven pixels straight up off whatever she was doing, buzzes, and
+sinks back to it.** The sixth thing that answers a hand, and the first whose
+answer is alive.
+
+- **What a visitor can do that they could not yesterday.** Press (or tab to and
+  press Enter or Space on) the wildflowers at the foot of the front wall. The
+  whole tuft gives a pixel under the palm and comes back inside two thirds of a
+  second; the bee goes up off the patch, stops dead at the top of the bolt for a
+  beat, and comes back down over the rest of the round. She buzzes while she
+  goes. Under a second altogether, and the bed stands exactly as it stood.
+
+- **Why this object, and why only half of it is announced.** Everything a hand
+  has reached here so far was made or laid — a crown, a firebox, a lamp in its
+  bracket, a path stone, a plank bench. The bee is the one thing out here that
+  *arrived*: she came in May to a patch of colour at a wall's foot, and she is
+  the only thing in this clearing I did not put down. The pad covers the bed and
+  the label names the flowers; nothing anywhere mentions her. You reach for the
+  blooms, and what answers is a thing that does not belong to the house. That is
+  your "a flower the bee moves to" and "a bird that startles" read together — the
+  signposted half is the bed, the unsignposted half is what comes off it.
+
+- **What a brush may NOT do, and it is the vow this one turns on.** It may not
+  take her off her round. `bee-forage` keeps running at index 0 of the animation
+  list for the whole of the bolt, so her thirty seconds go on underneath and she
+  comes down exactly where they had got to — further along, never behind, never
+  caught, never held, never fetched to a bloom and never kept from one. A hand
+  may interrupt a living thing's work and may not direct it: the same shape as a
+  prod that may not feed the fire and a turn that may not move a stone. Nothing
+  is spent and nothing gained.
+
+- **The fifth sound, and the first with a note in it.** The crack, the latch, the
+  knock and the creak are all things *coming apart*, and every one of them is cut
+  from the same half-second of in-memory white noise, because a release is
+  broadband by its physics. A wingbeat is not a release — it is two hundred
+  strokes a second, and what that makes is a pitch. So `buzz()` is the first
+  thing in `sound.js` built from oscillators rather than noise: two sawtooths
+  seven hertz apart (the beating between them is most of what tells an insect
+  from a note), climbing a fifth as she bolts and settling under it as she sinks.
+  Still nothing vendored, still nothing fetched, and `ASSETS.md` has its row like
+  the other four. It is also the quietest of the five, because a bee is a small
+  sound.
+
+- **Nothing in the drawing moved at rest.** The pad is transparent and both
+  animations exist only while a class is on, which is never on a resting page.
+  `check-drift` reported **0 px** on every home and around frame; the two that
+  broke are the documented sandbox-vs-CI browser noise at their exact figures
+  (`inside-winter-day` 64 px, `map-summer-day` 1327 px) on two faces today did
+  not touch, and the report picture was read. No baseline removed.
+  `check-almanac` (82 claims, 56 probes), `check-gallery` and `check-nesting` all
+  green.
+
+- **Tested.** `/tmp/test-bed-brush.js` performs the brush at 375, 390 and 900 —
+  click, Enter, Space and a real coarse-pointer tap — plus a reduced-motion pass.
+  It asserts that the reach clears 44×44 and spans the whole bed with the bee's
+  rest inside it, that it overlaps none of the crown, bench, stone, mailbox or
+  map-card pads, that **every** stem dips and not only the hand-sown three, that
+  she goes exactly seven pixels up and stops dead there and ends exactly where
+  her round had got to, that one audio context is built and exactly two
+  oscillators and **zero** buffer sources are started at the declared `PEAK` read
+  back off the live page, that a second brush mid-bolt is ignored, and that the
+  five things already answering a hand still do.
+
+- **One thing the break-testing taught, and it is about the guard.** The assertion
+  that she ends at rest was sampling at `currentTime = 800`, which is the round's
+  full duration — and with `animation-fill-mode: none` the element has already
+  fallen back to its base value there, so a 100% keyframe that did *not* return
+  to rest read as resting anyway. The guard was green and doing nothing. Sampling
+  at 799 puts the reading inside the active interval, and the same break now
+  reddens it at all three widths. That is Day 141's lesson from a third side: a
+  guard asked only where it has nothing to do will always look like one that does
+  nothing.
+
+**Still standing on this mission:** nothing from your list. Six days to the
+seventh; I mean to go on adding one a day and to write the completion note then.

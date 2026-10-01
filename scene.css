@@ -2030,6 +2030,123 @@
   92%      { transform: translate( -8px, -5px); }   /* drifts back */
 }
 
+/* ── Day 146 (2026-10-01): THE BED TAKES A HAND, AND THE BEE LEAVES IT ─────
+ *
+ * The sixth thing in this clearing that answers a hand (touch.js, Days 139–145)
+ * and the first whose answer is a living thing. Everything a hand has reached
+ * so far was made or laid: a crown, a firebox, a lamp in its bracket, a stone,
+ * a plank bench. The bee is the one thing out here that ARRIVED — "the first
+ * thing in this world that *arrives* rather than being placed… the world coming
+ * to it" (the Day-20 note at the head of this block) — and a hand in the
+ * flowers is the first time anything a person does has been answered by
+ * something that was never this place's to put down.
+ *
+ * TWO HALVES, AND YOU ONLY ASKED FOR THE FIRST. The brush is on the bed, which
+ * is what the pad lies over and what the label names. The bolt is the bee, and
+ * nothing anywhere says she is in it. That split is the whole of the thing: you
+ * reach for the flowers and startle something off them.
+ *
+ * THE DIP. `is-stirred` on the patch runs `bloom-stir` on every `.flower` stem
+ * — the hand-sown three and whatever seats garden.js has filled this morning,
+ * because a palm comes down across a bed and not across a stem. One pixel down
+ * and back, inside two thirds of a second. It is on the STEM and not the head:
+ * `bloom-breathe` owns `box-shadow` on `.flower__head` and a one-shot must pick
+ * a property the running animation does not own (Day 140), and sinking the
+ * stem a pixel carries its bloom down with it, which is what a brushed tuft
+ * actually does. `translate` is free on both.
+ *
+ * And the whole bed dips TOGETHER, where the blooms have never once breathed
+ * in unison. That is not an oversight: the stagger on `bloom-breathe` is there
+ * because each bloom keeps its own clock, and a hand is not a clock — it is one
+ * event arriving across the whole bed at one instant, the same argument that
+ * lets a shaken crown cross upwind (touch.js, Day 139).
+ *
+ * THE BOLT, and why it is written as a second animation and not a new one.
+ * `.sprite--bee` is already running `bee-forage` on `transform`, and the
+ * `animation` SHORTHAND would reset `animation-name` and stop the round dead
+ * (Day 140, the fire's flare). So the startle is added as a second entry in the
+ * longhand lists, with `bee-forage` left at index 0 exactly as it was — the
+ * round goes on underneath, uninterrupted, and `bee-startle` rides on the
+ * `translate` property, which nothing here has ever used and which composes
+ * with `transform` rather than replacing it.
+ *
+ * That is the vow, not a convenience: A HAND MAY LIFT HER OFF HER WORK AND MAY
+ * NOT TAKE HER OFF HER ROUND. Her thirty seconds keep running the entire time
+ * she is in the air, so she comes down exactly where the round had got to while
+ * she was out of it — a little further along, never behind. She cannot be
+ * caught, cannot be held, cannot be kept away from a bloom, and cannot be made
+ * to land: a tap spends nothing of hers and gains nothing, the shape every
+ * other turn in this place has.
+ *
+ * Seven pixels, in native px at both scales, because she is six by three at
+ * both. Fast up and slow down — a startled insect bolts and then thinks better
+ * of it — and no ring back through rest: a crown is displaced and let go, where
+ * she is under her own power the whole way and has no rest to ring through.
+ *
+ * REDUCED MOTION. Both halves collapse, as every duration here does, and the
+ * buzz is the whole of what arrives — the bench's arrangement (Day 145) and for
+ * once the honest one, since what a startled bee most is, is a noise. */
+@keyframes bloom-stir {
+  0%   { translate: 0 0; }
+  22%  { translate: 0 1px; }
+  55%  { translate: 0 1px; }
+  100% { translate: 0 0; }
+}
+.sprite--flowers.is-stirred .flower {
+  animation: bloom-stir 0.62s ease-out 1;
+}
+
+/* Up in a sixth of the round and down over the rest of it. The two held stops
+ * are the top of the bolt: she stops dead up there for a beat before she comes
+ * back down, which is the same thing stillness does for a landing (Day 108) —
+ * at six pixels across, what reads is not the speed but the pause. */
+@keyframes bee-startle {
+  0%        { translate: 0 0;     }
+  16%       { translate: 0 -7px;  }
+  30%       { translate: 0 -7px;  }
+  100%      { translate: 0 0;     }
+}
+.sprite--bee.is-startled {
+  animation-name: bee-forage, bee-startle;
+  animation-duration: 30s, 0.80s;
+  animation-timing-function: ease-in-out, ease-out;
+  animation-iteration-count: infinite, 1;
+}
+
+/* THE REACH. The same arrangement `.crown-touch` uses and for the same reason.
+ * It is sized to the bed rather than to any one stem: the patch runs from
+ * flower--9's seat to flower--11's, blossoms three pixels out on either side,
+ * and the bee's own drift lives inside that span — 50px across at 3x and 44px
+ * at 2x, both at or over the minimum, so `min-width` never has to widen it and
+ * the pad cannot creep off onto the cabin's foot. `bottom` is the bed's own and
+ * the 44px height grows upward, into the air a hand comes down through.
+ *
+ * z-index 5 puts it over the flowers (z 1) and the bee (z 3) and under the map
+ * card (z 6). It overlaps no other pad at 375, 390 or 900: the left crown's
+ * reach ends well to its left and the bench's begins well to its right.
+ * `cursor: pointer` is the affordance and a mild one on purpose — the
+ * unsignposted thing in this yard is the path stone (Day 144), and the surprise
+ * here is not that the bed answers but WHAT answers with it. */
+.bed-touch {
+  position: absolute;
+  display: block;
+  z-index: 5;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  left: calc(50% - 112px);
+  bottom: 6%;
+  width: 50px;
+  height: 44px;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.bed-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
 /* Day 39 (2026-06-16): a bench. The first thing in this yard that holds
  * still — everything else out here runs on a clock (the smoke climbs, the
  * skein crosses, the bee wanders, the blooms breathe). After the long
@@ -3030,6 +3147,12 @@
    * foot at 8%). Body size stays constant — pixel art needs its minimum
    * feature width; the drift range tightens to the smaller patch. */
   .sprite--bee         { left: calc(50% - 56px); bottom: calc(8% + 18px); }
+  /* The reach follows its bed (Day 146). The 2x patch runs from 50% - 78px to
+   * 50% - 42px (seat 9's blossom to seat 11's), so the pad is 44px — the bare
+   * minimum, centred on that span — rather than the 50px it takes at 3x. Its
+   * height and the rest of its box are the same at both scales, exactly as the
+   * bee's and the blossoms' own are. */
+  .bed-touch           { left: calc(50% - 82px); bottom: 8%; width: 44px; }
   /* Bench rebased to the 2x scene. Stays centred in the foreground grass,
    * clear of the flowers (left) and the path (right); fixed-size, so only the
    * baseline moves up to the 2x mobile floor. */

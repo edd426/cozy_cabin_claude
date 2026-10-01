@@ -216,6 +216,44 @@
  * the audible half, and that is a fact about benches rather than a gap: a board
  * taking a weight is mostly a noise.
  *
+ * ── Day 146 (2026-10-01): THE BED, AND THE FIRST ANSWER THAT IS ALIVE ─────
+ *
+ * The sixth thing here that answers a hand. A `.bed-touch` pad lies over the
+ * wildflower bed at the foot of the front wall (scene.css). Brush it and two
+ * things happen: `.sprite--flowers` carries `is-stirred` while every stem in
+ * the bed dips a pixel and comes back, and `.sprite--bee` carries `is-startled`
+ * while she bolts seven pixels straight up off whatever she was doing and sinks
+ * back to it — and `sound.js` is asked for a buzz.
+ *
+ * WHY THIS, AND WHY THE TWO HALVES ARE NOT THE SAME THING. Everything a hand
+ * has reached in this clearing so far was made or laid by somebody: a crown, a
+ * firebox, a lamp in its bracket, a path stone, a bench. The bee was never
+ * this place's to put down — "the first thing in this world that *arrives*
+ * rather than being placed… the world coming to it" (scene.css, Day 20). The
+ * bed is what the pad covers and what the label names; she is not mentioned
+ * anywhere, and that is deliberate. You reach for the flowers. What answers is
+ * a thing that does not belong to the house.
+ *
+ * WHAT A BRUSH MAY NOT DO, and it is the vow this one turns on. It may not take
+ * her off her round. `bee-forage` keeps running at index 0 of the animation
+ * list for the whole of the bolt (scene.css has the mechanism), so her thirty
+ * seconds go on underneath and she comes down exactly where they had got to —
+ * further along, never behind, never held, never caught, and never made to
+ * land. She cannot be kept away from a bloom and she cannot be fetched to one.
+ * A hand may interrupt a living thing's work and may not direct it, which is
+ * the same shape as a prod that may not feed the fire (Day 140) and a turn that
+ * may not move a stone (Day 144).
+ *
+ * WHAT NO PICTURE AND NO GUARD CAN HOLD, which is new even among the five. The
+ * other answers here are the same event every time: a crown rings, a lamp goes
+ * from one state to the other, a board gives a pixel. This one depends on where
+ * she happens to be in a thirty-second round that nobody controls — press at
+ * one second and you shoo a hovering bee, press at twenty and you lift her off
+ * a bloom she had her feet down on. Same gesture, same code, two different
+ * events, and nothing here can say which a visitor got: every camera stands at
+ * a named instant (Day 109) and every witness varies on a season, an hour or a
+ * date, and a hand is none of those.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -452,6 +490,59 @@
     }
   }
 
+  /* ── the bed (Day 146) ────────────────────────────────────────────────────
+   *
+   * One brush at a time on each half, and the two are asked separately on
+   * purpose: the bed is always there and the bee is one element that a later
+   * day could gate or retire, so neither may be the reason the other does not
+   * answer. Each is skipped if it is already mid-round rather than restarted —
+   * the rule every pad here keeps, and sharpest on the bee, because restarting
+   * would let a fast presser hold her at the top of her bolt indefinitely,
+   * which is a hand catching her.
+   *
+   * The classes come off at `animationend`. Several `bloom-stir` events arrive
+   * for one brush (one per stem in the bed, and the bed's count changes with
+   * the date — garden.js, Day 115), so the handler takes the first that names
+   * it and unsubscribes; the stems all run the same duration from the same
+   * instant, so the first to end is the end. Under `prefers-reduced-motion`
+   * both collapse to 0.001ms and come off on the next frame, and the buzz is
+   * the whole of what arrives. */
+  function brush(pad) {
+    var scene = pad.closest('.scene');
+    if (!scene) return;
+
+    var bed = scene.querySelector('.sprite--flowers');
+    if (bed && !bed.classList.contains('is-stirred')) {
+      bed.classList.add('is-stirred');
+      bed.addEventListener('animationend', function once(e) {
+        if (e.animationName !== 'bloom-stir') return;
+        bed.classList.remove('is-stirred');
+        bed.removeEventListener('animationend', once);
+      });
+    }
+
+    var bee = scene.querySelector('.sprite--bee');
+    if (bee && !bee.classList.contains('is-startled')) {
+      bee.classList.add('is-startled');
+      bee.addEventListener('animationend', function once(e) {
+        /* Named, and it matters more here than anywhere else in this file:
+         * `bee-forage` is thirty seconds long and infinite, so it never ends —
+         * but if a later day ever gives it an end, taking the first event that
+         * arrived would strip the startle off a bee still in the air. */
+        if (e.animationName !== 'bee-startle') return;
+        bee.classList.remove('is-startled');
+        bee.removeEventListener('animationend', once);
+      });
+    }
+
+    /* Second, and never first — the rule the fire, the lamp, the stone and the
+     * bench all keep. Both halves of the visible answer are already running by
+     * the time anything is asked of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.buzz === 'function') {
+      try { window.CabinSound.buzz(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -477,7 +568,9 @@
     pad = e.target.closest('.stone-touch');
     if (pad) { turn(pad); return; }
     pad = e.target.closest('.bench-touch');
-    if (pad) lean(pad);
+    if (pad) { lean(pad); return; }
+    pad = e.target.closest('.bed-touch');
+    if (pad) brush(pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -491,12 +584,14 @@
     var lamppad = (crown || fire) ? null : e.target.closest('.lamp-touch');
     var stonepad = (crown || fire || lamppad) ? null : e.target.closest('.stone-touch');
     var benchpad = (crown || fire || lamppad || stonepad) ? null : e.target.closest('.bench-touch');
-    if (!crown && !fire && !lamppad && !stonepad && !benchpad) return;
+    var bedpad = (crown || fire || lamppad || stonepad || benchpad) ? null : e.target.closest('.bed-touch');
+    if (!crown && !fire && !lamppad && !stonepad && !benchpad && !bedpad) return;
     e.preventDefault();
     if (crown) shake(crown);
     else if (fire) prod(fire);
     else if (lamppad) lamp(lamppad);
     else if (stonepad) turn(stonepad);
-    else lean(benchpad);
+    else if (benchpad) lean(benchpad);
+    else brush(bedpad);
   });
 })();

@@ -54,6 +54,16 @@
  * Both sounds are windows cut from the same half-second of noise and shaped
  * differently, so a second sound costs one more allocation of nothing.
  *
+ * Day 146 (2026-10-01) adds the fifth, `buzz()`, and with it the one exception
+ * to the paragraph above: it is not cut from the noise buffer, because it is
+ * not a thing letting go. The four before it are a pocket of coal, a catch, a
+ * stone on earth and two dry surfaces slipping — all releases, and a release is
+ * broadband by its physics, which is why noise WAS the thing itself rather than
+ * a stand-in for it. A wingbeat is a thing running, and what two hundred
+ * strokes a second make is a pitch. So `tone()` sits beside `burst()` and uses
+ * an oscillator. The trade is unchanged: arithmetic, in memory, nothing
+ * vendored and nothing fetched.
+ *
  * Published read-only on `window.CabinSound` (the Day-97 export move sky.js and
  * season.js make), so a consumer — today touch.js only — can ask for a sound
  * without owning any of this. Every entry point is a no-op rather than a throw
@@ -156,6 +166,52 @@
 
     src.start(t, Math.random() * maxOffset, dur + 0.02);
     src.stop(t + dur + 0.02);
+  }
+
+  /* One voice: a sawtooth under a filter and an envelope, with its pitch free
+   * to move while it sounds.
+   *
+   * Everything above this line is cut from the noise buffer, because the first
+   * four sounds here are all things LETTING GO — a pocket of coal, a catch, a
+   * stone meeting earth, two dry surfaces slipping — and a release is broadband
+   * by its physics. A wingbeat is not a release. It is a thing RUNNING, two
+   * hundred strokes a second, and what that makes is a pitch with harmonics
+   * stacked on it. Noise cannot say that however it is filtered, so this is the
+   * first oscillator in the file. Nothing is vendored and nothing is fetched by
+   * it either; it is the same trade as the rest, arithmetic instead of a
+   * recording (ASSETS.md carries its row).
+   *
+   * `f0` → `f1` over the life of the note, so a frequency that rises and falls
+   * is one call rather than three.
+   */
+  function tone(c, at, dur, gain, f0, f1, cutoff) {
+    var t = c.currentTime + at;
+
+    var osc = c.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(f0, t);
+    osc.frequency.linearRampToValueAtTime(f1, t + dur * 0.35);
+    osc.frequency.linearRampToValueAtTime(f0 * 0.92, t + dur);
+
+    /* A wing is a soft thing and the top of a sawtooth is not: without this the
+     * buzz reads as a synthesiser rather than an insect. */
+    var flt = c.createBiquadFilter();
+    flt.type = 'lowpass';
+    flt.frequency.value = cutoff;
+    flt.Q.value = 0.9;
+
+    var env = c.createGain();
+    env.gain.setValueAtTime(0.0001, t);
+    env.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), t + 0.02);
+    env.gain.setValueAtTime(Math.max(0.0002, gain), t + dur * 0.45);
+    env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+    osc.connect(flt);
+    flt.connect(env);
+    env.connect(master);
+
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
   }
 
   /* ── the fire's crack ─────────────────────────────────────────────────────
@@ -331,6 +387,41 @@
     return n;
   }
 
+  /* ── the bee's buzz (Day 146, 2026-10-01) ────────────────────────────────
+   *
+   * A bee startled off a bloom. The fifth sound here and the first that is a
+   * PITCH rather than an event: the crack, the latch, the knock and the creak
+   * are all things coming apart, and a wingbeat is a thing at work. So it is
+   * the first sound in this file that is not cut from the noise buffer — see
+   * `tone()` above for why noise cannot say it.
+   *
+   * Two sawtooths seven hertz apart. One alone is a tone and a tone is not a
+   * bee; two close together beat against each other several times a second,
+   * and that roughness is most of what the ear uses to tell an insect from a
+   * note. Both start near two hundred — about where a honeybee's wing runs —
+   * climb a fifth of that as she bolts, and settle back under it as she sinks.
+   *
+   * Loud enough to be heard and no louder: 0.085 against the stone's 0.42,
+   * because a sawtooth carries far more energy than a filtered noise burst at
+   * the same number, and because a bee two feet from your hand is a small
+   * sound. The four before it stand in a row that says something true about
+   * four objects (Day 144); this one has to stand in that row and be the
+   * quietest thing in it.
+   *
+   * Half a second, over inside rule 2, and gone before the bee is back down.
+   * Rule 4 is kept by the bed and the bee between them: the stems dip and she
+   * bolts, which a silent visitor gets in full.
+   *
+   * Returns the number of sources started — always 2, or 0 with no context. */
+  function buzz() {
+    var c = context();
+    if (!c) return 0;
+    var f = 196 + Math.random() * 14;
+    tone(c, 0,     0.52, 0.085, f,     f * 1.22,     1250);
+    tone(c, 0.005, 0.50, 0.060, f + 7, (f + 7) * 1.22, 1050);
+    return 2;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -340,6 +431,7 @@
     latch: latch,
     knock: knock,
     creak: creak,
+    buzz: buzz,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

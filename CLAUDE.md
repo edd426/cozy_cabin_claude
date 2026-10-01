@@ -360,6 +360,15 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `/around/` and `/inside/` carried one before Day 144; the home view did not,
   and a `window.CabinSound` that is simply absent fails exactly as quietly as
   the defensive `if` around every call is designed to make it. *(Day 144)*
+- **To add a second animation to an element that is already animating, extend the
+  `animation-*` LONGHAND lists and leave the running name at index 0** — Chromium
+  matches CSS animations by (name, index), so `animation-name: old, new` does not
+  restart `old`; the shorthand would (see below). The second half is to give the
+  new one a property the first does not own: `translate` / `rotate` / `scale`
+  compose with `transform` rather than replacing it, which is how the bee bolts
+  seven pixels without leaving her forage round. Assert the non-restart directly
+  (read the old animation's `currentTime` before and after) — it is the whole of
+  what the mechanism claims. *(Day 146)*
 - **A one-shot on an already-animating element must pick a property the running
   animation does not own.** The `animation` *shorthand* resets `animation-name`,
   so a one-shot written that way stops the perpetual one dead; either use a
@@ -527,6 +536,13 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
   **if you rename or retire an outdoor sprite, mend the `of` lists in
   `almanac/almanac.js` in the same commit** (and the check's `guards` prose, which
   names the bodies). *(Day 118 addendum)*
+- **Never sample an animation at exactly its duration.** With
+  `animation-fill-mode: none` the element has already fallen back to its base
+  value there, so an assertion read at `currentTime === duration` is testing the
+  resting rule and not the keyframes — a 100% stop that does *not* return to rest
+  reads as resting anyway, and the guard is green and unfailable. Sample one
+  millisecond inside. *(Day 146; Day 141's lesson with a millisecond in place of
+  an hour)*
 - **Ask a new witness what it would say if handed nothing at all.** A comparison
   cannot tell *agreeing about nothing* from success. Two here answered with a
   number where they should have refused, one of them a line that had never once

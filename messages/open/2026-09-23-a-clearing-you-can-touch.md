@@ -553,3 +553,110 @@ answer is alive.
 
 **Still standing on this mission:** nothing from your list. Six days to the
 seventh; I mean to go on adding one a day and to write the completion note then.
+
+### Day 147 — 2026-10-02 — the cloak on its peg takes a hand
+
+Shipped: **brush the cloak hanging by the chair and the cloth swings out from
+its peg, rings back through its own hang with the hem lagging the shoulder, and
+rustles.** The seventh thing here that answers a hand, and the first that hangs.
+
+- **What a visitor can do that they could not yesterday.** Go inside and press
+  (or tab to and press Enter or Space on) the small plum cloak on the wall above
+  the chair. The cloth swings out about three native pixels at the hem — half
+  the cloak's own width — crosses its own hang five times, each swing smaller
+  than the last, and is still inside nine tenths of a second. The peg does not
+  move. Nothing is kept.
+
+- **Why this object.** It is the oldest unanswered thing indoors, hung on Day 15
+  and untouched for a hundred and thirty-two mornings — the room's own version of
+  what the bench was out in the yard. It is also the one thing in there that is
+  not wood, brick, flame, or something the earth simply handed over: a plum
+  somebody picked for the liking of it, and the colour the moth borrowed. And it
+  is one of the two things in this world that are the trace of a body without
+  being one: the boots say somebody stepped out of these, the cloak says somebody
+  hung this here.
+
+- **Why it is a different gesture from all six, which is the day's finding.**
+  Everything that has ever moved in this clearing is rooted at its foot — the
+  crowns bend from the trunk, the stems dip on their stalks, the board gives at
+  the seat, the stone pivots on its own base, the flame stands up off its coals,
+  the smoke leaves a fixed cap. Every answer so far has been *the top of a
+  standing thing going*. This is the first thing here pinned at the top, so its
+  answer is the crown's own `skewX` with the origin moved from the bottom of the
+  element to the top: the gather holds and the hem goes. One line of CSS is the
+  whole difference between a thing that stands and a thing that is hung.
+
+- **And it is cloth, not a plank, and that is a time rather than a shape.** A
+  second skew runs on the body alone so the hem comes back through its hang
+  **26ms after the shoulder does**. That lag is the only reading available at
+  this size for *this is soft*, and it is asserted as a crossing time rather than
+  a displacement at a named phase — which is the correction the day cost me. A
+  CSS timing function is applied between each *pair* of keyframes, so an ease-out
+  leaves a value most of the way through a segment at its own 61%, and my first
+  assertion ("at 22% the shoulder is back and the hem is not") was simply false
+  about numbers I had picked by hand. The crossing times were true all along.
+
+- **What a brush may NOT do.** It may not take the cloak off its peg. The peg is
+  deliberately outside the element that swings, so nothing a hand does can move
+  it — and the reason is the oldest *given* here: a cloak taken down is a cloak
+  somebody is about to put on, and nobody is ever in this picture (Day 111). And
+  it is not remembered, for the stone's reason: a cloak found hanging differently
+  would be telling an arrival that somebody had been here.
+
+- **The sixth sound, and the first that is neither an event nor a note.** The
+  crack, the latch, the knock and the creak are all things coming apart, and the
+  buzz is a thing running. A rustle is *friction* — a release so finely divided
+  in time that there is no single release left in it — so it needed a shaper of
+  its own: `swell()`, with no attack at either end, where `burst()` reaches its
+  peak in three milliseconds and would have put a click at the front of a cloth.
+  It is also the file's first **highpass**: every sound before it is a body
+  letting go and a body's resonance is low (150Hz for the stone, 190 for the
+  fire, 210 for the board), and cloth has no body — what is rubbing is thousands
+  of fibres a hair across, and a thing that small can only make a small sound.
+  Two breaths a third of a second apart, for the cloth going out and coming back,
+  which makes it the first sound here that is about a *duration* rather than a
+  moment. `ASSETS.md` has its row like the other five.
+
+- **It answers the same way every time**, which is Monday's question taken up
+  rather than dodged. The bed's answer varies because a living thing is in the
+  middle of its own work. Nothing varies here, and nothing should: a cloak has no
+  round of its own to be interrupted. The variation was never the gift — the life
+  behind it was.
+
+- **Nothing in the drawing moved at rest.** `check-drift` reported 0 px on every
+  home and around frame; the two that broke are the documented sandbox-vs-CI
+  browser noise at their exact figures (`inside-winter-day` 64 px,
+  `map-summer-day` 1327 px). Because today touched `/inside/`, that figure is not
+  proof on its own, so it was settled the way the notes say: the whole check was
+  run again with the day's files stashed and reported the identical 64 and 1327.
+  The report picture was read as well — a thin outline at a gradient boundary,
+  not a shape. No baseline removed. `check-almanac` (82 claims, 56 probes),
+  `check-gallery` and `check-nesting` all green.
+
+- **Tested.** `/tmp/test-cloak-brush.js` performs the brush at 375, 390 and 900 —
+  click, Enter, Space and a real coarse-pointer tap — plus a reduced-motion pass.
+  It asserts that the reach clears 44×44 at *every* width (the cloak is 18×24
+  desktop and 12×16 on a phone, so this is the firebox's lesson and not the small
+  crown's), that it is centred on the hung cloth and overlaps neither the firebox
+  pad nor the map card, that both animations run, that the hem crosses its hang
+  every swing and each swing is smaller than the last, that the hem gets back
+  after the shoulder does, that **the peg does not move at any phase**, that the
+  keyframes end at exactly the hang, that a second press mid-swing is ignored,
+  that one audio context is built and exactly five buffer sources and **zero**
+  oscillators are started at the declared `PEAK` read back off the live page, and
+  that the five things already answering a hand still do. Break-tested four ways,
+  each red at all six width/pointer pairs and nowhere else: the pad's widening
+  dropped, the hem lag removed (the lag reads exactly 0ms — a plank), the 100%
+  keyframe left off the hang, and the peg moved inside the swinging wrapper.
+
+- **One thing the break-testing proved rather than inherited.** With the 100%
+  keyframe broken, moving the end sample from 899ms to 900ms turned the *whole
+  run* green. Day 146 learned that from one side; this is the other: a cloak that
+  did not come back to its hang still passes "it hangs as it hung when the round
+  is over", because with `animation-fill-mode: none` the element has already
+  fallen back to its base value by then. *Ends at rest* and *is at rest
+  afterwards* are two different claims and only one of them is about the
+  keyframes.
+
+**Still standing on this mission:** nothing from your list. Five days to the
+seventh; I mean to go on adding one a day and to write the completion note then.

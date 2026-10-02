@@ -54,6 +54,12 @@
  * Both sounds are windows cut from the same half-second of noise and shaped
  * differently, so a second sound costs one more allocation of nothing.
  *
+ * Day 147 (2026-10-02) adds the sixth, `rustle()`, and with it the second
+ * shaper: `swell()`, a slice of the same noise with no attack at either end.
+ * The five before it are all EVENTS — four releases and one wingbeat — and an
+ * event has a moment in it you could point at. Friction has none, so the
+ * envelope is the whole of the difference and the sound is its shape.
+ *
  * Day 146 (2026-10-01) adds the fifth, `buzz()`, and with it the one exception
  * to the paragraph above: it is not cut from the noise buffer, because it is
  * not a thing letting go. The four before it are a pocket of coal, a catch, a
@@ -212,6 +218,47 @@
 
     osc.start(t);
     osc.stop(t + dur + 0.02);
+  }
+
+  /* One swell: a slice of noise through a filter, under an envelope with no
+   * attack at either end — it comes on over better than a third of its life and
+   * goes off over the rest.
+   *
+   * `burst()` above reaches its peak in three milliseconds, which is what makes
+   * a crack a crack; run a cloth sound through it and the first thing you hear
+   * is a click, which is the one thing a cloth cannot do. Every sound in this
+   * file before today is an EVENT — a thing letting go, or (the buzz) a thing
+   * running — and an event has a moment you could point at. Friction has none.
+   * Two surfaces sliding past each other is a release so finely divided in time
+   * that there is no single release left in it, so the envelope is the whole
+   * difference between this and a burst, and the shape of it is the sound.
+   *
+   * `at` / `dur` / `gain` / `type` / `freq` / `q` as in `burst()`.
+   */
+  function swell(c, at, dur, gain, type, freq, q) {
+    var t = c.currentTime + at;
+
+    var src = c.createBufferSource();
+    src.buffer = noise;
+    var maxOffset = Math.max(0, noise.duration - dur - 0.02);
+
+    var flt = c.createBiquadFilter();
+    flt.type = type;
+    flt.frequency.value = freq;
+    flt.Q.value = q;
+
+    var g = Math.max(0.0002, gain);
+    var env = c.createGain();
+    env.gain.setValueAtTime(0.0001, t);
+    env.gain.exponentialRampToValueAtTime(g, t + dur * 0.38);
+    env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+    src.connect(flt);
+    flt.connect(env);
+    env.connect(master);
+
+    src.start(t, Math.random() * maxOffset, dur + 0.02);
+    src.stop(t + dur + 0.02);
   }
 
   /* ── the fire's crack ─────────────────────────────────────────────────────
@@ -422,6 +469,55 @@
     return 2;
   }
 
+  /* ── the cloak's rustle (Day 147, 2026-10-02) ────────────────────────────
+   *
+   * A hung cloth brushed on its peg. The sixth sound here and the first that is
+   * neither an event nor a note — see `swell()` above for why it needed a shaper
+   * of its own and could not be cut with `burst()`.
+   *
+   * It is also the first thing in this file built on a HIGHPASS. Every filter
+   * before it is a lowpass or a bandpass, because every sound before it is a
+   * body letting go and a body's resonance is low: the stone's thud sits at
+   * 150Hz, the fire's prod at 190, the board's bow at 210. Cloth has no body to
+   * resonate. What is actually rubbing is thousands of fibres a hair across, and
+   * a thing that small can only make a small sound, so the energy is all ABOVE
+   * the band everything else here lives in — which is why a rustle can sit at a
+   * gain number near the stone's and still be the softest thing in the room.
+   *
+   * TWO BREATHS, which is the part I care about. Every other sound here says one
+   * thing once: the latch clicks, the stone lands, the bee goes. A swung cloth
+   * rubs on the way out and again on the way back, so there are two swells, the
+   * second quieter and duller and starting at 0.30s — which is a third of the
+   * 0.9s swing, where the cloth is coming back through its own hang. The ear
+   * gets the shape of the motion rather than the moment of the touch, and that
+   * is as near as this place has come to a sound that is about a DURATION.
+   *
+   * Under each swell, a soft low note of the cloth's own weight. It is barely
+   * there (0.05 against the stone's 0.42) and it is what stops the whole thing
+   * reading as a hiss with nothing hanging on it.
+   *
+   * Everything is over inside 0.56s, well under rule 2 and well inside the
+   * swing it belongs to. Rule 4 is kept by the object: the cloak visibly swings
+   * out and back, which a silent visitor gets in full.
+   *
+   * Returns the number of sources started — always 5, or 0 with no context. */
+  function rustle() {
+    var c = context();
+    if (!c) return 0;
+
+    /* The push. Fibres first, then the cloth's own low weight under them. */
+    swell(c, 0,     0.30, 0.17,  'highpass', 2100 + Math.random() * 400, 0.6);
+    swell(c, 0.015, 0.26, 0.11,  'bandpass', 1150 + Math.random() * 250, 0.9);
+    swell(c, 0.01,  0.22, 0.05,  'lowpass',   320 + Math.random() * 60,  0.7);
+
+    /* The return, a third of the swing later: quieter, and duller because the
+     * cloth is moving more slowly by then. */
+    swell(c, 0.30,  0.26, 0.085, 'highpass', 1800 + Math.random() * 350, 0.6);
+    swell(c, 0.315, 0.22, 0.05,  'bandpass',  950 + Math.random() * 200, 0.9);
+
+    return 5;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -432,6 +528,7 @@
     knock: knock,
     creak: creak,
     buzz: buzz,
+    rustle: rustle,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

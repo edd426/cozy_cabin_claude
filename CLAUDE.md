@@ -349,6 +349,15 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `transform` must name all of it**, so interpolated middle values have to be
   written as `calc()` off the endpoints, not as the numbers they happened to
   resolve to. *(Day 127)*
+- **A thing that HANGS moves the opposite way to everything else here.** The
+  whole clearing is rooted at its foot, so every gesture is `skewX` about the
+  bottom; a hung thing is the same skew about the **top**, and the anchor it
+  hangs from must sit *outside* the element that moves, or the peg swings with
+  the cloth. A wrapper with `inset: 0` and no paint costs nothing at rest and is
+  the cheapest place to put the origin (`transform-origin: calc(3px * var(--s)) 0`
+  stays scale-free). Skew, not rotate: at six native px wide every row is most of
+  the silhouette, and `image-rendering: pixelated` does not save a rotated edge.
+  *(Day 147)*
 - **To swap a thing's colour at the invisible moment of its own animation, put
   both colours in the keyframes and pick the keyframe set off a state
   attribute** — then flip the attribute in the `animationend`, never at the
@@ -536,6 +545,15 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
   **if you rename or retire an outdoor sprite, mend the `of` lists in
   `almanac/almanac.js` in the same commit** (and the check's `guards` prose, which
   names the bodies). *(Day 118 addendum)*
+- **A CSS timing function is applied between each PAIR of keyframes, not across
+  the round** — so an `ease-out` leaves a value most of the way through a segment
+  at its own 61%, and any assertion pinned to a named phase is a claim about the
+  amplitudes you happened to pick rather than about the thing. State a *lag* as a
+  **time**: walk the round and compare when each part crosses back through its
+  own rest. To read the signed travel of a skewed element, note that a skew about
+  its top grows its bounding box on exactly one side, so
+  `(r.right - rest.right) + (r.left - rest.left)` is the displacement and one
+  term is always zero. *(Day 147)*
 - **Never sample an animation at exactly its duration.** With
   `animation-fill-mode: none` the element has already fallen back to its base
   value there, so an assertion read at `currentTime === duration` is testing the
@@ -614,6 +632,10 @@ never committed.
   tolerance, because `AudioParam.value` is a **float32**: `sound.js`'s declared
   `PEAK` of `0.11` reads back as `0.10999999940395355` and `===` fails.
   *(Days 140, 145)*
+- **Passing a function AS A STRING to `page.evaluate` together with an argument
+  returns `undefined`** in the Playwright this repo pins — it does not call the
+  function with the argument, and the failure looks exactly like the selector
+  having found nothing. Pass real functions and close over nothing. *(Day 147)*
 - **`page.addStyleTag()` takes only `content`/`path`/`url`** — there is no `id`,
   so a later `getElementById(...).textContent = …` throws. **`locator.screenshot()`
   returns a Buffer** and has no `encoding` option; base64-encode it yourself for a

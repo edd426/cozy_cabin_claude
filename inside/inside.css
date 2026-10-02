@@ -1666,6 +1666,21 @@
   box-shadow: inset calc(-1px * var(--s)) 0 0 var(--c-purple-soft);
 }
 
+/* Day 147 (2026-10-02): the cloth, wrapped away from its peg. No paint, no
+ * size of its own — `inset: 0` makes its box exactly `.coat`'s, so every child
+ * keeps the containing block it had and the resting drawing is unchanged to
+ * the pixel. It exists for one reason: the swing has to be applied to the
+ * HANGING part and not to the peg. */
+.coat__hang {
+  position: absolute;
+  inset: 0;
+  /* The peg. `.coat` is 6 native wide and the peg spans native x = 2..4, so its
+   * centre is x = 3; y = 0 is the top of the box, which is exactly where the
+   * gather grips. Written in native px * var(--s) so the 2x block inherits it
+   * and the origin never has to be restated. */
+  transform-origin: calc(3px * var(--s)) 0;
+}
+
 /* Peg: 2 native wide × 1 native tall, dark wood, directly above the
  * gather — a small wooden stub on the wall, not a bar across the
  * cloth. */
@@ -1677,6 +1692,127 @@
   height: calc(1px * var(--s));
   background: var(--c-wood-dark);
   z-index: 3;
+}
+
+/* ─── The cloak takes a hand (Day 147, 2026-10-02) ─────────────────
+ *
+ * The seventh thing in this clearing that answers a press, and the first that
+ * hangs. Everything that has ever moved here is rooted at its foot — the crowns
+ * bend from the trunk, the stems dip on their stalks, the board gives at the
+ * seat, the stone pivots on its own base, the flame stands up off its coals —
+ * so every gesture so far has been *the top of a standing thing going*. This
+ * one is that gesture turned over: the crown's own `skewX`, with the origin at
+ * the TOP instead of the bottom, so the peg and the gather hold and the hem
+ * goes. One line of CSS is the whole difference between a thing that stands and
+ * a thing that is hung.
+ *
+ * WHY SKEW AND NOT ROTATE. A rotation would carry the cloth's horizontal rows
+ * off the horizontal, and at six native px wide every row is most of the
+ * silhouette; `image-rendering: pixelated` does not save a rotated edge. A skew
+ * about the top keeps every row level and slides it — which is also the truer
+ * physics, because a hung cloth is not a rigid board swinging about a pivot. It
+ * drapes: the top stays where it is pinned and the cloth below shears past it.
+ *
+ * WHY IT MAY CROSS ITS OWN REST. The same reason the crown may (Day 139) and
+ * the falling leaf may (Day 116): a thing *held out* by a steady wind never
+ * rocks back past where it stands, and this is not held out by anything. It is
+ * displaced and let go, and a thing let go rings back through rest and dies
+ * away. Six crossings, each swing smaller than the last, and it ends at exactly
+ * zero.
+ *
+ * WHICH WAY IT GOES FIRST MEANS NOTHING, and that is worth writing down rather
+ * than leaving as a silence. Every other direction claim in this world is read
+ * off the plan — the smoke leans east because the wind is a westerly, the leaves
+ * finish right of where they let go, the door-side column stands straight
+ * because that face looks up the wind's throat (Day 133). There is no wind in
+ * this room. A hand reaches a hung thing from wherever the hand is, so the first
+ * swing is simply a direction, and nothing on the map can be wrong about it.
+ *
+ * The round is 0.9s, near the crown's 0.85 — a cloak on a short peg is a short
+ * pendulum and a fast one, not the slow swing the word "cloak" suggests. */
+.coat.is-swung .coat__hang {
+  animation: cloak-swing 0.9s ease-out 1;
+}
+
+/* The hem lags, which is the whole of what makes it cloth and not a plank.
+ * A second skew on the body alone, about the body's own top edge (2 native
+ * below the peg), peaking at 22% where the parent is already back through
+ * rest — so at the moment the shoulder has returned, the bottom of the cloak
+ * is still out. That one disagreement between a thing's top and its bottom is
+ * the only reading available at this size for *this is soft*.
+ *
+ * It composes rather than replaces: parent and child each carry their own
+ * `transform`, and the child's is applied inside the parent's, so the hem's
+ * travel is the sum of the two. At the body's extreme (11%) that is
+ * 7 native x tan(18deg) + 5 native x tan(3.5deg), a little over two and a half
+ * native px on a cloak six wide. */
+.coat.is-swung .coat__cloak {
+  transform-origin: 50% 0;
+  animation: cloak-hem 0.9s ease-out 1;
+}
+
+@keyframes cloak-swing {
+  0%   { transform: skewX(0deg);     }
+  11%  { transform: skewX(-18deg);   }
+  29%  { transform: skewX(11.5deg);  }
+  46%  { transform: skewX(-7deg);    }
+  63%  { transform: skewX(4deg);     }
+  79%  { transform: skewX(-2deg);    }
+  92%  { transform: skewX(0.8deg);   }
+  100% { transform: skewX(0deg);     }
+}
+@keyframes cloak-hem {
+  0%   { transform: skewX(0deg);    }
+  8%   { transform: skewX(-2deg);   }
+  22%  { transform: skewX(-9deg);   }
+  40%  { transform: skewX(5.5deg);  }
+  57%  { transform: skewX(-3.2deg); }
+  74%  { transform: skewX(1.8deg);  }
+  89%  { transform: skewX(-0.8deg); }
+  100% { transform: skewX(0deg);    }
+}
+
+/* THE REACH. A transparent sibling of `.coat`, centred on the hung cloth.
+ *
+ * `.coat` is 6 native wide and 8 tall counting the peg — 18x24 at the desktop
+ * scale and 12x16 on a phone — so it is under 44px in BOTH directions at BOTH
+ * widths, and the pad needs its widening everywhere. That is the firebox's
+ * lesson (Day 140) and not the small crown's (Day 139), which only needed it on
+ * a phone; this is the fourth object here where the thing drawn is smaller than
+ * the hand that reaches it at every size.
+ *
+ * Anchored with `left` + `translate(-50%, 50%)` the way `.fire-touch` is, not
+ * with `.coat`'s own `right`: a `min-width` grows a right-anchored box leftward
+ * only, which would hang the pad 26px off the cloak's left side at the desktop
+ * scale. The anchor is the cloak's own centre — `.coat`'s right edge sits 50px
+ * left of centre and the cloak is 18 wide, so its middle is 59px left of centre
+ * (40px on a phone, where the numbers are 34 and 12). The vertical centre is
+ * native y = 50: the hem rests at 46 and the peg's top is at 54.
+ *
+ * It does not reach the firebox's pad at either width. On a phone the two
+ * overlap by 4px horizontally and clear each other by 18px vertically, which is
+ * no overlap at all — but it is close enough that the day's test asserts the
+ * rectangles rather than the columns. */
+.coat-touch {
+  --s: 3;
+  position: absolute;
+  display: block;
+  left: calc(50% - 59px);
+  bottom: calc(50px * var(--s));
+  transform: translate(-50%, 50%);
+  width: calc(6px * var(--s));
+  height: calc(8px * var(--s));
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  z-index: 6;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(110, 69, 101, 0.3);
+}
+.coat-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
 }
 
 /* ─── Moth (Day 22) ────────────────────────────────────────────────
@@ -2504,10 +2640,23 @@
   100% { opacity: 0;   transform: translate(calc(-2.4px * var(--s)), calc(-11px * var(--s))); }
 }
 
-/* The pad is a sibling of `.hearth` and so does not inherit the scale swap the
- * 2x block above makes there. Its own swap, and the whole of its override — the
- * anchor and the size are native px * var(--s) throughout, and the sparks are
- * children of `.hearth` and already carry that block's --s. */
+/* The pads are siblings of `.hearth` and of `.coat`, so neither inherits the
+ * scale swap the 2x block above makes there. Their own swaps, and the whole of
+ * their overrides — every size is native px * var(--s), and the sparks are
+ * children of `.hearth` and already carry that block's --s.
+ *
+ * This block stays at the FOOT of the file and must keep staying there: a media
+ * query adds no specificity, so at equal specificity source order decides, and
+ * a 2x block written above the rule it rebases silently loses at every width
+ * (Day 141, which cost nineteen days of half-again-too-large leaves on the door
+ * side). `.coat-touch`'s anchor is a raw px offset from the frame's centre and
+ * does not scale with --s, so unlike the firebox it needs both lines: the
+ * cloak's middle sits 40px left of centre on a phone (its right edge at 34, its
+ * width 12) where it sits 59px left at the desktop scale. */
 @media (max-width: 599px) {
   .fire-touch { --s: 2; }
+  .coat-touch {
+    --s: 2;
+    left: calc(50% - 40px);
+  }
 }

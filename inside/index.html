@@ -183,6 +183,17 @@
       side. The band moved to the bottom row, where a real candle's wax does go
       dull away from its own flame (see diary 2026-08-07).
 
+  Day 147 (2026-10-02) lets the CLOAK be brushed — the seventh thing here that
+  answers a hand, and the first that is pinned at the top. Everything in this
+  world that has ever moved is rooted at its foot: the crowns bend from the
+  trunk, the stems dip on their stalks, the bench gives at the seat, the stone
+  pivots on its own base, the flame stands up off its coals. The cloak hangs.
+  So its answer is the crown's gesture turned upside down — the same skewX that
+  holds a tree's trunk still and moves its canopy, with the origin at the TOP,
+  so the peg and the gather hold and the hem goes. `.coat__hang` (new, and the
+  only change to the markup's shape) is what carries it, so the peg can stay
+  out of the swing. See inside.css, "The cloak takes a hand".
+
   Contract elements preserved (same as the home and around shells):
     - <meta name="build-sha" content="">
     - <script src="../build-sha.js" defer>
@@ -438,13 +449,36 @@
         <div class="sill-glass" aria-hidden="true"></div>
       </div>
 
+      <!-- Day 147 (2026-10-02): the cloth is wrapped so the PEG can stay out of
+           it. `.coat__hang` holds the three plum pieces and nothing else; it is
+           `inset: 0` with no paint of its own, so at rest the drawing is exactly
+           what it was on Day 36, and the only thing it adds is somewhere for the
+           swing to be applied. The peg is left outside it on purpose — it is
+           screwed to the wall, like the lantern's bracket round the corner, and
+           a hand that moved the peg would be a hand taking the cloak down. -->
       <div class="coat" role="img"
-           aria-label="A small plum-coloured cloak hanging from a wooden peg on the wall above the chair — gathered narrow at the peg, flaring toward its hem; the trace of a person who lives here and has just stepped out.">
-        <div class="coat__cloak"></div>
-        <div class="coat__shoulder"></div>
-        <div class="coat__gather"></div>
+           aria-label="A small plum-coloured cloak hanging from a wooden peg on the wall above the chair — gathered narrow at the peg, flaring toward its hem; the trace of a person who lives here and has just stepped out. It can be brushed: press it and the cloth swings out from the peg and back through its own hang, the hem lagging behind the shoulder the way cloth does, with a soft rustle — and then it is hanging exactly as it hung.">
+        <div class="coat__hang">
+          <div class="coat__cloak"></div>
+          <div class="coat__shoulder"></div>
+          <div class="coat__gather"></div>
+        </div>
         <div class="coat__peg"></div>
       </div>
+
+      <!-- Day 147 (2026-10-02): the reach that lets a visitor brush the cloak.
+           A transparent sibling of `.coat` rather than a pseudo-element on it,
+           for the firebox's reason — `.coat` carries `pointer-events: none` for
+           all four of its cells, and at 18x24 desktop / 12x16 phone it is under
+           the 44px minimum at BOTH widths, so the pad needs its own widening
+           either way (the firebox's lesson, not the small crown's). Signposted,
+           like the crown and the firebox and the lamp and the bench and the bed:
+           exactly one thing in this clearing is a secret, and that is the path
+           stone (Day 144). A second would only make the first less of one. -->
+      <span class="coat-touch"
+            role="button"
+            tabindex="0"
+            aria-label="brush the cloak on its peg"></span>
 
       <span class="sprite sprite--moth" aria-hidden="true"></span>
     </div>

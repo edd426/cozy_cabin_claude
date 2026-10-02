@@ -254,6 +254,55 @@
  * a named instant (Day 109) and every witness varies on a season, an hour or a
  * date, and a hand is none of those.
  *
+ * ── Day 147 (2026-10-02): THE CLOAK, AND THE FIRST THING HERE THAT HANGS ──
+ *
+ * The seventh thing that answers a hand. A `.coat-touch` pad lies over the
+ * cloak on its peg in the room (inside.css). Brush it and `.coat` carries
+ * `is-swung` for one round: the cloth swings out from the peg and rings back
+ * through its own hang, the hem lagging the shoulder — and `sound.js` is asked
+ * for a rustle.
+ *
+ * WHY THIS OBJECT. It is the oldest unanswered thing indoors, hung on Day 15
+ * and untouched for a hundred and thirty-two mornings, which makes it the room's
+ * own version of what the bench was out in the yard (Day 145). And it is the one
+ * thing in there that is not wood, brick, flame, or something the earth simply
+ * handed over: "a plum somebody picked for the liking of it" (diary 2026-09-10).
+ * It is also, with the boots by the door, one of the two things in this world
+ * that are the trace of a body without being one — the boots say somebody
+ * stepped out of these, the cloak says somebody hung this here.
+ *
+ * AND WHY IT IS A DIFFERENT GESTURE FROM ALL SIX. Everything that moves in this
+ * clearing is rooted at its foot. The crowns bend from the trunk and hold their
+ * trunks still; the stems dip on their stalks; the board gives at the seat; the
+ * stone pivots on its own base; the flame stands up off its coals; even the
+ * smoke leaves from a fixed cap. This is the first thing here pinned at the TOP,
+ * so its answer is the crown's own skew with the origin moved from the bottom of
+ * the element to the top — the gather holds and the hem goes. One line, and it
+ * is the whole difference between a thing that stands and a thing that is hung.
+ *
+ * WHAT A BRUSH MAY NOT DO. It may not take the cloak off its peg. The peg is
+ * deliberately outside the element that swings, so nothing a hand does here can
+ * move it — and the reason is the oldest given in the place: a cloak taken down
+ * is a cloak somebody is about to put on, and nobody is ever in this picture
+ * (Day 111). What a hand gets is the cloth moving and the hanging unchanged,
+ * which is the same shape as a prod that may not feed the fire (Day 140), a turn
+ * that may not move a stone (Day 144), a lean that may not wear the bench (Day
+ * 145) and a brush that may not direct the bee (Day 146). And it is not
+ * remembered, for the stone's reason: a cloak found already swung, or hanging
+ * differently, would be telling an arrival that somebody had been here.
+ *
+ * AND IT ANSWERS THE SAME WAY EVERY TIME, which is yesterday's question taken
+ * up rather than dodged. The bed's answer varies because a living thing is in
+ * the middle of its own work and a hand catches her wherever she happens to be.
+ * Nothing varies here, and nothing should: a cloak has no round of its own to be
+ * interrupted. The variation was never the gift — the life behind it was.
+ *
+ * REDUCED MOTION. The swing collapses to nothing, as every duration here does,
+ * and the rustle arrives whole. This sits between the crown (whose whole answer
+ * is motion, and who therefore has nothing at all for such a visitor) and the
+ * bench (whose answer is mostly a noise): a cloth both moves and sounds, and
+ * neither half is the smaller one.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -543,6 +592,45 @@
     }
   }
 
+  /* ── the cloak (Day 147) ─────────────────────────────────────────────────
+   *
+   * One swing at a time, the rule every pad in this file keeps. It matters here
+   * for the crown's reason rather than the bench's: `is-swung` comes off at the
+   * `animationend` of `cloak-swing`, so restarting mid-round would let a fast
+   * presser hold the cloth permanently out at an angle — a cloak that hung
+   * crooked, which is the one thing a brush may not leave behind.
+   *
+   * Two animations run for one brush — `cloak-swing` on `.coat__hang` and
+   * `cloak-hem` on `.coat__cloak` — and they share a duration, so either could
+   * arrive first. The handler takes the one that names `cloak-swing` and
+   * unsubscribes, the same check the bench and the bed make for the same
+   * reason. The class is read and written on `.coat`, not on the wrapper,
+   * because the wrapper is a detail of how the cloth is held and the thing a
+   * visitor pressed is the cloak.
+   *
+   * Under `prefers-reduced-motion` the duration collapses to 0.001ms and the
+   * class comes off on the next frame, so the cloth is never seen to move and
+   * the rustle is what arrives. */
+  function swing(pad) {
+    var scene = pad.closest('.scene');
+    var coat = scene && scene.querySelector('.coat');
+    if (!coat || coat.classList.contains('is-swung')) return;
+
+    coat.classList.add('is-swung');
+    coat.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'cloak-swing') return;
+      coat.classList.remove('is-swung');
+      coat.removeEventListener('animationend', once);
+    });
+
+    /* Second, and never first — the rule the fire, the lamp, the stone, the
+     * bench and the bed all keep. The cloth is already on its way out by the
+     * time anything is asked of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.rustle === 'function') {
+      try { window.CabinSound.rustle(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -570,7 +658,9 @@
     pad = e.target.closest('.bench-touch');
     if (pad) { lean(pad); return; }
     pad = e.target.closest('.bed-touch');
-    if (pad) brush(pad);
+    if (pad) { brush(pad); return; }
+    pad = e.target.closest('.coat-touch');
+    if (pad) swing(pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -585,13 +675,15 @@
     var stonepad = (crown || fire || lamppad) ? null : e.target.closest('.stone-touch');
     var benchpad = (crown || fire || lamppad || stonepad) ? null : e.target.closest('.bench-touch');
     var bedpad = (crown || fire || lamppad || stonepad || benchpad) ? null : e.target.closest('.bed-touch');
-    if (!crown && !fire && !lamppad && !stonepad && !benchpad && !bedpad) return;
+    var coatpad = (crown || fire || lamppad || stonepad || benchpad || bedpad) ? null : e.target.closest('.coat-touch');
+    if (!crown && !fire && !lamppad && !stonepad && !benchpad && !bedpad && !coatpad) return;
     e.preventDefault();
     if (crown) shake(crown);
     else if (fire) prod(fire);
     else if (lamppad) lamp(lamppad);
     else if (stonepad) turn(stonepad);
     else if (benchpad) lean(benchpad);
-    else brush(bedpad);
+    else if (bedpad) brush(bedpad);
+    else swing(coatpad);
   });
 })();

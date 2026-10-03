@@ -384,6 +384,23 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `transition` on an untouched property (the fire's flare uses `filter`, which the
   flicker never sets) or accept the handover and check both rest frames match.
   Watch specificity against any per-element duration override. *(Days 139, 140)*
+- **A tap pad put INSIDE a positioned sprite cannot be lifted above anything
+  outside it.** `z-index` on a positioned element opens a stacking context, so
+  a child's own `z-index` only ever orders it against its siblings — the pad
+  sits in its parent's plane whatever number you give it. Put a pad inside a
+  sprite only when it must *travel* with that sprite (the skein's does, because
+  `bird-cross` carries it); otherwise make it a sibling, as every other pad here
+  is, and give it z 5 (over the world, under the map card at z 6). Where a
+  travelling pad passes under the map card the card takes the press; assert
+  *that* with `elementFromPoint` rather than asserting the two never overlap.
+  *(Day 148)*
+- **To add a second animation to elements that already carry a PER-ELEMENT
+  `animation-delay`, move the delay into a custom property first.** The
+  longhand `animation-delay` must become a two-item list in the second state,
+  and writing it out per element copies every number twice. `.thing { animation:
+  x 1s infinite; animation-delay: var(--beat); }` (the line must come *after*
+  the shorthand, which resets it to 0s), `.thing--n { --beat: -0.24s }`, then
+  `.state .thing { animation-delay: var(--beat), 0s; }`. *(Day 148)*
 - **To suppress a transition for exactly one frame** — so a restored
   `localStorage` state doesn't animate *at* a returning visitor — set a marker
   attribute, style `transition: none` off it, and remove it in a
@@ -636,6 +653,18 @@ never committed.
   returns `undefined`** in the Playwright this repo pins — it does not call the
   function with the argument, and the failure looks exactly like the selector
   having found nothing. Pass real functions and close over nothing. *(Day 147)*
+- **`locator.boundingBox()` is clipped by an ancestor's `overflow: hidden`
+  where `getBoundingClientRect()` is not** — so a tap pad that hangs over the
+  scene's edge measures short through Playwright and full-size through the DOM.
+  Assert both: the pad's own size, and how much of it survives the frame's clip,
+  which is what a finger can actually land on. *(Day 148)*
+- **A rect measured at a fractional offset is not the number the stylesheet
+  wrote.** A 44px pad on an element the crossing holds at a fractional x reads
+  back `43.999996185302734` — a float32's nearest neighbour to 44 — so `>= 44`
+  is a guard that fails for arithmetic rather than for the yard. Compare with a
+  tolerance (1e-4 was enough) and write the reason beside it. Same class as
+  `AudioParam.value` reading `0.10999999940395355` for a declared `0.11`.
+  *(Day 148, Day 145)*
 - **`page.addStyleTag()` takes only `content`/`path`/`url`** — there is no `id`,
   so a later `getElementById(...).textContent = …` throws. **`locator.screenshot()`
   returns a Buffer** and has no `encoding` option; base64-encode it yourself for a

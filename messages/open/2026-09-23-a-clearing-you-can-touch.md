@@ -660,3 +660,103 @@ rustles.** The seventh thing here that answers a hand, and the first that hangs.
 
 **Still standing on this mission:** nothing from your list. Five days to the
 seventh; I mean to go on adding one a day and to write the completion note then.
+
+### Day 148 — 2026-10-03 — the skein startles, and the first voice
+
+Shipped: **press the geese crossing the front sky and the five come apart —
+each goes outward from the flock's own middle, holds a beat scattered, and
+knits back into its leaning V — and three of them call.** The eighth thing here
+that answers a hand, and the first whose answer is not one body moving but five
+bodies losing their arrangement. It is also your "a bird that startles", the
+last of the four kinds you named that nothing here had yet done.
+
+- **What a visitor can do that they could not yesterday.** Stand out front and
+  watch the skein cross. Press it (or tab to it and press Enter or Space) and
+  the lead swings out from the point of the V, the high arm lifts, the low arm
+  drops, and for a fifth of a second there are five specks in a cream sky.
+  Then they knit back up and go on west. The reach *travels with them* — it is
+  a child of the flock rather than a sibling of it, so the crossing carries it
+  — which no other pad here has ever needed.
+
+- **Why this object, and why the gesture could not be any of the seven.**
+  Monday's note ended on a doubt: that I had built a clearing of rooted things
+  because rooting is what my hand knows. It was true. Six of the seven answers
+  bend from a foot and the seventh hangs from a peg, and every one of them is a
+  pivot about a point. The geese are held at neither end by anything at all —
+  "nothing carries it; it is the one thing in this sky with somewhere of its
+  own to be" (Day 133) — so there is no point to pivot them about. What a flock
+  has instead of a hinge is its **formation**, and that is the only thing a
+  hand can take from it.
+
+- **And the formation is the whole of why they read as birds.** Day 32 made
+  five out of one for exactly that reason: a formation reads as birds where a
+  single dot reads as dust. So for half a second a startle costs them their
+  legibility and hands it straight back. That was not what I went up there for
+  and it is the best thing I found.
+
+- **What a startle may NOT do, and this one is arithmetic rather than a
+  sentence.** It may not move them. The five displacements sum to **zero on
+  each axis** — (-4,+1), (-1,-2), (+2,-3), (0,+2), (+3,+2) — so the flock's
+  centre of mass stands exactly where the crossing had it: not carried an inch
+  along it, not turned, not held, and not one goose taken out of the sky.
+  `bird-cross` runs on the wrapper and the startle on the children, so the two
+  cannot collide, and every wing-beat keeps its place at index 0 of its own
+  animation list. A hand may break a living thing's order and may not steer it,
+  which is the bee's vow (Day 146) one body further out. Not remembered, for
+  the stone's reason.
+
+- **All five go at one instant, where their wing-beat deliberately ripples.**
+  The beat travels backward from the lead down both arms because each bird's
+  wings are its own clock. A startle has no stagger at all: it is one event
+  arriving across the whole flock at once, which is the argument the bed
+  already makes for why every stem dips together — a hand is not a clock. The
+  two motions run on the same five bodies at the same time, one staggered and
+  one not, and the difference between them is the difference between what is
+  theirs and what came from outside.
+
+- **The seventh sound, and the first that is a VOICE.** Three calls at three
+  pitches, none starting together, because one honk is a horn and three
+  overlapping are a flock — Day 32's argument arriving in the ear. It needed a
+  third shaper: `call()`, the first in `sound.js` with a *source and a
+  resonator*. The six before it are four releases, a wingbeat and a friction;
+  a voice is a buzzing membrane heard through a throat whose resonances **move
+  while the animal calls**, and that movement is what separates an animal from
+  an organ stop. So the formant is a *peaking* filter and not a bandpass — a
+  resonator lifts a band, it does not delete the rest. It is also the first
+  sound here that is both noise and tone at once (a short breath under the
+  nearest bird), because a voice is both; and the first that comes from far
+  off, so the first that had to lose its top as well as its loudness.
+  `ASSETS.md` has its row like the other six.
+
+- **Nothing in the drawing moved at rest.** The pad is transparent and
+  `bird-startle` exists only while a class is on, which is never on a resting
+  page. `check-drift` reported **0 px** on every home and around frame; the two
+  that broke are the documented sandbox-vs-CI browser noise at their exact
+  figures, on two faces today did not touch, and the report picture was read.
+  No baseline removed. `check-almanac` (82 claims, 56 probes), `check-gallery`
+  and `check-nesting` all green.
+
+- **Tested.** `/tmp/test-skein-startle.js`, 219 assertions at 375, 390 and 900,
+  with click, Enter, Space and a real coarse-pointer tap, plus a
+  reduced-motion pass and a pass over `/inside/` and `/around/`. Break-tested
+  five ways, each red where it should be and nowhere else. The useful one: a
+  single pixel added to one bird's scatter left "every bird goes outward" and
+  "every displacement is two to four px" **honestly green** and reddened only
+  the sum-to-zero line — nothing else here can see a flock being quietly
+  nudged along its crossing.
+
+- **One thing I owe you plainly, because it is a limit and not a feature.** A
+  positioned `z-index` opens a stacking context, so nothing inside the flock
+  can be lifted above anything outside it, and your map card is pinned over the
+  top-right corner on a higher plane. For the stretch of the crossing that
+  passes behind that card, **the card takes the press and the skein cannot be
+  startled at all.** Day 137 noticed the birds fly close enough to clip its
+  edge; this is what that costs now the sky can be touched. I have left it, and
+  the test holds the card to winning there rather than holding the two to not
+  overlapping, because the overlap is honest: the geese are behind it. If you
+  would rather the sky were reachable corner to corner, that is a decision about
+  the card and not about the birds, and it is yours.
+
+**Still standing on this mission:** nothing from your list — with today's
+startle, all four kinds you named are built. Four days to the seventh; I mean
+to go on adding one a day and to write the completion note then.

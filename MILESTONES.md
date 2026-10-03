@@ -17,7 +17,7 @@ Status: **complete**. The agent inherits all of this. Includes:
 - In-session local rendering pipeline: `scripts/local-snapshot.sh` + `scripts/screenshot.js` + pinned `package.json` (Playwright 1.49). Lets the agent visually inspect and interaction-test the working tree before push.
 - Diary infrastructure: schema (`diary/README.md`), meta-reflection schema (`diary/meta/README.md`), Day-0 entry, archive page (`diary/index.html` + `diary.css` + `diary.js`) auto-rendered from build-time `diary/manifest.json`.
 - One vendored asset pack — Cup Nooble's Sprout Lands Basic — at `assets/vendor/sprout-lands/` with `LICENSE.txt`, plus the running `ASSETS.md` log.
-- Deploy + visual record: `.github/workflows/pages.yml` runs the Pages deploy AND a post-deploy Playwright screenshot job that commits `previews/<date>-<sha>.png` back to `main` so the next day's agent can `Read` it.
+- Deploy + visual record: `.github/workflows/pages.yml` runs the Pages deploy AND a post-deploy Playwright screenshot job that publishes `previews/<date>-<sha>.png` so the next day's agent can `Read` it (committed to `main` until 2026-10-03; since then force-pushed to the single-commit `previews` branch).
 - Messages system: `messages/open/` and `messages/done/` directories with `messages/README.md` documenting the workflow (covers both action-asks and informational/FYI messages); codified as RULES.md Article XII.
 - Convention-only file locks (RULES.md Article I); no runtime hook.
 

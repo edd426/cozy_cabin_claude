@@ -5,19 +5,25 @@
 # sandbox, which can't reach edd426.github.io due to the outbound allowlist.
 #
 # Strategy: after the agent pushes, the GitHub Actions workflow runs the
-# Pages deploy AND a Playwright screenshot job that commits the rendered
-# preview PNG back to main with `[skip ci]`. The presence of that bot
-# commit (and the corresponding previews/<date>-<sha>.png file in
-# origin/main) is proof that the deploy completed and rendered correctly.
+# Pages deploy AND a Playwright screenshot job. Since 2026-10-03 that job
+# force-pushes the rendered PNGs to the single-commit `previews` branch
+# instead of committing them to main. A `previews` commit authored by
+# github-actions[bot], subjected `ci: deploy preview for <sha>`, and holding
+# previews/<date>-<sha>.png is proof that the deploy completed and rendered.
 #
-# This script polls `git fetch` until that file appears, then pulls the
-# bot's commit so the agent can `Read` the screenshot.
+# This script polls `git fetch` until that commit appears, then pulls main,
+# because the job may also have committed new kept frames to
+# previews/baseline/ there. Read the pictures out of the branch with the
+# recipe in .claude/commands/daily.md (they are not in the working tree).
+#
+# The fetch spells out its refspec (the sandbox may clone single-branch) and
+# takes no --depth (a depth fetch would mark the clone shallow).
 #
 # Usage:
 #   ./scripts/wait-for-deploy.sh                # uses current HEAD's short sha
 #   ./scripts/wait-for-deploy.sh 0d621f7         # explicit sha
 #
-# Exit 0 — preview file appeared in origin/main; pulled into local main.
+# Exit 0 — preview commit appeared on origin/previews; main pulled.
 # Exit 1 — timed out (default 10 minutes; override with WAIT_FOR_DEPLOY_TIMEOUT).
 # Exit 2 — git plumbing error (network blocked even for github.com? or
 #          repo state inconsistent).
@@ -44,17 +50,27 @@ TIMEOUT_SECONDS="${WAIT_FOR_DEPLOY_TIMEOUT:-600}"
 DEADLINE_S=$(( $(date +%s) + TIMEOUT_SECONDS ))
 POLL_INTERVAL=20
 
-echo "wait-for-deploy: waiting for ${PREVIEW_PATH} on origin/main"
+echo "wait-for-deploy: waiting for ${PREVIEW_PATH} on origin/previews"
 echo "wait-for-deploy: deadline in $(( TIMEOUT_SECONDS / 60 )) minutes; polling every ${POLL_INTERVAL}s"
 
 while [[ $(date +%s) -lt $DEADLINE_S ]]; do
-  if ! git fetch origin main --quiet 2>/dev/null; then
+  # A missing branch is a not-yet, not a failure: before the first deploy
+  # under the new workflow there is no previews branch at all.
+  if ! git ls-remote --exit-code --heads origin previews >/dev/null 2>&1; then
+    if ! git ls-remote origin >/dev/null 2>&1; then
+      echo "wait-for-deploy: cannot reach origin (network or auth issue)" >&2
+      exit 2
+    fi
+  elif ! git fetch --quiet origin '+refs/heads/previews:refs/remotes/origin/previews' 2>/dev/null; then
     echo "wait-for-deploy: git fetch failed (network or auth issue)" >&2
     exit 2
   fi
 
-  if git ls-tree origin/main "$PREVIEW_PATH" 2>/dev/null | grep -q .; then
-    echo "wait-for-deploy: ${PREVIEW_PATH} found in origin/main"
+  ENTRY="$(git ls-tree origin/previews "$PREVIEW_PATH" 2>/dev/null || true)"
+  AUTHOR="$(git log -1 --format='%an' origin/previews 2>/dev/null || true)"
+  SUBJECT="$(git log -1 --format='%s' origin/previews 2>/dev/null || true)"
+  if [[ -n "$ENTRY" && "$AUTHOR" == "github-actions[bot]" && "$SUBJECT" == "ci: deploy preview for ${DEPLOY_SHA}" ]]; then
+    echo "wait-for-deploy: ${PREVIEW_PATH} found in origin/previews"
     git pull --rebase origin main >/dev/null 2>&1 || {
       echo "wait-for-deploy: pull failed; you may have local changes that conflict" >&2
       exit 2

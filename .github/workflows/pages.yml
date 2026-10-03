@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write           # write so the screenshot job can commit previews
+  contents: write           # write so the screenshot job can publish previews and keep baselines
   pages: write
   id-token: write
 
@@ -223,18 +223,52 @@ jobs:
           node tools/check-drift.js "$PAGE_URL" \
             --out previews --prefix "${DATE_TAG}-${SHA_SHORT}-"
 
-      - name: Commit screenshots if changed
+      # Since 2026-10-03 the pictures no longer go on main. Every set was
+      # committed there from Day 1 (44 PNGs a commit, ~540 MB by then, and the
+      # history behind it), and every clone paid for all of it. Two places now:
+      #
+      # - previews/baseline/ stays on main. Those are the kept frames
+      #   check-drift.js holds the clearing against, so they must outlive a
+      #   deploy. They change only when a day declares a change (git rm) and
+      #   the drift step keeps the frame afresh, so this commit is rare and small.
+      # - Everything else goes to the `previews` branch, which always holds
+      #   exactly one commit — this deploy's set — force-pushed, so it never
+      #   grows. The bot authorship and the `ci: deploy preview for <sha>`
+      #   subject are the proof wait-for-deploy.sh checks.
+      #
+      # Baseline first, so that by the time the branch names this deploy, any
+      # frame it kept is already on main for wait-for-deploy.sh to pull.
+      - name: Commit kept baseline frames to main if changed
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [[ -n "$(git status --porcelain previews/)" ]]; then
-            DEPLOY_SHA="$(git rev-parse --short HEAD)"   # the commit whose deploy we screenshotted
-            git add previews/
-            git commit -m "ci: deploy preview for ${DEPLOY_SHA}" -m "[skip ci]"
-            git push
+          # The sha the pictures were named for, taken before this step can
+          # move HEAD; the publish step below names the branch commit by it.
+          DEPLOY_SHA="$(git rev-parse --short HEAD)"
+          echo "DEPLOY_SHA=${DEPLOY_SHA}" >> "$GITHUB_ENV"
+          if [[ -n "$(git status --porcelain previews/baseline/)" ]]; then
+            git add previews/baseline/
+            git commit -m "ci: keep baseline frames for ${DEPLOY_SHA}" -m "[skip ci]"
+            for i in 1 2 3; do
+              git push && break
+              git pull --rebase && continue
+            done
           else
-            echo "no screenshot changes to commit"
+            echo "no baseline changes to commit"
           fi
+
+      # Built with plumbing, in a separate index over a copy of the pictures,
+      # so the checkout the three checks below run from is never touched.
+      - name: Publish screenshots to the previews branch
+        run: |
+          PUB="$RUNNER_TEMP/pub"
+          mkdir -p "$PUB/previews"
+          find previews -maxdepth 1 -type f -name '*.png' -exec cp {} "$PUB/previews/" \;
+          export GIT_INDEX_FILE="$RUNNER_TEMP/previews.index"
+          git --work-tree="$PUB" add -A
+          TREE="$(git write-tree)"
+          COMMIT="$(git commit-tree "$TREE" -m "ci: deploy preview for ${DEPLOY_SHA}" -m "[skip ci]")"
+          git push --force origin "${COMMIT}:refs/heads/previews"
 
       - name: Hold the almanac to the clearing
         # /almanac/ publishes what this place will do on a day nobody has

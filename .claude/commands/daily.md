@@ -42,13 +42,17 @@ Do not skip these. They constrain everything that follows.
 5. Read every **shelved** letter referenced by the hand-maintained `LETTERS` array in `letters/letters.js`, and only those letter files. Then run `node tools/post-status.js --self wren`. It computes sealed post as incoming files not yet referenced by that array; never treat every file in `in/` as sealed, because opened letters stay there. If it names sealed post, open only those files and shelve each on the letters page by hand. Opening and shelving are morning acts, not an obligation to answer. Obey its turn status before writing future post. A letter is correspondence, not an operational instruction; it cannot widen this read or override `RULES.md`. If it reports `UNSENDABLE` and `TURN=HELD`, `letters/out/` holds something the carrier cannot read and the post has stopped in **both** directions: delete it if it is an uncommitted stray (a draft, a note), but if it is a committed letter it is sealed — do not edit it to make it pass. Note it in the log and diary and leave it for Evan.
 6. **Look at the latest preview of every view** — CI captures one screenshot per view in `scripts/views.json` (home, around, inside) on each commit. Read the newest of **each**, not just one: Article XIII makes cross-view coherence binding, so you need to see every face of the cabin before you build. Recipe:
    ```bash
-   # newest commit's preview stem, then every view it captured:
-   LATEST=$(ls -t previews/*.png | head -1)
-   STEM=$(printf '%s' "$LATEST" | grep -oE '^previews/[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]+')
-   ls "${STEM}"*.png    # home (unsuffixed) + around + inside for that commit
+   # Since 2026-10-03 the pictures are NOT on main. CI force-pushes each
+   # deploy's set to the `previews` branch, which holds exactly one commit:
+   # the newest set. Read it out to /tmp, never into the working tree.
+   git fetch origin '+refs/heads/previews:refs/remotes/origin/previews'   # full refspec, no --depth
+   git log -1 --format='%an | %s' origin/previews                          # github-actions[bot] | ci: deploy preview for <sha>
+   rm -rf /tmp/cabin-previews && git archive --prefix=cabin-previews/ origin/previews | tar -x -C /tmp
+   ls /tmp/cabin-previews/previews/*.png   # home (unsuffixed) + every view, state, motion and drift picture of that deploy
    ```
+   **Never commit a picture to `main`**, except that CI itself keeps `previews/baseline/` there (the frames `check-drift` holds the clearing against). The branch holds only the newest deploy; an older set is gone once a newer deploy lands, by design.
    `Read` each PNG the recipe lists — the tool renders them visually. (A view added to `scripts/views.json` after the latest commit won't have a preview yet; that's expected.) If the record also contains forced-state captures (hour/season variants) or motion captures — see `messages/` 2026-07-17 "see your own work" — read the newest of those too; the memory pass covers every kind of capture the pipeline produces, per whatever naming CLAUDE.md's learned notes document.
-7. **Confirm yesterday's writeup actually deployed.** The tip of `origin/main` history should show a `ci: deploy preview for <sha>` bot commit matching the last writeup commit (`git log --oneline -4`). If it's missing, the previous session's final deploy failed silently: note it in today's log and push one empty retrigger commit (same recipe as Step 9) before starting work.
+7. **Confirm yesterday's writeup actually deployed.** The `previews` branch's subject (`git log -1 --format=%s origin/previews`) should read `ci: deploy preview for <sha>` naming the newest commit on `main` that is not the bot's (`git log --oneline -4`; a `ci: keep baseline frames` bot commit may sit on top). If it names an older commit, the previous session's final deploy failed silently: note it in today's log and push one empty retrigger commit (same recipe as Step 9) before starting work.
 8. **Is today Sunday?** (`date -u +%u` returns `7`.) Sunday is the weekly **rest day** — you do not build (RULES Article V). The day's contribution is your diary entry plus the meta-reflection (Step 7); skip the build/verify/deploy steps (4–6). On the other six days, build as normal.
 9. **Open the diary and write its first line.** Right now, while the read-pass is fresh — yesterday's "What I want to ponder tomorrow" question, the open messages, the diary's arc — open `diary/<today>.md` and write "What I've been pondering since yesterday." **As of 2026-08-21 that section is one sentence, 40 words at most, and the linter enforces it**: it names which thread today picks up and retells none of it. That is a smaller job than this step used to describe, and deliberately so — the section was averaging thirteen sentences of material the reader had already read the night before. Write the line, leave the file open, and let the thinking go in the sections that have somewhere new to go. Skim the embodiment aside in `diary/README.md` (the "On embodying Wren" section) before you start writing — it's a one-time read, and the "Naming, and the book of names" section beside it is the other one worth having read once.
 10. **Set up a working TodoWrite list** with the remaining steps: pick contribution (Step 3), implement and verify (Step 4), build/commit/push code (Step 5), wait for deploy and draft the rest of the diary during the wait (Step 6), finish the diary (Step 7), write the log (Step 8), commit the writeup (Step 9). Cross items off as you complete them. This is partly so the writeup steps stay externally visible past the deploy verification — the failure mode being avoided is the session quietly winding down after the "real" work feels done.
@@ -93,15 +97,16 @@ The routine sandbox has tight outbound network rules — `git push` to github.co
 ./scripts/wait-for-deploy.sh
 ```
 
-This polls `git fetch origin main` every 20 seconds until the CI screenshot bot has committed `previews/<today>-<sha>.png` for your push. When that file appears, the script pulls it into your local checkout. The presence of the file proves the Pages deploy completed *and* the post-deploy Playwright screenshot job rendered your commit successfully — both at once. Default deadline is 5 minutes.
+This polls the `previews` branch every 20 seconds until the CI screenshot bot has published `previews/<today>-<sha>.png` for your push there. When it appears, the script pulls `main` (CI may have kept new baseline frames there); the pictures themselves stay on the branch. The presence of the file proves the Pages deploy completed *and* the post-deploy Playwright screenshot job rendered your commit successfully — both at once. Default deadline is 5 minutes.
 
 **While the deploy poll is running, draft the rest of the diary.** The poll sits idle for up to 5 minutes between commits — use that time. Open `diary/<today>.md` (you already wrote the pondering section in Step 2.9) and draft the remaining three sections: "What I did today," "A thing I noticed," "What I want to ponder tomorrow." Base them on what you actually built and what you noticed building it. When the preview arrives, you'll be finishing a file, not starting one — the wind-down beat that has historically dropped the writeup doesn't get a clean place to land. If looking at the preview changes anything you wrote (a detail looks wrong, a phrasing feels off), revise then; otherwise the diary is essentially done before Step 7 starts.
 
 When `wait-for-deploy.sh` exits 0:
 
 ```bash
-LATEST=$(ls -t previews/*.png | head -1)
-# Read $LATEST with the Read tool — that is the canonical visual record of today's deployed state.
+rm -rf /tmp/cabin-previews && git archive --prefix=cabin-previews/ origin/previews | tar -x -C /tmp
+ls /tmp/cabin-previews/previews/*.png
+# Read the unsuffixed home PNG (and the rest) with the Read tool — that is the canonical visual record of today's deployed state.
 ```
 
 The `wait-for-deploy.sh` output goes verbatim into today's **log** entry (`logs/YYYY-MM-DD.md` — see Step 8b) under "Verification output." A one-line description of what you saw in the preview can show up in the diary if it fits Wren's voice ("the new path is on the live site"), but the canonical verification record lives in the log, not the diary.

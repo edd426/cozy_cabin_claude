@@ -263,7 +263,12 @@ jobs:
         run: |
           PUB="$RUNNER_TEMP/pub"
           mkdir -p "$PUB/previews"
-          find previews -maxdepth 1 -type f -name '*.png' -exec cp {} "$PUB/previews/" \;
+          # This deploy's pictures only, by sha: anything else in previews/
+          # (an older set, a stray) is not this deploy's to vouch for.
+          find previews -maxdepth 1 -type f -name "*-${DEPLOY_SHA}*.png" -exec cp {} "$PUB/previews/" \;
+          COUNT="$(find "$PUB/previews" -type f | wc -l)"
+          echo "publishing ${COUNT} pictures for ${DEPLOY_SHA}"
+          [[ "$COUNT" -gt 0 ]] || { echo "no pictures for ${DEPLOY_SHA}; not publishing" >&2; exit 1; }
           export GIT_INDEX_FILE="$RUNNER_TEMP/previews.index"
           git --work-tree="$PUB" add -A
           TREE="$(git write-tree)"

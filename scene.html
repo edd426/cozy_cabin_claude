@@ -300,12 +300,27 @@
     <span class="mailbox__name"></span>
   </a>
 
-  <span class="sprite sprite--birds" aria-hidden="true">
-    <span class="bird bird--1"></span>
-    <span class="bird bird--2"></span>
-    <span class="bird bird--3"></span>
-    <span class="bird bird--4"></span>
-    <span class="bird bird--5"></span>
+  <!-- A skein of five geese crossing the sky (Day 21 as one bird, Day 32 as
+       five). Day 148 (2026-10-03): they can be STARTLED. The five cells are
+       `aria-hidden` individually now rather than the wrapper being hidden
+       whole, because the reach inside it has to be reachable — a focusable
+       thing inside an `aria-hidden` subtree is a thing shut out of, which is
+       the line the path stone's pad drew on Day 144. -->
+  <span class="sprite sprite--birds">
+    <span class="bird bird--1" aria-hidden="true"></span>
+    <span class="bird bird--2" aria-hidden="true"></span>
+    <span class="bird bird--3" aria-hidden="true"></span>
+    <span class="bird bird--4" aria-hidden="true"></span>
+    <span class="bird bird--5" aria-hidden="true"></span>
+
+    <!-- THE REACH, and the only pad in this place that travels. It is a CHILD
+         of the flock rather than a sibling of it, so `bird-cross` carries it
+         across the sky with the birds and a hand finds them wherever they have
+         got to. Transparent; the drawing is untouched. See scene.css for the
+         scatter, for why the five displacements sum to nothing, and for the one
+         stretch of the crossing a hand cannot reach. -->
+    <span class="birds-touch" role="button" tabindex="0"
+          aria-label="startle the skein of five geese crossing the sky"></span>
   </span>
 
   <!-- Fireflies in the front yard (Day 52, 2026-06-29): the front face's own

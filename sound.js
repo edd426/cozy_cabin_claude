@@ -60,6 +60,15 @@
  * event has a moment in it you could point at. Friction has none, so the
  * envelope is the whole of the difference and the sound is its shape.
  *
+ * Day 148 (2026-10-03) adds the seventh, `honk()`, and with it the third
+ * shaper: `call()`, a source AND a resonator. `tone()` is a buzzing membrane
+ * with its top rolled off; a voice is a buzzing membrane heard through a
+ * throat whose resonances MOVE while the animal calls, and that movement is
+ * what separates an animal from an organ stop. It is also the first sound here
+ * that is both noise and tone at once, because a voice is turbulent air
+ * driving something that vibrates — and the first that comes from far off, so
+ * the first that had to lose its top as well as its loudness.
+ *
  * Day 146 (2026-10-01) adds the fifth, `buzz()`, and with it the one exception
  * to the paragraph above: it is not cut from the noise buffer, because it is
  * not a thing letting go. The four before it are a pocket of coal, a catch, a
@@ -259,6 +268,70 @@
 
     src.start(t, Math.random() * maxOffset, dur + 0.02);
     src.stop(t + dur + 0.02);
+  }
+
+  /* One call: an oscillator through a MOVING FORMANT, and then through the
+   * distance.
+   *
+   * `tone()` above is a source with the top taken off it. This is the first
+   * thing in the file with a source AND a resonator, which is what a voice
+   * physically is: a membrane buzzing in a throat (broadband, harmonically
+   * rich, and on its own just a rude noise), shaped on its way out by a tube
+   * whose resonances move while the animal calls. That movement is the whole of
+   * why a call reads as an animal rather than as a note — a fixed filter on a
+   * sawtooth is an organ stop; a filter that opens and shuts is a throat.
+   *
+   * So the formant is a PEAKING filter and not a bandpass. A resonator does not
+   * delete the bands it is not resonating at, it lifts the one it is, and a
+   * bandpass here would take the fundamental out from under the call and leave
+   * it thin. `fm0` → `fm1` → back is the throat opening on the stressed
+   * syllable and closing again.
+   *
+   * `far` is the second filter and belongs to the sky rather than to the bird.
+   * These are the first things here that make a sound from a long way off —
+   * everything before was within arm's reach, because an arm is what reached it
+   * — and distance is a lowpass: air absorbs the top of a sound before it
+   * absorbs the bottom, which is why far-off things sound dull as well as
+   * quiet. A goose is loud; this one is simply not nearby.
+   */
+  function call(c, at, dur, gain, f0, f1, fm0, fm1, far) {
+    var t = c.currentTime + at;
+    var g = Math.max(0.0002, gain);
+
+    var osc = c.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(f0, t);
+    osc.frequency.linearRampToValueAtTime(f1, t + dur * 0.30);
+    osc.frequency.linearRampToValueAtTime(f1 * 0.88, t + dur);
+
+    var formant = c.createBiquadFilter();
+    formant.type = 'peaking';
+    formant.Q.value = 1.6;
+    formant.gain.value = 14;
+    formant.frequency.setValueAtTime(fm0, t);
+    formant.frequency.linearRampToValueAtTime(fm1, t + dur * 0.35);
+    formant.frequency.linearRampToValueAtTime(fm0, t + dur);
+
+    var air = c.createBiquadFilter();
+    air.type = 'lowpass';
+    air.frequency.value = far;
+    air.Q.value = 0.7;
+
+    /* A call has a bark on the front of it and a fall off the back: up in
+     * eighteen milliseconds, held past the middle, then gone. */
+    var env = c.createGain();
+    env.gain.setValueAtTime(0.0001, t);
+    env.gain.exponentialRampToValueAtTime(g, t + 0.018);
+    env.gain.setValueAtTime(g, t + dur * 0.55);
+    env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+    osc.connect(formant);
+    formant.connect(air);
+    air.connect(env);
+    env.connect(master);
+
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
   }
 
   /* ── the fire's crack ─────────────────────────────────────────────────────
@@ -518,6 +591,47 @@
     return 5;
   }
 
+  /* ── the skein's honk (Day 148, 2026-10-03) ──────────────────────────────
+   *
+   * Five geese startled out of their formation. The seventh sound here and the
+   * first that is a VOICE — see `call()` above for the source-and-resonator it
+   * needed and why no shaper already in this file could have made one.
+   *
+   * It is also the first that is BOTH noise and tone, in one breath, and that
+   * is not a flourish: a voice is turbulent air driven through something that
+   * vibrates, so there is a hiss of breath at the front of every call and a
+   * pitch behind it. Everything here before now is one or the other — four
+   * releases and a rustle cut from noise, a wingbeat built from oscillators.
+   * The single short `burst` below is that breath, under the nearest bird only.
+   *
+   * THREE BIRDS AND NOT ONE, which is Day 32's whole argument arriving in the
+   * ear. One mark in that sky read as dust and five read as geese; one honk is
+   * a horn and three overlapping honks, at three pitches, out of step, are a
+   * flock. The second is lower (a bigger bird) and the third higher and
+   * quieter (further back down the V), and none of them starts when another
+   * does — a startled skein does not call in chorus.
+   *
+   * Over inside half a second, well under rule 2, and gone before the five
+   * have knitted back up. Rule 4 is kept by the formation itself: it visibly
+   * splays and re-forms, which a silent visitor gets in full.
+   *
+   * Returns the number of sources started — always 4 (three oscillators and
+   * one slice of noise), or 0 with no context. */
+  function honk() {
+    var c = context();
+    if (!c) return 0;
+
+    /* The breath, under the first call only. */
+    burst(c, 0, 0.07, 0.05, 'bandpass', 900, 0.8);
+
+    var f = 292 + Math.random() * 26;
+    call(c, 0,    0.21, 0.135, f,        f * 1.18, 620, 1320, 2400);
+    call(c, 0.12, 0.23, 0.105, f * 0.84, f * 1.02, 540, 1150, 2200);
+    call(c, 0.30, 0.19, 0.075, f * 1.11, f * 1.26, 700, 1430, 2000);
+
+    return 4;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -529,6 +643,7 @@
     creak: creak,
     buzz: buzz,
     rustle: rustle,
+    honk: honk,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

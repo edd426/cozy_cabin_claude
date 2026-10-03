@@ -2760,6 +2760,11 @@
     -1px -1px 0 var(--c-wood-dark),  /* left wing tip, row -1 col -1 */
      4px -1px 0 var(--c-wood-dark);  /* right wing tip, row -1 col 4 */
   animation: bird-flap 0.36s infinite;
+  /* The per-bird beat offset, lifted out of `.bird--N` into a custom property
+   * on Day 148 so the startle below can extend `animation-delay` to a two-item
+   * list without five hand-copied numbers going stale in it. The shorthand
+   * above resets `animation-delay` to 0s, so this line must stay after it. */
+  animation-delay: var(--beat);
 }
 
 /* Wing-beat: snap between the up-stroke (A, tips at row -1) and the
@@ -2802,11 +2807,15 @@
 /* The beat, rippling backward from the lead bird down both arms — see the note
  * above for why the spread is 0.444 of a round and not less. Offsets, as
  * fractions of the 0.36s beat: --1 .667, --4 .556, --2 .444, --5 .333, --3 .222. */
-.bird--1 { left:  0;    bottom:  8px; animation-delay: -0.24s; }
-.bird--2 { left:  8px;  bottom: 12px; animation-delay: -0.16s; }
-.bird--3 { left: 16px;  bottom: 16px; animation-delay: -0.08s; }
-.bird--4 { left:  9px;  bottom:  4px; animation-delay: -0.20s; }
-.bird--5 { left: 18px;  bottom:  1px; animation-delay: -0.12s; }
+/* `--scatter-x` / `--scatter-y` are the startle's, and belong here rather than
+ * in the keyframes because each is a fact about where that bird STANDS in the
+ * formation — see the Day-148 note below `bird-cross` for how they were got
+ * and why the five of them add up to nothing. */
+.bird--1 { left:  0;    bottom:  8px; --beat: -0.24s; --scatter-x: -4px; --scatter-y:  1px; }
+.bird--2 { left:  8px;  bottom: 12px; --beat: -0.16s; --scatter-x: -1px; --scatter-y: -2px; }
+.bird--3 { left: 16px;  bottom: 16px; --beat: -0.08s; --scatter-x:  2px; --scatter-y: -3px; }
+.bird--4 { left:  9px;  bottom:  4px; --beat: -0.20s; --scatter-x:  0px; --scatter-y:  2px; }
+.bird--5 { left: 18px;  bottom:  1px; --beat: -0.12s; --scatter-x:  3px; --scatter-y:  2px; }
 
 /* One migrating pass: the skein enters off the right edge, crosses, and exits
  * off the left. The horizontal offset decreases monotonically (360 -> -380) so
@@ -2820,6 +2829,129 @@
   50%  { transform: translate(   0px,   2px); }
   75%  { transform: translate(-190px,  -6px); }
   100% { transform: translate(-380px,   4px); }
+}
+
+/* ── THE STARTLE (Day 148, 2026-10-03) ────────────────────────────────────
+ *
+ * The eighth thing in this clearing that answers a hand, and the first whose
+ * answer is not one body moving but five bodies losing their arrangement.
+ *
+ * WHY THESE. Everything a hand has reached here is rooted at its foot — a
+ * crown bends from its trunk, a stem dips on its stalk, a board gives at the
+ * seat, a stone pivots on its base — except the cloak, which is pinned at the
+ * top (inside.css, Day 147). That morning's note ended wondering whether this
+ * is "a world of feet because feet are what I know how to draw". The skein is
+ * the answer standing in plain sight: five bodies held at neither end, by
+ * nothing at all, the only things out here whose going anywhere is their own
+ * (diary 2026-09-18: "Nothing carries it. It is the one thing in this sky with
+ * somewhere of its own to be"). So the gesture could not be a pivot about any
+ * point, because there is no point to pivot about. What a flock has instead of
+ * a hinge is a FORMATION, and that is what a startle takes.
+ *
+ * AND THE FORMATION IS THE WHOLE REASON THEY READ AS BIRDS. Day 32 made five
+ * out of one for exactly that: "a formation reads as birds where a single dot
+ * reads as dust". So for half a second a startle costs them their legibility —
+ * they splay into five specks and knit back into geese, and the thing a hand
+ * can briefly take is the only thing that makes them anything.
+ *
+ * THE SCATTER, and the arithmetic in it. Each bird goes OUTWARD from the
+ * flock's own middle, which sits at (11px, 9.5px up) in the wrapper's local
+ * coordinates — so the lead at the point of the V goes left, the high arm goes
+ * up-and-right, the low arm goes down-and-right. Two to four native px, at both
+ * scales, because a bird is five by two at both.
+ *
+ * The five displacements SUM TO ZERO on each axis (-4-1+2+0+3 = 0 across,
+ * 1-2-3+2+2 = 0 down), and that is the vow written as arithmetic rather than as
+ * a sentence: the flock's centre of mass does not move. A HAND MAY BREAK THEIR
+ * ORDER AND MAY NOT MOVE THE FLOCK. They are crossing, westward, into the one
+ * wind this place has (Day 133), and a tap may not carry them an inch along
+ * that crossing, hold them, turn them or take one out of the sky — the same
+ * shape as a prod that may not feed the fire (Day 140), a turn that may not
+ * move a stone (Day 144), a lean that may not wear the bench (Day 145) and a
+ * brush that may not direct the bee (Day 146).
+ *
+ * THE CROSSING GOES ON UNDERNEATH, by the Day-146 mechanism and for the Day-146
+ * reason: `bird-cross` runs on the WRAPPER and the startle on the five
+ * CHILDREN, so the two cannot collide at all — and each child's own
+ * `bird-flap` is left at index 0 of its animation list, with `bird-startle`
+ * added as a second entry in the longhands, because the `animation` shorthand
+ * would reset `animation-name` and stop the beat dead (Day 140, the fire's
+ * flare). The wings never miss a stroke while the flock comes apart.
+ *
+ * ALL FIVE SCATTER AT ONCE, where the wing-beat deliberately does not. The
+ * beat ripples backward from the lead bird down both arms, because each bird's
+ * wings are its own clock and five marks snapping together is a strobe. A
+ * startle has no stagger at all: it is ONE EVENT ARRIVING ACROSS THE WHOLE
+ * FLOCK AT ONE INSTANT, which is the argument the bed already makes for why
+ * every stem dips together — "a hand is not a clock". The two motions run on
+ * the same five bodies at the same time, one staggered and one not, and the
+ * difference between them is exactly the difference between what is theirs and
+ * what came from outside.
+ *
+ * NO RING BACK THROUGH REST. A crown is displaced and let go, so it rings; a
+ * goose is under her own power the whole way and has no rest to ring through —
+ * the bee's distinction (Day 146), spent here. Out in an eighth of a second,
+ * held splayed for a fifth, and the better part of half a second to knit back
+ * up: the timing functions sit INSIDE the keyframes, because a function is
+ * applied between each PAIR of them (Day 147) and the fling and the re-forming
+ * are not the same motion.
+ *
+ * REDUCED MOTION. The scatter collapses as every duration here does, and the
+ * honk arrives whole — the cloak's arrangement rather than the bench's, since
+ * a startled flock is as much a noise as it is a shape. */
+@keyframes bird-startle {
+  0%   { translate: 0 0;
+         animation-timing-function: ease-out; }     /* flung apart */
+  18%  { translate: var(--scatter-x) var(--scatter-y); }
+  40%  { translate: var(--scatter-x) var(--scatter-y);
+         animation-timing-function: ease-in-out; }  /* and knitting back */
+  100% { translate: 0 0; }
+}
+.sprite--birds.is-startled .bird {
+  animation-name: bird-flap, bird-startle;
+  animation-duration: 0.36s, 0.72s;
+  animation-timing-function: ease, linear;
+  animation-iteration-count: infinite, 1;
+  animation-delay: var(--beat), 0s;
+}
+
+/* THE REACH, and the only one in this place that travels. Every other pad here
+ * lies over a thing that stays where it was put; this one is a child of the
+ * flock, so `bird-cross` carries it along and a hand finds the skein wherever
+ * it has got to in its forty seconds.
+ *
+ * Centred on the formation's own middle (11px across, 9px up) and exactly
+ * `--tap-min` square — the bird offsets are fixed native px at both scales, so
+ * this needs no mobile rebase and `min-width` would have nothing to widen.
+ *
+ * NO z-index, and that is a finding rather than an omission. `.sprite--birds`
+ * is positioned with `z-index: 3`, so it opens a stacking context, and nothing
+ * inside it can be lifted above anything outside it — the pad sits in the
+ * flock's own plane whatever number it is given. The one thing out here above
+ * that plane is the map card (z-index 6) in the top-right corner, and Day 137
+ * noticed the birds cross close enough to clip its edge. So for the stretch of
+ * the crossing that passes behind the card, the card takes the tap and the
+ * skein cannot be reached. That is the honest answer: the geese are behind it.
+ *
+ * `cursor: pointer`, like six of the other seven — the unsignposted thing in
+ * this yard is the path stone (Day 144) and one is enough. What is unannounced
+ * here is smaller and is in the drawing: nothing says a formation is a thing
+ * that can be taken from them. */
+.birds-touch {
+  position: absolute;
+  display: block;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  left: calc(11px - var(--tap-min) / 2);
+  bottom: calc(9px - var(--tap-min) / 2);
+  width: var(--tap-min);
+  height: var(--tap-min);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.birds-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
 }
 
 /* ── Fireflies (Day 52, 2026-06-29) ────────────────────────────────────────

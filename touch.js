@@ -303,6 +303,43 @@
  * bench (whose answer is mostly a noise): a cloth both moves and sounds, and
  * neither half is the smaller one.
  *
+ * ── Day 148 (2026-10-03): THE SKEIN, AND THE FIRST ANSWER THAT IS NOT ONE
+ * BODY MOVING ─────────────────────────────────────────────────────────────
+ *
+ * The eighth thing that answers a hand. A `.birds-touch` pad rides WITH the
+ * flock — it is a child of `.sprite--birds`, so the crossing carries it — and
+ * on a press `.sprite--birds` takes `is-startled` for one round: the five
+ * geese splay out of their V, hold a beat scattered, and knit back up, while
+ * every one of them goes on beating its wings and the skein goes on crossing.
+ * And `sound.js` is asked for a honk.
+ *
+ * WHY THIS, AND WHY THE GESTURE IS NEW. Yesterday's note ends on a doubt about
+ * whether this is "a world of feet because feet are what I know how to draw".
+ * Seven answers stand: six rooted at the foot and one hung from the top, and
+ * every one of them a pivot. The skein is held at neither end by anything at
+ * all, so there is no point to pivot about — what a flock has instead of a
+ * hinge is its FORMATION, and that is the only thing a hand can take from it.
+ * scene.css carries the scatter, the arithmetic that keeps the flock's centre
+ * of mass still, and why all five go at one instant where their wing-beat
+ * deliberately ripples.
+ *
+ * WHAT A STARTLE MAY NOT DO. It may not move them. The five displacements sum
+ * to nothing on each axis, so the flock's middle stands exactly where the
+ * crossing had it; `bird-cross` is on the wrapper and untouched; no goose is
+ * taken out of the sky, turned, held or hurried along. A hand may break a
+ * living thing's order and may not steer it, which is the bee's vow (Day 146)
+ * one body further out. And it is not remembered, for the stone's reason: a
+ * skein found already scattered would be telling an arrival that somebody had
+ * been here.
+ *
+ * WHERE A HAND CANNOT REACH THEM, which is the day's own small finding. A
+ * positioned `z-index` opens a stacking context, so nothing inside the flock
+ * can be lifted above anything outside it, and the map card is pinned over the
+ * top-right corner at a higher plane. For the stretch of the crossing that
+ * passes behind that card, the card takes the press and the geese cannot be
+ * startled at all. Day 137 noticed they fly close enough to clip its edge; this
+ * is what that costs once the sky can be touched.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -631,6 +668,44 @@
     }
   }
 
+  /* ── the skein (Day 148) ─────────────────────────────────────────────────
+   *
+   * One startle at a time, the rule every pad in this file keeps, and here it
+   * stops a fast tapper holding five geese permanently splayed — a skein that
+   * never knits back up, which is the one thing a startle may not leave
+   * behind, since the formation is the whole of what makes them birds.
+   *
+   * The class goes on the FLOCK and the animation runs on its five children,
+   * so five `animationend` events arrive for one startle. They share a
+   * duration and a start instant, so the first to end is the end; the handler
+   * takes the first that names `bird-startle` and unsubscribes, the same check
+   * the bench, the bed and the cloak make for the same reason. The name matters
+   * more than usual here: `bird-cross` on the wrapper and `bird-flap` on each
+   * child are both infinite and neither ever ends today, but a later day that
+   * gave either an end would otherwise strip the startle off a flock still
+   * coming apart.
+   *
+   * Under `prefers-reduced-motion` the duration collapses to 0.001ms, the class
+   * comes off on the next frame, and the honk is what arrives. */
+  function startle(pad) {
+    var skein = pad.closest('.sprite--birds');
+    if (!skein || skein.classList.contains('is-startled')) return;
+
+    skein.classList.add('is-startled');
+    skein.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'bird-startle') return;
+      skein.classList.remove('is-startled');
+      skein.removeEventListener('animationend', once);
+    });
+
+    /* Second, and never first — the rule every answer in this file keeps. The
+     * formation is already coming apart by the time anything is asked of the
+     * audio. */
+    if (window.CabinSound && typeof window.CabinSound.honk === 'function') {
+      try { window.CabinSound.honk(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -645,22 +720,38 @@
     lampPaint(scene, pad, lampStored(), true);
   })();
 
+  /* Every pad in this place, and what each one answers with. Pads never nest,
+   * so at most one of these can match any one target and the order is only a
+   * tiebreak that never happens — but it is the order they were built in, so
+   * the list reads as the record does.
+   *
+   * It is a table rather than a chain of ifs because until Day 148 the two
+   * listeners below said the same thing twice, once as early returns and once
+   * as eight nested ternaries, and an eighth thing that answers a hand would
+   * have made the second of those unreadable. One list, read by both. */
+  var PADS = [
+    ['.crown-touch',  shake],
+    ['.fire-touch',   prod],
+    ['.lamp-touch',   lamp],
+    ['.stone-touch',  turn],
+    ['.bench-touch',  lean],
+    ['.bed-touch',    brush],
+    ['.coat-touch',   swing],
+    ['.birds-touch',  startle]
+  ];
+
+  function padFor(target) {
+    if (!target || !target.closest) return null;
+    for (var i = 0; i < PADS.length; i++) {
+      var pad = target.closest(PADS[i][0]);
+      if (pad) return { pad: pad, answer: PADS[i][1] };
+    }
+    return null;
+  }
+
   document.addEventListener('click', function (e) {
-    if (!e.target.closest) return;
-    var pad = e.target.closest('.crown-touch');
-    if (pad) { shake(pad); return; }
-    pad = e.target.closest('.fire-touch');
-    if (pad) { prod(pad); return; }
-    pad = e.target.closest('.lamp-touch');
-    if (pad) { lamp(pad); return; }
-    pad = e.target.closest('.stone-touch');
-    if (pad) { turn(pad); return; }
-    pad = e.target.closest('.bench-touch');
-    if (pad) { lean(pad); return; }
-    pad = e.target.closest('.bed-touch');
-    if (pad) { brush(pad); return; }
-    pad = e.target.closest('.coat-touch');
-    if (pad) swing(pad);
+    var hit = padFor(e.target);
+    if (hit) hit.answer(hit.pad);
   });
 
   /* Everything a real <button> would have given for free, minus the layout it
@@ -668,22 +759,9 @@
    * is given). Space scrolls the page if it is not swallowed. */
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
-    if (!e.target.closest) return;
-    var crown = e.target.closest('.crown-touch');
-    var fire = crown ? null : e.target.closest('.fire-touch');
-    var lamppad = (crown || fire) ? null : e.target.closest('.lamp-touch');
-    var stonepad = (crown || fire || lamppad) ? null : e.target.closest('.stone-touch');
-    var benchpad = (crown || fire || lamppad || stonepad) ? null : e.target.closest('.bench-touch');
-    var bedpad = (crown || fire || lamppad || stonepad || benchpad) ? null : e.target.closest('.bed-touch');
-    var coatpad = (crown || fire || lamppad || stonepad || benchpad || bedpad) ? null : e.target.closest('.coat-touch');
-    if (!crown && !fire && !lamppad && !stonepad && !benchpad && !bedpad && !coatpad) return;
+    var hit = padFor(e.target);
+    if (!hit) return;
     e.preventDefault();
-    if (crown) shake(crown);
-    else if (fire) prod(fire);
-    else if (lamppad) lamp(lamppad);
-    else if (stonepad) turn(stonepad);
-    else if (benchpad) lean(benchpad);
-    else if (bedpad) brush(bedpad);
-    else swing(coatpad);
+    hit.answer(hit.pad);
   });
 })();

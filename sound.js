@@ -334,6 +334,50 @@
     osc.stop(t + dur + 0.02);
   }
 
+  /* One mode: a sine that is given all its energy at once and spends the rest
+   * of its life giving it back.
+   *
+   * This is the fourth shaper and the first whose envelope has NO ATTACK worth
+   * the name. Every other sound in this file is something happening over time
+   * and so has a rise in it — `burst()` reaches its peak in three milliseconds
+   * (that rise is what makes a crack a crack), `swell()` takes better than a
+   * third of its life (that absence of a moment is what makes a rustle a
+   * rustle), `tone()` and `call()` each come on over a hundredth of a second
+   * and hold. A STRUCK body does none of that. It receives everything it will
+   * ever have in the instant of the strike and is decaying from that instant
+   * on, which is why the only number here is a decay. Two milliseconds is not
+   * an attack, it is the shortest a loudspeaker can honestly be asked to do; a
+   * hard step to full value is a click, and a click is a different sound.
+   *
+   * A sine and not a sawtooth, which is the other half of it. A sawtooth is a
+   * thing being driven — a wing, a throat — and carries a stack of harmonics
+   * because something is still putting energy in. Nothing is putting energy
+   * into a struck glass; what is left after the strike is the few shapes that
+   * particular piece of glass is able to hold, each a pure tone of its own
+   * frequency dying at its own rate. So a ring is not one sound with overtones.
+   * It is a handful of separate notes, and `ring()` below schedules them as
+   * such, which is why the upper ones are given shorter lives: a thin high mode
+   * loses its energy faster than the body of the glass does. */
+  function mode(c, at, dur, gain, freq) {
+    var t = c.currentTime + at;
+    var g = Math.max(0.0002, gain);
+
+    var osc = c.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+
+    var env = c.createGain();
+    env.gain.setValueAtTime(0.0001, t);
+    env.gain.exponentialRampToValueAtTime(g, t + 0.002);
+    env.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+
+    osc.connect(env);
+    env.connect(master);
+
+    osc.start(t);
+    osc.stop(t + dur + 0.02);
+  }
+
   /* ── the fire's crack ─────────────────────────────────────────────────────
    *
    * Two things layered, and they are two different physical events:
@@ -632,6 +676,70 @@
     return 4;
   }
 
+  /* ── the glass's ring (Day 150, 2026-10-05) ──────────────────────────────
+   *
+   * The small tumbler on the window's sill, tapped. The eighth sound here and
+   * the exact complement of the third: Day 144 wrote of the path stone that it
+   * is "a dead sound… it has no ring at all, because nothing in the collision
+   * is free to vibrate." A glass is the other end of that sentence. Almost all
+   * of it is free to vibrate and almost none of it is anything else, which is
+   * the whole reason a tumbler is the one object in this room that answers in a
+   * NOTE rather than in a noise.
+   *
+   * So it is the first thing in this file with a definite pitch you could sing
+   * back. The bee has a pitch but she is a thing running, smeared by two
+   * sawtooths beating against each other on purpose; the geese have pitch but
+   * it is a voice, a source dragged through a moving throat. This is three
+   * clean modes of one small hard hollow thing — see `mode()` above for why a
+   * struck body needs a shaper with no attack in it.
+   *
+   * The partials are inharmonic and deliberately so. A string or a pipe divides
+   * its length into halves and thirds, so its overtones land on whole multiples
+   * and the ear fuses them into one note with a timbre. A shell does not divide
+   * like that, so a glass's modes land at awkward ratios — near 2.7 and 5.2 of
+   * the body here — and never quite fuse, which is exactly what tells the ear
+   * *glass* rather than *flute*. Whole multiples would have made this a tin
+   * whistle on a windowsill.
+   *
+   * THE QUIETEST PEAK IN THE FILE, at 0.048 against the stone's 0.42, and that
+   * is not timidity either. A filtered noise burst spends its energy across the
+   * spectrum and the ear gets a fraction of it at any one place; a sine puts
+   * every bit of what it has in one band and wastes nothing, so the same number
+   * would be several times louder. The row these eight sounds stand in has to
+   * go on saying something true about eight objects (Day 144), and a tumbler is
+   * a small thing.
+   *
+   * IT OUTLIVES ITS OWN MOTION, which is new here and is the day's finding.
+   * 0.82 seconds against the 0.34s of `glass-ring` in inside.css: every other
+   * sound in this file is over inside the gesture it belongs to, and this one
+   * goes on for half a second after the glass has visibly stopped. That is not
+   * a liberty — it is what a drawing one pixel wide at its smallest step cannot
+   * say and a sound can. Still inside rule 2.
+   *
+   * Rule 4 is kept by the object: the tumbler visibly quivers where it stands,
+   * which a silent visitor gets in full.
+   *
+   * Returns the number of sources started — always 4 (three oscillators and the
+   * one slice of noise that is the strike), or 0 with no context. */
+  function ring() {
+    var c = context();
+    if (!c) return 0;
+
+    /* The strike itself — knuckle or nail meeting glass. Twelve milliseconds
+     * of very high noise and gone: it is not part of the ring, it is the event
+     * that starts it, and a ring with no strike on the front reads as a tone
+     * someone faded up. */
+    burst(c, 0, 0.012, 0.10, 'highpass', 4200, 0.7);
+
+    /* The body, and two thinner modes above it that die sooner. */
+    var f = 1180 + Math.random() * 90;
+    mode(c, 0,      0.80, 0.048, f);
+    mode(c, 0.001,  0.26, 0.028, f * 2.71);
+    mode(c, 0.0015, 0.14, 0.015, f * 5.18);
+
+    return 4;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -644,6 +752,7 @@
     buzz: buzz,
     rustle: rustle,
     honk: honk,
+    ring: ring,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

@@ -192,7 +192,8 @@
  *
  * Exit 0 if every claim held, 1 if any parted company with the yard (or if the
  * page could not be read at all). CI runs it as the last step of the screenshot
- * job — after the previews are committed, so a red check can never cost the
+ * job — after the pictures are published to the `previews` branch (2026-10-03;
+ * they were committed to main before that), so a red check can never cost the
  * record a picture, and loud, because a claim the clearing no longer keeps is
  * worse than no claim.
  */

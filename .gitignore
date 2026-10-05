@@ -19,6 +19,16 @@ node_modules/
 # Logs.
 *.log
 
+# Deploy pictures (Evan's 2026-10-03 note, "The pictures leave main"). CI
+# publishes each deploy's set to the `previews` BRANCH; nothing but
+# previews/baseline/ belongs on main, and this is the belt to that braces:
+# a picture dropped in the working tree by accident cannot be committed back.
+# `*` does not match `/`, so this pattern catches previews/<date>-<sha>*.png
+# and leaves previews/baseline/*.png — one level deeper — alone, which is why
+# there is no negation under it and why CI's `git add previews/baseline/` is
+# unaffected.
+previews/*.png
+
 # Project-local Claude Code overrides (per-user, not shared).
 .claude/settings.local.json
 

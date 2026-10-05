@@ -157,10 +157,15 @@ const { chromium } = require('playwright');
 
 const DEFAULT_BASE = 'https://edd426.github.io/cozy_cabin_claude/';
 
-/* Where the kept frames live. previews/ is excluded from the deployed site by
- * pages.yml's rsync, so these cost the visitor nothing; and a subdirectory is
- * not matched by the memory pass's `previews/*.png` glob, so they don't crowd
- * the morning read either. */
+/* Where the kept frames live, and the one place a picture is still committed to
+ * `main` (Evan's 2026-10-03 note, "The pictures leave main"). Every other
+ * deploy picture now goes to the `previews` branch, which holds the newest set
+ * and nothing else — but a baseline has to outlive a deploy by definition,
+ * since its whole job is to be compared against a morning that has not happened
+ * yet, so these stay. previews/ is excluded from the deployed site by pages.yml's
+ * rsync, so they cost the visitor nothing; and being one level down, they are
+ * matched neither by the morning read's glob nor by .gitignore's
+ * `previews/*.png`, so they neither crowd the read nor get ignored. */
 const BASELINE_DIR = path.join(__dirname, '..', 'previews', 'baseline');
 
 /* The phone width every other camera here stands at. A frame may name its own

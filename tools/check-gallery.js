@@ -43,7 +43,7 @@
  * scripts/screenshot.js itself, plus its `clock` entries resolved by asking
  * window.CabinSky and window.CabinSeason what tags that instant reckons to —
  * the same lines the yard runs on, so a clock frame is credited for the state a
- * visitor would actually find there. The UNFORCED view previews are
+ * visitor would actually find there. The UNFORCED view pictures are
  * deliberately NOT counted: they are taken at whatever season and band the
  * deploy falls in, so counting them would make this check's verdict depend on
  * the calendar, and a guard that is green in December and red in July is not a
@@ -73,9 +73,16 @@
  *
  * Run: node tools/check-gallery.js [BASE_URL]
  * Falls back to COZY_CABIN_URL, then to the deployed site. Wired into
- * pages.yml beside check-almanac, after the previews are committed, and
+ * pages.yml beside check-almanac, after the pictures are published to the
+ * `previews` branch (2026-10-03; they were committed to main before that), and
  * without continue-on-error: a record that has stopped covering the clearing
  * should turn the run red.
+ *
+ * One thing the branch changed and this check did not: "kept" here has always
+ * meant *photographed by this deploy*, never *stored forever*. The frames it
+ * reads are GALLERY_STATES in scripts/screenshot.js, which is a list of what
+ * the camera stands at, not a list of files on disk — so the move cost this
+ * guard nothing at all.
  */
 'use strict';
 

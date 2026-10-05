@@ -340,6 +340,51 @@
  * startled at all. Day 137 noticed they fly close enough to clip its edge; this
  * is what that costs once the sky can be touched.
  *
+ * ── Day 150 (2026-10-05): THE GLASS, AND THE FIRST ANSWER THAT DOES NOT GO
+ * ANYWHERE ────────────────────────────────────────────────────────────────
+ *
+ * The ninth thing that answers a hand. A `.glass-touch` pad lies over the small
+ * tumbler on the window's sill (inside.css). Tap it and `.sill-glass` takes
+ * `is-rung` for one 0.34s round — it quivers one native pixel either way, five
+ * passes through its own rest, and ends exactly where it began — and `sound.js`
+ * is asked for a ring.
+ *
+ * WHY THIS OBJECT. It is the one thing in this room that answers to the SKY
+ * rather than to the fire. The mantle's stone and jar and candle are fire-side
+ * and steady; the sill is the single ledge the day reaches, and the tumbler was
+ * set there on Day 47 precisely because glass is the one material that can hold
+ * a borrowed hour rather than merely catch it. The entry that drew it called it
+ * "the one held drop of that blue you could almost pick up." Almost is the word
+ * a hand has now come back for.
+ *
+ * WHY THE GESTURE IS NEW, which is the whole of the day. Eight answers stand
+ * and every one of them goes somewhere: six bend from a foot, the cloak hangs
+ * from a peg, the geese lose their arrangement. A struck glass travels nowhere
+ * at all. It is the first thing here whose answer is a VIBRATION — a body held
+ * where it is, returning to the same place five times inside a third of a
+ * second — and that is not a smaller version of a swing, it is the one motion a
+ * small hard hollow thing has and the only one nothing else in this clearing
+ * does.
+ *
+ * WHAT A TAP MAY NOT DO. It may not take the tumbler off the sill, and it may
+ * not shift it: a glass found an inch along would be a glass somebody had
+ * moved, and a glass on the floor would be worse. So the round ends at exactly
+ * its start, and nothing is kept — the stone's reason (Day 144), and the same
+ * shape as a prod that may not feed the fire and a brush that may not take the
+ * cloak down. The tumbler goes on holding the hour it held before the tap.
+ *
+ * THE SOUND OUTLIVES THE MOTION, and nothing here has done that before. The
+ * ring runs 0.82s against the tremble's 0.34s, so for half a second the glass
+ * is visibly still and audibly going. The reason is a limit rather than a
+ * flourish: one native pixel is the smallest step this drawing owns, so a ring
+ * can be drawn stopping and cannot be drawn dying away, and the dying away is
+ * most of what a ring is. The ear carries what the pixel grid cannot.
+ *
+ * REDUCED MOTION. The tremble collapses to nothing, as every duration here
+ * does, and the note arrives whole. Of the nine, this is the one such a visitor
+ * loses least by — the crown has nothing at all for them and the cloak loses
+ * half, where a ring was always mostly a sound.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -706,6 +751,50 @@
     }
   }
 
+  /* ── the glass (Day 150) ─────────────────────────────────────────────────
+   *
+   * One tap at a time, the rule every pad in this file keeps. Here it stops a
+   * fast tapper holding the tumbler permanently off-centre — a glass standing
+   * a pixel to the side of where it has stood since the day it was set down,
+   * which is the one thing a tap may not leave behind.
+   *
+   * It is the only answer in this file where the guard and the sound part
+   * company, and that is deliberate. `glass-ring` runs 0.34s and `ring()` runs
+   * 0.82s, so a second press arriving while the first note is still sounding is
+   * NOT skipped — the tremble has long since ended and the class is off. Two
+   * rings overlapping is simply what tapping a glass twice sounds like, and
+   * refusing the second would be the file pretending it owns the room's air. A
+   * press inside the 0.34s does nothing at all, as everywhere else here.
+   *
+   * One animation runs for one tap, on `.sill-glass` itself, so there is no
+   * ambiguity about which `animationend` is the end — but the name is checked
+   * all the same, the check the bench, the bed, the cloak and the skein all
+   * make, so that a later day giving the tumbler a second animation cannot
+   * strip the ring off a glass still quivering.
+   *
+   * Under `prefers-reduced-motion` the duration collapses to 0.001ms and the
+   * class comes off on the next frame, so the glass is never seen to move and
+   * the note is the whole of what arrives — which costs that visitor less here
+   * than anywhere else in this file, because a ring was always mostly a sound. */
+  function strike(pad) {
+    var scene = pad.closest('.scene');
+    var glass = scene && scene.querySelector('.sill-glass');
+    if (!glass || glass.classList.contains('is-rung')) return;
+
+    glass.classList.add('is-rung');
+    glass.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'glass-ring') return;
+      glass.classList.remove('is-rung');
+      glass.removeEventListener('animationend', once);
+    });
+
+    /* Second, and never first — the rule every answer in this file keeps. The
+     * glass is already quivering by the time anything is asked of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.ring === 'function') {
+      try { window.CabinSound.ring(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -737,7 +826,8 @@
     ['.bench-touch',  lean],
     ['.bed-touch',    brush],
     ['.coat-touch',   swing],
-    ['.birds-touch',  startle]
+    ['.birds-touch',  startle],
+    ['.glass-touch',  strike]
   ];
 
   function padFor(target) {

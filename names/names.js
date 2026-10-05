@@ -97,7 +97,9 @@
                 'because it is always taken at the same dark minute of the same ' +
                 'warm month.',
           mark: '`previews/<date>-<sha>-state-*.png`, written by the `--gallery` ' +
-                'mode of `scripts/screenshot.js`.',
+                'mode of `scripts/screenshot.js`. Since 2026-10-03 they are ' +
+                'published to the `previews` branch rather than kept on `main`, ' +
+                'so the shelf holds the newest deploy’s row and no other.',
         },
         {
           since: '2026-07-21',
@@ -179,8 +181,11 @@
                 'was always there, which is why it stands beside them and not ' +
                 'instead of them.',
           mark: 'the `FRAMES` table in `tools/check-drift.js` and the pictures ' +
-                'it is held against in `previews/baseline/`; a drifted frame ' +
-                'leaves `previews/<date>-<sha>-drift-<name>.png` in the record.',
+                'it is held against in `previews/baseline/`, which are the only ' +
+                'pictures still kept on `main` — they have to outlive a deploy ' +
+                'to do their job. A drifted frame leaves ' +
+                '`previews/<date>-<sha>-drift-<name>.png` on the `previews` ' +
+                'branch, where the next deploy replaces it.',
         },
         {
           since: '2026-09-17',

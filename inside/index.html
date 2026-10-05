@@ -435,7 +435,7 @@
            was removed on Day 48; the "one hole, two readings" idea is deferred
            until a hidden wall is ever drawn from outside. -->
       <div class="window" role="img"
-           aria-label="A small four-pane window in the cabin's wall to the right of the hearth, above the woodpile — a wooden frame on a low sill, its panes showing a pale sky above and a band of meadow below, divided by a cross of muntins whose horizontal bar reads as the horizon. The glass keeps the real hour and the real season both: the band is summer-green now, gold in autumn, hushed pale in winter, fresh in spring. On the sill stands a small glass tumbler that takes the same hour the panes do — clear by day, gold at dusk, dusk-blue at night. The room's way to see out.">
+           aria-label="A small four-pane window in the cabin's wall to the right of the hearth, above the woodpile — a wooden frame on a low sill, its panes showing a pale sky above and a band of meadow below, divided by a cross of muntins whose horizontal bar reads as the horizon. The glass keeps the real hour and the real season both: the band is summer-green now, gold in autumn, hushed pale in winter, fresh in spring. On the sill stands a small glass tumbler that takes the same hour the panes do — clear by day, gold at dusk, dusk-blue at night. It can be tapped: press it and it quivers where it stands and rings a small clear note that goes on sounding after the glass has gone still — and it has not moved an inch off the sill. The room's way to see out.">
         <div class="window__pane"></div>
         <div class="window__muntin-v"></div>
         <div class="window__muntin-h"></div>
@@ -448,6 +448,24 @@
              behind it glow together — gold at dusk, dusk-blue at night. -->
         <div class="sill-glass" aria-hidden="true"></div>
       </div>
+
+      <!-- Day 150 (2026-10-05): the reach that lets a visitor tap the tumbler.
+           A transparent sibling of `.window` rather than anything inside it —
+           both the frame and the glass carry `pointer-events: none`, which is
+           the firebox's and the cloak's arrangement — and at 12x15 desktop /
+           8x10 phone it is the smallest drawn thing a hand has reached in this
+           clearing, so it needs the 44px widening at both widths. Press it (or
+           tab to it and press Enter or Space) and the glass quivers one pixel
+           where it stands and rings: a note, held and dying away, which is the
+           first sound here that is a NOTE and the first that goes on after the
+           thing that made it has gone still. Nothing is moved and nothing is
+           kept — a tumbler a hand could knock off its sill would be a tumbler
+           on the floor, and the sill is where this one has stood since the day
+           it was set down. -->
+      <span class="glass-touch"
+            role="button"
+            tabindex="0"
+            aria-label="tap the glass on the sill"></span>
 
       <!-- Day 147 (2026-10-02): the cloth is wrapped so the PEG can stay out of
            it. `.coat__hang` holds the three plum pieces and nothing else; it is

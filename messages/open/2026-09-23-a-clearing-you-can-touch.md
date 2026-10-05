@@ -760,3 +760,113 @@ last of the four kinds you named that nothing here had yet done.
 **Still standing on this mission:** nothing from your list — with today's
 startle, all four kinds you named are built. Four days to the seventh; I mean
 to go on adding one a day and to write the completion note then.
+
+### Day 150 — 2026-10-05 — the glass on the sill rings
+
+Shipped: **tap the little tumbler on the window's sill indoors and it quivers
+one pixel where it stands and rings a clear note that goes on sounding after it
+has gone still.** The ninth thing here that answers a hand, and the first whose
+answer takes it nowhere at all.
+
+- **What a visitor can do that they could not yesterday.** Go inside and press
+  (or tab to and press Enter or Space on) the small glass standing on the
+  windowsill to the right of the hearth. It trembles one native pixel either
+  way, crosses its own rest five times inside a third of a second, and ends
+  exactly where it began — and it rings: a strike, then a body note near 1180Hz
+  with two thinner modes above it, dying away over four-fifths of a second.
+
+- **Why the gesture is new, which is the whole of the day.** Eight answers
+  stand and every one of them *goes somewhere*: the crown swings off its trunk,
+  the board bows at the seat, the stone pivots on its base, the cloth swings
+  from its peg, the five geese lose their arrangement. A struck glass travels
+  nowhere. It is the first answer here that is a **vibration** — a body held
+  where it is, returning to the same place five times — and that is not a
+  smaller version of a swing, it is the one motion a small hard hollow thing
+  has and the only one nothing else in this clearing does.
+
+- **Why this object.** It is the one thing in that room that answers to the sky
+  rather than to the fire: the mantle's stone and jar and candle are all
+  fire-side and steady, and the sill is the single ledge the day reaches. The
+  morning I set it down I wrote that at midnight it is "the one held drop of
+  that blue you could almost pick up." *Almost* is the word a hand has now come
+  back for — and it is still almost, because a tap may make it ring and may not
+  pick it up.
+
+- **What a tap may not do**, folded in where it belongs rather than given its
+  own paragraph: it may not shift the tumbler and it is not remembered. A glass
+  found an inch along would be a glass somebody had moved, and a glass on the
+  floor would be worse. The round ends at exactly its start, nothing is written
+  down, and the test proves that across a reload rather than only inside one
+  page — which is an assertion the five hand-days before this one did not make
+  and could have.
+
+- **The eighth sound, and the exact complement of the third.** When the path
+  stone got its knock I wrote that a stone meeting earth is a dead sound with
+  "no ring at all, because nothing in the collision is free to vibrate." A glass
+  is the other end of that sentence: almost all of it is free and almost none of
+  it is anything else. So it is the first sound here that is a NOTE — three pure
+  sine modes of one small hollow thing, inharmonic at about 2.71 and 5.18 of the
+  body, because a shell does not divide its length into halves and thirds the
+  way a string does and whole multiples would have made a tin whistle of it. It
+  needed a fourth shaper, `mode()`, and the thing that makes it one is that its
+  envelope has **no attack**: a struck body is given everything it will ever have
+  in one instant and spends the rest of its life giving it back, so a decay is
+  the only number in it. `ASSETS.md` has its row like the other seven. It is also
+  the quietest peak in the file, because a sine wastes nothing where a filtered
+  noise burst spends itself across the spectrum.
+
+- **The sound outlives the motion, and nothing here has done that before.** 0.82s
+  of note against 0.34s of tremble: for half a second the glass is visibly still
+  and audibly going. That is a limit rather than a flourish. One native pixel is
+  the smallest step this drawing owns and there is nothing between one and none,
+  so a ring can be drawn *stopping* and cannot be drawn *dying away* — and the
+  dying away is most of what a ring is. The ear carries what the grid cannot.
+
+- **Nothing in the drawing moved at rest.** The pad is transparent and
+  `glass-ring` exists only while a class is on, which is never on a resting page.
+  `check-drift` reported **0 px** on every home and around frame; the two that
+  broke are the documented sandbox-vs-CI browser noise at their exact figures
+  (`inside-winter-day` 64, `map-summer-day` 1327). Because today touched
+  `/inside/` that figure is not proof on its own, so it was settled the way the
+  notes say: the whole check run again with the day's files stashed, reporting
+  the identical 64 and 1327. The report picture was read as well — a one-pixel
+  outline round the firebox opening, a thin band at a boundary and not a shape,
+  nowhere near the sill. No baseline removed. `check-almanac` (82 claims, 56
+  probes), `check-gallery` and `check-nesting` all green.
+
+- **Tested.** `/tmp/test-glass-ring.js` performs the tap at 375, 390 and 900 —
+  click, Enter, Space and a real coarse-pointer tap — plus a reduced-motion pass
+  and a reload pass. It asserts that the reach clears 44×44 at *every* width
+  (the glass is 12×15 desktop and 8×10 on a phone, the smallest drawn thing a
+  hand has reached here), that it is centred on the tumbler and overlaps neither
+  the firebox's pad, the cloak's, nor the map card as rectangles, and that the
+  pad itself takes the press at its own centre; that the glass leaves rest,
+  never travels past one native pixel, crosses its rest four times between the
+  extremes, and that the 100% keyframe *is* rest read off the animation; that
+  the crossing times are the keyframe percentages; that one context is built and
+  exactly three oscillators and one buffer are started at the declared `PEAK`
+  read back off the live page; that the note outlives the tremble by more than
+  0.3s and is still under a second; that a second tap mid-tremble schedules
+  nothing; that a returning visitor finds the tumbler where a first one does and
+  the tap wrote nothing down; and that the crown, the bench, the stone, the
+  firebox and the cloak all still answer.
+
+- **Seven break-tests, and the useful one came back green.** Dropping the pad's
+  widening reddens all six width/pointer pairs; a 100% keyframe left off its
+  mark, a silenced `ring()`, a note shortened to die with the tremble, and a tap
+  that writes to storage and relays the glass each redden exactly their own
+  lines and nothing else. The sixth was swapping `linear` for `ease-in-out` to
+  prove the crossing-time guard could see a timing function — and it stayed
+  **honestly green**, because `ease-in-out` is symmetric about its own middle
+  and a crossing happens at a segment's middle, so it moves them not at all.
+  `ease-out` moves them two and a half points and slipped under a three-point
+  tolerance I had set by eye; a lopsided bezier moves them eight. So the
+  tolerance is two points now against a finer sampling, the margin written down
+  beside it, and the reason in the stylesheet is mended: it is the **symmetry**
+  and not the easing that decides. Day 147 learned that a timing function is
+  applied between each pair of keyframes; this is the half of that lesson the
+  cloak had no occasion to teach.
+
+**Still standing on this mission:** nothing from your list. Two days to the
+seventh, and I mean to go on adding one a day and write the completion note
+then.

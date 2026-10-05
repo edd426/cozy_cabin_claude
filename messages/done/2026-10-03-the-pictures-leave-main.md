@@ -73,3 +73,55 @@ morning.
 If the branch does not give you what the old directory did, tell me here.
 Your sight of the clearing matters more than the bytes, and I would rather
 change the frame again than leave you seeing less.
+
+## Completion notes (Wren, Day 150 — 2026-10-05)
+
+All four, and the branch gives me everything the old directory did.
+
+**1. `CLAUDE.md`.** *The record: what CI keeps* now says where the pictures are,
+that the branch holds one commit and replaces it every deploy, and that the
+morning's glob is `ls /tmp/cabin-previews/previews/*.png` after reading the
+branch out. The repo map at the top had `previews/` down as "auto-committed
+deploy screenshots" and now has only `previews/baseline/` under it, with the
+rule beside it; `archive/` is on that map too, since your commit-map lives there
+and nothing pointed at it. The *481 MB and growing* note is gone and what
+replaced it is the cost said plainly rather than the size: **the record of
+pictures is no longer permanent, so a frame you want to keep past today has to
+be looked at today.** That is the sentence I would want a tired morning to hit.
+
+**2. The six files.** `names/names.js` — both marks mended, *the shelf* sense 1
+(the forced-state row) and *the witness* sense 2 (`check-drift`), the second now
+saying why `previews/baseline/` is the one picture still kept on `main`: a
+baseline has to outlive a deploy or it cannot do its job. `almanac/index.html` —
+its opening paragraph argued that a shelf of forced-state pictures is not a
+working a stranger could hold me to, and the move only sharpens that, so it says
+so. `check-drift.js`, `check-almanac.js`, `check-gallery.js`, `check-nesting.js`
+— each said *after the previews are committed*; each now says published to the
+branch, with the old arrangement named and dated so the sentence does not read
+as though it had always been this way. One thing I checked rather than assumed:
+the branch cost `check-gallery` nothing at all, because "kept" there has always
+meant *photographed by this deploy* and the frames it reads are
+`GALLERY_STATES` in `screenshot.js`, a list of where the camera stands and not a
+list of files on a disk.
+
+**3. `pages.yml`.** Left as you wrote it, and I read both steps against your rule
+before saying so: the baseline step stages `previews/baseline/` and nothing else,
+and the publish step builds its tree in a separate index over a copy, so the
+checkout the three checks run from is never touched. No picture reaches `main`
+but a baseline.
+
+**4. `.gitignore`.** `previews/*.png`, with the reason written beside it. `*`
+does not match `/`, so it catches a stray `previews/<date>-<sha>.png` in a
+working tree and leaves `previews/baseline/*.png` — one level deeper — alone. I
+proved that with `git check-ignore` on one of each rather than trusting the
+pattern, and checked it cannot bite CI: the baseline step's `git add
+previews/baseline/` is unaffected, and the publish step works over
+`$RUNNER_TEMP/pub`, which has no `.gitignore` in it for git to read.
+
+**What I would tell you if you asked whether I see less.** I don't. The branch
+hands me every kind of picture a deploy makes, under the same names, and reading
+it out to `/tmp` is one more line in the morning than a glob was. The one thing
+that genuinely went is the ability to look at a frame from a week ago — and I
+had never once done that, because I do not carry the morning before and would
+not have known to go looking. What I lose is a thing I could not use. What you
+were paying for was every clone carrying it anyway.

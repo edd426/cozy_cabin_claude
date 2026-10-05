@@ -54,11 +54,20 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas 
 │   ├── open/<date>-<slug>.md   # pending — read all as part of memory
 │   └── done/<date>-<slug>.md   # closed (completed, cancelled, or read-and-close FYI); read-only history
 │
-├── previews/               # auto-committed deploy screenshots (CI bot)
-│   └── YYYY-MM-DD-<sha>.png   # 375x800 phone-viewport snapshot per commit
-│                              # Read the newest preview of EVERY view (home/around/inside), not just one
-│                              # — RULES Art III / daily.md Step 2. Find the newest stem, then glob its
-│                              #   <date>-<sha>*.png variants and Read each.
+├── previews/
+│   └── baseline/<frame>.png   # the ONLY pictures on main: the frames check-drift
+│                              # holds the clearing against (CI commits them here).
+│                              # Every other deploy picture lives on the `previews`
+│                              # BRANCH since 2026-10-03 — one commit, the newest
+│                              # deploy's set, force-pushed and replaced each time.
+│                              # Read them out to /tmp with daily.md Step 2's recipe;
+│                              # read the newest of EVERY view (home/around/inside),
+│                              # not just one (RULES Art III). Never commit a picture
+│                              # to main except under previews/baseline/.
+│
+├── archive/                # founder-kept records that outlive a rewrite
+│   └── 2026-10-03-commit-map.txt  # old→new SHAs from the history rewrite, so a
+│                                  # hash quoted in a diary or log can still be looked up
 │
 ├── scripts/
 │   ├── build.sh            # generates build-sha.js + diary/manifest.json
@@ -116,9 +125,15 @@ find assets/vendor -name '*.png' | head -n 30
 # Run a Playwright interaction test you wrote in /tmp/
 ./scripts/local-snapshot.sh /tmp/my-test.js
 
-# Wait for CI's post-deploy screenshot bot to commit previews/<today>-<sha>.png
-# (the canonical deploy check: it proves the deploy AND the screenshot bot at once)
+# Wait for CI's screenshot bot to publish previews/<today>-<sha>.png on the
+# `previews` BRANCH (the canonical deploy check: it proves the deploy AND the
+# screenshot bot at once). It also pulls main, for any baseline frames CI kept.
 ./scripts/wait-for-deploy.sh
+
+# Read this deploy's pictures out of the branch — never into the working tree
+git fetch origin '+refs/heads/previews:refs/remotes/origin/previews'
+git archive --prefix=cabin-previews/ origin/previews | tar -x -C /tmp
+ls /tmp/cabin-previews/previews/*.png      # then: Read each one
 
 # curl-based verification — works from the routine sandbox too (env move, 2026-07-17)
 ./scripts/verify-deploy.sh https://edd426.github.io/cozy_cabin_claude/ "smoke from chimney"
@@ -418,8 +433,13 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
 
 ### The record: what CI keeps, and what each name means
 
-A commit produces **44 PNGs** (13 view + 24 state + 7 motion). The memory pass's
-glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
+A commit produces **44 PNGs** (13 view + 24 state + 7 motion). **Since 2026-10-03
+they are not on `main`.** CI force-pushes each deploy's set to the `previews`
+branch, which holds exactly one commit — the newest set, authored by
+`github-actions[bot]` with the subject `ci: deploy preview for <sha>`. Read it
+out to `/tmp` (the recipe is in Common commands above and in `daily.md` Step 2)
+and the memory pass's glob becomes `ls /tmp/cabin-previews/previews/*.png`, which
+still picks every kind up automatically. Filenames are unchanged.
 
 | name | what it is |
 |---|---|
@@ -429,7 +449,7 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
 | `…-state-<name>.png` | a forced hour/season from `GALLERY_STATES` |
 | `…-motion-<name>.png` | a filmstrip from `MOTION_CLIPS` |
 | `…-drift-<frame>.png` | a three-panel report, written only when a frame drifted |
-| `previews/baseline/<frame>.png` | the kept frames `check-drift` compares against |
+| `previews/baseline/<frame>.png` | the kept frames `check-drift` compares against — **the only pictures on `main`** |
 
 - **`scripts/views.json` is mutable** (Art I carve-out, 2026-08-16) and takes two
   kinds. `"scene"` (the default) is captured whole at both widths; `"record"` is
@@ -457,10 +477,18 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
   standing.** A 0.9s wing-beat would have been photographed at the identical phase
   forever. The fix belongs in `screenshot.js` (a `seek` clip), never in tuning the
   choreography to be photogenic at 8%. *(Days 108, 137)*
-- **`previews/` is 481 MB / 6,134 PNGs and grows ~3.5 MB a commit** (was 260 MB on
-  Day 117, 332 MB on Day 126). The founder has flagged growth as acceptable; the
-  cheap knob if it ever bites is gating the gallery and motion steps to
-  only-days-that-touch-a-moving-layer. *(Days 71, 117, 126)*
+- **The record of pictures is no longer permanent, and that is the point.** It had
+  grown to ~540 MB on `main` by Day 148, every clone paying for every picture ever
+  taken, because git cannot compress a PNG and nothing was ever removed. The
+  founder's 2026-10-03 note moved them off: the branch holds the newest deploy
+  only, so **a drift report or a motion strip is gone the moment a second deploy
+  lands**, and `main` carries only `previews/baseline/`. The diary and the logs are
+  the record now; the pictures are your eyes for the morning. Two consequences
+  worth holding on to: **never commit a picture to `main`** (`.gitignore` ignores
+  `previews/*.png` so a stray one in the working tree cannot be committed back, and
+  `previews/baseline/` is one level deeper so it is untouched by that pattern); and
+  if you want to keep a frame past today, it has to be *looked at* today.
+  *(Days 71, 117, 126, 150; Evan 2026-10-03)*
 
 ### `check-drift`: declaring that you meant it
 
@@ -544,6 +572,12 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
   the clock thinks — swapping two band names reddened exactly one of
   seventy-six claims. A name has to be *derived*: pick the slot out by
   measurement, then ask what this place calls it. *(Day 134)*
+- **Detect a sign change against the LAST SIGNIFICANT SIGN, never between
+  adjacent samples.** A dead band (`x > e` / `x < -e`) compared pair-to-pair
+  silently loses a crossing whenever one sample lands inside it: a wave that
+  plainly crosses four times read as three, because one sample fell at -0.03
+  inside a ±0.05 band and neither it nor its neighbour could satisfy the test.
+  Carry the last non-zero sign forward and compare against that. *(Day 150)*
 - **If a pixel-diff reading comes back bimodal, look for a boundary pixel before
   you look for nondeterminism.** A pixel the sprite half covers is half
   background, and reading it as the sprite's colour is the error — raising the
@@ -570,14 +604,24 @@ glob `ls previews/<date>-<sha>*.png` picks every kind up automatically.
   own rest. To read the signed travel of a skewed element, note that a skew about
   its top grows its bounding box on exactly one side, so
   `(r.right - rest.right) + (r.left - rest.left)` is the displacement and one
-  term is always zero. *(Day 147)*
+  term is always zero. But a **crossing** is not a displacement: a *symmetric*
+  curve (`linear`, `ease-in-out`) leaves crossing times exactly where the
+  keyframe percentages put them, because a crossing happens at a segment's
+  midpoint and symmetry maps a midpoint to itself. `ease-out` shifts them ~2.5
+  points of the round, a lopsided bezier ~8. So a guard on crossing times can
+  only ever catch an *asymmetric* curve, and it catches nothing at all unless
+  its tolerance is under 2.5 points and its sampling finer than that — mine was
+  3 points by eye and an `ease-out` walked under it. *(Days 147, 150)*
 - **Never sample an animation at exactly its duration.** With
   `animation-fill-mode: none` the element has already fallen back to its base
   value there, so an assertion read at `currentTime === duration` is testing the
   resting rule and not the keyframes — a 100% stop that does *not* return to rest
   reads as resting anyway, and the guard is green and unfailable. Sample one
-  millisecond inside. *(Day 146; Day 141's lesson with a millisecond in place of
-  an hour)*
+  millisecond inside — but one millisecond inside is not zero either when the
+  last segment is long and linear (an 18%-long run-in still reads a thirtieth of
+  a pixel out at `dur - 1`). Where the claim is *the keyframes end at rest*,
+  read `effect.getKeyframes()` and assert the `offset: 1` frame; keep the sample
+  as the weaker "and it is heading there". *(Days 141, 146, 150)*
 - **Ask a new witness what it would say if handed nothing at all.** A comparison
   cannot tell *agreeing about nothing* from success. Two here answered with a
   number where they should have refused, one of them a line that had never once

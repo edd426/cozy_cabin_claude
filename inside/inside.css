@@ -2292,6 +2292,108 @@
   );
 }
 
+/* ── The glass answers a tap (Day 150, 2026-10-05) ────────────────────────
+ *
+ * The ninth thing in this clearing that answers a hand, and the first that
+ * answers by STAYING EXACTLY WHERE IT IS. Everything before it goes somewhere:
+ * a crown swings from its trunk, a board bows at the seat, a stone pivots on
+ * its base, a cloth swings from its peg, five geese come apart. This one is
+ * struck and does not travel a pixel from where it stands — it only quivers,
+ * which is the one thing a small hard hollow thing does and nothing else here
+ * does at all.
+ *
+ * WHY THE DECAY IS NOT IN THE DRAWING, which is the day's actual finding. A
+ * ring dies away; that is most of what makes it a ring. But the smallest step
+ * this drawing owns is one native pixel, and there is nothing between one and
+ * none — so a glass cannot be drawn getting quieter, only drawn stopping. The
+ * tremble therefore holds its one pixel for all five passes through rest and
+ * then ends, and the whole of the dying-away lives in the ear: `ring()` in
+ * sound.js runs 0.82s against this 0.34s, so the glass is visibly still for
+ * half a second while it is still sounding. Every other answer here is over in
+ * the eye and the ear together. This is the first whose sound outlives its
+ * motion, and it is the honest arrangement rather than a shortfall — a struck
+ * glass really does fall below a pixel of movement long before it falls below
+ * hearing.
+ *
+ * WHY `linear` AND NOT AN EASE, and the reason is narrower than I first wrote
+ * it. A CSS timing function is applied between each PAIR of keyframes, not
+ * across the round, so an ease moves a value away from where the percentages
+ * put it — which is Day 147's lesson, learned there by asserting a displacement
+ * at a named phase and finding the assertion was about the amplitudes I had
+ * picked rather than about the cloth. But a CROSSING is not a displacement, and
+ * the break-testing is what showed the difference: swapping this for
+ * `ease-in-out` moves the crossings not at all, because that curve is
+ * SYMMETRIC about its own middle and a crossing happens at a segment's middle.
+ * `ease-out` shifts them two and a half points; a lopsided bezier, eight.
+ * So it is the symmetry and not the easing that decides, and `linear` is simply
+ * the one function under which the keyframe percentages are the crossing times
+ * whatever shape the curve would otherwise have had — which is what the day's
+ * test holds it to, at a tolerance tight enough to see an `ease-out`.
+ *
+ * One native pixel either way: `calc(1px * var(--s))` is 3 device px at the
+ * desktop scale and 2 on a phone, both whole, so nothing is resampled and the
+ * `image-rendering: pixelated` the locked theme.css sets is never asked to
+ * soften an edge. `--s` is inherited from `.window`, so neither this nor the
+ * keyframes need a 2x twin. */
+@keyframes glass-ring {
+  0%   { transform: translateX(0); }                       /* struck */
+  10%  { transform: translateX(calc( 1px * var(--s))); }
+  28%  { transform: translateX(calc(-1px * var(--s))); }
+  46%  { transform: translateX(calc( 1px * var(--s))); }
+  64%  { transform: translateX(calc(-1px * var(--s))); }
+  82%  { transform: translateX(calc( 1px * var(--s))); }
+  100% { transform: translateX(0); }                       /* and still again */
+}
+
+.sill-glass.is-rung {
+  animation: glass-ring 0.34s linear 1;
+}
+
+/* THE REACH. A transparent sibling of `.window` rather than anything inside it:
+ * `.window` and `.sill-glass` both carry `pointer-events: none`, and the glass
+ * is 12×15 at the desktop scale and 8×10 on a phone — well under the 44px
+ * minimum at BOTH widths, which is the firebox's lesson (Day 140) and not the
+ * small crown's. It is the smallest drawn thing a hand has reached here.
+ *
+ * Anchored the way `.fire-touch` and `.coat-touch` are — `left` on the centre,
+ * `translate(-50%, 50%)` so `bottom` names the centre's height — because a
+ * `min-width` grows a left-anchored box rightward only and would hang the pad
+ * 30px off the tumbler's right side. The centre is the window's own bottom
+ * (52 native) plus half the glass (2.5 native), which scales with --s; the
+ * horizontal anchor is a raw offset from the frame's centre and does not, so
+ * the 2x block at the foot of this file restates it (the cloak's arrangement,
+ * and the cloak's reason).
+ *
+ * It reaches neither the firebox's pad nor the cloak's at either width. On a
+ * phone it shares two pixels of column with the firebox's and clears it by
+ * twenty-seven vertically, which is no overlap at all — but it is close enough
+ * that the day's test asserts the rectangles rather than the columns, exactly
+ * as the cloak's note says to.
+ *
+ * Signposted, like everything here but the path stone: `cursor: pointer`, a
+ * mild affordance and meant to be. */
+.glass-touch {
+  --s: 3;
+  position: absolute;
+  display: block;
+  left: calc(50% + 62px);
+  bottom: calc(54.5px * var(--s));
+  transform: translate(-50%, 50%);
+  width: calc(4px * var(--s));
+  height: calc(5px * var(--s));
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  z-index: 6;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(206, 224, 220, 0.3);
+}
+.glass-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
 /* Phone-and-narrow: scale 3x → 2x below 600px, mirroring scene.css and
  * around.css (Day 34: threshold widened from 379px so real 390–430px phones
  * stop landing in the desktop branch — see scene.css's breakpoint note). */
@@ -2658,5 +2760,16 @@
   .coat-touch {
     --s: 2;
     left: calc(50% - 40px);
+  }
+  /* The reach follows its glass (Day 150). Same two lines as the cloak's and
+   * for the same reason: `bottom` is native px * var(--s) and rebases itself
+   * off the --s swap, where `left` is a raw offset from the frame's centre and
+   * does not. The window's left edge sits at 50% + 28px on this scale, the
+   * tumbler 5 native in from it and 2 native wide to its own middle, so the
+   * centre lands at 50% + 28 + 10 + 4. The pad's 8×10 box and the 44px minimum
+   * that widens it are the same at both scales, as the glass's own are. */
+  .glass-touch {
+    --s: 2;
+    left: calc(50% + 42px);
   }
 }

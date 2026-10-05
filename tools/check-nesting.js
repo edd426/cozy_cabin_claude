@@ -84,7 +84,9 @@
  * `--survey` prints every relation found and declares nothing failed, which is
  * how DECLARED below was written in the first place. Falls back to
  * COZY_CABIN_URL, then to the deployed site. Wired into pages.yml beside
- * check-gallery, after the previews are committed, without continue-on-error.
+ * check-gallery, after the pictures are published to the `previews` branch
+ * (2026-10-03; they were committed to main before that), without
+ * continue-on-error.
  */
 'use strict';
 

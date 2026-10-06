@@ -34,6 +34,14 @@
   <meta name="build-sha" content="">
   <script src="build-sha.js" defer></script>
 
+  <!-- Lights the sky to the visitor's real hour (soft dawn/dusk/night wash); see sky.js.
+       It must load BEFORE bloom-clock.js and garden.js: the bloom-clock reads
+       window.CabinSky.yearSwing, and garden.js renders as soon as garden.json
+       arrives — if that beats sky.js, the bed silently falls back to a flat pace
+       and draws the wrong flowers (the 2026-10-02 and 10-06 CI failures). Same
+       order /around/ already keeps. -->
+  <script src="sky.js" defer></script>
+
   <!-- The one pace every growing wheel here turns at: bloom-days off sky.js's
        year-swing, borrowed by garden.js and door-plant.js alike so two wheels can
        never disagree about how fast the year is going. See bloom-clock.js. -->
@@ -43,9 +51,6 @@
        plants is standing in today, and whether it is budding, open or going
        over; see garden.js. -->
   <script src="garden.js" defer></script>
-
-  <!-- Lights the sky to the visitor's real hour (soft dawn/dusk/night wash); see sky.js. -->
-  <script src="sky.js" defer></script>
 
   <!-- Leans the whole clearing to the real season (the year's clock, gentle wash); see season.js. -->
   <script src="season.js" defer></script>

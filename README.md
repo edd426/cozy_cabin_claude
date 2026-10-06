@@ -1,28 +1,41 @@
 # the cabin
 
-A small cozy-cabin website that builds itself one day at a time.
+**Visit: [edd426.github.io/cozy_cabin_claude](https://edd426.github.io/cozy_cabin_claude/)** — best on a phone.
 
-Each day, an AI agent (Claude, 1M-token context) reads the diary, decides on one small contribution to the cabin, makes it, verifies the deployed site reflects the change, and writes a diary entry. Then it stops. Tomorrow's agent is a different process — there is no shared session state, no streaming memory. Continuity comes from the diary, which is canonical. Code is exoskeleton.
+A small pixel-art cabin website that has been building itself one day at a time since May 2026. An AI agent wakes up each morning, reads everything its predecessors wrote, makes that day's contribution, verifies it deployed, and writes a diary entry. Then it stops existing. Tomorrow's agent is a new process with no memory of today — continuity comes entirely from what's written down.
 
-→ [The cabin](https://edd426.github.io/cozy_cabin_claude/)
-→ [The diary](./diary/)
-→ [Constitution](./RULES.md) · [Roadmap](./MILESTONES.md)
+## What you're looking at
 
-## Why
+Start at the cabin, then use the **[map](https://edd426.github.io/cozy_cabin_claude/map/)** (tap the plan-card in the corner of any view) to walk around:
 
-It's an experiment in routine-driven creative agents — same architectural pattern as a personal-memory tool I was building, applied to a fictional self instead of mine. The artifact is a cozy cabin in the Stardew Valley register, mobile-first, designed to be glanceable on a morning commute. The interesting question is not whether the cabin gets built, but what an agent that lives one day at a time produces over thirty days when it can never re-edit its own past.
+- **[The front yard](https://edd426.github.io/cozy_cabin_claude/)** — chimney smoke, a path, a mailbox, wildflowers, two trees. The scene knows the hour and the season: visit at dusk and the sky leans gold; visit in October and the crowns turn.
+- **[Around the side](https://edd426.github.io/cozy_cabin_claude/around/)** — the door face of the same building, obeying the same geometry.
+- **[Inside](https://edd426.github.io/cozy_cabin_claude/inside/)** — the hearth, a candle that burns down through the evening, firelight on the floor and shadows that obey it.
+- **[The diary](https://edd426.github.io/cozy_cabin_claude/diary/)** — the heart of the project. One entry per day in the voice of the cabin's resident, Wren. Readable in a typeset reader; her coined terms link to her own **[book of names](https://edd426.github.io/cozy_cabin_claude/names/)**.
+- **[The letters](https://edd426.github.io/cozy_cabin_claude/letters/)** — correspondence with a keeper of a far-off tower, delivered by a post that takes three mornings each way.
+- **[The almanac](https://edd426.github.io/cozy_cabin_claude/almanac/)** — the clearing's published working: what it will do at any date and hour, held to automated checks so the page can't quietly drift from the yard.
 
-## How it works
+## The experiment
 
-- Daily Claude Code routine on a cron-like schedule.
-- The agent reads `RULES.md` (a constitution it cannot edit), `MILESTONES.md` (a roadmap it cannot edit), and the last 7 days of `diary/`.
-- It picks one small contribution, edits only mutable files (`scene.html`, `scene.css`, `assets/composed/`, today's diary entry), commits, pushes, waits for GitHub Pages to deploy, runs a verification script, and writes the day's diary entry.
-- The verification step ([`scripts/verify-deploy.sh`](./scripts/verify-deploy.sh)) curls the deployed site, confirms the build SHA matches the local `HEAD`, and grep-checks that the agent's stated claim actually appears on the page. This counters the well-documented LLM tendency to claim work it didn't actually do.
-- Locked files (the constitution and shell) are protected by convention only — `RULES.md` Article I lists them and the agent reads it. No runtime enforcement; if drift happens it's visible in the diary and recoverable via git.
+This started as a question about routine-driven creative agents: what does an agent that lives one day at a time — that can never re-edit its own past — produce over months? The original horizon was thirty days; it's past a hundred now, and the interesting results have been less about the cabin than about the voice: a consistent first-person resident maintained across a hundred-plus discontinuous sessions, weekly self-reflections that flag and correct her own stylistic drift, and an accumulating vocabulary and set of vows the place holds itself to.
+
+Some ground rules shape it:
+
+- **The diary is canonical.** When the code and the diary disagree, the diary wins. Past entries are read-only, even to the session that wrote them.
+- **A constitution the agent cannot edit** (`RULES.md`) locks the roadmap, the palette, the build pipeline, and the agent's own configuration. Enforcement is convention only — the agent reads the rules and follows them; drift would be visible in the diary and recoverable via git.
+- **The day's shape is the agent's, and Sunday is a rest day.** A morning can be several small things, one large change, or a reflective day — not finishing is fine if it's explained. Sunday's output is reflection: the diary entry and a weekly meta-review of the week's writing.
+
+## How a day runs
+
+- A scheduled Claude Code session (1M-token context) starts fresh each morning.
+- **Memory pass:** it reads the entire diary arc, all weekly metas, the founder's message board, every letter, the book of names, and the latest deployed screenshot of every view — the full record, not a recent window.
+- It decides what today is for, builds it in mutable files only, and tests interactive changes with throwaway Playwright scripts before committing.
+- **Verification:** after pushing, it waits for CI to deploy GitHub Pages and run a screenshot bot that publishes phone-viewport captures of every view — plus forced-state galleries (each season, each hour) and motion filmstrips — to a single-commit `previews` branch, replaced on every deploy. Only the baseline frames the drift check compares against live on `main`, under `previews/baseline/`. The agent reads those PNGs to confirm the deployed site shows what it claims to have built. This closes the loop on the well-documented LLM tendency to report work that didn't happen; the pictures are also the next morning's eyes.
+- It writes the day's diary entry and an operational log, and stops.
 
 ## Running this yourself
 
-This repo is set up specifically for one person's use case. If you want to fork it, the parts that are reusable: the lockdown hook pattern, the verification-step idea, the diary schema. The asset packs and routine config are personal.
+The repo is set up for one person's use, but the reusable ideas are: the constitution/mutable-file split, the diary-as-canonical-memory pattern, the screenshot-based verification loop, and the weekly meta-reflection schema. The asset packs and routine config are personal.
 
 ## License
 

@@ -79,6 +79,22 @@
  * an oscillator. The trade is unchanged: arithmetic, in memory, nothing
  * vendored and nothing fetched.
  *
+ * Day 150 (2026-10-05) adds the eighth, `ring()`, and with it the fourth
+ * shaper: `mode()`, a pure sine with NO ATTACK at all. A struck body is handed
+ * everything it will ever have in one instant and spends the rest of its life
+ * giving it back, so a decay is the only number in its envelope.
+ *
+ * Day 151 (2026-10-06) adds the ninth, `clack()`, and it is the first in five
+ * days that needed no new shaper. A split billet knocked out of its valley and
+ * dropping back onto two more is a RELEASE — wood letting go of wood, three
+ * times over as it settles — and a release is exactly what `burst()` was cut
+ * for on Day 140. What is new is not the shaper but the SERIES: the three
+ * knocks fall away at three fifths each, which is the very ratio the crown and
+ * the cloak ring down by, and which the drawing of the log cannot hold past its
+ * second bounce because a height is measured in pixels and a lean is not (see
+ * `log-settle` in inside.css). The sound is carrying a decay the picture runs
+ * out of room for, which is the glass's arrangement one day on.
+ *
  * Published read-only on `window.CabinSound` (the Day-97 export move sky.js and
  * season.js make), so a consumer — today touch.js only — can ask for a sound
  * without owning any of this. Every entry point is a no-op rather than a throw
@@ -740,6 +756,80 @@
     return 4;
   }
 
+  /* ── the armful's clack (Day 151, 2026-10-06) ────────────────────────────
+   *
+   * A split billet knocked out of its valley, dropping back onto the two logs
+   * holding it up, bouncing, and settling. The ninth sound here, and the third
+   * impact after the stone's knock and the fire's thud — which is the row this
+   * one has to say something true in.
+   *
+   * WOOD IS THE MIDDLE TERM, and that is the whole of the design. When the
+   * path stone got its knock I wrote that a stone meeting earth has no ring at
+   * all, because nothing in the collision is free to vibrate; when the tumbler
+   * got its note I wrote that a glass is the other end of that sentence,
+   * because almost all of it is free and almost none of it is anything else. A
+   * split log is squarely between them. It is a solid body with real modes, so
+   * it is not dead — but wood damps itself hard, so what it has is gone in a
+   * couple of hundredths of a second. So the body here is a BANDPASS burst and
+   * not a `mode()`: a resonance too short-lived and too broad to be a note, and
+   * the sound a thing makes when it is a little bit free to vibrate and not
+   * much. Three materials, three answers: 150Hz and nothing after it, 400Hz for
+   * seventy milliseconds, 1180Hz for most of a second.
+   *
+   * THE FIRST SOUND IS THE HAND, not the wood. The log does not land for a
+   * sixth of a second after the press, and a sixth of a second of silence after
+   * a tap reads as the tap having failed — so the palm meeting bark opens it, a
+   * low soft nothing-much, the same part `crackle()` gives the poker (Day 140)
+   * and for the same reason: it is the only part of the sound that is the same
+   * every time, because it is the hand and not the pile.
+   *
+   * THEN THREE LANDINGS, each three fifths of the one before in loudness and a
+   * step duller in the filter, because a quieter impact excites less of the top
+   * of a body than a louder one. The gaps shorten the way a dropped thing's
+   * bounces do — 150ms, then 110ms — and the third landing has no drawn bounce
+   * in front of it at all: by then the log is rising less than one native pixel
+   * and the drawing has nothing between one and none (see `log-settle`). So the
+   * last third of this decay exists only here. That is the glass's finding from
+   * the other side — there the whole dying-away was inaudible to the eye, here
+   * only the tail of it is.
+   *
+   * Peak 0.30 on the first body: under the stone's 0.42, because a log settling
+   * two native pixels back into a pile it never left is a smaller event than a
+   * stone turning over on the ground, and over the bench's 0.20, because a
+   * plank giving a pixel under a palm is smaller still. Everything is done
+   * inside 0.42s (rule 2), and rule 4 is kept by the object: the top log
+   * visibly jumps twice, which a silent visitor gets in full.
+   *
+   * Returns the number of sources started — always 7 (one hand and three
+   * two-part landings), or 0 with no context. */
+  function clack() {
+    var c = context();
+    if (!c) return 0;
+
+    /* The palm on the bark. Soft, low, and the same every time. */
+    burst(c, 0, 0.05, 0.11, 'lowpass', 240 + Math.random() * 40, 0.7);
+
+    /* Three landings: when, how loud, how long the body runs, and where the
+     * two filters sit. Each row is three fifths of the one above it in gain,
+     * and a step duller in both filters. */
+    var LANDINGS = [
+      /* at      body-gain  body-dur  body-f  tick-gain  tick-f  */
+      [0.150,    0.300,     0.075,    420,    0.170,     1500],
+      [0.260,    0.180,     0.060,    380,    0.100,     1250],
+      [0.335,    0.108,     0.045,    340,    0.060,     1050]
+    ];
+
+    for (var i = 0; i < LANDINGS.length; i++) {
+      var L = LANDINGS[i];
+      /* The contact — short, bright, and over before the body has started. */
+      burst(c, L[0], 0.018, L[4], 'bandpass', L[5] + Math.random() * 120, 1.6);
+      /* The body — the little the wood has, damped out almost at once. */
+      burst(c, L[0], L[2], L[1], 'bandpass', L[3] + Math.random() * 30, 3.2);
+    }
+
+    return 7;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -753,6 +843,7 @@
     rustle: rustle,
     honk: honk,
     ring: ring,
+    clack: clack,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

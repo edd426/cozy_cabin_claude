@@ -364,6 +364,14 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `transform` must name all of it**, so interpolated middle values have to be
   written as `calc()` off the endpoints, not as the numbers they happened to
   resolve to. *(Day 127)*
+- **`animation-timing-function` inside a keyframe governs the segment that
+  STARTS there**, which is the only way to draw a thing under gravity: a bounce
+  decelerates up and accelerates down, so `log-settle` sets `ease-out` at each
+  trough and `ease-in` at each peak. One function for the whole round draws a
+  sawtooth (`linear`) or a hover (`ease-in-out`). Don't pair it with a guard on
+  crossing *times* — an asymmetric curve moves those (see the Day-150 note
+  below); assert the peaks, the returns, and the `offset: 1` keyframe instead.
+  *(Day 151)*
 - **A thing that HANGS moves the opposite way to everything else here.** The
   whole clearing is rooted at its foot, so every gesture is `skewX` about the
   bottom; a hung thing is the same skew about the **top**, and the anchor it
@@ -399,6 +407,18 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `transition` on an untouched property (the fire's flare uses `filter`, which the
   flicker never sets) or accept the handover and check both rest frames match.
   Watch specificity against any per-element duration override. *(Days 139, 140)*
+- **Anchor a pad by an edge, not a centre, when the thing it names changes size
+  with the season.** The indoor armful is 8 native px wide in summer and 12 from
+  autumn (Day 125), so a pad centred on it steps four native px left every
+  summer — in `.logs-touch`'s case straight at `.fire-touch`'s reach. Left-anchor
+  it on the sprite's own anchor and let `min-width` grow it into the spare
+  ground, the way `.lamp-touch` already does for a different reason. Related
+  survey finding, not yet acted on: **the door side has no room left at phone
+  width.** `.stone-touch--e` is 44px tall from `bottom: 0` and `.door-boots` sits
+  only 24px off the scene floor, so that reach has lain over the boots since
+  Day 144, and `.side-cabin__door::after` (inset `-12px`) already reaches 6px
+  into them from the other side. Anything that wants a hand on that face has to
+  move a pad that already exists. *(Day 151)*
 - **A tap pad put INSIDE a positioned sprite cannot be lifted above anything
   outside it.** `z-index` on a positioned element opens a stacking context, so
   a child's own `z-index` only ever orders it against its siblings — the pad
@@ -612,6 +632,22 @@ still picks every kind up automatically. Filenames are unchanged.
   only ever catch an *asymmetric* curve, and it catches nothing at all unless
   its tolerance is under 2.5 points and its sampling finer than that — mine was
   3 points by eye and an `ease-out` walked under it. *(Days 147, 150)*
+- **A decay can be drawn in degrees and cannot be drawn in pixels.** Of the four
+  ring-downs here written down as *each swing smaller than the last*, only the
+  two measured in **degrees** are: the crown runs 4.2° → 0.3° and the cloak 18°
+  → 0.8°, both about three fifths a swing, because a skew of a few tenths of a
+  degree asks for a fraction of a pixel and the renderer is free to find it. The
+  bench (`bench-give`, ±1px) and the glass (`glass-ring`, ±1px) are measured in
+  **pixels**, which have nothing under one but none, so each crosses its rest at
+  exactly the amplitude it started at — ratio 1.00, measured off the rendered
+  page, not read off the file. So before writing *dies away* beside anything,
+  check which unit it moves in; a thing that travels needs its first step to be
+  ≥ 2 native px or its decay has to go somewhere else (`log-settle` puts it in
+  the rhythm and in `clack()`'s three knocks). To measure a series, carry the
+  **last non-zero derivative sign** forward rather than comparing adjacent
+  samples — `bench-give` holds a plateau at full press and a pair-to-pair test
+  calls every sample in it an extreme — and drop any turning point under ~5% of
+  the peak, which is the thing landing and not an extreme of it. *(Day 151)*
 - **Never sample an animation at exactly its duration.** With
   `animation-fill-mode: none` the element has already fallen back to its base
   value there, so an assertion read at `currentTime === duration` is testing the

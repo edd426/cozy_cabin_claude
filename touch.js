@@ -385,6 +385,62 @@
  * loses least by — the crown has nothing at all for them and the cloak loses
  * half, where a ring was always mostly a sound.
  *
+ * ── Day 151 (2026-10-06): THE ARMFUL, AND THE FIRST GROUP WHERE ONE BODY
+ * ANSWERS ─────────────────────────────────────────────────────────────────
+ *
+ * The tenth thing that answers a hand. A `.logs-touch` pad lies over the armful
+ * of firewood on the boards to the right of the hearth (inside.css). Press it
+ * and `.woodpile` takes `is-settling` for one 0.26s round — the top log jumps
+ * two native pixels out of its valley, drops back into it, jumps one more and
+ * drops again — and `sound.js` is asked for a clack.
+ *
+ * WHY THIS OBJECT. Day 149 went round the things here that are several and get
+ * read as one — the rick is nine logs read as a store, the path eight stones
+ * read as a walk, the bed a count of stems read as a patch — and settled them
+ * by what you can take away: lose a goose and there is no V, lose a log and
+ * there is a smaller pile. The armful is the plainest of those, and it is the
+ * one a hand can actually put the question to. It is also the oldest untouched
+ * thing left in the room: Day 14, one morning after the chair and one before
+ * the cloak that was answered on the second of October.
+ *
+ * WHY THE GESTURE IS NEW. Two plurals here already answer a hand and both move
+ * all of themselves: every stem in the bed dips together (Day 146) and all five
+ * geese scatter at once (Day 148), and in each case the argument was that a
+ * hand is one event and not a clock. A pile does not contradict that — the
+ * event still arrives everywhere at once; it is the PILE that is not a
+ * formation. It is held up by its own bottom, so the only loose part of it is
+ * the part nothing is standing on. Two logs do not move because they are
+ * carrying the third. That is the first answer here where the right reading is
+ * which bodies DON'T go.
+ *
+ * WHAT A KNOCK MAY NOT DO. It may not take a log off. The founder's list has
+ * asked for "the woodpile and a log comes off it" since the twenty-third of
+ * September, and after fifteen days it is the one item on that list this place
+ * cannot give, because nothing here is ever spent: the armful holds the count
+ * the season gave it (Day 125) and a hand is neither a season nor a fire. So
+ * the log ends in the valley it started in, and nothing is written down — the
+ * stone's reason (Day 144), a pile found restacked being a pile somebody had
+ * restacked.
+ *
+ * WHERE THE DECAY GOES, which is the day's finding and the answer to the
+ * question Day 150 left on the sill. Four answers here are written down as
+ * "each swing smaller than the last," and only two of them are: the crown and
+ * the cloak ring down by about three fifths a swing, and both are measured in
+ * DEGREES, where a skew of 0.3° asks for a fraction of a pixel and the renderer
+ * is free to give it. The bench's give and the glass's quiver are measured in
+ * PIXELS, and a pixel has nothing under it but none — so the bench crosses its
+ * rest exactly once at the height it was pressed to and the glass five times at
+ * the height it was struck to, and neither is dying away however it was
+ * described. This log is in the second class. What it can draw is two of the
+ * three bounces — two native px, then one, then four tenths of one, which is
+ * not a smaller bounce but no bounce — and what it cannot draw, `clack()`
+ * carries: three knocks at the same three fifths, the last of them over a log
+ * that is visibly already still.
+ *
+ * REDUCED MOTION. The bounce collapses as every duration here does, and the
+ * three knocks arrive whole — so such a visitor loses the drawn half of the
+ * series and keeps the half that was always going to be the longer one.
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -795,6 +851,35 @@
     }
   }
 
+  /* One settle at a time. A second press while the top log is still in the air
+   * is ignored rather than restarting it, the rule every ring-down in this file
+   * keeps — and here it also keeps a fast tapper from holding a log permanently
+   * two pixels off the pile, which would be the one thing a knock may not do
+   * wearing a different coat.
+   *
+   * The class goes on `.woodpile` and the animation runs on its `--top` child,
+   * so the `animationend` is caught on the pile by bubbling. Naming the
+   * animation in the guard is deliberate: a renamed keyframe set fails loudly
+   * here rather than leaving the class on forever. */
+  function settle(pad) {
+    var scene = pad.closest('.scene');
+    var pile = scene && scene.querySelector('.woodpile');
+    if (!pile || pile.classList.contains('is-settling')) return;
+
+    pile.classList.add('is-settling');
+    pile.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'log-settle') return;
+      pile.classList.remove('is-settling');
+      pile.removeEventListener('animationend', once);
+    });
+
+    /* Second, and never first. The log is already out of its valley by the time
+     * anything is asked of the audio. */
+    if (window.CabinSound && typeof window.CabinSound.clack === 'function') {
+      try { window.CabinSound.clack(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -827,7 +912,8 @@
     ['.bed-touch',    brush],
     ['.coat-touch',   swing],
     ['.birds-touch',  startle],
-    ['.glass-touch',  strike]
+    ['.glass-touch',  strike],
+    ['.logs-touch',   settle]
   ];
 
   function padFor(target) {

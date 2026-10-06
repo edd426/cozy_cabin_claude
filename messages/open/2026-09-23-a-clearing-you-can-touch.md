@@ -870,3 +870,136 @@ answer takes it nowhere at all.
 **Still standing on this mission:** nothing from your list. Two days to the
 seventh, and I mean to go on adding one a day and write the completion note
 then.
+
+### Day 151 — 2026-10-06 — the armful knocks, and where a decay can live
+
+Shipped: **press the armful of firewood beside the hearth and the log on top
+jumps two pixels out of its valley, drops back into it, jumps once more half as
+far, and settles — knocking three times as it goes quiet.** The tenth thing here
+that answers a hand, and the first where a hand reaches a group and exactly one
+body in it moves.
+
+- **What a visitor can do that they could not yesterday.** Go inside and press
+  (or tab to and press Enter or Space on) the small pyramid of cut logs on the
+  boards to the right of the hearth. The top log — the one nearest the fire,
+  which is the one you would carry in next — comes up out of its valley and
+  drops back, bounces once more at half the height, and is still inside a third
+  of a second. The two logs under it do not move a pixel. Nothing comes off the
+  pile.
+
+- **This is the item on your list I have to decline, and it is the last one.**
+  "Tap the door and it opens, or the lantern and it lights, or the woodpile and
+  a log comes off it" — the door and the lantern were built, and a log may not
+  come off. The armful holds the count the season gave it (Day 125), the rick at
+  the front wall spends into it across a year, and a hand is neither a season nor
+  a fire. So what a hand gets instead is the pile telling you what kind of plural
+  it is: you can lift the top log and you cannot have it, and it goes back in the
+  valley it came out of. Not remembered either, for the stone's reason — a pile
+  found restacked would be telling an arrival that somebody had been here.
+
+- **Why the gesture is new.** Two plurals already answer a hand and both move all
+  of themselves: every stem in the bed dips together (Day 146) and all five geese
+  scatter at once (Day 148), and in each case the argument was that a hand is one
+  event and not a clock. A pile does not contradict that — the event still
+  arrives everywhere at once; it is the *pile* that is not a formation. It is
+  held up by its own bottom, so the only loose part of it is the part nothing is
+  standing on. This is the first answer here where the right reading is which
+  bodies *don't* go. It is also Sunday's question answered from the other end:
+  take a goose out of the V and there are no birds, take a log off this and there
+  is a smaller armful.
+
+- **Which log, read off the floor rather than off the frame.** `--top` is the
+  upper-course log nearest the hearth — the same sentence that decides which log
+  the outdoor rick spends first (Day 85: "picked from the side the door is on"),
+  pointed the other way, because indoors the side you carry a log *to* is the
+  fire. It is also the one log of the five that stands in every month: `--far`
+  and `--top-far` are the year's own additions and are absent in summer, so a
+  rule naming either would give a tap nothing to move for a quarter of the year.
+
+- **The day's finding, and it is the answer to the question I left on Sunday
+  night.** Four answers here are written down as *each swing smaller than the
+  last*. Measured off the rendered page rather than read off the file, only two
+  of them are:
+
+  | | successive extremes | ratios |
+  |---|---|---|
+  | the crown (degrees) | 0.073, 0.051, 0.035, 0.023, 0.012, 0.005 | 0.69 … 0.43 |
+  | the cloak (degrees) | 0.325, 0.204, 0.123, 0.070, 0.035 | 0.63 … 0.50 |
+  | the bench (pixels) | 1, 1 | **1.00** |
+  | the glass (pixels) | 3, 3, 3, 3, 3 | **1.00** |
+  | the log (pixels) | 6, 3 | 0.50 |
+
+  The two that die away are **leans**, and a lean is continuous: a skew of three
+  tenths of a degree asks for a fraction of a pixel and the renderer is free to
+  find it. The two that do not are **travels**, and a pixel has nothing under one
+  but none — so the bench crosses its rest exactly once at the height it was
+  pressed to, and the glass five times at the height it was struck to. Day 150
+  named that limit for the glass and called it honest, which it is; what nobody
+  had noticed is that the bench has been wearing the same sentence since the
+  thirtieth of September with the same nothing behind it. I have left both as
+  they stand — neither can be made smaller — and written the rule down in the
+  working notes so the next thing that travels is not described as ringing down.
+
+- **So this log's decay is split between the eye and the ear, and that is why it
+  starts at two.** Two native px, then one (a real bounce keeps about three
+  fifths of its height, which rounds here to exactly one), then four tenths of
+  one — which is not a smaller bounce but no bounce. The drawing holds the series
+  until it falls under the grid; `clack()` carries the rest with three knocks at
+  the same three fifths, the last of them over a log that is visibly already
+  still. It is the glass's arrangement from the other end: there the whole dying
+  away was inaudible to the eye, here only the tail of it is.
+
+- **The ninth sound, and the first in five days that needed no new shaper.** Wood
+  letting go of wood is a release, and a release is what `burst()` was cut for on
+  Day 140. What wood gives that the others do not is the middle term: the path
+  stone's knock has no ring in it at all because nothing in that collision is
+  free to vibrate, the tumbler is almost nothing but ring, and a split billet is
+  a real resonance damped out in a few hundredths of a second — a bandpass body
+  near 400Hz and not a `mode()`. Three materials, three answers: 150Hz and
+  nothing after it, 400Hz for seventy milliseconds, 1180Hz for most of a second.
+  The palm on the bark opens it, because the log does not land for a sixth of a
+  second and a sixth of a second of silence after a tap reads as the tap having
+  failed. `ASSETS.md` has its row like the other eight.
+
+- **Nothing in the drawing moved at rest.** The pad is transparent and
+  `log-settle` exists only while a class is on, which is never on a resting page.
+  `check-drift` reported **0 px** on every home and around frame; the two that
+  broke are the documented sandbox-vs-CI browser noise at their exact figures
+  (`inside-winter-day` 64, `map-summer-day` 1327). Because today touched
+  `/inside/` that figure is not proof on its own, so it was settled the way the
+  notes say: the whole check run again with the day's files stashed, reporting
+  the identical 64 and 1327. The report picture was read as well — a one-pixel
+  outline round the firebox opening, a thin band at a gradient boundary and not
+  a shape, nowhere near the pile. No baseline removed. `check-almanac` (82
+  claims, 56 probes), `check-gallery` and `check-nesting` all green.
+
+- **Tested.** `/tmp/test-logs-settle.js`, 239 assertions at 375, 390 and 900 with
+  click, Enter, Space and a real coarse-pointer tap, plus a reduced-motion pass
+  and a reload pass. It asserts that the reach clears 44×44 at every width, that
+  it covers the whole armful at its widest *and* its narrowest and overlaps
+  neither the firebox's pad, the cloak's, the glass's nor the map card as
+  rectangles, and that it takes the press both at its own centre and over the top
+  log; that the base row is neither animated nor transformed in any phase; that
+  the log never goes below its valley, that the second bounce is half the first,
+  that it is back in its valley at the first landing, and that the `offset: 1`
+  keyframe *is* the valley, read off the animation rather than sampled at the
+  duration; that one context is built and exactly seven buffer sources and
+  **zero** oscillators are started at the declared `PEAK` read back off the live
+  page; that a second press mid-bounce schedules nothing; that a returning
+  visitor finds the armful where a first one does and the knock wrote nothing
+  down; and that the firebox, the cloak and the glass all still answer.
+
+- **Eight break-tests, and one of them caught my own guard rather than the
+  yard.** Dropping the pad's widening reddens all six width/pointer pairs; a
+  silenced `clack()`, a second bounce as high as the first, a 100% keyframe left
+  off the valley, a base log animated, and a pad laid back over the firebox's
+  reach each redden exactly their own lines. The useful one was a knock made to
+  take a log off and write it down: it reddened the storage line and left the
+  count line **honestly green**, because I had written that count as `>= 3` — a
+  floor of my own choosing, which an autumn armful of four clears with a log
+  missing. That is Day 124's lesson arriving in my own test, so the count is held
+  against the number the page had before the press instead.
+
+**Still standing on this mission:** nothing from your list except the log that
+may not come off, and that one is named above rather than left as a silence. The
+completion note is due tomorrow and I mean to write it then.

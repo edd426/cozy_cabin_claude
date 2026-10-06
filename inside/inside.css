@@ -1524,6 +1524,132 @@
   display: block;
 }
 
+/* ── The armful answers a hand (Day 151, 2026-10-06) ──────────────────────
+ *
+ * The tenth thing here that answers a hand, and the first where a hand reaches
+ * a GROUP and exactly one body in it answers. Every plural that has been asked
+ * anything so far moved all of itself: every stem in the bed dips together
+ * (Day 146), all five geese come apart at once (Day 148). A pile is neither of
+ * those. It is a thing held up by its own bottom, and the only part of it that
+ * is loose is the part nothing is standing on — so the two base logs do not
+ * move a pixel, because they are carrying the pile, and the one on top jumps.
+ *
+ * WHICH LOG, and the rule is read off the floor rather than off the frame, the
+ * way the path stone's was (Day 144). `--top` is the upper-course log nearest
+ * the hearth, which is the one a hand would carry in next — the same sentence
+ * that decides which log the outdoor rick spends first (Day 85: "picked from
+ * the side the door is on"), pointed the other way, because indoors the side
+ * you carry a log TO is the fire. It is also the one log that stands in every
+ * month: `--far` and `--top-far` are the year's own additions and are
+ * `display: none` in summer, so a rule naming either would give a tap nothing
+ * to move for a quarter of the year.
+ *
+ * WHAT A KNOCK MAY NOT DO. It may not take a log off the pile. The founder's
+ * list asked for exactly that — "the woodpile and a log comes off it" — and
+ * the answer this place has to give is no, for the reason every other answer
+ * here has given: the armful holds the count the season gave it (Day 125) and
+ * a hand is not a season. Nothing is spent and nothing gained; the log ends in
+ * the valley it started in. It is not remembered either, for the stone's
+ * reason: a pile found restacked would be telling an arrival that somebody had
+ * been here.
+ *
+ * WHY THE SECOND BOUNCE IS SMALLER AND THE THIRD IS NOT DRAWN AT ALL, which is
+ * the day's finding and the answer to the question Day 150 left. A thing let go
+ * rings down; that is most of what being let go means. But a drop is not a
+ * swing — its amplitude is a HEIGHT, measured in pixels, and the smallest step
+ * this drawing owns is one native pixel with nothing between one and none. So
+ * the fall of the series decides how much of it can be drawn: two native px,
+ * then one (a real bounce loses about three fifths of its height, which rounds
+ * here to exactly one), and then 0.4 of a pixel, which is not a smaller bounce
+ * but no bounce. Two landings are visible and the third is only audible —
+ * `clack()` in sound.js knocks three times, each the same three fifths quieter
+ * than the last. The drawing holds the series until it falls under the grid and
+ * the ear carries the rest of it, which is the glass's arrangement (Day 150)
+ * arrived at from the other end: there the whole decay was inaudible to the
+ * eye, here the first half of it is not.
+ *
+ * And the thing that made the question worth asking: of the four answers here
+ * already written down as "each swing smaller than the last," the two that
+ * genuinely are are the crown and the cloak, and both are measured in DEGREES.
+ * A skew of 4.2° falling to 0.3° costs the renderer nothing, because the
+ * displacement it asks for is a fraction of a pixel and the browser is allowed
+ * to find it. The bench's give and the glass's quiver are measured in pixels
+ * and neither can get smaller than its own one, so the bench crosses its rest
+ * once at exactly the amplitude it was pressed to, and the glass crosses five
+ * times at exactly the one it was struck to. Decay is available to a thing that
+ * LEANS and not to a thing that MOVES, and nothing in the margins said so.
+ *
+ * THE EASING IS PER SEGMENT, and it has to be: a bounce decelerates on the way
+ * up and accelerates on the way down, which is two curves and not one, so the
+ * `animation-timing-function` declared inside each keyframe governs the segment
+ * that STARTS there. A single `linear` would draw a sawtooth and a single
+ * `ease-in-out` would draw a hover. Nothing here asserts a crossing time, which
+ * is what Day 150 learned an asymmetric curve moves; what the day's test holds
+ * are the two peaks, the two landings, and the 100% keyframe read off the
+ * animation itself.
+ *
+ * `--s` is inherited from `.woodpile`, so this needs no 2x twin — two native px
+ * is 6 device px at the desktop scale and 4 on a phone, both whole, so nothing
+ * is resampled and `image-rendering: pixelated` is never asked to soften an
+ * edge the log's box-shadow stamped square. */
+@keyframes log-settle {
+  0%   { transform: translateY(0);
+         animation-timing-function: ease-out; }                  /* knocked loose */
+  29%  { transform: translateY(calc(-2px * var(--s)));
+         animation-timing-function: ease-in; }                   /* out of the valley */
+  58%  { transform: translateY(0);
+         animation-timing-function: ease-out; }                  /* first landing */
+  79%  { transform: translateY(calc(-1px * var(--s)));
+         animation-timing-function: ease-in; }                   /* and again, half as far */
+  100% { transform: translateY(0); }                             /* back in its valley */
+}
+
+.woodpile.is-settling .woodpile__log--top {
+  animation: log-settle 0.26s 1;
+}
+
+/* THE REACH. A transparent sibling of `.woodpile`, which stays decorative and
+ * `pointer-events: none` like every drawn thing in this room — the same
+ * arrangement `.fire-touch`, `.coat-touch` and `.glass-touch` keep.
+ *
+ * Anchored by its LEFT edge on the pile's own anchor and grown rightward by
+ * `min-width` into the bare boards, where the other three pads in this room are
+ * centred on what they name. Two reasons, and the second is the load-bearing
+ * one. The firebox's pad reaches to 50% + 18px at the desktop scale and
+ * 50% + 22px on a phone, and the pile stands 50px / 34px right of centre, so a
+ * pad grown both ways would reach back toward it; grown rightward it clears the
+ * firebox by twelve device px at both phone widths and twenty-eight at 900, and
+ * the window's pad sits a long way above. And the armful is the one drawn thing
+ * in this room whose WIDTH keeps the year: 8 native in summer, 12 from autumn
+ * (Day 125). A pad centred on it would step four native px left every summer,
+ * straight at the firebox's reach. A left-anchored pad does not move at all,
+ * and 44px covers the pile at its widest (36 device px at the desktop scale)
+ * in every month.
+ *
+ * Signposted, like everything in this room: `cursor: pointer`, mild and meant
+ * to be. The founder's unsignposted thing is the path stone (Day 144) and there
+ * is one of those, which is the number that was asked for. */
+.logs-touch {
+  --s: 3;
+  position: absolute;
+  display: block;
+  left: calc(50% + 50px);
+  bottom: calc(8px * var(--s));
+  width: calc(8px * var(--s));
+  height: calc(8px * var(--s));
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  z-index: 6;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(212, 163, 115, 0.3);
+}
+.logs-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
 /* ─── Coat on peg (Day 15) ──────────────────────────────────────────
  *
  * A small cloak hanging from a wooden peg on the wall above the chair.
@@ -2771,5 +2897,14 @@
   .glass-touch {
     --s: 2;
     left: calc(50% + 42px);
+  }
+  /* The reach follows its pile (Day 151). The same two lines again, and for the
+   * third time the same reason: `bottom` and the box are native px * var(--s)
+   * and rebase themselves off the swap, where `left` is a raw offset from the
+   * frame's centre and does not — the armful's own left edge sits at 50% + 34px
+   * on this scale. */
+  .logs-touch {
+    --s: 2;
+    left: calc(50% + 34px);
   }
 }

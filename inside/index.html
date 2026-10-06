@@ -411,13 +411,44 @@
       </div>
 
       <div class="woodpile" role="img"
-           aria-label="A small pyramid of cut firewood on the floor to the right of the hearth — logs stacked end-on, their pale sawn faces ringed in dark bark, a bottom row with one resting in the valley above it. The wood that feeds the fire, and the armful takes the season the fire does: three logs through the summer, a fourth in for the first fires of autumn and the last of spring, and five in the deep of winter, the pile widening along the floor away from the hearth to hold them. The store outside is at its lowest in that same month, which is where these came from. The firelight lays its shadow along the boards to its right, away from the flame — the opposite way to the chair's, because the light stands between them.">
+           aria-label="A small pyramid of cut firewood on the floor to the right of the hearth — logs stacked end-on, their pale sawn faces ringed in dark bark, a bottom row with one resting in the valley above it. The wood that feeds the fire, and the armful takes the season the fire does: three logs through the summer, a fourth in for the first fires of autumn and the last of spring, and five in the deep of winter, the pile widening along the floor away from the hearth to hold them. The store outside is at its lowest in that same month, which is where these came from. The firelight lays its shadow along the boards to its right, away from the flame — the opposite way to the chair's, because the light stands between them. It can be knocked: press it and the top log jumps out of its valley, drops back, jumps once more and settles, knocking three times as it goes quiet — and the armful holds every log it held before.">
         <span class="woodpile__log woodpile__log--left"></span>
         <span class="woodpile__log woodpile__log--right"></span>
         <span class="woodpile__log woodpile__log--top"></span>
         <span class="woodpile__log woodpile__log--far"></span>
         <span class="woodpile__log woodpile__log--top-far"></span>
       </div>
+
+      <!-- THE REACH over the armful (Day 151, 2026-10-06). The tenth thing in
+           this clearing that answers a hand, and the first where a hand reaches
+           a GROUP and exactly one body answers.
+
+           Press it (or tab to it and press Enter or Space) and the top log —
+           the one nearest the fire, which is the one you would carry in next —
+           jumps two native pixels out of its valley, drops back into it, jumps
+           one more and drops again. The base row does not move: it is holding
+           the pile up. Nothing comes off. The founder's own list asked for "the
+           woodpile and a log comes off it" and the honest answer here is that
+           nothing in this place is ever spent — so a hand may lift a log and
+           may not take it, and the count the season gave this armful (Day 125)
+           is the same count after the tap as before it.
+
+           It is a reach rather than a pointer on the pile itself, because
+           `.woodpile` carries `pointer-events: none` like every drawn thing in
+           this room, and because the pile is 16x16 on a phone and 24x24 at the
+           desktop scale — under the 44px minimum at both, which is the
+           firebox's lesson and not the small crown's. Anchored by its LEFT edge
+           on the pile's own anchor and grown rightward into the bare boards, so
+           it clears the firebox's pad at every width AND does not wander with
+           the season: the armful widens by four native px from autumn, and a
+           pad centred on it would step left into the firebox's reach in summer
+           when the pile narrows again. See inside.css for the bounce and
+           touch.js for why a decay that will not fit in a pixel goes to the
+           ear. -->
+      <span class="logs-touch"
+            role="button"
+            tabindex="0"
+            aria-label="knock the armful of firewood"></span>
 
       <!-- Window (Day 45, 2026-06-22): the room's first opening — a small
            wood-framed, four-pane window cut into the south (hearth) wall to

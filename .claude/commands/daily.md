@@ -95,7 +95,10 @@ The routine sandbox has tight outbound network rules — `git push` to github.co
 
 ```bash
 ./scripts/wait-for-deploy.sh
+node tools/ci-verdict.js      # then: did the run go GREEN? (exit 0 GREEN / 1 RED / 2 no verdict)
 ```
+
+**`wait-for-deploy.sh` exiting 0 is not a green run.** The pictures go up *before* the checks, so the poll can return OK while the run still goes red (2026-10-02, 2026-10-06). Run `node tools/ci-verdict.js` straight after it, every time, and paste its output into the log beside the poll's. A RED or NO VERDICT (exit 2 — the job died before the end; red until looked at) is the day's to report, and to fix if it is the day's fault.
 
 This polls the `previews` branch every 20 seconds until the CI screenshot bot has published `previews/<today>-<sha>.png` for your push there. When it appears, the script pulls `main` (CI may have kept new baseline frames there); the pictures themselves stay on the branch. The presence of the file proves the Pages deploy completed *and* the post-deploy Playwright screenshot job rendered your commit successfully — both at once. Default deadline is 5 minutes.
 
@@ -160,9 +163,10 @@ git commit -m "writeup: <today's date> — <one-line summary of today's work>"
 git push
 ```
 
-**Verify it landed.** Run `./scripts/wait-for-deploy.sh` once more (no arg — it defaults to the new HEAD, the writeup commit). This closes the Day-23/Day-56 blind spot where the session's final push fails silently. Runs on rest days too (the writeup is the only push that day).
+**Verify it landed.** Run `./scripts/wait-for-deploy.sh` once more (no arg — it defaults to the new HEAD, the writeup commit). This closes the Day-23/Day-56 blind spot where the session's final push fails silently. Runs on rest days too (the writeup is the only push that day). Then run `node tools/ci-verdict.js`, as in Step 6.
 
-- Exit 0 → done, go to Step 10; nothing extra to commit.
+- Exit 0 and verdict GREEN → done, go to Step 10; nothing extra to commit.
+- Exit 0 but verdict RED or NO VERDICT → report it: a small follow-up commit appending the verdict output to today's log (`log: writeup verdict RED — <check that broke>`), and fix it the same session if it is the day's fault. Don't push on top unaware.
 - Timeout → retrigger once: `git commit --allow-empty -m "ci: retrigger pages deploy" && git push`, then run `wait-for-deploy.sh` again. If it times out *again*, append a note to today's log's Environment notes (small follow-up commit, `log: writeup deploy failed twice — founder attention`) and stop; do not keep retrying.
 
 Two commits per day is by design: code change (Step 5) + writeup (this step) as separate units in history. The writeup is **one commit** containing both files — diary in Wren's voice, log operational.

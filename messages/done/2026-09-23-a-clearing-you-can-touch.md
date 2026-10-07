@@ -1003,3 +1003,57 @@ body in it moves.
 **Still standing on this mission:** nothing from your list except the log that
 may not come off, and that one is named above rather than left as a silence. The
 completion note is due tomorrow and I mean to write it then.
+
+## Completion notes — Day 152 — 2026-10-07
+
+**What a visitor can do now that they could not on 2026-09-23.** On the
+twenty-third nothing in the scene answered a tap except the mailbox and the
+map card, and both only left the frame. Now ten things answer in place:
+
+1. **The crowns** (both front trees, the near door-side tree) shake and ring
+   back to rest; in autumn the touched crown lets a leaf go. *(Day 139)*
+2. **The firebox** flares, throws five sparks up the flue, and **cracks** —
+   the first sound this place ever made. *(Day 140)*
+3. **The lantern by the door** lights or goes out with a latch click, and
+   **holds** what you left it at across views and visits (`localStorage`).
+   *(Day 141)*
+4. **The nearest path stone** (front and door side) turns over to its damp
+   side with a dead knock — **no cursor, no hover, nothing to signpost it.**
+   *(Day 144)*
+5. **The bench** gives a pixel under a hand and creaks. *(Day 145)*
+6. **The wildflower bed** dips under a palm, and **the bee bolts off it** and
+   comes back to wherever her round has got to, buzzing. *(Day 146)*
+7. **The cloak** swings on its peg, rustling — the first hung thing.
+   *(Day 147)*
+8. **The skein** comes apart for a fifth of a second and calls, three geese
+   at three pitches. *(Day 148)*
+9. **The glass on the sill** shivers one pixel and rings. *(Day 150)*
+10. **The armful by the hearth** bounces its top log and knocks. *(Day 151)*
+
+Every one works by click, Enter/Space and a real coarse-pointer tap at 375,
+390 and 900, each with a disposable `/tmp/` test that performs the tap. Nine
+sounds, all made in `sound.js` from Web Audio arithmetic — nothing stored,
+nothing licensed, nothing plays without a hand. A visitor who has asked for
+reduced motion still gets the sound and every state change.
+
+**Against the acceptance criteria, honestly.**
+- *One touchable thing every building day until today* — met: Days 139–141,
+  144–148, 150, 151. Day 143 was not (the founder's CLAUDE.md consolidation
+  ask took it, and its diary says so), and Days 142 and 149 were Sundays.
+- *At least one makes a sound* — nine do.
+- *At least one never mentioned on the page or in the diary as a feature* —
+  **half met.** The stone carries no affordance on the page, and the bee's
+  bolt has nothing on the page announcing it; a visitor has to poke to find
+  either. But both were written about in the diary the day they were made,
+  as features. I never built a thing and kept it out of the diary, and I
+  don't think I could have without the diary stopping being the record. If
+  that half matters, it is the one I did not do.
+- *Diary in my voice, engineering in the log* — kept.
+
+**What I'd leave open, if anything:** one item from your list stays undone on
+purpose — *the woodpile and a log comes off it* — because a hand taking a log
+would take one from a count the season keeps (Day 151 reasons it out). And
+the door: the one on the east face has opened into the room since June and needs no more.
+
+**Close.** Moving to `done/`. Whatever a hand does here next is my own choosing
+rather than this mission.

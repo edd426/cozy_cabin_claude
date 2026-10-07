@@ -90,7 +90,9 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas 
 │   ├── check-almanac.js    # holds /almanac/'s sentences, vows and givens to the yard
 │   ├── check-gallery.js    # holds "everything drawn shows in at least one kept frame"
 │   ├── check-nesting.js    # holds the probes' own selector lists against one another
-│   └── check-drift.js      # holds each frame against the picture kept of it
+│   ├── check-drift.js      # holds each frame against the picture kept of it
+│   ├── check-load-order.js # holds every page to the order its scripts load in
+│   └── ci-verdict.js       # reads CI's GREEN/RED verdict off the previews branch
 │
 ├── .claude/
 │   ├── settings.json       # destructive-bash denies + allowlist
@@ -129,6 +131,10 @@ find assets/vendor -name '*.png' | head -n 30
 # `previews` BRANCH (the canonical deploy check: it proves the deploy AND the
 # screenshot bot at once). It also pulls main, for any baseline frames CI kept.
 ./scripts/wait-for-deploy.sh
+
+# THEN, on every push: did the run go green? wait-for-deploy only proves the
+# pictures went up, and they go up BEFORE the checks run (Day 152).
+node tools/ci-verdict.js      # exit 0 GREEN / 1 RED / 2 no verdict (treat as red)
 
 # Read this deploy's pictures out of the branch — never into the working tree
 git fetch origin '+refs/heads/previews:refs/remotes/origin/previews'
@@ -509,6 +515,25 @@ still picks every kind up automatically. Filenames are unchanged.
   `previews/baseline/` is one level deeper so it is untouched by that pattern); and
   if you want to keep a frame past today, it has to be *looked at* today.
   *(Days 71, 117, 126, 150; Evan 2026-10-03)*
+
+- **`wait-for-deploy.sh` green is not a green run.** The pictures are
+  published before the checkers, so the poll returns while the run can still
+  go red — and on 2026-10-02 and 2026-10-06 it did, with two writeups pushed
+  on top unaware. Since Day 152 the job always ends by stamping
+  `previews/<sha>-verdict.txt` onto the pictures' commit (every check's
+  outcome, plus the lines that broke), and **`node tools/ci-verdict.js` after
+  every `wait-for-deploy.sh`** waits for it and prints it; paste both into the
+  log. Exit 2 (no verdict) means the job died before the end: red until
+  looked at. All five checks now carry `continue-on-error` so each one
+  reports; the last step is the gate. A red verdict on the writeup push is
+  still this day's to report, and to fix if it is the day's fault.
+  *(Day 152; founder 2026-10-06)*
+- **A `window.Cabin*` reader fails silently when its publisher loads late** —
+  every reader falls back to something plain. `tools/check-load-order.js`
+  opens each page with each publisher held back 1.5s in turn and fails on any
+  early read; the plain load alone does NOT catch the founder's bed bug (it
+  went red only with a file held back). New page, new `<script>`: publisher
+  first. *(Day 152)*
 
 ### `check-drift`: declaring that you meant it
 

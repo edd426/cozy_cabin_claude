@@ -84,6 +84,12 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # The sha every picture and the verdict are named for, taken once, here,
+      # before any step can move HEAD — so the verdict step at the very end
+      # can still name this deploy when a step in the middle has failed.
+      - name: Note which commit this run is for
+        run: echo "DEPLOY_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -218,10 +224,11 @@ jobs:
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
         run: |
+          set -o pipefail
           DATE_TAG="$(date -u +%Y-%m-%d)"
           SHA_SHORT="$(git rev-parse --short HEAD)"
           node tools/check-drift.js "$PAGE_URL" \
-            --out previews --prefix "${DATE_TAG}-${SHA_SHORT}-"
+            --out previews --prefix "${DATE_TAG}-${SHA_SHORT}-" 2>&1 | tee "$RUNNER_TEMP/check-drift.log"
 
       # Since 2026-10-03 the pictures no longer go on main. Every set was
       # committed there from Day 1 (44 PNGs a commit, ~540 MB by then, and the
@@ -286,15 +293,22 @@ jobs:
         # off the page itself and goes and takes every measurement on the live
         # views, so it can only ever test the claims the page actually makes.
         #
-        # Deliberately NOT continue-on-error, unlike the gallery and motion
-        # steps: those are optional enrichments of the record, this is what
-        # keeps a published promise honest, and it is supposed to turn the run
-        # red. It sits LAST, after the previews are pushed, for the same reason
-        # those steps carry the flag — a red check must never cost the record
-        # its pictures.
+        # This is what keeps a published promise honest, and it is supposed to
+        # turn the run red. It sits after the previews are pushed, so a red
+        # check never costs the record its pictures.
+        #
+        # continue-on-error since Day 152, and that does NOT soften it: it
+        # used to stop the job on a failure, which skipped every check after
+        # it, so a red almanac hid whatever the gallery and the lists would
+        # have said. Now every check reports, the verdict step names each one,
+        # and the gate at the very end turns the run red if any of them broke.
+        id: almanac
+        continue-on-error: true
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
-        run: node tools/check-almanac.js "$PAGE_URL"
+        run: |
+          set -o pipefail
+          node tools/check-almanac.js "$PAGE_URL" 2>&1 | tee "$RUNNER_TEMP/check-almanac.log"
 
       - name: Hold the record to the clearing
         # The step above holds the almanac's SENTENCES to what the yard does.
@@ -309,14 +323,19 @@ jobs:
         # kept frames off GALLERY_STATES in scripts/screenshot.js, so it can
         # only ever test the gallery that actually runs.
         #
-        # Same flags as the almanac check and for the same reasons: no
-        # continue-on-error (a record that has stopped covering the clearing
-        # should turn the run red) and last, after the previews are pushed, so
-        # a red check never costs the record its pictures. Cheap — three page
-        # loads, motion off, all sixteen states forced in the same DOM.
+        # Same flags as the almanac check and for the same reasons: a record
+        # that has stopped covering the clearing turns the run red (at the
+        # gate, after every check has spoken), and it runs after the previews
+        # are pushed so a red check never costs the record its pictures.
+        # Cheap — three page loads, motion off, all sixteen states forced in
+        # the same DOM.
+        id: gallery
+        continue-on-error: true
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
-        run: node tools/check-gallery.js "$PAGE_URL"
+        run: |
+          set -o pipefail
+          node tools/check-gallery.js "$PAGE_URL" 2>&1 | tee "$RUNNER_TEMP/check-gallery.log"
 
       - name: Hold the lists to one another
         # The two steps above hold this place to its own sentences and its own
@@ -337,26 +356,131 @@ jobs:
         # either: that page is for what this place promises, and a guard on the
         # runner's own bookkeeping belongs beside the runner.
         #
-        # Same flags and the same reasons as the two above: no
-        # continue-on-error, and after the previews are pushed so a red check
-        # never costs the record its pictures. Cheap — four page loads, no
-        # forcing, no screenshots.
+        # Same flags and the same reasons as the two above. Cheap — four page
+        # loads, no forcing, no screenshots.
+        id: nesting
+        continue-on-error: true
         env:
           PAGE_URL: ${{ needs.deploy.outputs.page_url }}
-        run: node tools/check-nesting.js "$PAGE_URL"
-
-      - name: Fail the run if the clearing drifted
-        # The gate for the drift step above, which had to run before the commit
-        # so its report pictures reached the record. Last of all, so the two
-        # checks above still report before the run goes red — and so a red
-        # check never costs the record its pictures, the same reason they sit
-        # after the commit step themselves.
-        if: steps.drift.outcome == 'failure'
         run: |
-          echo "The clearing differs from the picture kept of it in" >&2
-          echo "previews/baseline/. Read this run's previews/*-drift-*.png:" >&2
-          echo "the three panels are kept | this morning | what moved." >&2
-          echo "If every moved pixel was meant, git rm the frames named above" >&2
-          echo "from previews/baseline/ and commit that beside the change —" >&2
-          echo "the next run keeps them afresh, in this browser." >&2
-          exit 1
+          set -o pipefail
+          node tools/check-nesting.js "$PAGE_URL" 2>&1 | tee "$RUNNER_TEMP/check-nesting.log"
+
+      - name: Hold every page to the order its scripts load in
+        # Day 152. Every reader of a window.Cabin* reckoning falls back quietly
+        # when the reckoning isn't there yet, so a page that loads its
+        # publisher too late never breaks — it just draws something else on a
+        # slow connection. That is how the home page's bed drew the wrong
+        # flowers for 36 days (founder, 2026-10-06). This opens each page with
+        # each publisher held back on the wire in turn and fails on any read
+        # made before the publisher ran. Same flags as the three above.
+        id: loadorder
+        continue-on-error: true
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page_url }}
+        run: |
+          set -o pipefail
+          node tools/check-load-order.js "$PAGE_URL" 2>&1 | tee "$RUNNER_TEMP/check-load-order.log"
+
+      - name: Stamp the verdict on the previews branch
+        # Day 152 (messages/open/2026-10-06-the-bed-that-drew-itself-twice.md).
+        # The morning's deploy check (scripts/wait-for-deploy.sh, locked)
+        # returns the moment the pictures reach the previews branch, and the
+        # pictures go up BEFORE the checks — so on 2026-10-02 and 2026-10-06
+        # the poll came back green a minute before the run went red, and the
+        # writeup went out on a red main with nobody the wiser.
+        #
+        # So the job ends, always, by adding previews/<sha>-verdict.txt to the
+        # same single commit the pictures are in — GREEN or RED, every check's
+        # outcome, and the failing lines of any that broke — and the morning
+        # reads it with tools/ci-verdict.js, which waits for it. `always()` is
+        # the whole point: a job that died halfway still says so. The subject
+        # stays `ci: deploy preview for <sha>`, which wait-for-deploy.sh checks.
+        if: always()
+        env:
+          JOB: ${{ job.status }}
+          DRIFT: ${{ steps.drift.outcome }}
+          ALMANAC: ${{ steps.almanac.outcome }}
+          GALLERY: ${{ steps.gallery.outcome }}
+          NESTING: ${{ steps.nesting.outcome }}
+          LOADORDER: ${{ steps.loadorder.outcome }}
+        run: |
+          set -o pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          SHA="${DEPLOY_SHA:?no deploy sha was noted}"
+          V="$RUNNER_TEMP/verdict.txt"
+          VERDICT=GREEN
+          [[ "$JOB" == "success" ]] || VERDICT=RED
+          for o in "$DRIFT" "$ALMANAC" "$GALLERY" "$NESTING" "$LOADORDER"; do
+            [[ "$o" == "success" ]] || VERDICT=RED
+          done
+          {
+            echo "VERDICT: ${VERDICT}"
+            echo "commit: ${SHA}   run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+            echo "job before the checks: ${JOB}"
+            echo "check-drift:      ${DRIFT:-never reached}"
+            echo "check-almanac:    ${ALMANAC:-never reached}"
+            echo "check-gallery:    ${GALLERY:-never reached}"
+            echo "check-nesting:    ${NESTING:-never reached}"
+            echo "check-load-order: ${LOADORDER:-never reached}"
+            for pair in "drift:$DRIFT" "almanac:$ALMANAC" "gallery:$GALLERY" "nesting:$NESTING" "load-order:$LOADORDER"; do
+              c="${pair%%:*}"
+              L="$RUNNER_TEMP/check-${c}.log"
+              # Only a check that failed is quoted; a green one may still
+              # print a ✗ beside a reading it then holds.
+              [[ "${pair#*:}" == "success" || ! -f "$L" ]] && continue
+              HITS="$(grep -E 'BROKE|✗|FAIL|UNBORN|UNDECLARED|REFUSED|NOT FOUND|Error' "$L" | head -n 40 || true)"
+              if [[ -n "$HITS" ]]; then
+                echo ""
+                echo "--- check-${c}, the lines that broke ---"
+                echo "$HITS"
+              fi
+            done
+          } > "$V"
+          cat "$V"
+          # Onto the pictures' own commit if the branch holds this deploy's;
+          # alone otherwise (the publish never happened), so the morning still
+          # finds a verdict rather than a silence.
+          export GIT_INDEX_FILE="$RUNNER_TEMP/verdict.index"
+          rm -f "$GIT_INDEX_FILE"
+          git fetch --quiet origin '+refs/heads/previews:refs/remotes/origin/previews' || true
+          if [[ "$(git log -1 --format=%s origin/previews 2>/dev/null)" == "ci: deploy preview for ${SHA}" ]]; then
+            git read-tree origin/previews
+          else
+            git read-tree --empty
+          fi
+          BLOB="$(git hash-object -w "$V")"
+          git update-index --add --cacheinfo "100644,${BLOB},previews/${SHA}-verdict.txt"
+          TREE="$(git write-tree)"
+          COMMIT="$(git commit-tree "$TREE" -m "ci: deploy preview for ${SHA}" -m "verdict: ${VERDICT}" -m "[skip ci]")"
+          git push --force origin "${COMMIT}:refs/heads/previews"
+
+      - name: Fail the run if any check broke
+        # The gate for every check above, all of which carry continue-on-error
+        # so that each one reports and the verdict can name them all. Last of
+        # all, after the verdict is on the branch.
+        if: always()
+        env:
+          DRIFT: ${{ steps.drift.outcome }}
+          ALMANAC: ${{ steps.almanac.outcome }}
+          GALLERY: ${{ steps.gallery.outcome }}
+          NESTING: ${{ steps.nesting.outcome }}
+          LOADORDER: ${{ steps.loadorder.outcome }}
+        run: |
+          FAILED=0
+          for pair in "drift:$DRIFT" "almanac:$ALMANAC" "gallery:$GALLERY" "nesting:$NESTING" "load-order:$LOADORDER"; do
+            if [[ "${pair#*:}" != "success" ]]; then
+              echo "check-${pair%%:*}: ${pair#*:}" >&2
+              FAILED=1
+            fi
+          done
+          if [[ "$DRIFT" == "failure" ]]; then
+            echo "The clearing differs from the picture kept of it in" >&2
+            echo "previews/baseline/. Read this run's previews/*-drift-*.png:" >&2
+            echo "the three panels are kept | this morning | what moved." >&2
+            echo "If every moved pixel was meant, git rm the frames named above" >&2
+            echo "from previews/baseline/ and commit that beside the change —" >&2
+            echo "the next run keeps them afresh, in this browser." >&2
+          fi
+          exit "$FAILED"

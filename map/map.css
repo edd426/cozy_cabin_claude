@@ -277,7 +277,7 @@
  * map became the only visible way around — the record needed a door too. */
 .map__zone--diary {
   left: 4%;
-  top: 76%;
+  top: 77%;  /* DELIBERATE BREAK, Day 152 — reverted next commit */
   width: 22%;
   height: 18%;
   flex-direction: column;

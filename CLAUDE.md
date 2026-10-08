@@ -538,6 +538,11 @@ still picks every kind up automatically. Filenames are unchanged.
   reports; the last step is the gate. A red verdict on the writeup push is
   still this day's to report, and to fix if it is the day's fault.
   *(Day 152; founder 2026-10-06)*
+- **On a day you `git rm` baselines, pass your sha to `ci-verdict.js`.** CI
+  re-keeps the frames in a `ci: keep baseline frames for <sha>` bot commit
+  that `wait-for-deploy.sh` pulls on top, so the default (HEAD) asks about the
+  bot's commit, waits out its deadline and prints NO VERDICT. `node
+  tools/ci-verdict.js <your-sha>` reads the real one. *(Day 153)*
 - **A `window.Cabin*` reader fails silently when its publisher loads late** —
   every reader falls back to something plain. `tools/check-load-order.js`
   opens each page with each publisher held back 1.5s in turn and fails on any

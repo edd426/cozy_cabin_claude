@@ -1236,6 +1236,11 @@
  * the warm cream sky for contrast. The container anchors above the
  * cabin chimney; tweak `bottom`/`left` if the cabin moves. */
 .sprite--smoke {
+  /* Day 153: the smoke's own scale, so every step it takes can be a whole
+   * native pixel of the cabin it rises off (the 2x block below sets 2). A
+   * sibling container needs its own --s; .front-cabin's does not reach here. */
+  --s: 3;
+  --u: calc(1px * var(--s));
   width: 6px;
   height: 78px;
   /* Chimney cap sits roughly above cabin centre at 3x scale. Cabin top
@@ -1246,15 +1251,50 @@
   z-index: 3;
 }
 
+/* ── The smoke steps (Day 153, 2026-10-08) ─────────────────────────────────
+ * Until this morning a puff was a 6px block with three box-shadow neighbours,
+ * carried up by `translate` and swelled by `scale`. Both are continuous, so at
+ * every instant but the first the puff stood at a fractional position and a
+ * fractional size: measured across one round at both widths, 255 of 261
+ * visible samples were off the pixel grid in x, in y and in width. The browser
+ * resampled the block into soft-edged smears with a seam between its four
+ * cells — the one drawing in this clearing not made of pixels. The diary had
+ * called it a lean since July. It was neither a lean nor a step. It slid.
+ *
+ * So the motion is now in three registered custom properties — the rise, the
+ * lean and the girth — which animate as smoothly as the transform did, and
+ * the drawing reads each of them through `round()` to the native pixel `--u`.
+ * The clock is unchanged; only what the clock is allowed to draw is.
+ *
+ * The puff is a POINT now: a 0×0 box at the cluster's centre, painted
+ * entirely by box-shadow squares whose half-side `--q` is a whole number of
+ * native pixels. That is what keeps a growing puff honest about the wind. A
+ * block that grows one pixel cannot stay centred; one that grows a pixel on
+ * EACH side can, so the centre — the point the almanac's drift probe tracks —
+ * stands still on the door side (which meets the wind end-on) and moves only
+ * rightward out front, in whole steps, never back. The lit top-right cell the
+ * cluster always carried (#fdeed0) is kept as the second shadow.
+ *
+ * The centre sits on the cabin's own lattice: the cabin is centred at 50% and
+ * its height is whole natives off its floor, so `50% + n·u` across and
+ * `floor + 76u + 6px` up are both on it. The old ±4px puff offsets were not
+ * (4px is a third of a pixel short at 3x), so they are rounded the same way.
+ */
+@property --puff-x { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --puff-y { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --puff-k { syntax: '<number>'; inherits: false; initial-value: 1; }
+
 .smoke-puff {
   position: absolute;
   display: block;
-  width: 6px;
-  height: 6px;
-  background: #fff8ec;
+  width: 0;
+  height: 0;
   opacity: 0;
-  bottom: 0;
-  left: 0;
+  /* The cluster's centre: 6px up and 3px right of the container's corner,
+   * which puts it on 50% across (the container sits at 50% − 3px) and on
+   * the cabin's lattice at both scales (6px is 2u at 3x and 3u at 2x). */
+  bottom: 6px;
+  left: calc(3px + round(nearest, var(--puff-off, 0px), var(--u)));
   /* HOW MUCH breath there is — season-tunable (Day 87 block below): how bright
    * a puff holds at its peak and mid-climb, and how wide it has spread by the
    * top. The born values are the thin summer thread. */
@@ -1268,12 +1308,16 @@
    * one declaration and no rule ever has to name both wheels at once. */
   --puff-born: 0.70;
   --puff-rise: 4.5s;
-  /* Pixel-art cluster: the puff plus three neighbouring pixel blocks
-   * make a chunky 12x12 cloud while keeping integer pixel edges. */
+  /* Half a cluster's side. The old 6px cell scaled by k made a 12k-px cluster,
+   * so the half-side is 6k px, rounded to whole natives and never below one. */
+  --q: max(var(--u), round(nearest, calc(6px * var(--puff-k)), var(--u)));
+  transform: translate(round(nearest, var(--puff-x), var(--u)),
+                       round(nearest, var(--puff-y), var(--u)));
+  /* Pixel-art cluster: a 2q square centred on the point, its top-right
+   * quarter the lit cell it has always carried. First shadow paints on top. */
   box-shadow:
-     6px  0   0 #fff8ec,
-     0   -6px 0 #fff8ec,
-     6px -6px 0 #fdeed0;
+    calc(var(--q) / 2) calc(var(--q) / -2) 0 calc(var(--q) / 2) #fdeed0,
+    0 0 0 var(--q) #fff8ec;
   animation: smoke-rise var(--puff-rise) linear infinite;
 }
 /* The stagger is written as a fraction of the round rather than in seconds, so
@@ -1281,16 +1325,16 @@
  * takes. Written as 1.5s / 3.0s / 2.25s they were tuned to a 4.5s round and
  * would have bunched the moment the hour slowed it. At 4.5s these resolve to
  * exactly the old numbers, which is why the day and dusk frames do not move. */
-.smoke-puff--1 { animation-delay: 0s;                              left:  0px;  }
-.smoke-puff--2 { animation-delay: calc(var(--puff-rise) / 3);      left: -4px;  }
-.smoke-puff--3 { animation-delay: calc(var(--puff-rise) / 3 * 2);  left:  4px;  }
+.smoke-puff--1 { animation-delay: 0s;                              --puff-off:  0px; }
+.smoke-puff--2 { animation-delay: calc(var(--puff-rise) / 3);      --puff-off: -4px; }
+.smoke-puff--3 { animation-delay: calc(var(--puff-rise) / 3 * 2);  --puff-off:  4px; }
 /* The winter puff (Day 87): hidden except in the cold, when the column
  * carries four puffs instead of three. Its half-round delay lands it between
  * puffs 2 and 3, so the winter column reads denser without the cadence
  * turning metronomic. */
 .smoke-puff--4 {
   animation-delay: calc(var(--puff-rise) / 2);
-  left: -2px;
+  --puff-off: -2px;
   display: none;
 }
 
@@ -1425,35 +1469,32 @@
 .scene--exterior .smoke-puff { animation-name: smoke-rise-lean; }
 
 @keyframes smoke-rise {
-  0%   { transform: translateY(0)     scale(var(--puff-born)); opacity: 0;                }
-  12%  {                                                        opacity: var(--puff-peak); }
-  60%  {                                                        opacity: var(--puff-mid);  }
-  100% { transform: translateY(-72px) scale(var(--puff-end));  opacity: 0;                }
+  0%   { --puff-y: 0px;   --puff-k: var(--puff-born); opacity: 0;                }
+  12%  {                                              opacity: var(--puff-peak); }
+  60%  {                                              opacity: var(--puff-mid);  }
+  100% { --puff-y: -72px; --puff-k: var(--puff-end);  opacity: 0;                }
 }
 
-/* The leaning column: same opacity/scale/height curve as smoke-rise, plus a
+/* The leaning column: same opacity/girth/height curve as smoke-rise, plus a
  * rightward drift that grows faster than the rise (1→5→9px over the -72px climb)
  * so the smoke bends a touch more the higher and slower it gets — the honest
  * shape of a column carried by a steady wind, kept to a whisper (~7°, less than
  * the flag's lift). Rest at 0% keeps prefers-reduced-motion behaviour identical
- * to the vertical variant. */
-/* The two middle steps carry a transform only because a keyframe that names any
- * part of `transform` must name all of it, and these two need the drift. Their
- * scales are therefore not choices — the girth runs linearly from `--puff-born`
- * at the cap to `--puff-end` at the top, so each middle step is written as its
- * own fraction of that run rather than as a number. Written as 0.77 and 1.06
- * they were the linear values for a 0.70 birth and would have stopped being so
- * the moment the hour thickened it (Day 127). At 0.70 → 1.30 they resolve to
- * exactly 0.77 and 1.06, which is why the day and dusk frames do not move. */
+ * to the vertical variant.
+ *
+ * Day 153: these are the same numbers as before, only now on the three
+ * properties the drawing rounds (see the block over .smoke-puff). The girth no
+ * longer needs its middle steps written as fractions of its run: it is its own
+ * property, so the two middle keyframes simply do not name it and it runs
+ * linearly from `--puff-born` to `--puff-end` as it always did. What the
+ * drawing does with the drift is take it in whole native pixels — 0, 3, 6, 9px
+ * at 3x and 0, 2, 4, 6, 8, 10px at 2x — so the column now leans by stepping,
+ * one pixel at a time, and never back. */
 @keyframes smoke-rise-lean {
-  0%   { transform: translate(0,     0)      scale(var(--puff-born)); opacity: 0;                }
-  12%  { transform: translate(1px,  -8.6px)
-                    scale(calc(var(--puff-born) +
-                          (var(--puff-end) - var(--puff-born)) * 0.1167));  opacity: var(--puff-peak); }
-  60%  { transform: translate(5px,  -43px)
-                    scale(calc(var(--puff-born) +
-                          (var(--puff-end) - var(--puff-born)) * 0.6));     opacity: var(--puff-mid);  }
-  100% { transform: translate(9px,  -72px)   scale(var(--puff-end));  opacity: 0;                }
+  0%   { --puff-x: 0px; --puff-y: 0px;     --puff-k: var(--puff-born); opacity: 0;                }
+  12%  { --puff-x: 1px; --puff-y: -8.6px;                               opacity: var(--puff-peak); }
+  60%  { --puff-x: 5px; --puff-y: -43px;                                opacity: var(--puff-mid);  }
+  100% { --puff-x: 9px; --puff-y: -72px;   --puff-k: var(--puff-end);  opacity: 0;                }
 }
 
 /* Footpath: five pixel-art stepping stones emerging from behind the
@@ -3243,7 +3284,7 @@
    * tappable at all on a phone (Article VIII). */
   .crown-touch--left   { width: calc(28px * 2); height: calc(33px * 2); }
   .crown-touch--right  { width: calc(15px * 2); height: calc(33px * 2); }
-  .sprite--smoke       { bottom: calc(8% + 152px); }
+  .sprite--smoke       { --s: 2; bottom: calc(8% + 152px); }
   /* Path stones rebased to the 2x cabin (96×160, foot at 8%, right edge
    * at 50% + 48px). Stone widths/heights stay constant — pixel art needs
    * its minimum-feature-width to stay legible at the smaller scale. */

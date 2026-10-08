@@ -347,6 +347,16 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   flag, crowns, clouds). **A thing let go may** — a falling leaf planes both ways
   and only its *net* drift belongs to the yard's wind; a shaken crown rings back
   through rest and decays, because a hand is not a wind. *(Days 60, 116, 139)*
+- **A `translate`/`scale` animation is not pixel art, whatever the keyframe
+  numbers.** Interpolation lands on fractional px nearly every frame and the
+  renderer smears the block (the smoke did this from Day 2 to Day 153: 255 of
+  261 samples off-grid). To keep the clock smooth but the drawing on the grid,
+  animate `@property`-registered custom properties and read them through
+  `round(nearest, var(--x), var(--u))` with `--u: calc(1px * var(--s))`. To grow
+  a thing and keep its centre still (the drift probe tracks the box centre),
+  make it a 0×0 point painted by box-shadow squares (`0 0 0 var(--q)` spread)
+  with `--q` a whole number of `--u`. Registered props interpolate between
+  keyframes that don't name them, like any property. *(Day 153)*
 - **Before judging any sprite's own colour, kill both whole-frame washes**
   (`.scene::before, .scene::after { opacity: 0 !important }`) — and then **put
   them back and check it still reads against what is actually behind it.** A grey
@@ -545,7 +555,7 @@ still picks every kind up automatically. Filenames are unchanged.
   exists as a blunt local convenience; prefer the removal, and **never commit a
   sandbox-made baseline** — CI must keep its own. *(Day 119 + addendum)*
 - **Two frames are known sandbox-vs-CI browser noise and must be left alone:**
-  `map-summer-day` at **1327 px** (every glyph of every label) and
+  `map-summer-day` at **1327 px** (every glyph of every label; read **2174 px** on Day 153's sandbox, same glyph-only shape, baseline unchanged — so the figure follows the sandbox browser, and the *shape* is the proof) and
   `inside-winter-day` at **64 px** (a one-pixel outline round the firebox
   opening). Their byte-identity to those figures is the cheapest proof they are
   the browser and not the day's work. **Read the report picture before believing

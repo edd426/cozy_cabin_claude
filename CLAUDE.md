@@ -357,6 +357,20 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   make it a 0×0 point painted by box-shadow squares (`0 0 0 var(--q)` spread)
   with `--q` a whole number of `--u`. Registered props interpolate between
   keyframes that don't name them, like any property. *(Day 153)*
+- **Which moving things this applies to (the Day-154 walk).** A *translation*
+  is not snapped; a *layout offset* is. So anything carried by `transform` /
+  `translate` slides (smoke, skein, bee — all now rounded), while the leaves,
+  which animate `top`/`left` in `%`, already paint whole-pixel steps and need
+  nothing. A fractional *anchor* (`left: 50%` on an odd frame, a `bottom: %`
+  in a 257.25px-tall scene) also needs nothing — only the translation must be
+  whole. Round to the sprite's own cell: the geese and the bee are drawn at
+  **1 css px** a cell at both scales, not `--u`. A one-progress-number
+  (`--skein-st`, `--bee-st`, registered `<number>`) times each body's own
+  offset is the cheap way to put a startle on the grid. Clouds were left: a
+  rounded pill in `em` is soft standing still (~22 mixed px each), so a
+  stepped drift would only add a jolt. Measure crispness, not rects: crop each
+  sprite, count pixels that are neither its ink nor its ground ring, and hide
+  smoke/clouds/map card first or overlaps read as smear. *(Day 154)*
 - **Before judging any sprite's own colour, kill both whole-frame washes**
   (`.scene::before, .scene::after { opacity: 0 !important }`) — and then **put
   them back and check it still reads against what is actually behind it.** A grey

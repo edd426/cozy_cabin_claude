@@ -2032,6 +2032,11 @@
    * thing out here. Roughly a third of the round is now spent down on a
    * bloom. */
   animation: bee-forage 30s ease-in-out infinite;
+  /* Day 154: her round and her startle, both drawn on the grid — see the note
+   * under the keyframes. */
+  transform: translate(round(nearest, var(--bee-x), 1px),
+                       round(nearest, var(--bee-y), 1px));
+  translate: 0 round(nearest, calc(-7px * var(--bee-st)), 1px);
 }
 
 .bee__wings {
@@ -2055,20 +2060,35 @@
  * holds its stop across two percentages so the motion stops dead rather than
  * easing through the contact. 0% is still the hover rest over the right of the
  * patch — the reduced-motion and single-frame fallback the Day-20 note relies
- * on, unchanged. Desktop (3x) layout; the 2x patch has its own copy below. */
+ * on, unchanged. Desktop (3x) layout; the 2x patch has its own copy below.
+ *
+ * Day 154 (2026-10-09): "pixel-crisp at each keyframe stop" was exactly true
+ * and exactly as far as it went. Between the stops an ease-in-out carried her
+ * through every fraction of a pixel there is, and a bee is six by three cells
+ * of one css pixel, so for most of her thirty seconds she was resampled into
+ * a smudge — I went to look at the skein's wing-tips and found her the same
+ * way on the same morning. Only the two holds were ever sharp, because only
+ * there does the motion stop. Her round is carried now on `--bee-x` /
+ * `--bee-y` and drawn through `round()` to 1px, the same move the smoke and
+ * the skein make: the clock and the stops are unchanged, the holds are still
+ * dead still (both ends of a hold are the same whole number), and in between
+ * she goes a pixel at a time. */
+@property --bee-x  { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --bee-y  { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --bee-st { syntax: '<number>'; inherits: false; initial-value: 0; }
 @keyframes bee-forage {
-  0%, 100% { transform: translate(  0px,  0px); }   /* hover rest */
-  7%       { transform: translate( -4px, -5px); }   /* wanders up and left */
-  13%      { transform: translate(-10px, -5px); }   /* over flower--1, dropping */
-  18%      { transform: translate(-11px, -2px); }   /* ALIGHT on flower--1 */
-  36%      { transform: translate(-11px, -2px); }   /* — working it, dead still */
-  42%      { transform: translate(-14px, -7px); }   /* lifts off */
-  50%      { transform: translate(-22px, -3px); }   /* crosses the patch */
-  56%      { transform: translate(-20px,  1px); }   /* over flower--2, dropping */
-  60%      { transform: translate(-19px,  5px); }   /* ALIGHT on flower--2 */
-  78%      { transform: translate(-19px,  5px); }   /* — working it, dead still */
-  84%      { transform: translate(-21px, -1px); }   /* lifts off */
-  92%      { transform: translate( -8px, -5px); }   /* drifts back */
+  0%, 100% { --bee-x:   0px; --bee-y:  0px; }   /* hover rest */
+  7%       { --bee-x:  -4px; --bee-y: -5px; }   /* wanders up and left */
+  13%      { --bee-x: -10px; --bee-y: -5px; }   /* over flower--1, dropping */
+  18%      { --bee-x: -11px; --bee-y: -2px; }   /* ALIGHT on flower--1 */
+  36%      { --bee-x: -11px; --bee-y: -2px; }   /* — working it, dead still */
+  42%      { --bee-x: -14px; --bee-y: -7px; }   /* lifts off */
+  50%      { --bee-x: -22px; --bee-y: -3px; }   /* crosses the patch */
+  56%      { --bee-x: -20px; --bee-y:  1px; }   /* over flower--2, dropping */
+  60%      { --bee-x: -19px; --bee-y:  5px; }   /* ALIGHT on flower--2 */
+  78%      { --bee-x: -19px; --bee-y:  5px; }   /* — working it, dead still */
+  84%      { --bee-x: -21px; --bee-y: -1px; }   /* lifts off */
+  92%      { --bee-x:  -8px; --bee-y: -5px; }   /* drifts back */
 }
 
 /* ── Day 146 (2026-10-01): THE BED TAKES A HAND, AND THE BEE LEAVES IT ─────
@@ -2141,11 +2161,13 @@
  * are the top of the bolt: she stops dead up there for a beat before she comes
  * back down, which is the same thing stillness does for a landing (Day 108) —
  * at six pixels across, what reads is not the speed but the pause. */
+/* Day 154: the bolt as a progress number, read by `.sprite--bee` through
+ * `round()` — seven whole pixels up and back, not seven slid. */
 @keyframes bee-startle {
-  0%        { translate: 0 0;     }
-  16%       { translate: 0 -7px;  }
-  30%       { translate: 0 -7px;  }
-  100%      { translate: 0 0;     }
+  0%        { --bee-st: 0; }
+  16%       { --bee-st: 1; }
+  30%       { --bee-st: 1; }
+  100%      { --bee-st: 0; }
 }
 .sprite--bee.is-startled {
   animation-name: bee-forage, bee-startle;
@@ -2783,6 +2805,11 @@
    * birds crossing open sky rather than an empty sky waiting for them to enter
    * or a flock tangled over the smoke at centre. */
   animation: bird-cross 40s linear -10s infinite;
+  /* Day 154: the crossing is carried on two registered properties and drawn
+   * through `round()` to the whole CSS pixel a bird is drawn in — see the note
+   * over `bird-cross` below. */
+  transform: translate(round(nearest, var(--skein-x), 1px),
+                       round(nearest, var(--skein-y), 1px));
 }
 
 .bird {
@@ -2801,6 +2828,12 @@
     -1px -1px 0 var(--c-wood-dark),  /* left wing tip, row -1 col -1 */
      4px -1px 0 var(--c-wood-dark);  /* right wing tip, row -1 col 4 */
   animation: bird-flap 0.36s infinite;
+  /* Day 154: the startle's scatter, drawn on the grid. `--skein-st` runs 0 → 1
+   * → 0 under `bird-startle` and each bird's own `--scatter-*` says how far
+   * out that whole step is; the product is rounded, so a scattering goose
+   * moves a whole pixel at a time like everything else in this sky. */
+  translate: round(nearest, calc(var(--scatter-x, 0px) * var(--skein-st)), 1px)
+             round(nearest, calc(var(--scatter-y, 0px) * var(--skein-st)), 1px);
   /* The per-bird beat offset, lifted out of `.bird--N` into a custom property
    * on Day 148 so the startle below can extend `animation-delay` to a two-item
    * list without five hand-copied numbers going stale in it. The shorthand
@@ -2862,14 +2895,47 @@
  * off the left. The horizontal offset decreases monotonically (360 -> -380) so
  * the flock never reverses — it always travels the way its V points. A gentle
  * vertical undulation suggests birds riding the air without animating wings.
- * Integer px offsets keep the silhouettes pixel-crisp. The range clears the
- * widest desktop scene; the mobile block below tightens it to the 2x scene. */
+ * "Integer px offsets keep the silhouettes pixel-crisp" stood here from Day 38
+ * to Day 153 and was never true: whole-pixel KEYFRAMES say nothing about the
+ * hundreds of frames a linear run paints between them (Day 154, below). The
+ * range clears the widest desktop scene; the mobile block below tightens it to
+ * the 2x scene. */
+/* ── The skein crosses on the grid (Day 154, 2026-10-09) ───────────────────
+ * The keyframes below are the same numbers they have been since Day 38; what
+ * changed is what they drive. Until this morning they drove `transform`
+ * directly, and a linear crossing of 740px in forty seconds stands at a whole
+ * pixel for an instant in every eighteen-odd milliseconds and between two for
+ * the rest. Each bird is five by two cells of ONE css pixel, so a goose a
+ * third of a pixel off the grid is resampled into a smear: in a crop sampled
+ * every 0.7s across a round, at 375, 390 and 800 wide and at one and two
+ * device pixels to the css pixel, between half and two-thirds of the samples
+ * carried pixels that were neither goose nor sky. The skein was the same
+ * fault the smoke was (Day 153), one band higher.
+ *
+ * So the crossing lives on `--skein-x` / `--skein-y`, registered so they
+ * interpolate exactly as the transform did, and the wrapper draws them
+ * through `round()` to 1px — a bird's own cell, which is not the cabin's `--u`:
+ * the geese are drawn at one css pixel to the native at both scales and have
+ * been since Day 21. The clock is unchanged; the flock now steps west a pixel
+ * at a time, about one step every 54ms on a wide screen and every 99ms on a phone,
+ * which is still faster than the eye can count and slow enough for the grid.
+ * Measured after: no mixed pixel in any sample where the goose stood over
+ * open sky. The few that remain are a bird crossing the smoke or a cloud,
+ * where the ground behind it is itself not one colour.
+ *
+ * The anchor (`left: 50%`, `bottom: calc(… %)`) lands on a fraction of a
+ * pixel at most widths, and does not need rounding: the browser snaps a
+ * layer's own offset, and what it cannot snap is a translation that is
+ * itself fractional — which is the one thing `round()` takes away. */
+@property --skein-x  { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --skein-y  { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --skein-st { syntax: '<number>'; inherits: false; initial-value: 0; }
 @keyframes bird-cross {
-  0%   { transform: translate( 360px,   0px); }
-  25%  { transform: translate( 175px,  -8px); }
-  50%  { transform: translate(   0px,   2px); }
-  75%  { transform: translate(-190px,  -6px); }
-  100% { transform: translate(-380px,   4px); }
+  0%   { --skein-x:  360px; --skein-y:  0px; }
+  25%  { --skein-x:  175px; --skein-y: -8px; }
+  50%  { --skein-x:    0px; --skein-y:  2px; }
+  75%  { --skein-x: -190px; --skein-y: -6px; }
+  100% { --skein-x: -380px; --skein-y:  4px; }
 }
 
 /* ── THE STARTLE (Day 148, 2026-10-03) ────────────────────────────────────
@@ -2940,13 +3006,16 @@
  * REDUCED MOTION. The scatter collapses as every duration here does, and the
  * honk arrives whole — the cloak's arrangement rather than the bench's, since
  * a startled flock is as much a noise as it is a shape. */
+/* Day 154: the same three stretches on one progress number rather than on
+ * `translate` itself — `.bird` reads it through `round()` (see `.bird`), so
+ * the fling, the hold and the knitting-back all happen in whole pixels. */
 @keyframes bird-startle {
-  0%   { translate: 0 0;
+  0%   { --skein-st: 0;
          animation-timing-function: ease-out; }     /* flung apart */
-  18%  { translate: var(--scatter-x) var(--scatter-y); }
-  40%  { translate: var(--scatter-x) var(--scatter-y);
+  18%  { --skein-st: 1; }
+  40%  { --skein-st: 1;
          animation-timing-function: ease-in-out; }  /* and knitting back */
-  100% { translate: 0 0; }
+  100% { --skein-st: 0; }
 }
 .sprite--birds.is-startled .bird {
   animation-name: bird-flap, bird-startle;
@@ -3358,26 +3427,26 @@
    * below). Measured at 375 and 390 and identical at both, since the 2x block
    * covers the whole band. */
   @keyframes bee-forage {
-    0%, 100% { transform: translate(  0px,  0px); }   /* hover rest */
-    7%       { transform: translate( -3px, -4px); }
-    13%      { transform: translate( -7px, -4px); }
-    18%      { transform: translate( -7px, -1px); }   /* ALIGHT on flower--1 */
-    36%      { transform: translate( -7px, -1px); }
-    42%      { transform: translate( -9px, -5px); }
-    50%      { transform: translate(-15px, -2px); }
-    56%      { transform: translate(-14px,  0px); }
-    60%      { transform: translate(-13px,  3px); }   /* ALIGHT on flower--2 */
-    78%      { transform: translate(-13px,  3px); }
-    84%      { transform: translate(-15px, -1px); }
-    92%      { transform: translate( -5px, -4px); }
+    0%, 100% { --bee-x:   0px; --bee-y:  0px; }   /* hover rest */
+    7%       { --bee-x:  -3px; --bee-y: -4px; }
+    13%      { --bee-x:  -7px; --bee-y: -4px; }
+    18%      { --bee-x:  -7px; --bee-y: -1px; }   /* ALIGHT on flower--1 */
+    36%      { --bee-x:  -7px; --bee-y: -1px; }
+    42%      { --bee-x:  -9px; --bee-y: -5px; }
+    50%      { --bee-x: -15px; --bee-y: -2px; }
+    56%      { --bee-x: -14px; --bee-y:  0px; }
+    60%      { --bee-x: -13px; --bee-y:  3px; }   /* ALIGHT on flower--2 */
+    78%      { --bee-x: -13px; --bee-y:  3px; }
+    84%      { --bee-x: -15px; --bee-y: -1px; }
+    92%      { --bee-x:  -5px; --bee-y: -4px; }
   }
   /* Migrating pass tightened to the 2x scene — same monotonic right-to-left
    * crossing, smaller range so it enters and exits the narrower frame. */
   @keyframes bird-cross {
-    0%   { transform: translate( 195px,  0px); }
-    25%  { transform: translate(  95px, -6px); }
-    50%  { transform: translate(   0px,  2px); }
-    75%  { transform: translate(-105px, -5px); }
-    100% { transform: translate(-210px,  3px); }
+    0%   { --skein-x:  195px; --skein-y:  0px; }
+    25%  { --skein-x:   95px; --skein-y: -6px; }
+    50%  { --skein-x:    0px; --skein-y:  2px; }
+    75%  { --skein-x: -105px; --skein-y: -5px; }
+    100% { --skein-x: -210px; --skein-y:  3px; }
   }
 }

@@ -2015,6 +2015,10 @@
   animation:
     moth-flap   0.34s infinite,
     moth-flight 8s    linear infinite;
+  /* Day 155: her flight is carried on --moth-x / --moth-y and drawn in whole
+   * pixels — see the note under moth-flight. */
+  transform: translate(round(nearest, var(--moth-x), 1px),
+                       round(nearest, var(--moth-y), 1px));
 }
 
 /* Wing-beat: snap between the up-stroke (A) and down-stroke (B)
@@ -2045,23 +2049,38 @@
  * overshooting the flame (down-left of the anchor) and doubling back —
  * the unruly path a moth actually takes at a light, not a patient orbit.
  * Integer px offsets keep the silhouette crisp at every stop; the path
- * begins and ends at (0,0) so the loop is seamless. */
+ * begins and ends at (0,0) so the loop is seamless.
+ *
+ * Day 155 (2026-10-10): "crisp at every stop" was true at the fourteen stops
+ * and nowhere else. The run between them is linear, so for nearly the whole
+ * eight seconds she stood a fraction of the way between one pixel and the next
+ * and the drawing guessed — measured, 57 to 59 of 61 instants smeared at every
+ * width and density, her two plum cells bleeding into the wings beside them.
+ * She is three cells wide; a guessed edge is a third of her. So the run drives
+ * two registered lengths and `.sprite--moth` draws them through round() to
+ * 1px, her own cell at both scales, the move the smoke, the skein and the bee
+ * made on Days 153–154. The stops, the clock and the darting are unchanged;
+ * between stops she now jumps a pixel at a time, which for a moth is closer
+ * to the truth than the glide ever was. The flap needed nothing: it is a
+ * box-shadow switch, which only ever drew whole cells. */
+@property --moth-x { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --moth-y { syntax: '<length>'; inherits: false; initial-value: 0px; }
 @keyframes moth-flight {
-  0%   { transform: translate(  0px,  0px); }
-  8%   { transform: translate( -3px, -2px); }
-  14%  { transform: translate( -7px,  2px); }
-  19%  { transform: translate( -4px,  5px); }
-  27%  { transform: translate( -9px,  3px); }
-  33%  { transform: translate(-11px, -1px); }
-  41%  { transform: translate( -6px, -4px); }
-  48%  { transform: translate( -2px, -1px); }
-  55%  { transform: translate( -8px,  1px); }
-  63%  { transform: translate(-10px,  4px); }
-  70%  { transform: translate( -4px,  2px); }
-  77%  { transform: translate(  1px, -2px); }
-  85%  { transform: translate( -3px, -4px); }
-  92%  { transform: translate(  2px, -1px); }
-  100% { transform: translate(  0px,  0px); }
+  0%   { --moth-x:   0px; --moth-y:  0px; }
+  8%   { --moth-x:  -3px; --moth-y: -2px; }
+  14%  { --moth-x:  -7px; --moth-y:  2px; }
+  19%  { --moth-x:  -4px; --moth-y:  5px; }
+  27%  { --moth-x:  -9px; --moth-y:  3px; }
+  33%  { --moth-x: -11px; --moth-y: -1px; }
+  41%  { --moth-x:  -6px; --moth-y: -4px; }
+  48%  { --moth-x:  -2px; --moth-y: -1px; }
+  55%  { --moth-x:  -8px; --moth-y:  1px; }
+  63%  { --moth-x: -10px; --moth-y:  4px; }
+  70%  { --moth-x:  -4px; --moth-y:  2px; }
+  77%  { --moth-x:   1px; --moth-y: -2px; }
+  85%  { --moth-x:  -3px; --moth-y: -4px; }
+  92%  { --moth-x:   2px; --moth-y: -1px; }
+  100% { --moth-x:   0px; --moth-y:  0px; }
 }
 
 /* ─── Window (Day 45) ───────────────────────────────────────────────
@@ -2642,21 +2661,21 @@
   /* Flight range tightens to the smaller mantle — same erratic character,
    * smaller swing. The flap keyframes (box-shadow) are scale-independent. */
   @keyframes moth-flight {
-    0%   { transform: translate( 0px,  0px); }
-    8%   { transform: translate(-2px, -2px); }
-    14%  { transform: translate(-5px,  1px); }
-    19%  { transform: translate(-3px,  4px); }
-    27%  { transform: translate(-7px,  2px); }
-    33%  { transform: translate(-8px, -1px); }
-    41%  { transform: translate(-4px, -3px); }
-    48%  { transform: translate(-1px, -1px); }
-    55%  { transform: translate(-6px,  1px); }
-    63%  { transform: translate(-7px,  3px); }
-    70%  { transform: translate(-3px,  2px); }
-    77%  { transform: translate( 1px, -1px); }
-    85%  { transform: translate(-2px, -3px); }
-    92%  { transform: translate( 1px, -1px); }
-    100% { transform: translate( 0px,  0px); }
+    0%   { --moth-x:   0px; --moth-y:  0px; }
+    8%   { --moth-x:  -2px; --moth-y: -2px; }
+    14%  { --moth-x:  -5px; --moth-y:  1px; }
+    19%  { --moth-x:  -3px; --moth-y:  4px; }
+    27%  { --moth-x:  -7px; --moth-y:  2px; }
+    33%  { --moth-x:  -8px; --moth-y: -1px; }
+    41%  { --moth-x:  -4px; --moth-y: -3px; }
+    48%  { --moth-x:  -1px; --moth-y: -1px; }
+    55%  { --moth-x:  -6px; --moth-y:  1px; }
+    63%  { --moth-x:  -7px; --moth-y:  3px; }
+    70%  { --moth-x:  -3px; --moth-y:  2px; }
+    77%  { --moth-x:   1px; --moth-y: -1px; }
+    85%  { --moth-x:  -2px; --moth-y: -3px; }
+    92%  { --moth-x:   1px; --moth-y: -1px; }
+    100% { --moth-x:   0px; --moth-y:  0px; }
   }
 }
 
@@ -2818,6 +2837,11 @@
   background: #fff0c4;
   z-index: 5;
   pointer-events: none;
+  /* Day 155: the climb is drawn in whole native pixels of the hearth — see the
+   * note above ember-rise-1. */
+  --u: calc(1px * var(--s));
+  transform: translate(round(nearest, var(--ember-x), var(--u)),
+                       round(nearest, var(--ember-y), var(--u)));
 }
 .hearth.is-prodded .ember-spark {
   display: block;
@@ -2836,36 +2860,51 @@
  * convergence and not a heading. Every one ends at `opacity: 0`, so nothing is
  * left standing when the class comes off; `translate` in px * var(--s) rather
  * than in per cent, because the box these sit in is the whole hearth column and
- * a percentage of a 1px box is nothing. */
+ * a percentage of a 1px box is nothing.
+ *
+ * Day 155 (2026-10-10): a spark is one native cell, and for most of its climb
+ * it stood a fraction of the way between two of them — the stops themselves
+ * were written in tenths of a native (0.3, 1.4, -0.8), and the run between
+ * them is a slide. Measured with the hearth pressed, two in three instants of
+ * the shower drew a guessed edge on at least one spark. So the rise drives two
+ * registered lengths and `.ember-spark` draws them through round() to the
+ * hearth's own cell, `--u`, the same as the smoke above the roof. The tenths
+ * still steer the climb; they just no longer decide where a cell is painted,
+ * which means a drift of a third of a native shows as none and one of a native
+ * and a half as a step and a half rounded — a spark goes up the throat a
+ * native at a time and leans in by one or two, never by a smear. The fade is
+ * untouched; opacity was never on the grid's side of the question. */
+@property --ember-x { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --ember-y { syntax: '<length>'; inherits: false; initial-value: 0px; }
 @keyframes ember-rise-1 {
-  0%   { opacity: 0;   transform: translate(0, 0); }
-  12%  { opacity: 1;   transform: translate(calc(0.3px * var(--s)), calc(-1px * var(--s))); }
-  70%  { opacity: 0.85; transform: translate(calc(1.4px * var(--s)), calc(-7px * var(--s))); }
-  100% { opacity: 0;   transform: translate(calc(2px * var(--s)), calc(-11px * var(--s))); }
+  0%   { opacity: 0;   --ember-x: 0px; --ember-y: 0px; }
+  12%  { opacity: 1;   --ember-x: calc(0.3px * var(--s)); --ember-y: calc(-1px * var(--s)); }
+  70%  { opacity: 0.85; --ember-x: calc(1.4px * var(--s)); --ember-y: calc(-7px * var(--s)); }
+  100% { opacity: 0;   --ember-x: calc(2px * var(--s)); --ember-y: calc(-11px * var(--s)); }
 }
 @keyframes ember-rise-2 {
-  0%   { opacity: 0;   transform: translate(0, 0); }
-  15%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
-  65%  { opacity: 0.8; transform: translate(calc(0.6px * var(--s)), calc(-6px * var(--s))); }
-  100% { opacity: 0;   transform: translate(calc(0.2px * var(--s)), calc(-10px * var(--s))); }
+  0%   { opacity: 0;   --ember-x: 0px; --ember-y: 0px; }
+  15%  { opacity: 1;   --ember-x: 0px; --ember-y: calc(-1px * var(--s)); }
+  65%  { opacity: 0.8; --ember-x: calc(0.6px * var(--s)); --ember-y: calc(-6px * var(--s)); }
+  100% { opacity: 0;   --ember-x: calc(0.2px * var(--s)); --ember-y: calc(-10px * var(--s)); }
 }
 @keyframes ember-rise-3 {
-  0%   { opacity: 0;   transform: translate(0, 0); }
-  10%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
-  60%  { opacity: 0.9; transform: translate(calc(-0.8px * var(--s)), calc(-6px * var(--s))); }
-  100% { opacity: 0;   transform: translate(calc(0.4px * var(--s)), calc(-11px * var(--s))); }
+  0%   { opacity: 0;   --ember-x: 0px; --ember-y: 0px; }
+  10%  { opacity: 1;   --ember-x: 0px; --ember-y: calc(-1px * var(--s)); }
+  60%  { opacity: 0.9; --ember-x: calc(-0.8px * var(--s)); --ember-y: calc(-6px * var(--s)); }
+  100% { opacity: 0;   --ember-x: calc(0.4px * var(--s)); --ember-y: calc(-11px * var(--s)); }
 }
 @keyframes ember-rise-4 {
-  0%   { opacity: 0;   transform: translate(0, 0); }
-  14%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
-  68%  { opacity: 0.8; transform: translate(calc(-1px * var(--s)), calc(-6px * var(--s))); }
-  100% { opacity: 0;   transform: translate(calc(-1.6px * var(--s)), calc(-10px * var(--s))); }
+  0%   { opacity: 0;   --ember-x: 0px; --ember-y: 0px; }
+  14%  { opacity: 1;   --ember-x: 0px; --ember-y: calc(-1px * var(--s)); }
+  68%  { opacity: 0.8; --ember-x: calc(-1px * var(--s)); --ember-y: calc(-6px * var(--s)); }
+  100% { opacity: 0;   --ember-x: calc(-1.6px * var(--s)); --ember-y: calc(-10px * var(--s)); }
 }
 @keyframes ember-rise-5 {
-  0%   { opacity: 0;   transform: translate(0, 0); }
-  12%  { opacity: 1;   transform: translate(0, calc(-1px * var(--s))); }
-  66%  { opacity: 0.85; transform: translate(calc(-1.6px * var(--s)), calc(-7px * var(--s))); }
-  100% { opacity: 0;   transform: translate(calc(-2.4px * var(--s)), calc(-11px * var(--s))); }
+  0%   { opacity: 0;   --ember-x: 0px; --ember-y: 0px; }
+  12%  { opacity: 1;   --ember-x: 0px; --ember-y: calc(-1px * var(--s)); }
+  66%  { opacity: 0.85; --ember-x: calc(-1.6px * var(--s)); --ember-y: calc(-7px * var(--s)); }
+  100% { opacity: 0;   --ember-x: calc(-2.4px * var(--s)); --ember-y: calc(-11px * var(--s)); }
 }
 
 /* The pads are siblings of `.hearth` and of `.coat`, so neither inherits the

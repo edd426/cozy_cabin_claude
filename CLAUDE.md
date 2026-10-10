@@ -370,7 +370,13 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   rounded pill in `em` is soft standing still (~22 mixed px each), so a
   stepped drift would only add a jolt. Measure crispness, not rects: crop each
   sprite, count pixels that are neither its ink nor its ground ring, and hide
-  smoke/clouds/map card first or overlaps read as smear. *(Day 154)*
+  smoke/clouds/map card first or overlaps read as smear. *(Day 154)* Day 155
+  did the moth (`--moth-x/-y`, 1px) and the hearth's ember sparks
+  (`--ember-x/-y`, rounded to `--u`, because each spark is one native cell).
+  Still sliding, and soft standing still by design: clouds, `mist-drift`,
+  `firefly-drift`. When isolating a sprite with `.scene * {visibility:hidden}`,
+  the page's cream (`#f9efd2`) shows through, not the scene's background —
+  count it as ground or every instant reads mixed. *(Day 155)*
 - **Before judging any sprite's own colour, kill both whole-frame washes**
   (`.scene::before, .scene::after { opacity: 0 !important }`) — and then **put
   them back and check it still reads against what is actually behind it.** A grey

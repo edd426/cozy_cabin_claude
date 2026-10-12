@@ -464,18 +464,107 @@
 .sprite--clouds {
   inset: 0;
   z-index: 0;
+  /* Day 157: the clouds' own scale, so every cell of one is a whole native
+   * pixel of the cabin under it (the 2x block at the foot sets 2). A sibling
+   * container needs its own --s; .front-cabin's does not reach up here. */
+  --s: 3;
+  --u: calc(1px * var(--s));
 }
+
+/* ── The clouds are drawn in cells (Day 157, 2026-10-12) ───────────────────
+ * Until this morning a cloud was a rounded pill in `em` with three offset
+ * copies of itself for lumps. Two things were wrong with that, and the second
+ * only shows at the day's edges.
+ *
+ * First, it was the one body in the sky not made of pixels: a 999px radius at
+ * a fractional em is an antialiased curve, so every cloud carried a soft ring
+ * of guessed edge standing perfectly still, and a stepped drift (Day 154) would
+ * only have jolted a haze. Second, the belly. Day 57 lit the two LOWER lumps
+ * warm and left the body pill cool — but the body pill ran right down to the
+ * cloud's bottom edge in the middle, so the warm only ever showed as two ends
+ * poking out left and right of a cool middle. At ×6 a dawn cloud was a cool
+ * blob with a rose cap on each side: lit at its flanks, not underneath. Its
+ * own sentence said belly. Its pixels said sides.
+ *
+ * So a cloud is a bitmap now, cell by cell on the native grid (`--u`), in two
+ * regions: a CROWN (every row above the last two) and a BELLY (the last two
+ * rows, which are also the widest — so the belly is literally what the low sun
+ * reaches first and what the eye meets at both ends). By day both regions are
+ * the one warm near-white and the cloud reads as one soft thing; at dawn and
+ * dusk only the two colour variables change.
+ *
+ * Mechanism: the element is one native cell standing on an EMPTY corner of the
+ * bitmap, painted entirely by box-shadow squares (spread 0 → 1 cell, u → 3,
+ * 2u → 5), crown layers first so they paint over the belly's larger squares
+ * where those reach up into it. The list was generated from the two bitmaps
+ * below and checked by rebuilding each bitmap from its layers; the bitmaps are
+ * the source, the lists are their transcription.
+ *
+ *   big (24×8)                    small (16×5)
+ *   ........ccccc...........      ......cccc......
+ *   ......ccccccccc..cccc...      ...cccccccccc...
+ *   ....cccccccccccccccccc..      .cccccccccccccc.
+ *   ..cccccccccccccccccccc..      bbbbbbbbbbbbbbbb
+ *   .cccccccccccccccccccccc.      ..bbbbbbbbbbbb..
+ *   .cccccccccccccccccccccc.
+ *   bbbbbbbbbbbbbbbbbbbbbbbb
+ *   ..bbbbbbbbbbbbbbbbbbbb..
+ *
+ * The leftmost and rightmost layers are belly cells (bottom row, x = 0 and
+ * x = last), which is what the almanac's `cloud-belly-tilt` reads: the two
+ * ends of the underside the same colour as each other. That probe used to be
+ * comparing the two lit flanks; it is now comparing the two ends of one belly.
+ *
+ * Tone: unchanged — a soft warm near-white only a little lighter than the sky,
+ * atmospheric rather than a cutout (a far, soft thing may be quiet). Placed by
+ * % from its top-left cell; sized in native cells, so a cloud is half again as
+ * large at 3x as at 2x, like everything else drawn on this grid. */
+@property --cloud-x { syntax: '<number>'; inherits: false; initial-value: 0; }
 
 .cloud {
   position: absolute;
-  width: 2.6em;
-  height: 1em;
-  border-radius: 999px;
-  background: #fdf7e6;
+  width: var(--u);
+  height: var(--u);
+  --cl-crown: #fdf7e6;
+  --cl-belly: #fdf7e6;
   box-shadow:
-     1.25em  0.20em 0 -0.10em #fdf7e6,   /* right lump */
-    -1.05em  0.30em 0 -0.20em #fdf7e6,   /* left lump  */
-     0.40em -0.45em 0 -0.30em #fdf7e6;   /* top hump   */
+calc(var(--u) * 10) calc(var(--u) * 2) 0 calc(var(--u) * 2) var(--cl-crown),
+    calc(var(--u) * 8) calc(var(--u) * 3) 0 calc(var(--u) * 2) var(--cl-crown),
+    calc(var(--u) * 12) calc(var(--u) * 3) 0 calc(var(--u) * 2) var(--cl-crown),
+    calc(var(--u) * 18) calc(var(--u) * 2) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 5) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 15) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 19) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 3) calc(var(--u) * 4) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 16) calc(var(--u) * 4) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 20) calc(var(--u) * 4) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 20) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 21) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 1) calc(var(--u) * 4) 0 0 var(--cl-crown),
+    calc(var(--u) * 22) calc(var(--u) * 4) 0 0 var(--cl-crown),
+    calc(var(--u) * 1) calc(var(--u) * 5) 0 0 var(--cl-crown),
+    calc(var(--u) * 5) calc(var(--u) * 5) 0 0 var(--cl-crown),
+    calc(var(--u) * 18) calc(var(--u) * 5) 0 0 var(--cl-crown),
+    calc(var(--u) * 22) calc(var(--u) * 5) 0 0 var(--cl-crown),
+    calc(var(--u) * 3) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 5) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 7) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 9) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 11) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 13) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 15) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 17) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 19) calc(var(--u) * 6) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 0) calc(var(--u) * 6) 0 0 var(--cl-belly),
+    calc(var(--u) * 1) calc(var(--u) * 6) 0 0 var(--cl-belly),
+    calc(var(--u) * 21) calc(var(--u) * 6) 0 0 var(--cl-belly),
+    calc(var(--u) * 22) calc(var(--u) * 6) 0 0 var(--cl-belly),
+    calc(var(--u) * 23) calc(var(--u) * 6) 0 0 var(--cl-belly),
+    calc(var(--u) * 21) calc(var(--u) * 7) 0 0 var(--cl-belly);
+  /* The drift is a number of cells, read through round() so the cloud is only
+   * ever drawn on the grid (the Day-153 recipe). The keyframes below animate
+   * --cloud-x; nothing animates transform itself. */
+  transform: translateX(calc(round(nearest, var(--cloud-x), 1) * var(--u)));
   /* A very slow, small drift — far clouds barely move; this reads as "hanging,
    * just adrift" rather than sailing. ease-in-out softens the turn; per-cloud
    * duration/delay overrides below keep the pair off lockstep. A cloud has no
@@ -494,10 +583,47 @@
   animation: cloud-drift 96s ease-in-out infinite;
 }
 
+/* The small shape — the second cloud of each face's pair. */
+.cloud--small {
+  box-shadow:
+calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
+    calc(var(--u) * 9) calc(var(--u) * 0) 0 0 var(--cl-crown),
+    calc(var(--u) * 3) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 4) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 5) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 9) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 10) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 11) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 12) calc(var(--u) * 1) 0 0 var(--cl-crown),
+    calc(var(--u) * 1) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 2) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 3) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 4) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 5) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 9) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 10) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 11) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 12) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 13) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 14) calc(var(--u) * 2) 0 0 var(--cl-crown),
+    calc(var(--u) * 3) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 5) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 7) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 9) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 11) calc(var(--u) * 3) 0 calc(var(--u) * 1) var(--cl-belly),
+    calc(var(--u) * 0) calc(var(--u) * 3) 0 0 var(--cl-belly),
+    calc(var(--u) * 1) calc(var(--u) * 3) 0 0 var(--cl-belly),
+    calc(var(--u) * 13) calc(var(--u) * 3) 0 0 var(--cl-belly),
+    calc(var(--u) * 14) calc(var(--u) * 3) 0 0 var(--cl-belly),
+    calc(var(--u) * 15) calc(var(--u) * 3) 0 0 var(--cl-belly),
+    calc(var(--u) * 13) calc(var(--u) * 4) 0 0 var(--cl-belly);
+}
+
+/* ±3 cells: 6px at 2x where the old sway was ±7px, 9px at 3x. */
 @keyframes cloud-drift {
-  0%, 100% { transform: translateX(0);    }
-  25%      { transform: translateX(7px);  }
-  75%      { transform: translateX(-7px); }
+  0%, 100% { --cloud-x: 0;  }
+  25%      { --cloud-x: 3;  }
+  75%      { --cloud-x: -3; }
 }
 
 /* Day 62 (2026-07-09): the front clouds drift DOWNWIND, and only downwind.
@@ -535,19 +661,20 @@
   animation-timing-function: linear;
 }
 
+/* In cells since Day 157: 13 and 17 are the old 26px and 34px at 2x. */
 @keyframes cloud-drift-wind {
-  0%,   8% { transform: translateX(0);    opacity: 1; }   /* formed, upwind */
-  82%      { transform: translateX(26px); opacity: 1; }   /* ridden downwind */
-  92%      { transform: translateX(34px); opacity: 0; }   /* thinned away downwind */
-  92.01%   { transform: translateX(0);    opacity: 0; }   /* silent reset upwind */
-  100%     { transform: translateX(0);    opacity: 1; }   /* re-formed, loops into 0% */
+  0%,   8% { --cloud-x: 0;  opacity: 1; }   /* formed, upwind */
+  82%      { --cloud-x: 13; opacity: 1; }   /* ridden downwind */
+  92%      { --cloud-x: 17; opacity: 0; }   /* thinned away downwind */
+  92.01%   { --cloud-x: 0;  opacity: 0; }   /* silent reset upwind */
+  100%     { --cloud-x: 0;  opacity: 1; }   /* re-formed, loops into 0% */
 }
 
 /* Home (south) view's pair: one larger cloud high on the left, a smaller one
  * higher and right-of-centre — clear of the map card (far top-right) and the
  * central smoke. Different sizes/speeds so they don't pulse together. */
-.cloud--s-1 { font-size: 12px; left: 11%; top: 12%; }
-.cloud--s-2 { font-size:  8px; left: 58%; top:  7%;
+.cloud--s-1 { left:  8%; top: 11%; }
+.cloud--s-2 { left: 56%; top:  6%;
               animation-duration: 124s; animation-delay: -34s; }
 
 /* ── Underlit cloud bellies at the day's warm edges ────────────────────────
@@ -559,30 +686,26 @@
  * warm and leaves its crown cool: the mirror of the low fog, which takes the
  * same low sun along its *top* edge instead.
  *
- * Technique: the cloud is one pill body + three box-shadow lumps (all cream by
- * day). The two LOWER lumps (right +0.20em, left +0.30em) are the belly; the
- * top hump (-0.45em) is the crown. Recolouring only the two lower lumps warm —
- * and leaving the body + top hump the cool day cream — lights the underside
- * without repainting the whole cloud. A whisper on purpose (like the wash and
- * the fog): the belly reads a touch warmer than the flat sky behind it, no more.
+ * Technique (Day 157): only the two colour variables change. The crown — every
+ * row of the bitmap above the last two — takes the cool sunless tone; the
+ * belly — the last two rows, the widest — takes the warm one. Until Day 157
+ * this block repainted three pill lumps and the warm showed only at the two
+ * ends of a cool middle (see the bitmap note above); now the warm runs the
+ * whole underside, which is what this paragraph always said it did. A whisper
+ * on purpose (like the wash and the fog): the belly reads a touch warmer than
+ * the flat sky behind it, no more.
  *
  * Shared by both exterior faces (home + around load this stylesheet), so the
  * one hour lights the clouds over both walls at once — a cloud belongs to no
  * wall (RULES Art XIII). Night is left to the ambient blue wash: this is only
  * the two WARM edges, the rose and the gold. */
 .scene[data-tod="dawn"] .cloud {
-  background: #e7d5ce;                    /* crown/body — cool, sunless top   */
-  box-shadow:
-     1.25em  0.20em 0 -0.10em #fbdccb,   /* right lump — belly, bright rose  */
-    -1.05em  0.30em 0 -0.20em #fbdccb,   /* left lump  — belly, bright rose  */
-     0.40em -0.45em 0 -0.30em #e7d5ce;   /* top hump   — crown, cool         */
+  --cl-crown: #e7d5ce;   /* cool, sunless top */
+  --cl-belly: #fbdccb;   /* bright rose       */
 }
 .scene[data-tod="dusk"] .cloud {
-  background: #e5d6bf;                    /* crown/body — cool, sunless top   */
-  box-shadow:
-     1.25em  0.20em 0 -0.10em #fbe3b0,   /* right lump — belly, bright gold  */
-    -1.05em  0.30em 0 -0.20em #fbe3b0,   /* left lump  — belly, bright gold  */
-     0.40em -0.45em 0 -0.30em #e5d6bf;   /* top hump   — crown, cool         */
+  --cl-crown: #e5d6bf;   /* cool, sunless top */
+  --cl-belly: #fbe3b0;   /* bright gold       */
 }
 
 /* All sprites: integer-scale, no smoothing, positioned absolutely. */
@@ -3354,6 +3477,9 @@
   .crown-touch--left   { width: calc(28px * 2); height: calc(33px * 2); }
   .crown-touch--right  { width: calc(15px * 2); height: calc(33px * 2); }
   .sprite--smoke       { --s: 2; bottom: calc(8% + 152px); }
+  /* The clouds' cells go to 2x with everything else (Day 157); their
+   * placement is % of the frame and needs no rebase. */
+  .sprite--clouds      { --s: 2; }
   /* Path stones rebased to the 2x cabin (96×160, foot at 8%, right edge
    * at 50% + 48px). Stone widths/heights stay constant — pixel art needs
    * its minimum-feature-width to stay legible at the smaller scale. */

@@ -305,6 +305,43 @@
         },
       ],
     },
+
+    {
+      word: 'the grid',
+      forms: ['the grid', 'on the grid', 'off the grid'],
+      note: 'Entered Day 157, after a week in which *step* and *slide* carried ' +
+            'every entry as coined words with fixed meanings. Those two are ' +
+            'left out on purpose: both are ordinary words the diary also uses ' +
+            'in their ordinary senses (“a step for the first fires”), and the ' +
+            'page marks every form it is given wherever it first falls, so it ' +
+            'would pin this meaning onto sentences that never had it. *The ' +
+            'grid* is the word they were both about, and it has only ever been ' +
+            'used in this one sense.',
+      senses: [
+        {
+          since: '2026-10-05',
+          day: 150,
+          says: 'The lattice of native pixels every drawing here is made of. One ' +
+                'cell is three screen pixels on a wide screen and two on a phone, ' +
+                'the same cell the cabin’s planks are counted in. A thing is on ' +
+                'the grid when every edge it has falls on that lattice. A thing ' +
+                'carried by a smooth slide is not: between one cell and the next ' +
+                'it stands at a fraction, and the drawing has to guess its edges, ' +
+                'which at this size is most of the thing. So since Day 153 a ' +
+                'moving thing keeps its smooth clock and *steps* — its position ' +
+                'is read through a rounding to the nearest whole cell, and it is ' +
+                'only ever painted there. Nothing can be smaller than one cell ' +
+                'and more than none, which is why a ring drawn here can stop and ' +
+                'cannot die away.',
+          mark: '`--u: calc(1px * var(--s))` on each sprite container in ' +
+                '`scene.css`, `around/around.css` and `inside/inside.css`, and ' +
+                'the `round(nearest, …, var(--u))` that reads a registered ' +
+                'property such as `--puff-x` (the smoke), `--skein-x` (the geese) ' +
+                'or `--cloud-x` (the clouds, which are drawn in cells too since ' +
+                'Day 157).',
+        },
+      ],
+    },
   ];
 
   /* ── lookup ───────────────────────────────────────────────────────────────

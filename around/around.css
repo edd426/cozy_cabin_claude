@@ -913,9 +913,18 @@
  * positions but a different stretch of the same sky, the way the hills wrap the
  * corner without repeating (RULES Art XIII). Placed clear of the side chimney's
  * smoke (centred at 50%) and the map card (top-right): one larger cloud on the
- * left over the bunched hills, a smaller one right-of-centre and higher. */
-.cloud--e-1 { font-size: 12px; left: 16%; top:  9%; }
-.cloud--e-2 { font-size:  8px; left: 64%; top: 15%;
+ * left, a smaller one right-of-centre and lower.
+ *
+ * Day 157: this paragraph said the larger cloud hung "over the bunched hills".
+ * It did on the day it was written; seven mornings later (Day 48) the hills
+ * were mirrored to the right of this frame, where the map puts the clearing's
+ * back edge, and the cloud has hung over the open flat ever since while its
+ * margin went on placing it over a range that had moved. It also said the
+ * small one was "higher", and its `top` has always put it lower. Mended; the
+ * size now comes from the shape (`.cloud--small` in the markup), not from a
+ * font-size, so only the placement is left here. */
+.cloud--e-1 { left: 13%; top:  8%; }
+.cloud--e-2 { left: 62%; top: 14%;
               animation-duration: 110s; animation-delay: -22s; }
 
 /* ── The east tree, met from beside it (Day 120, 2026-09-05) ────────────────

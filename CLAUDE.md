@@ -373,10 +373,26 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   smoke/clouds/map card first or overlaps read as smear. *(Day 154)* Day 155
   did the moth (`--moth-x/-y`, 1px) and the hearth's ember sparks
   (`--ember-x/-y`, rounded to `--u`, because each spark is one native cell).
-  Still sliding, and soft standing still by design: clouds, `mist-drift`,
-  `firefly-drift`. When isolating a sprite with `.scene * {visibility:hidden}`,
+  Still sliding, and soft standing still by design: `mist-drift`,
+  `firefly-drift`. *(Day 157: the clouds are off that list — redrawn as cell
+  bitmaps on `--u` and stepped through `--cloud-x`, a registered `<number>` of
+  cells, read as `calc(round(nearest, var(--cloud-x), 1) * var(--u))`.)* When isolating a sprite with `.scene * {visibility:hidden}`,
   the page's cream (`#f9efd2`) shows through, not the scene's background —
   count it as ground or every instant reads mixed. *(Day 155)*
+- **To paint a sprite from a bitmap, stand its element on an EMPTY cell.** An
+  outer box-shadow is never painted under its own element's border box, so a
+  1-cell element carrying the bitmap's cells as shadows (spread 0 / `u` / `2u`
+  → 1, 3, 5 cells) must sit where the bitmap has nothing. Put colour regions
+  in custom properties (`--cl-crown`, `--cl-belly`) so an hour state changes
+  two variables instead of re-listing every shadow; computed `box-shadow`
+  still resolves to `rgb()`, so the `lumpSpread` probe reads it. Generate the
+  list from the bitmap and verify by rebuilding the bitmap from the layers —
+  the bitmap is the source, the shadows its transcription. *(Day 157)*
+- **A colour region drawn as lumps BEHIND a body shows only where it pokes
+  out.** The Day-57 cloud belly was two warm lumps under a cool pill, and the
+  pill ran to the bottom edge, so the "belly" was two warm ends of a cool
+  middle for a hundred days. Zoom ×6 on every state a region is claimed in
+  before believing the sentence about it. *(Day 157)*
 - **Before judging any sprite's own colour, kill both whole-frame washes**
   (`.scene::before, .scene::after { opacity: 0 !important }`) — and then **put
   them back and check it still reads against what is actually behind it.** A grey

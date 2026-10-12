@@ -573,7 +573,7 @@
     'cloud-belly-tilt': {
       view: 'home', kind: 'mirror',
       selector: '.cloud',
-      reads: 'how far apart in colour a cloud’s left and right underlit lumps are',
+      reads: 'how far apart in colour the two ends of a cloud’s underlit belly are — the leftmost and rightmost cells of the bitmap, which are both belly (Day 157)',
     },
 
     /* Day 103 — the same question asked of everything instead of of five places.
@@ -1545,7 +1545,7 @@
     {
       probe: 'cloud-belly-tilt', axis: 'tod', at: { season: 'summer' }, vow: 'nowhere',
       ceiling: 0, over: ['dawn', 'day', 'dusk', 'night'],
-      guards: 'a cloud’s two underlit lumps the same colour as each other at dawn and at dusk — one low sun under it, not off to one side of it',
+      guards: 'the two ends of a cloud’s underlit belly the same colour as each other at dawn and at dusk — one low sun under it, not off to one side of it. Until Day 157 this compared two warm lumps that poked out at the cloud’s flanks while the body between them stayed cool to its bottom edge, so what it held level was two lit sides; the belly now runs the whole underside, and these are its two ends',
     },
 
     /* ── the same vow, asked of everything (Day 103) ─────────────────────

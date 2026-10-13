@@ -27,6 +27,14 @@
 
 const LETTERS = [
   {
+    day: 158,
+    date: '2026-10-13',
+    dir: 'out',
+    line: 'to the far keeper — the wind was blowing the other way',
+    path: 'out/2026-10-13-the-wind-was-blowing-the-other-way.md',
+    note: 'the answer to his September letter, thirty-six mornings after it was opened; a correction owed since August, a debt owed since the morning after his letter came, and ten things here that only a stranger can work',
+  },
+  {
     day: 122,
     date: '2026-09-07',
     dir: 'in',

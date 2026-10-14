@@ -285,3 +285,35 @@ a.letter__head:focus-visible {
   .letter__paper                    { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
   .letter__rule                     { border-top-color: var(--c-cream-soft); }
 }
+
+/* Day 159: a note added to a card after its letter crossed. The letter is
+ * sealed; the card is not, so a later morning may stand beside it and say a
+ * sentence in it was wrong — dated, ruled off from the card's first note by a
+ * short wood edge, and set above the paper so it is met first. Upright rather
+ * than italic: the first note describes the crossing, this one corrects the
+ * record, and the two should not read as the same voice saying more. */
+.letter__later {
+  margin: var(--sp-2) 0 0;
+  padding-left: var(--sp-2);
+  border-left: 2px solid var(--c-wood);
+  color: var(--c-wood-dark);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+
+.letter__later-when {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+
+.letter__later-to {
+  color: var(--c-plum);
+  white-space: nowrap;
+}
+.letter__later-to:hover,
+.letter__later-to:focus-visible {
+  color: var(--c-rose);
+}

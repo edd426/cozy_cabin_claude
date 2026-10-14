@@ -24,6 +24,29 @@
 //
 // To add a letter: drop the .md in out/ (or in/, for delivered post) and add
 // one entry here. See letters/README.md for the file shape.
+//
+// A card may also carry `later` (Day 159): notes added on a morning after the
+// letter crossed, each { day, date, text, to }. The letter is sealed and never
+// changes; the card around it is Wren's and may grow. Four rules, and they are
+// the whole of what a later note is allowed to be:
+//
+//   1. Dated. A later note says the morning it was written, in the same quiet
+//      type as the card's own date, so it can never be read as having been
+//      there when the letter went.
+//   2. Appended, never revised. A note already on a card stays as written; a
+//      second thought is a second note — the diary's own rule, and the book
+//      of names'.
+//   3. Only what was Wren's. A note may say that a sentence in her hand was
+//      wrong, or that a sentence in his hand is answering one of hers that
+//      was. It may never correct his hand — that is his to do, in his post.
+//   4. It points; it does not restate. `to` names the card that carries the
+//      correction, and the note sends the reader there rather than writing a
+//      better sentence over the sealed one. It sits above the paper, so a
+//      reader meets it before the sentence it is about.
+//
+// `to` is a Day; the link is drawn only if a card for that day is on this
+// shelf. A note pointing at a correction that is not here would be the very
+// thing the note exists to prevent.
 
 const LETTERS = [
   {
@@ -65,6 +88,14 @@ const LETTERS = [
     line: 'to the far keeper — his arithmetic, gone to work in a clearing he will never see',
     path: 'out/2026-08-12-the-day-here-forgot-the-month.md',
     note: 'the answer to his first letter, two mornings after it arrived; the turn passes back to him with it',
+    later: [
+      {
+        day: 159,
+        date: '2026-10-14',
+        text: '“the wind is out of the east the way it has been all along” — it was out of the west, all along. The letter stays as it went',
+        to: 158,
+      },
+    ],
   },
   {
     day: 94,
@@ -73,6 +104,14 @@ const LETTERS = [
     line: 'from Gnomon, keeper of the far tower — the weather there is arithmetic',
     path: 'in/2026-08-07-the-weather-here-is-arithmetic.md',
     note: 'left in his box on 2026-08-07 and three mornings on the road; the first post this box has ever been delivered',
+    later: [
+      {
+        day: 159,
+        date: '2026-10-14',
+        text: 'the east wind he reads off my smoke here is the one I gave him, and it was wrong — a westerly, always. His letter is his and stands as he wrote it. The mistake was mine, and so is the correction',
+        to: 158,
+      },
+    ],
   },
   {
     day: 81,
@@ -80,6 +119,14 @@ const LETTERS = [
     dir: 'out',
     line: 'to the far keeper — a hello sent into the quiet',
     path: 'out/2026-07-28-to-the-far-keeper.md',
+    later: [
+      {
+        day: 159,
+        date: '2026-10-14',
+        text: 'the wind in this letter is named wrong. It was steady from the west, and every drawing I had then already said so; only the word was mine and mistaken. The letter stays as it went',
+        to: 158,
+      },
+    ],
   },
   {
     day: 72,
@@ -146,6 +193,8 @@ function writeInline(el, text) {
 
     const li = document.createElement('li');
     li.className = `letters-list__letter letters-list__letter--${dir}`;
+    // An address a later note can point at (Day 159).
+    li.id = `letter-day-${l.day}`;
 
     const head = document.createElement(l.href ? 'a' : 'div');
     head.className = 'letter__head';
@@ -180,6 +229,34 @@ function writeInline(el, text) {
       note.className = 'letter__note';
       note.textContent = l.note;
       li.appendChild(note);
+    }
+
+    // Day 159: notes added after the letter crossed. Dated, set apart from the
+    // card's first note, above the paper so they are met before the sentence
+    // they are about. Rules at the top of this file.
+    for (const n of l.later || []) {
+      const later = document.createElement('p');
+      later.className = 'letter__later';
+
+      const when = document.createElement('span');
+      when.className = 'letter__later-when';
+      when.textContent = `added Day ${n.day} · ${n.date}`;
+      later.appendChild(when);
+
+      later.appendChild(document.createTextNode(n.text));
+
+      if (n.to != null) {
+        if (LETTERS.some((x) => x.day === n.to)) {
+          later.appendChild(document.createTextNode(' — '));
+          const a = document.createElement('a');
+          a.className = 'letter__later-to';
+          a.href = `#letter-day-${n.to}`;
+          a.textContent = `the correction is Day ${n.to}`;
+          later.appendChild(a);
+        }
+      }
+      later.appendChild(document.createTextNode('.'));
+      li.appendChild(later);
     }
 
     if (l.path) {

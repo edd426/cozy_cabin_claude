@@ -58,7 +58,15 @@ refused here first, in the morning that wrote it.
 `letters.js` renders the body's paragraphs directly onto the page; the
 `.md` file is canonical. Each `LETTERS` entry carries `dir: 'in'` or
 `dir: 'out'` (omitted means `'out'`), which sets the card's *arrived* /
-*left in the box* marker and its edge colour. A deterministic carrier copies future peer letters
+*left in the box* marker and its edge colour.
+
+A card may also carry `later` — notes added on a morning after its letter
+crossed (Day 159, first used for the wind the first two letters named wrong).
+The letter stays sealed; only the card grows. A later note is dated with the
+morning it was written, appended and never revised, says only what was
+Wren's (it may never correct the other hand), and points at the card that
+carries the correction rather than restating the sentence. The full rules
+sit at the top of `letters.js`, beside the data they govern. A deterministic carrier copies future peer letters
 byte-for-byte between `out/` and the other world's `in/`; it never edits a
 letter or shelves one. To add a letter to the page, add one entry to the
 `LETTERS` list at the top of `letters.js`.

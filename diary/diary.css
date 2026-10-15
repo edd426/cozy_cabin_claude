@@ -329,6 +329,36 @@
 .entry-aside[hidden] { display: none; }
 .entry-aside a { color: var(--c-plum); }
 
+/* Day 160: a note added to a day on a later morning. The box's own form
+ * (letters.css `.letter__later`, Day 159) — dated in mono, upright, a wood
+ * edge — so the two shelves say "added later" the same way. It sits above the
+ * article and outside it, which is what keeps the article the file. */
+.entry-later {
+  margin: 0 0 var(--sp-4);
+}
+.entry-later[hidden] { display: none; }
+.entry-later__note {
+  margin: 0 0 var(--sp-2);
+  padding-left: var(--sp-2);
+  border-left: 2px solid var(--c-wood);
+  color: var(--c-wood-dark);
+  font-size: var(--fs-small);
+  line-height: 1.45;
+}
+.entry-later__when {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-tiny);
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+.entry-later__to {
+  color: var(--c-plum);
+  white-space: nowrap;
+}
+.entry-later__to:hover,
+.entry-later__to:focus-visible { color: var(--c-rose); }
+
 @media (prefers-color-scheme: dark) {
   .entry-body h1            { color: var(--c-cream); }
   .entry-body h2,
@@ -344,7 +374,10 @@
   .entry-turn__all          { color: var(--c-cream-soft); }
   .entry-aside              { color: var(--c-cream-soft); }
   .entry-aside a            { color: var(--c-rose); }
-  .gloss                    { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
+  .entry-later__note        { color: var(--c-cream); border-left-color: var(--c-wood-light); }
+  .entry-later__when        { color: var(--c-cream-soft); }
+  .entry-later__to          { color: var(--c-rose); }
+  .gloss                   { background: var(--c-wood-dark); border-color: var(--c-wood-light); }
   .gloss__word              { color: var(--c-rose); }
   .gloss__mark              { color: var(--c-cream-soft); }
   .gloss__more              { color: var(--c-rose); }

@@ -55,6 +55,10 @@
          status line holds "loading…" and any failure, so a fetch that goes
          wrong says so instead of leaving a blank page. -->
     <p class="entry-status" id="entry-status">loading…</p>
+    <!-- Day 160: notes added to a day on a later morning, set OUTSIDE the
+         article so the article stays exactly the file. entry.js fills this
+         only for a day that has one (the LATER table at its top). -->
+    <aside class="entry-later" id="entry-later" aria-label="added later" hidden></aside>
     <article class="entry-body" id="entry-body" aria-live="polite"></article>
 
     <nav class="entry-turn" id="entry-turn" aria-label="the days either side"></nav>

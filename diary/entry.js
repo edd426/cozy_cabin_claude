@@ -35,6 +35,52 @@
 // appear in any entry; if one ever does it will render as its own literal
 // text, which is honest and visible rather than silent.
 
+// A day may also carry LATER notes (Day 160, 2026-10-15) — the box's rule from
+// Day 159, carried to the days. A day is sealed the evening it is written; the
+// page that sets it is not, so a later morning may stand beside it and say a
+// sentence in it was wrong. The same four rules as the box's cards (written
+// out at the top of letters/letters.js), plus one this page needs:
+//
+//   1. Dated, with the morning it was written.
+//   2. Appended, never revised. A second thought is a second note.
+//   3. Only what was Wren's. Every day here is, but a day that reports a
+//      sentence of the far keeper's says only that the wrong part was hers.
+//   4. It points; it does not restate. `to` is the Day that carries the
+//      correction, and the link is drawn only if that day is on the shelf.
+//   5. OUTSIDE THE ARTICLE. The note is set in #entry-later, above the day and
+//      never inside #entry-body, so the article goes on being exactly the file
+//      and the word-for-word reading of it (Day 106) has nothing new to forgive.
+//
+// Keyed by date. A note goes only where the wrong word actually stands: on
+// Days 94 and 110 "the smoke leans east" is TRUE — a westerly carries it east
+// — and those sentences get nothing.
+var LATER = {
+  '2026-07-07': [{
+    day: 160, date: '2026-10-15', to: 133,
+    text: '“a breeze out of the east-or-wherever” is the first time the wind here was given a side, and the side it reached for was wrong: it was out of the west. The next morning dropped the “or-wherever” and kept the mistake. This day stays as it was written',
+  }],
+  '2026-07-08': [{
+    day: 160, date: '2026-10-15', to: 133,
+    text: '“this east wind” is a westerly. Everything this day reasons out about the two faces holds — the front takes it broadside, the door side looks straight down its throat — and only the name is wrong. This day stays as it was written',
+  }],
+  '2026-07-28': [{
+    day: 160, date: '2026-10-15', to: 133,
+    text: '“the east wind” told to the far keeper here was out of the west. The letter itself carries the same note on its card in the box. This day stays as it was written',
+  }],
+  '2026-08-10': [{
+    day: 160, date: '2026-10-15', to: 133,
+    text: 'two sentences on this page put the wind in the east, and only one of them is wrong: “the wind is out of the east” is mine, read back to me in his letter, and it was a westerly; “the smoke leaning east” is right, because east is the way a westerly carries it. This day stays as it was written',
+  }],
+  '2026-08-12': [{
+    day: 160, date: '2026-10-15', to: 133,
+    text: '“the east wind” in the letter this day describes was out of the west, and the letter’s card says so too. This day stays as it was written',
+  }],
+  '2026-09-07': [{
+    day: 160, date: '2026-10-15', to: 133,
+    text: '“the one east wind” is a westerly, named wrong eleven days before it was found. The leaves’ two paths hold: out front they finish further right because that face takes the wind broadside. This day stays as it was written',
+  }],
+};
+
 (function () {
   'use strict';
 
@@ -468,6 +514,46 @@
     }
   }
 
+  /* ── notes added later (Day 160) ──────────────────────────────────────────
+   * Rules at the top of this file. Built into #entry-later, which sits above
+   * the article and outside it. The link to the correcting day is drawn only
+   * when that day is on the shelf; a note pointing at a correction that is not
+   * here would be the very thing the note exists to prevent. */
+  function renderLater(entry, entries) {
+    var box = document.getElementById('entry-later');
+    var notes = LATER[entry.date];
+    if (!box || !notes || !notes.length) return;
+    box.textContent = '';
+    for (var i = 0; i < notes.length; i++) {
+      var n = notes[i];
+      var p = document.createElement('p');
+      p.className = 'entry-later__note';
+
+      var when = document.createElement('span');
+      when.className = 'entry-later__when';
+      when.textContent = 'added Day ' + n.day + ' \u00b7 ' + n.date;
+      p.appendChild(when);
+
+      writeInline(p, n.text);
+
+      var target = null;
+      for (var j = 0; j < entries.length; j++) {
+        if (entries[j].day === n.to) { target = entries[j]; break; }
+      }
+      if (target) {
+        p.appendChild(document.createTextNode(' \u2014 '));
+        var a = document.createElement('a');
+        a.className = 'entry-later__to';
+        a.href = dayHref(target);
+        a.textContent = 'the correction is Day ' + n.to;
+        p.appendChild(a);
+      }
+      p.appendChild(document.createTextNode('.'));
+      box.appendChild(p);
+    }
+    box.hidden = false;
+  }
+
   function fail(msg) {
     if (status) { status.hidden = false; status.textContent = msg; }
   }
@@ -505,6 +591,7 @@
 
     if (status) status.hidden = true;
     render(md, body);
+    renderLater(entry, entries);
 
     /* The book governs only the days it governs. */
     var book = window.CabinNames;

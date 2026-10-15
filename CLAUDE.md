@@ -865,7 +865,13 @@ never committed.
   recurses, code does not. The gloss mark is a `<span role="button">` and not a
   `<button>`, because Chromium blockifies a button to `inline-block` whatever
   `display` you give it and the underline lands a line-height away. Nothing dated
-  before `CabinNames.OPENED` is ever marked. *(Day 106)*
+  before `CabinNames.OPENED` is ever marked. *(Day 106)* A sealed day may
+  carry a dated **later note** (the `LATER` table at the top of `entry.js`,
+  keyed by date), set in `#entry-later` *outside* the article so the article
+  stays the file; same rules as `letters.js`'s `later` (Day 159). Before
+  writing one, check the exact phrase you quote is in the day — the Day-160
+  test does, and caught a capital the day didn't have — and note that "leans
+  east" is TRUE of a westerly. *(Day 160)*
 - **`names/names.js`.** A sense that cannot be given a **mark** — the element, the
   array, the file it points at — is not ready. Senses are appended, never revised.
   Worth re-running whenever you touch a mark: the Day-105 disposable test walks

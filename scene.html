@@ -376,6 +376,35 @@
         data-shake=".sprite--tree-right" data-leaf=".leaf--shake-r"
         aria-label="shake the small tree"></span>
 
+  <!-- The litter (Day 161, 2026-10-16): what the autumn owes the ground. For
+       six weeks the leaves came down and thinned out a hand's width above the
+       grass, because a leaf on the ground would have to lie there or be taken
+       away — and the answer turned out to be that it lies there and is TAKEN
+       IN, which is the turn and not a loss. A few under each crown in autumn;
+       the whole fall in winter, gone over to the spent bloom's russet; a few
+       remnants in spring, the rest gone back into the meadow the spring wash
+       freshens; none in summer. The same four-step wheel the rick rides.
+
+       Three tiers, gated by `display` in scene.css so the almanac's count reads
+       layout: t1 lies in spring, autumn and winter (the first down and the last
+       taken in), t2 in autumn and winter, t3 in winter only. Before the
+       leaf-fall layer in DOM order so a falling leaf paints over the litter it
+       is about to join. Decorative, pointer-inert; JS off means no data-season
+       and an empty ground, the way it was. -->
+  <div class="sprite sprite--litter" aria-hidden="true">
+    <span class="litter litter--t1 litter--l1"></span>
+    <span class="litter litter--t1 litter--l2"></span>
+    <span class="litter litter--t1 litter--l3"></span>
+    <span class="litter litter--t2 litter--l4"></span>
+    <span class="litter litter--t3 litter--l5"></span>
+    <span class="litter litter--t3 litter--l6"></span>
+    <span class="litter litter--t3 litter--l7"></span>
+    <span class="litter litter--t1 litter--r1"></span>
+    <span class="litter litter--t2 litter--r2"></span>
+    <span class="litter litter--t3 litter--r3"></span>
+    <span class="litter litter--t3 litter--r4"></span>
+  </div>
+
   <!-- Leaf-fall (Day 116, 2026-09-01): autumn's own ownerless gesture, the way
        the fireflies are summer's and the stars are winter's — but NOT a
        night-welcome, and deliberately not one. Day 78's ruling that "a year is

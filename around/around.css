@@ -1285,6 +1285,31 @@
   100%  { top: 96.8%; left: 87.4%; opacity: 0; }
 }
 
+/* ── The litter under the near tree (Day 161, 2026-10-16) ──────────────────
+ * The front's layer (scene.css: `.sprite--litter`, `.litter`, the four-step
+ * season table and the colours) reused whole; only where it lies and how big
+ * it is belong to this face. Sized in this view's own pixels like the leaf
+ * that falls onto it (Day 120's grid rule). Spread evenly round the trunk —
+ * x 84-90% of the frame, its foot at 94% — and every leaf below that foot, on
+ * the grass band that runs to 98.5%: nearer than the trunk, so lower than it.
+ * No skew, because nothing on this face drifts (the wind comes straight on). */
+.sprite--litter--e {
+  --s: 3;                  /* rebased in the breakpoint block at the foot */
+  z-index: 3;              /* the near tree's plane, after it in DOM order */
+}
+.litter--e1, .litter--e2, .litter--e3, .litter--e4, .litter--e5 {
+  width:  calc(3px * var(--s));
+  height: calc(2px * var(--s));
+}
+.litter--e1, .litter--e4 { background: #97bb8e; }
+.litter--e2, .litter--e3, .litter--e5 { background: #aed499; }
+.scene[data-season="winter"] .litter--e3 { background: #93594f; }
+.litter--e1 { left: 82.6%; top: 95.8%; }
+.litter--e2 { left: 91.0%; top: 96.6%; }
+.litter--e3 { left: 86.8%; top: 97.6%; }
+.litter--e4 { left: 93.2%; top: 95.4%; }
+.litter--e5 { left: 80.2%; top: 97.0%; }
+
 /* ── Breakpoint, for the two components declared below the tree's own line ──
  * (Day 141, 2026-09-26.) `.sprite--leaffall--e` and `.crown-touch--e` both set
  * `--s: 3` in rules that stand further down this file than the tree's 3x->2x
@@ -1294,5 +1319,6 @@
  * which is the only place it can win. */
 @media (max-width: 599px) {
   .sprite--leaffall--e,
+  .sprite--litter--e,
   .crown-touch--e { --s: 2; }
 }

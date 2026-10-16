@@ -1208,6 +1208,103 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   100%  { top: 67%;   left: 91.0%; opacity: 1; }
 }
 
+/* ── The litter (Day 161, 2026-10-16) ──────────────────────────────────────
+ * What the autumn owes the ground. For six weeks every leaf above thinned out
+ * a hand's width over the grass, and the reason was written down on Day 128: a
+ * leaf on the ground would have to lie there or be taken away, and nothing here
+ * is ever taken away. The second half of that was true and the first half was
+ * the mistake. Lying there is not a loss, and neither is being taken IN — a
+ * leaf the ground keeps through the cold and draws back into itself by spring
+ * is the far half of the same wheel the rick rides (spent through the winter,
+ * given back by the summer). The spring wash already lifts "new growth on the
+ * bough"; this is where it comes from.
+ *
+ * FOUR STEPS, the rick's shape and on the same coarse year (season.js: a lean,
+ * not a thermometer):
+ *   autumn — a few down under each crown, the first of the fall (t1 + t2);
+ *   winter — the whole fall lying, gone over to the spent bloom's russet
+ *            (#a5675c, the pot's and the bed's own going-over), t1 + t2 + t3;
+ *   spring — the last few, darker, most of it already taken in (t1 only);
+ *   summer — none. The ground clean, the way it has always been in June.
+ * Counted by `leaf-litter` / `door-leaf-litter` in almanac/almanac.js, so the
+ * table above is a claim with a witness and not a description.
+ *
+ * WHERE: under each crown, where the leaves above finish their fall, and so a
+ * little RIGHT of each trunk — downwind, the same net drift every falling leaf
+ * on this face carries (the yard's one westerly). The door face's litter in
+ * around.css has no such drift, for that face's own reason. All in `%` of the
+ * frame like the fall itself, so nothing rebases at the breakpoint, and every
+ * one of them below its own tree's foot: the ground plane is sacred, and a
+ * thing lying nearer than a trunk lies LOWER in the frame than it (the
+ * founder's 2026-05-30 note).
+ *
+ * WHAT IT IS: the same 3×2 block the falling leaf is — the leaf, landed — and
+ * flat colour, no lit side (a near thing lit down one edge names a sun). In
+ * autumn it is literally the falling leaf's colour, read off `--crown-gild`
+ * the same way; from winter it is no longer the tree's, so it stops wearing
+ * the tree's lens and goes the colour every spent thing here goes.
+ *
+ * Not a light, so it sits at the trees' z 1 under both washes and takes the
+ * hour like the grass does. Gated by `display`, never opacity, so the count
+ * reads layout (Day 98). Default (no data-season / JS off) is none. */
+.sprite--litter {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+}
+.scene[data-season="autumn"] .sprite--litter,
+.scene[data-season="winter"] .sprite--litter,
+.scene[data-season="spring"] .sprite--litter { display: block; }
+
+.litter {
+  position: absolute;
+  width: 3px;
+  height: 2px;
+  display: none;
+}
+.scene[data-season="autumn"] .litter--t1,
+.scene[data-season="autumn"] .litter--t2,
+.scene[data-season="winter"] .litter,
+.scene[data-season="spring"] .litter--t1 { display: block; }
+
+/* Autumn: the falling leaf's own two greens through its own lens, so a leaf
+ * that lands is the leaf that fell and not a second swatch beside it. */
+.scene[data-season="autumn"] .litter {
+  filter: var(--crown-gild) hue-rotate(-8deg) saturate(1.45) brightness(0.93);
+}
+.litter--l1, .litter--l3, .litter--l5, .litter--l7,
+.litter--r1, .litter--r3 { background: #97bb8e; }
+.litter--l2, .litter--l4, .litter--l6,
+.litter--r2, .litter--r4 { background: #aed499; }
+/* Winter: gone over. The spent bloom's russet and one shade under it, so the
+ * full fall reads as many leaves rather than one stamp. */
+.scene[data-season="winter"] .litter { background: #a5675c; }
+.scene[data-season="winter"] .litter--l2,
+.scene[data-season="winter"] .litter--l5,
+.scene[data-season="winter"] .litter--r3 { background: #93594f; }
+/* Spring: the last of it, darkened toward the earth it is going back into. */
+.scene[data-season="spring"] .litter { background: #8f5c4c; }
+
+/* Left crown (its foot near 82% of the frame): seven places, skewed right of
+ * the trunk the way the leaves above finish. Right crown (foot near 77%,
+ * further off and smaller): four. In each, the t1 leaves that lie longest are
+ * set where the falling ones actually finish (leaf-fall-1 at 15.6/92,
+ * leaf-fall-2 at 19.0/93, leaf-fall-3/4 at 94.4-96.2/91), so a leaf comes down
+ * onto the litter it is joining rather than beside it. */
+.litter--l1 { left: 13.0%; top: 86.0%; }
+.litter--l2 { left: 15.8%; top: 91.8%; }
+.litter--l3 { left: 19.0%; top: 92.8%; }
+.litter--l4 { left: 10.6%; top: 87.6%; }
+.litter--l5 { left: 17.6%; top: 86.2%; }
+.litter--l6 { left: 20.6%; top: 88.2%; }
+.litter--l7 { left: 14.4%; top: 91.4%; }
+.litter--r1 { left: 94.2%; top: 90.0%; }
+.litter--r2 { left: 89.8%; top: 82.6%; }
+.litter--r3 { left: 95.2%; top: 83.0%; }
+.litter--r4 { left: 93.4%; top: 85.4%; }
+
 /* ── The crowns answer a hand (Day 139, 2026-09-24) ────────────────────────
  * The first response in this clearing that is not the year's, the hour's, or a
  * clock's — the first thing here that moves because somebody touched it

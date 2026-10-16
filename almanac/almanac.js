@@ -134,6 +134,7 @@
         'indoors, a low fire on its ember bed, and the light it lays on the boards reaching no further than the chair on one side and the wood on the other',
         'three logs in the armful by the hearth — as much as a banked fire asks for, and the fewest of the year',
         'fireflies up off the grass once the light goes, and no stars at all',
+        'the grass under the three crowns clean — the last of the year before’s leaves taken back into the ground in the spring',
       ],
     },
     autumn: {
@@ -146,6 +147,7 @@
         'the pot’s bloom wheel slowing out of the summer toward its middling pace, each bloom holding every state a little longer than it did in August',
         'leaves coming down off the two crowns out front — four of them in the air at any moment, each falling on its own long clock, swinging as it goes and always finishing further right than it began, because the yard’s one wind is out of the west and carries them the way it leans the smoke',
         'and three more off the near tree on the door side, the same leaves off the same crown, keeping the same swing and finishing in the very column each let go from — that face looks straight up the wind’s throat, and a wind coming at you leans nothing sideways',
+        'the first of the fall lying in the grass under the crowns — four under the big tree out front and two under the small one, each a little right of its trunk where the wind carries the falling ones, and three round the foot of the near tree on the door side, spread evenly, because nothing on that face drifts',
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
         'a fourth log in the armful by the hearth — the first fires being fed; the pile widens along the floor away from the hearth to take it, rather than growing a tier a two-wide base could not carry',
         'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
@@ -156,6 +158,7 @@
       does: [
         'a pale blue-grey quiet over the frame, and the crowns cooled to a muted sage — never a bare branch',
         'the woodpile being spent: six logs, the middle row’s right-hand end gone first, picked from the side the door is on',
+        'the whole fall lying under the crowns, gone over to the russet every spent bloom here goes — seven under the big tree, four under the small one, five round the near tree by the door. Nothing comes down now; the ground keeps what came down',
         'the chimney at its deepest — a fourth puff where three climb all year, each brighter and spreading wider by the top',
         'the wildflowers drained to a dusty pink on grey-sage stems and the door pot quieted with them — every stem still standing, none of them taken',
         'the pot’s bloom wheel at its slowest — a quarter of the midsummer pace, a round taking most of the season — and still turning, and still never fewer than three blooms standing in it, because the four stems keep a fixed spacing on the wheel and only the pace changes',
@@ -169,6 +172,7 @@
       does: [
         'a fresh pistachio over the frame with a breath of blossom high in it, and the crowns lifted bright with new growth',
         'the woodpile at its thinnest — four logs, the bottom course only',
+        'the last of the fallen leaves, darkened toward the earth — three under the big tree, one under the small one, two by the door — the rest already taken back into the ground the fresh green comes up out of',
         'the chimney a touch fuller than the summer thread — the last fires',
         'the wildflowers at their brightest and freshest rose of the year, and the door pot lifted with them — new bloom on new growth',
         'the pot’s bloom wheel quickening back out of the cold, past its middling pace at the equinox and on toward the summer',
@@ -467,6 +471,21 @@
       view: 'around', kind: 'visible-count',
       selector: '.sprite--leaffall--e .leaf',
       reads: 'how many leaves are coming down off the near tree on the door side',
+    },
+    /* Day 161. What the autumn owes the ground: the leaves that came down,
+     * lying. Counted on layout like the rick — each one is gated with
+     * `display` by tier in scene.css — and on its own four-step table, which
+     * peaks a season LATER than the fall that makes it: the most leaves are in
+     * the air in autumn and the most are on the ground in winter. */
+    'leaf-litter': {
+      view: 'home', kind: 'visible-count',
+      selector: '.sprite--litter .litter',
+      reads: 'how many fallen leaves are lying in the grass under the two crowns out front',
+    },
+    'door-leaf-litter': {
+      view: 'around', kind: 'visible-count',
+      selector: '.sprite--litter--e .litter',
+      reads: 'how many fallen leaves are lying round the foot of the near tree on the door side',
     },
     'firefly-layer': {
       view: 'home', kind: 'opacity',
@@ -1226,6 +1245,16 @@
       probe: 'door-falling-leaves', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 3, winter: 0, spring: 0 },
       guards: '“three more off the near tree on the door side” in autumn, and nothing falling on that face in the other three seasons. There is deliberately no second hour check here: both faces are opened by the one `[data-season="autumn"]` rule on the shared container, so asking the door side about the four bands as well would be putting the same line on the stand twice. What makes this face’s fall its own — that each leaf finishes in the column it let go from, where a front leaf finishes further right — went unheld from Day 122 to Day 133, on the grounds that a count cannot see a path; `door-leaf-returns` below holds it now, not by seeing the path but by reading its two ends.',
+    },
+    {
+      probe: 'leaf-litter', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 6, winter: 11, spring: 4 },
+      guards: 'the litter under the two front crowns in all four seasons — the first six of the fall in autumn, all eleven gone over in winter, four remnants in spring, the grass clean in summer. Standing beside `falling-leaves` above it also holds the phase: four in the air in autumn and none in winter, six on the ground in autumn and eleven in winter, so the two tables cannot both be right unless the ground fills a season after the air does, which is what a fall is',
+    },
+    {
+      probe: 'door-leaf-litter', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 3, winter: 5, spring: 2 },
+      guards: 'the litter round the near tree on the door side, on the same four steps as the front’s — three, five, two and none. The tiers are shared from one set of lines in scene.css, so this mostly holds that this face’s five spans are still wearing the right tier classes',
     },
     /* Day 133. The wind's direction, held to the picture rather than to a
      * sentence. The four counted layers are the smoke, the clouds, the falling

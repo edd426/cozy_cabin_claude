@@ -1151,7 +1151,8 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 
 /* Two off the left crown (which spans about 5–17% of the frame at both widths,
  * its top at 59–66%), two off the right (87–93%, top at 55–62%). Each starts
- * inside its own crown and settles into the grass near 92%. Long periods, all
+ * inside its own crown and comes down onto a leaf of the litter (THE LANDING,
+ * below). Long periods, all
  * different, with negative delays spreading the four around their cycles so the
  * fall is always somewhere in the frame and never in step. */
 .leaf--1 { animation-name: leaf-fall-1; animation-duration: 13s;   animation-delay: 0s;   }
@@ -1160,17 +1161,40 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .leaf--4 { animation-name: leaf-fall-4; animation-duration: 18s;   animation-delay: -11s; }
 
 /* Each fall is its own path — no two leaves come down the same way. The swing
- * crosses back and forth; the finish is always right of the start. The last two
- * frames of each cut the leaf out at the grass and return it, unseen, to the
- * crown, so 0% and 100% are the same in-crown rest. */
+ * crosses back and forth; the finish is always right of the start.
+ *
+ * THE LANDING (Day 162). Until today each leaf thinned out over the last
+ * stride of its fall and was gone a hair above the grass — which read as a
+ * leaf going out, not a leaf arriving, and once the litter lay there (Day 161)
+ * it went out a hair above a patch of its own kind. Now each comes down onto
+ * one particular leaf of the litter, the same size, the same green through the
+ * same lens, at exactly the same `top`/`left` in the same frame, and stops
+ * there at full strength. One frame later (a tenth of a per cent of the round,
+ * under a single paint) it is taken out — and what it was standing on is
+ * itself, so nothing changes in the picture. It has not vanished; it has
+ * joined. The litter does not grow by it, because a count that rose for ever
+ * would be a tally and not a ground (the litter's own four steps keep that).
+ *
+ * Which twin is the one the colours allow: leaf-fall-1 (body green) onto
+ * `.litter--l2`, leaf-fall-2 (lit green) onto `.litter--l3`, leaf-fall-3 (lit)
+ * onto `.litter--r2`, leaf-fall-4 (body) onto `.litter--r1`. The right crown's
+ * two finish at two depths — r2 lies just below that trunk's foot, r1 well out
+ * on the grass — because a far tree's leaves do not all come down at one
+ * distance either. Held by `leaf-landing` in almanac/almanac.js, which seeks
+ * each leaf to its last opaque frame and asks the rendered page whether a
+ * showing litter leaf of the same colour is lying in the very same box.
+ *
+ * After the join each is returned, unseen, to the crown, so 0% and 100% are
+ * the same in-crown rest. */
 @keyframes leaf-fall-1 {
   0%    { top: 68%;   left:  9.5%; opacity: 1; }
   18%   { top: 73%;   left: 11.8%; }
   36%   { top: 78%;   left: 10.6%; }
   55%   { top: 83%;   left: 13.4%; }
   74%   { top: 87.5%; left: 12.4%; }
-  90%   { top: 91%;   left: 15.0%; opacity: 1; }
-  97%   { top: 92%;   left: 15.6%; opacity: 0; }
+  90%   { top: 90.8%; left: 15.0%; }
+  96%   { top: 91.8%; left: 15.8%; opacity: 1; }
+  96.1% { top: 91.8%; left: 15.8%; opacity: 0; }
   97.5% { top: 68%;   left:  9.5%; opacity: 0; }
   100%  { top: 68%;   left:  9.5%; opacity: 1; }
 }
@@ -1180,19 +1204,20 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   44%   { top: 81%;   left: 15.6%; }
   64%   { top: 85.5%; left: 14.4%; }
   84%   { top: 89.5%; left: 17.8%; }
-  94%   { top: 92%;   left: 18.4%; opacity: 1; }
-  99%   { top: 93%;   left: 19.0%; opacity: 0; }
+  94%   { top: 92.2%; left: 18.6%; }
+  98%   { top: 92.8%; left: 19.0%; opacity: 1; }
+  98.1% { top: 92.8%; left: 19.0%; opacity: 0; }
   99.5% { top: 69%;   left: 13.5%; opacity: 0; }
   100%  { top: 69%;   left: 13.5%; opacity: 1; }
 }
 @keyframes leaf-fall-3 {
   0%    { top: 66%;   left: 88.0%; opacity: 1; }
-  20%   { top: 71%;   left: 90.4%; }
-  40%   { top: 76%;   left: 89.2%; }
-  60%   { top: 81%;   left: 92.0%; }
-  80%   { top: 86%;   left: 91.0%; }
-  93%   { top: 89.5%; left: 93.6%; opacity: 1; }
-  98%   { top: 91%;   left: 94.4%; opacity: 0; }
+  20%   { top: 70%;   left: 89.6%; }
+  40%   { top: 74%;   left: 88.4%; }
+  60%   { top: 78%;   left: 90.6%; }
+  80%   { top: 81.4%; left: 89.4%; }
+  93%   { top: 82.6%; left: 89.8%; opacity: 1; }
+  93.1% { top: 82.6%; left: 89.8%; opacity: 0; }
   98.5% { top: 66%;   left: 88.0%; opacity: 0; }
   100%  { top: 66%;   left: 88.0%; opacity: 1; }
 }
@@ -1202,8 +1227,8 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   46%   { top: 79%;   left: 91.6%; }
   68%   { top: 84%;   left: 94.6%; }
   88%   { top: 88.5%; left: 93.6%; }
-  95%   { top: 90.5%; left: 95.6%; opacity: 1; }
-  99%   { top: 91.5%; left: 96.2%; opacity: 0; }
+  96%   { top: 90.0%; left: 94.2%; opacity: 1; }
+  96.1% { top: 90.0%; left: 94.2%; opacity: 0; }
   99.5% { top: 67%;   left: 91.0%; opacity: 0; }
   100%  { top: 67%;   left: 91.0%; opacity: 1; }
 }
@@ -1274,9 +1299,11 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .scene[data-season="autumn"] .litter {
   filter: var(--crown-gild) hue-rotate(-8deg) saturate(1.45) brightness(0.93);
 }
-.litter--l1, .litter--l3, .litter--l5, .litter--l7,
+/* (l2 and l3 traded greens on Day 162, so each is the colour of the leaf that
+ * comes down onto it — see THE LANDING above.) */
+.litter--l1, .litter--l2, .litter--l5, .litter--l7,
 .litter--r1, .litter--r3 { background: #97bb8e; }
-.litter--l2, .litter--l4, .litter--l6,
+.litter--l3, .litter--l4, .litter--l6,
 .litter--r2, .litter--r4 { background: #aed499; }
 /* Winter: gone over. The spent bloom's russet and one shade under it, so the
  * full fall reads as many leaves rather than one stamp. */
@@ -1289,10 +1316,10 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 
 /* Left crown (its foot near 82% of the frame): seven places, skewed right of
  * the trunk the way the leaves above finish. Right crown (foot near 77%,
- * further off and smaller): four. In each, the t1 leaves that lie longest are
- * set where the falling ones actually finish (leaf-fall-1 at 15.6/92,
- * leaf-fall-2 at 19.0/93, leaf-fall-3/4 at 94.4-96.2/91), so a leaf comes down
- * onto the litter it is joining rather than beside it. */
+ * further off and smaller): four. Four of the six that lie in autumn are where
+ * the falling ones finish — exactly where, since Day 162: l2, l3, r1 and r2
+ * are each some leaf's landing, to the hundredth of a per cent, so a leaf
+ * comes down onto the litter it is joining rather than beside it. */
 .litter--l1 { left: 13.0%; top: 86.0%; }
 .litter--l2 { left: 15.8%; top: 91.8%; }
 .litter--l3 { left: 19.0%; top: 92.8%; }
@@ -1418,18 +1445,23 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 
 /* Each starts between the two leaves that crown already drops — inside the
  * canopy at both widths (the left crown spans 5–17% of the frame, the right
- * 87–93%) — and settles into the grass near 92%, finishing right of where it
- * let go, because this face meets the west wind broadside like everything else
- * on it. It ends transparent and touch.js then takes the class off, so the span
- * goes back to display:none and is countable-as-absent again. */
+ * 87–93%) — and finishing right of where it let go, because this face meets
+ * the west wind broadside like everything else on it. Since Day 162 each comes
+ * down onto a litter leaf of its own green, as the four above do (THE LANDING):
+ * the left one onto `.litter--l3`, the right one onto `.litter--r1`, and is
+ * taken out there under a single paint. It ends transparent and touch.js then
+ * takes the class off, so the span goes back to display:none and is
+ * countable-as-absent again. */
 @keyframes leaf-shaken-l {
   0%    { top: 67.0%; left: 11.5%; opacity: 1; }
   16%   { top: 72%;   left: 13.8%; }
   34%   { top: 77%;   left: 12.2%; }
   53%   { top: 82%;   left: 15.0%; }
-  72%   { top: 87%;   left: 13.9%; }
-  90%   { top: 91%;   left: 16.6%; opacity: 1; }
-  100%  { top: 92%;   left: 17.2%; opacity: 0; }
+  72%   { top: 87%;   left: 14.4%; }
+  90%   { top: 91.6%; left: 18.2%; }
+  97%   { top: 92.8%; left: 19.0%; opacity: 1; }
+  97.1% { top: 92.8%; left: 19.0%; opacity: 0; }
+  100%  { top: 92.8%; left: 19.0%; opacity: 0; }
 }
 @keyframes leaf-shaken-r {
   0%    { top: 65.0%; left: 89.6%; opacity: 1; }
@@ -1437,8 +1469,10 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   38%   { top: 75.5%; left: 90.2%; }
   57%   { top: 81%;   left: 93.0%; }
   76%   { top: 86%;   left: 91.8%; }
-  91%   { top: 90%;   left: 94.4%; opacity: 1; }
-  100%  { top: 91%;   left: 95.0%; opacity: 0; }
+  91%   { top: 89.2%; left: 93.8%; }
+  97%   { top: 90.0%; left: 94.2%; opacity: 1; }
+  97.1% { top: 90.0%; left: 94.2%; opacity: 0; }
+  100%  { top: 90.0%; left: 94.2%; opacity: 0; }
 }
 
 /* Bush — 32×28 native, scaled 2.5x. Front-right corner. */

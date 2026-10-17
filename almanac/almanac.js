@@ -487,6 +487,21 @@
       selector: '.sprite--litter--e .litter',
       reads: 'how many fallen leaves are lying round the foot of the near tree on the door side',
     },
+    /* Day 162. Where a falling leaf comes down. Each is seeked to the last
+     * frame it is opaque in and the page is asked whether a showing leaf of
+     * the litter lies in exactly that box, in exactly that colour through
+     * exactly that filter — because the join is only invisible if all four
+     * agree. The same two selectors as the counts above, not new names. */
+    'leaf-landing': {
+      view: 'home', kind: 'landing',
+      selector: '.sprite--leaffall .leaf', onto: '.sprite--litter .litter',
+      reads: 'how many of the leaves coming down out front land on a leaf of the litter that is their own twin — the same box, the same colour, the same lens',
+    },
+    'door-leaf-landing': {
+      view: 'around', kind: 'landing',
+      selector: '.sprite--leaffall--e .leaf', onto: '.sprite--litter--e .litter',
+      reads: 'the same asked of the near tree’s leaves on the door side',
+    },
     'firefly-layer': {
       view: 'home', kind: 'opacity',
       selector: '.sprite--fireflies',
@@ -1250,6 +1265,16 @@
       probe: 'leaf-litter', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 6, winter: 11, spring: 4 },
       guards: 'the litter under the two front crowns in all four seasons — the first six of the fall in autumn, all eleven gone over in winter, four remnants in spring, the grass clean in summer. Standing beside `falling-leaves` above it also holds the phase: four in the air in autumn and none in winter, six on the ground in autumn and eleven in winter, so the two tables cannot both be right unless the ground fills a season after the air does, which is what a fall is',
+    },
+    {
+      probe: 'leaf-landing', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 4, winter: 0, spring: 0 },
+      guards: 'every leaf coming down out front arriving rather than going out — landing at full strength on one leaf of the litter that is its own twin, and only then taken out, over itself, so nothing in the picture changes. Until Day 162 each thinned out a hair above the grass, and this line would have read nought. What it reads is one instant of each fall; it cannot tell a leaf that swoops in from one that settles',
+    },
+    {
+      probe: 'door-leaf-landing', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 3, winter: 0, spring: 0 },
+      guards: 'the same on the door side, where it also pins where the three that lie in autumn have to be: each in the column a leaf let go from, since that face’s leaves finish where they started (`door-leaf-returns`)',
     },
     {
       probe: 'door-leaf-litter', axis: 'season', at: { tod: 'day' },

@@ -386,10 +386,13 @@ const MOTION_CLIPS = [
         { frac: 0.18, label: 'let go' },
         { frac: 0.36, label: 'swung back' },
         { frac: 0.55, label: 'swung out' },
-        { frac: 0.74, label: 'nearly down' },
-        { frac: 0.90, label: 'in the grass' },
+        { frac: 0.96, label: 'landed on its twin' },
+        { frac: 0.965, label: 'joined' },
       ],
     },
+    // Day 162: the last two frames are the claim. The leaf comes down onto a
+    // leaf of the litter that is its own twin and is taken out over itself, so
+    // 'landed' and 'joined' must be the same picture — read them side by side.
     crop: { around: ['.sprite--tree-left', '.leaf--1', '.leaf--2'], margin: 6, scale: 3 },
   },
   // Day 122 (2026-09-07) — the same fall on the door side (around.css
@@ -415,8 +418,8 @@ const MOTION_CLIPS = [
         { frac: 0.20, label: 'let go' },
         { frac: 0.42, label: 'swung back' },
         { frac: 0.64, label: 'swung out' },
-        { frac: 0.84, label: 'nearly down' },
-        { frac: 0.93, label: 'in the grass' },
+        { frac: 0.95, label: 'landed on its twin' },
+        { frac: 0.955, label: 'joined' },
       ],
     },
     crop: { around: ['.sprite--tree-near', '.leaf--e-1', '.leaf--e-2'], margin: 6, scale: 3 },

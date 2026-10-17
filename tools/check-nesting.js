@@ -232,6 +232,8 @@ function namesFrom(probes) {
   for (const [name, p] of Object.entries(probes)) {
     if (!p || !per[p.view]) continue;
     if (p.selector) add(p.view, p.selector, `${name}.selector`);
+    // Day 162. A `landing` probe names the ground its leaves come down onto.
+    if (p.onto) add(p.view, p.onto, `${name}.onto`);
     // Day 134. A `naming` probe's `of` is not a selector — it is which wheel to
     // derive ('hours' or 'seasons'), and that probe reads no element at all.
     // Registered as a selector it would match nothing, report nothing and fail

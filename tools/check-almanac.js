@@ -450,6 +450,10 @@ function measureInPage({ probes, forDate }) {
     // page of its own after this evaluate returns.
     if (probe.kind === 'drift') continue;
 
+    // Day 162. `landing` pauses every animation too and seeks each leaf to the
+    // instant it comes down, so it is taken on a page of its own the same way.
+    if (probe.kind === 'landing') continue;
+
     // Day 111. An `attr` probe belongs to a hold check, which visits the page
     // itself on a stepped clock rather than in a forced state — so there is
     // nothing here for it, and reading it in a forced state would be a reading
@@ -1407,6 +1411,80 @@ async function measureDrift(page, probe) {
   });
 }
 
+/* Day 162 — `landing`. Where a falling leaf comes down, asked of the rendered
+ * page. Until this morning every leaf thinned out over the last stride of its
+ * fall and was gone a hair above the grass; now each comes down onto one leaf of
+ * the litter — the same size, the same colour through the same lens, in the
+ * very same box — and is taken out a tenth of a per cent later, over itself.
+ * The claim is that the join is invisible because the two are identical, and
+ * that is a claim about four things at once: where, how big, what colour, what
+ * filter. So all four are read, off the page, at the landing instant.
+ *
+ * The landing instant is read off the keyframes rather than guessed: the frame
+ * just before the first one that names `opacity: 0` (the join), which must
+ * itself name `opacity: 1` — a leaf still thinning as it lands is the old
+ * going-out, and is counted as not landed. The animation is seeked there by
+ * absolute `currentTime` (Day 108), every other animation on the page paused,
+ * and then each showing element of `onto` is asked whether its box matches the
+ * leaf's to a hundredth of a pixel and its computed background and filter are
+ * the same strings. The reading is how many showing leaves landed on a twin.
+ *
+ * Blind, and said here: it reads one instant of each fall, the last opaque one.
+ * It cannot tell a leaf that swoops in from one that settles, and it has
+ * nothing to say about a leaf that lands on its twin and is then left lying on
+ * top of it (which would be invisible too, and would also be a lie about the
+ * count — `leaf-litter` holds that). Handed nothing at all — no element
+ * matching `selector` — it answers null rather than nought (Day 130). */
+async function measureLanding(page, probe) {
+  return await page.evaluate(({ sel, onto }) => {
+    const all = document.querySelectorAll(sel);
+    if (all.length === 0) return null;
+    for (const a of document.getAnimations()) {
+      try { a.pause(); } catch (e) { /* a finished transition may refuse */ }
+    }
+    const shows = (el) => el.getClientRects().length > 0 &&
+      getComputedStyle(el).visibility !== 'hidden';
+    const box = (el) => {
+      const r = el.getBoundingClientRect();
+      return [r.left, r.top, r.right, r.bottom];
+    };
+    const near = (a, b) => a.every((v, i) => Math.abs(v - b[i]) < 0.01);
+    const name = (el) => [...el.classList].filter((c) => /--/.test(c)).pop() || el.className;
+
+    const leaves = [...all].filter(shows);
+    let landed = 0;
+    const parts = [];
+    for (const el of leaves) {
+      const anim = el.getAnimations().find((a) => typeof a.animationName === 'string');
+      if (!anim) { parts.push(name(el) + ': not falling'); continue; }
+      const kfs = anim.effect.getKeyframes();
+      const join = kfs.findIndex((k, i) => i > 0 && k.opacity !== undefined &&
+        parseFloat(k.opacity) === 0);
+      const land = join > 0 ? kfs[join - 1] : null;
+      if (!land || land.opacity === undefined || parseFloat(land.opacity) !== 1) {
+        parts.push(name(el) + ': thins out before it lands');
+        continue;
+      }
+      const t = anim.effect.getComputedTiming();
+      anim.currentTime = (t.delay || 0) + t.duration * (1 + land.computedOffset);
+      const cs = getComputedStyle(el);
+      if (parseFloat(cs.opacity) < 0.999) {
+        parts.push(name(el) + ': not opaque at its landing');
+        continue;
+      }
+      const b = box(el);
+      const twin = [...document.querySelectorAll(onto)].filter(shows).find((o) => {
+        const os = getComputedStyle(o);
+        return near(box(o), b) && os.backgroundColor === cs.backgroundColor &&
+          os.filter === cs.filter;
+      });
+      if (twin) { landed++; parts.push(name(el) + ' onto ' + name(twin)); }
+      else parts.push(name(el) + ': onto nothing of its own kind');
+    }
+    return { landed, parts };
+  }, { sel: probe.selector, onto: probe.onto });
+}
+
 /* ------------------------------------------------------------------------ *
  * Day 131 — the seal a page carries, and what a witness says when it is
  * handed not nothing but another witness's damage.
@@ -1929,6 +2007,25 @@ async function readState(browser, base, view, state, probes) {
         }
       } finally {
         await driftPage.close();
+      }
+    }
+
+    // Day 162. `landing` seeks every leaf to the instant it comes down, which
+    // leaves the page stopped at an instant it would never otherwise be caught
+    // at — so each probe takes a page of its own, like `drift` above.
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind !== 'landing') continue;
+      const landPage = await openForced();
+      try {
+        const taken = await takenOn(landPage, name, () => measureLanding(landPage, probe));
+        const got = taken.value;
+        readings[name] = got ? got.landed : null;
+        if (got) {
+          console.log(`check-almanac:   ${name} ${keyOf(state)} = ${got.landed} landed ` +
+                      `(${got.parts.join(', ') || 'nothing falling'})`);
+        }
+      } finally {
+        await landPage.close();
       }
     }
 

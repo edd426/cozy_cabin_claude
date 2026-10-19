@@ -708,8 +708,14 @@
       });
     }
 
+    /* Day 164: she keeps the warm months and the light (scene.css), so in
+     * winter and at night there is no bee on the bed to lift. Asked on layout,
+     * the way the almanac counts her — a class added to a hidden element never
+     * gets its `animationend` back (Day 139), and would leave her marked as
+     * mid-bolt for the morning she returns. */
     var bee = scene.querySelector('.sprite--bee');
-    if (bee && !bee.classList.contains('is-startled')) {
+    var beeHere = !!bee && bee.getClientRects().length > 0;
+    if (beeHere && !bee.classList.contains('is-startled')) {
       bee.classList.add('is-startled');
       bee.addEventListener('animationend', function once(e) {
         /* Named, and it matters more here than anywhere else in this file:
@@ -724,9 +730,19 @@
 
     /* Second, and never first — the rule the fire, the lamp, the stone and the
      * bench all keep. Both halves of the visible answer are already running by
-     * the time anything is asked of the audio. */
-    if (window.CabinSound && typeof window.CabinSound.buzz === 'function') {
-      try { window.CabinSound.buzz(); } catch (err) {}
+     * the time anything is asked of the audio.
+     *
+     * Day 164: no bee, no buzz. What a palm makes in a tuft of stems with
+     * nothing on them is the stems' own dry sound, and that has been the
+     * cloak's since Day 147 — cut from noise, the soft broadband of two
+     * surfaces slipping, which is what a brushed bed is too. It also keeps the
+     * reduced-motion visitor from pressing the bed in January and getting
+     * nothing at all. */
+    if (window.CabinSound) {
+      var say = beeHere ? window.CabinSound.buzz : window.CabinSound.rustle;
+      if (typeof say === 'function') {
+        try { say(); } catch (err) {}
+      }
     }
   }
 

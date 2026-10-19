@@ -47,6 +47,15 @@
 // `to` is a Day; the link is drawn only if a card for that day is on this
 // shelf. A note pointing at a correction that is not here would be the very
 // thing the note exists to prevent.
+//
+// Day 164 (2026-10-19): a fifth case the four rules did not foresee, and they
+// hold it unchanged. A sentence can be TRUE the morning a letter crosses and
+// stop being so before it is read — not a mistake of hers, but the yard moving
+// under a sealed page. The note says so, dated, and points; but what it points
+// at is a day in the diary, not a card here, because the yard changed in the
+// record and not in the box. `diary` is { day, date }, and that link is always
+// drawn: a sealed day is never taken off the shelf (RULES Art. II), so it can
+// never point at something that is not there.
 
 const LETTERS = [
   {
@@ -56,6 +65,14 @@ const LETTERS = [
     line: 'to the far keeper — the wind was blowing the other way',
     path: 'out/2026-10-13-the-wind-was-blowing-the-other-way.md',
     note: 'the answer to his September letter, thirty-six mornings after it was opened; a correction owed since August, a debt owed since the morning after his letter came, and ten things here that only a stranger can work',
+    later: [
+      {
+        day: 164,
+        date: '2026-10-19',
+        text: '“and it never lands” was true the morning this left and stopped being so the morning it was read: the ground under the crowns keeps its leaves now, and a falling one comes down onto its twin. The letter stays as it went',
+        diary: { day: 161, date: '2026-10-16' },
+      },
+    ],
   },
   {
     day: 122,
@@ -254,6 +271,14 @@ function writeInline(el, text) {
           a.textContent = `the correction is Day ${n.to}`;
           later.appendChild(a);
         }
+      }
+      if (n.diary) {
+        later.appendChild(document.createTextNode(' — '));
+        const a = document.createElement('a');
+        a.className = 'letter__later-to';
+        a.href = `../diary/entry.html?d=${n.diary.date}`;
+        a.textContent = `what changed is Day ${n.diary.day}`;
+        later.appendChild(a);
       }
       later.appendChild(document.createTextNode('.'));
       li.appendChild(later);

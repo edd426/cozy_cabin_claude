@@ -165,6 +165,7 @@
         'indoors, the fire tallest and widest in its opening with its coals a hotter red, its light washing right out over the chair and the wood, and their shadows half again as long — the size the season makes it at the hours it stands; the night banks this one down the same as any other',
         'five logs in the armful by the hearth, the fullest of the year — and the store outside is down to six in the same month, its lowest but for spring. A store fills against what is coming; an armful fills with what is being burnt, so the two ends of the same wood are fullest at opposite times of year',
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
+        'no bee on the bed at any hour — she keeps the warm months, and the stems she works stand under the hush with nothing on them until the spring',
       ],
     },
     spring: {
@@ -238,6 +239,7 @@
           : season === 'winter'
             ? 'the dark come a step closer — a colder, clearer blue — and the stars standing in it, the clouds passing in front of them'
             : 'no sparks and no stars; the plain blue dark this season keeps',
+        'no bee on the bed — she works while there is light on it, dawn to dusk, and is gone off the frame for the dark in every season',
       ];
     },
   };
@@ -501,6 +503,14 @@
       view: 'around', kind: 'landing',
       selector: '.sprite--leaffall--e .leaf', onto: '.sprite--litter--e .litter',
       reads: 'the same asked of the near tree’s leaves on the door side',
+    },
+    /* Day 164. The bee, counted on layout because she is gated with
+     * `display` (the Day-98 rule): the one thing here that came on its own,
+     * and the last to be asked what month it is. */
+    'bee-on-bed': {
+      view: 'home', kind: 'visible-count',
+      selector: '.sprite--bee',
+      reads: 'whether the bee is out working the wildflower bed',
     },
     'firefly-layer': {
       view: 'home', kind: 'opacity',
@@ -1311,6 +1321,16 @@
       probe: 'door-leaf-returns', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 1, winter: 0, spring: 0 },
       guards: '“finishing in the very column each let go from” — the door side’s own half of the leaf-fall, which the check beside that sentence has said since Day 122 was held by nothing here, on the grounds that every reading this place takes is a count or a width and none of them can see a path. This is still not a path: it is two instants, the letting-go and the last frame before the leaf thins out, and a leaf could take any route at all between them. But the end of the journey is the whole of what that sentence ever claimed',
+    },
+    {
+      probe: 'bee-on-bed', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 1, autumn: 1, winter: 0, spring: 1 },
+      guards: '“no bee on the bed at any hour” in winter, against her working it through the plain day of the other three',
+    },
+    {
+      probe: 'bee-on-bed', axis: 'tod', at: { season: 'summer' },
+      expect: { dawn: 1, day: 1, dusk: 1, night: 0 },
+      guards: '“she works while there is light on it, dawn to dusk, and is gone off the frame for the dark”',
     },
     {
       probe: 'firefly-layer', axis: 'season', at: { tod: 'night' },

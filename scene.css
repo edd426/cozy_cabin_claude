@@ -2345,6 +2345,39 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   92%      { --bee-x:  -8px; --bee-y: -5px; }   /* drifts back */
 }
 
+/* ── Day 164 (2026-10-19): SHE KEEPS THE WARM MONTHS AND THE LIGHT ─────────
+ *
+ * For a hundred and forty-four days the bee worked the bed at every hour of
+ * every season: on a January flower under a hush, and at midnight under the
+ * winter stars. Every rule written here since May has been about a thing this
+ * place put down, and she is the one thing it did not — she came on her own,
+ * to a patch of colour — so not one of those rules ever asked her what month
+ * it was, or what hour.
+ *
+ * A bee does not forage in the cold and does not forage in the dark. So she is
+ * gone from the bed in winter, at every hour of it, and gone at night in every
+ * other season. Dawn and dusk keep her: there is light on the bed at both
+ * edges of the day, and a bee works while there is.
+ *
+ * Gated with `display`, never `opacity` (Day 98): the almanac counts her on
+ * layout, and an opacity gate would be a bee the count still found. Where she
+ * goes is not drawn. She came in from off the frame and she goes back to it,
+ * the fireflies' arrangement with the warm months (Day 84) and the leaves'
+ * with the ground (Day 161): nothing is taken, the year only says where she
+ * is. And nobody ever watches her leave: the clearing does not turn while you
+ * stand in it (the given, Day 111), so she is simply there or not on the hour
+ * you arrive at. (A `display: none` would restart her round if it were ever
+ * lifted under a watching eye; nothing here lifts it.)
+ *
+ * The bed itself is untouched: its stems keep their own clock and their own
+ * year, and in winter they stand under the hush with nothing on them. A hand
+ * that brushes them then gets the dip and no bolt — touch.js asks whether she
+ * is there before it lifts her. */
+.scene[data-season="winter"] .sprite--bee,
+.scene[data-tod="night"] .sprite--bee {
+  display: none;
+}
+
 /* ── Day 146 (2026-10-01): THE BED TAKES A HAND, AND THE BEE LEAVES IT ─────
  *
  * The sixth thing in this clearing that answers a hand (touch.js, Days 139–145)

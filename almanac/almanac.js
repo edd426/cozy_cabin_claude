@@ -199,6 +199,7 @@
         season === 'winter'
           ? 'the sprig beginning to lean toward the window; the stars gone with the dark'
           : 'the sprig beginning to lean toward the window; no sparks — they belong to the falling edge of the day, not the waking one',
+        'the moth already down off the candle and flat to the shaded brick above it, wings spread and still — a moth has settled before first light',
       ];
     },
     day: function () {
@@ -209,6 +210,7 @@
         'the hearth standing its full three tiers, the tip licking the lintel — whatever size the season has made of it, this is the hour it is up',
         'the chimney drawing clean — the column leaving the cap as a thin fast thread and only spreading as it cools, which is the quickest and most tapered it gets all day',
         'the window indoors showing plain pale sky above its crossbar and the season’s own meadow below it',
+        'the moth at rest on the brick a hand above the candle’s glow, in the shade the mantle throws — the whole day, without moving',
       ];
     },
     dusk: function (season) {
@@ -217,6 +219,7 @@
         'the far hills’ crests taking a thin gold, and the clouds gold along their bellies',
         'the lantern by the door burning fuller, and the candle spent down to four of its six — its flame riding the wax down',
         'the sprig easing part-way back from the window as the gold goes low',
+        'the moth up off the brick and back at the candle, darting at it the way she will all night',
         'the hearth still standing its three tiers — the fire is not banked until the house goes to bed, so the evening is the one edge of the day it keeps its full height through',
         'the chimney drawing as cleanly as at noon, for the same reason: the column at the plain day’s own thin thread and the plain day’s own pace',
         season === 'summer'
@@ -240,6 +243,7 @@
             ? 'the dark come a step closer — a colder, clearer blue — and the stars standing in it, the clouds passing in front of them'
             : 'no sparks and no stars; the plain blue dark this season keeps',
         'no bee on the bed — she works while there is light on it, dawn to dusk, and is gone off the frame for the dark in every season',
+        'the moth at the candle stub in every season alike — the year turns back at the room’s door, and she lives on the warm side of it',
       ];
     },
   };
@@ -511,6 +515,20 @@
       view: 'home', kind: 'visible-count',
       selector: '.sprite--bee',
       reads: 'whether the bee is out working the wildflower bed',
+    },
+    /* Day 165. The moth, asked what the bee was asked the day before. Two
+     * drawings, one at a time, each gated with `display` and so each counted
+     * on layout: the one in the air at the candle and the one flat to the
+     * brick above it. */
+    'moth-at-candle': {
+      view: 'inside', kind: 'visible-count',
+      selector: '.sprite--moth',
+      reads: 'whether the moth is in the air at the candle',
+    },
+    'moth-at-rest': {
+      view: 'inside', kind: 'visible-count',
+      selector: '.sprite--moth-rest',
+      reads: 'whether the moth is at rest on the brick above the mantle',
     },
     'firefly-layer': {
       view: 'home', kind: 'opacity',
@@ -1331,6 +1349,21 @@
       probe: 'bee-on-bed', axis: 'tod', at: { season: 'summer' },
       expect: { dawn: 1, day: 1, dusk: 1, night: 0 },
       guards: '“she works while there is light on it, dawn to dusk, and is gone off the frame for the dark”',
+    },
+    {
+      probe: 'moth-at-candle', axis: 'tod', at: { season: 'summer' },
+      expect: { dawn: 0, day: 0, dusk: 1, night: 1 },
+      guards: '“the moth up off the brick and back at the candle” at dusk and through the night, and “already down off the candle” by dawn',
+    },
+    {
+      probe: 'moth-at-rest', axis: 'tod', at: { season: 'summer' },
+      expect: { dawn: 1, day: 1, dusk: 0, night: 0 },
+      guards: '“the moth at rest on the brick … the whole day” — and never both: the two counts are the two halves of one moth',
+    },
+    {
+      probe: 'moth-at-candle', axis: 'season', at: { tod: 'night' },
+      expect: { summer: 1, autumn: 1, winter: 1, spring: 1 },
+      guards: '“the moth at the candle stub in every season alike” — the bee’s winter is the meadow’s, and the room turns the year back at its door',
     },
     {
       probe: 'firefly-layer', axis: 'season', at: { tod: 'night' },

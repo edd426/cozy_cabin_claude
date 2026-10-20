@@ -2083,6 +2083,66 @@
   100% { --moth-x:   0px; --moth-y:  0px; }
 }
 
+/* ── Day 165 (2026-10-20): SHE KEEPS THE DARK ─────────────────────────────
+ *
+ * Yesterday the bee was asked what month it was and what hour, and answered
+ * the way a bee does. The moth came in on her own in May exactly as the bee
+ * came to the flowers, and for a hundred and forty-four days she has blundered
+ * at the candle at noon as hard as at midnight. A moth does not. She flies from
+ * dusk through the night, and the day she spends dead still, flat to a wall
+ * somewhere dim, close to the last light she found.
+ *
+ * So at dusk and at night she is at the flame, as she always was; at dawn and
+ * through the day she is on the brick above it, at rest. Where she rests is
+ * not picked for looks: the shelf throws its shade up the breast (Day 92), and
+ * the shaded brick a hand above the candle's own glow is the dimmest wall in
+ * this room that is still near the flame. Dawn belongs to the resting half
+ * because a moth has settled before first light; the candle standing full
+ * again at dawn is the room's new morning, and she is already down for it.
+ *
+ * The year asks her nothing, and that is a reading rather than an omission:
+ * the room turns the year back at its door (Day 88) — it reaches in only
+ * through the glass and the one leaf — and she lives on the warm side of that
+ * door. The bee's winter is the meadow's. The moth's is the hearth's.
+ *
+ * Two drawings, one at a time, gated with `display` (Day 98) so the almanac
+ * counts each on layout. The resting one is no new drawing: it is her own
+ * down-stroke (frame B of moth-flap above), wings spread flat beside the plum
+ * body, held. At rest a moth lies flat to the wall in exactly the shape she
+ * passes through three times a second at the flame, so the moth on the brick at
+ * noon and the moth at the candle at midnight are the same five cells. It is
+ * mirrored about its own centre, so it lights itself from no side, and it does
+ * not move at all. Default (no data-tod, JS off) is the flying moth, as before.
+ *
+ *     W B W   row 0   (B at col 0 is the element itself)
+ *     W B W   row 1
+ *    -1 0 1
+ */
+.sprite--moth-rest {
+  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: var(--c-plum);
+  box-shadow:
+     0    1px 0 var(--c-plum),            /* body lower */
+    -1px  0   0 var(--c-purple-soft),     /* L wing */
+     1px  0   0 var(--c-purple-soft),     /* R wing */
+    -1px  1px 0 var(--c-purple-soft),     /* L wing low */
+     1px  1px 0 var(--c-purple-soft);     /* R wing low */
+  left: calc(50% - 14px);
+  bottom: calc(58px * 3 + 30px);
+  z-index: 5;
+}
+.scene--inside[data-tod="dawn"] .sprite--moth,
+.scene--inside[data-tod="day"]  .sprite--moth {
+  display: none;
+}
+.scene--inside[data-tod="dawn"] .sprite--moth-rest,
+.scene--inside[data-tod="day"]  .sprite--moth-rest {
+  display: block;
+}
+
 /* ─── Window (Day 45) ───────────────────────────────────────────────
  *
  * The room's first opening, cut into the south (hearth) wall to the right
@@ -2657,6 +2717,12 @@
   .sprite--moth {
     left: calc(50% + 6px);
     bottom: calc(58px * 2 + 7px);
+  }
+  /* Day 165: her resting place rebased with her — the same shaded brick a
+   * hand above the candle's glow, on the smaller column. */
+  .sprite--moth-rest {
+    left: calc(50% - 10px);
+    bottom: calc(58px * 2 + 20px);
   }
   /* Flight range tightens to the smaller mantle — same erratic character,
    * smaller swing. The flap keyframes (box-shadow) are scale-independent. */

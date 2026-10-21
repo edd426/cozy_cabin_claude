@@ -3351,6 +3351,44 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   outline-offset: 2px;
 }
 
+/* ── Day 166 (2026-10-21): THE SKEIN KEEPS THE PASSAGE ──────────────────────
+ *
+ * For a hundred and forty-five days the five crossed this sky in every month
+ * and at every hour — the one layer up here gated on neither wheel, and Day
+ * 137's almanac note called that the reason nothing had ever watched it. The
+ * bee was asked her month and her hour on Day 164 and the moth hers on Day 165.
+ * These were the last creature here not asked, and they are the one most people
+ * would name a season by.
+ *
+ * A high V crossing over is not geese at home. It is geese ON PASSAGE — going
+ * somewhere, which is the one thing Day 133 found this skein has that nothing
+ * else in the sky does. So the clearing lies under their road and is neither
+ * end of it: they go over in autumn, and they come back over in spring. In
+ * summer they are wherever they summer, on the water and flightless through the
+ * moult; in winter they are wherever they winter. Neither place is drawn. They
+ * came in off the frame in May and they go back to it, the bee's arrangement
+ * with the cold and the fireflies' with the warm months: nothing is taken, the
+ * year only says where they are.
+ *
+ * And no hour gate, which is the difference from the bee and not an oversight.
+ * A bee forages by light and so goes when it does. A skein on passage does not
+ * put down for the dark — geese migrate through the night and call over in it
+ * — so in the two seasons they cross at all, they cross at every hour.
+ *
+ * Gated with `display`, never `opacity` (Day 98): `skein-birds` counts them on
+ * layout. The pad is a child of the flock, so it goes with them and a hand
+ * finds no geese to startle in June; `display: none` also takes it out of the
+ * tab order, so a keyboard is not offered an empty sky. A `display: none` lifted
+ * under a watching eye would restart `bird-cross` at its delay, but nothing here
+ * lifts it while anyone stands in it (the given, Day 111).
+ *
+ * The spring skein still heads west, the autumn road. Which way the five go
+ * back is not settled here. */
+.scene[data-season="summer"] .sprite--birds,
+.scene[data-season="winter"] .sprite--birds {
+  display: none;
+}
+
 /* ── Fireflies (Day 52, 2026-06-29) ────────────────────────────────────────
  * The front face's own answer to the door side's lantern. The lantern is a
  * MADE light, hung by the door, kindled FOR whoever comes up the path; these

@@ -135,6 +135,7 @@
         'three logs in the armful by the hearth — as much as a banked fire asks for, and the fewest of the year',
         'fireflies up off the grass once the light goes, and no stars at all',
         'the grass under the three crowns clean — the last of the year before’s leaves taken back into the ground in the spring',
+        'no skein over the clearing — the geese are wherever they summer, down on the water through the moult, and this place is under their road and not at either end of it',
       ],
     },
     autumn: {
@@ -151,6 +152,7 @@
         'indoors, a shade more heat in the fire’s colour, its light a stride further across the boards, and the shadows the chair and the woodpile throw a stride longer with it',
         'a fourth log in the armful by the hearth — the first fires being fed; the pile widens along the floor away from the hearth to take it, rather than growing a tier a two-wide base could not carry',
         'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
+        'the skein of five crossing west high over the clearing — geese on passage, going over to wherever they winter. At every hour, the dark included: a skein on its road does not put down for the night',
       ],
     },
     winter: {
@@ -166,6 +168,7 @@
         'five logs in the armful by the hearth, the fullest of the year — and the store outside is down to six in the same month, its lowest but for spring. A store fills against what is coming; an armful fills with what is being burnt, so the two ends of the same wood are fullest at opposite times of year',
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
         'no bee on the bed at any hour — she keeps the warm months, and the stems she works stand under the hush with nothing on them until the spring',
+        'no skein over the clearing either — the geese are wherever they winter, and the sky over the hush has nothing crossing it',
       ],
     },
     spring: {
@@ -180,6 +183,7 @@
         'indoors, a shade more heat in the fire’s colour and its light a stride further out, the same as autumn',
         'four logs in the armful by the hearth — the last fires, the same as autumn, though the store they came from is at its thinnest now and was at its fullest then',
         'a pale tender tip budding above the sprig in the jar; plain dark after sundown, no sparks and no stars',
+        'the skein of five back over the clearing at every hour, the dark included, the way it went over in the autumn',
       ],
     },
   };
@@ -445,7 +449,13 @@
      *
      * A count and not a size, for the ordinary reason: `--s` is 3 on a desktop
      * and 2 on a phone, so no check here may state a width (Day 98). A count is
-     * scale-free and may be stated outright. */
+     * scale-free and may be stated outright.
+     *
+     * Day 166: "They answer neither wheel" was true for a hundred and
+     * forty-five days and is not now. The year gates them — over in autumn and
+     * spring, gone in summer and winter (scene.css, THE SKEIN KEEPS THE
+     * PASSAGE) — and the hour still does not. The probe is unchanged; the
+     * checks that read it are mended where they stand. */
     'skein-birds': {
       view: 'home', kind: 'visible-count',
       selector: '.sprite--birds .bird',
@@ -1589,15 +1599,29 @@
      * four is a bird lost, and “never below one” would not have a word to say
      * about it. Where a thing genuinely varies a floor has to be set at its
      * leanest; where nothing varies it may be set at the whole. */
+    /* Day 166. The two floors above stood at five "over" all four seasons,
+     * guarding "the skein answers no wheel". It answers one now — the year —
+     * so the floor is held over the two seasons the skein crosses in, and is
+     * still FIVE there for Day 137's reason: in a month the geese are over at
+     * all, a skein of four is a goose lost. Where they are not over, that is
+     * the season's to say and not a loss, so it is a plain table beside the
+     * vow, the way the bee's winter is. The hour axis moves to autumn: at a
+     * summer `at` there are no geese to count, and a floor read off nothing is
+     * the Day-129 failure exactly. */
     {
       probe: 'skein-birds', axis: 'season', at: { tod: 'day' }, vow: 'kept',
-      floor: 5, over: ['summer', 'autumn', 'winter', 'spring'],
-      guards: 'all five birds still crossing in every season — the skein answers no wheel, so no season may take one from it',
+      floor: 5, over: ['autumn', 'spring'],
+      guards: 'all five birds crossing in both seasons of passage — in a month the geese are over at all, no goose may be taken from the V',
     },
     {
-      probe: 'skein-birds', axis: 'tod', at: { season: 'summer' }, vow: 'kept',
+      probe: 'skein-birds', axis: 'tod', at: { season: 'autumn' }, vow: 'kept',
       floor: 5, over: ['dawn', 'day', 'dusk', 'night'],
-      guards: 'and all five at every hour as well, the dark included — the one layer in this sky gated on neither wheel, and so the one nothing had ever been pointed at',
+      guards: 'and all five at every hour of the passage, the dark included — a skein on its road does not put down for the night the way the bee does',
+    },
+    {
+      probe: 'skein-birds', axis: 'season', at: { tod: 'night' },
+      expect: { summer: 0, autumn: 5, winter: 0, spring: 5 },
+      guards: '“no skein over the clearing” in summer and in winter — the geese are wherever they summer and wherever they winter, and this place is under their road and neither end of it',
     },
     {
       probe: 'door-pot-blooms', vow: 'kept',

@@ -445,10 +445,14 @@ const MOTION_CLIPS = [
   // silhouette and the whole flock spans under twenty native px, the smallest
   // subject any clip here has had. `bird-cross` is pinned by the same seek, so
   // the flock holds its place in the sky and only the wings move.
+  //
+  // Day 166: stood in AUTUMN, not summer. The skein keeps the passage now —
+  // over in autumn and spring, gone in summer and winter (scene.css) — so a
+  // summer clip would crop round five birds that are not there.
   {
     name: 'skein',
     tod: 'day',
-    season: 'summer',
+    season: 'autumn',
     seek: {
       animation: 'bird-flap',
       at: [

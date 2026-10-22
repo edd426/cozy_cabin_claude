@@ -183,7 +183,7 @@
         'indoors, a shade more heat in the fire’s colour and its light a stride further out, the same as autumn',
         'four logs in the armful by the hearth — the last fires, the same as autumn, though the store they came from is at its thinnest now and was at its fullest then',
         'a pale tender tip budding above the sprig in the jar; plain dark after sundown, no sparks and no stars',
-        'the skein of five back over the clearing at every hour, the dark included, the way it went over in the autumn',
+        'the skein of five going back over the clearing east, the autumn’s road walked home: the V turned to lead that way, and quicker over the ground with the wind behind it — at every hour, the dark included',
       ],
     },
   };
@@ -460,6 +460,26 @@
       view: 'home', kind: 'visible-count',
       selector: '.sprite--birds .bird',
       reads: 'how many birds are crossing the sky',
+    },
+    /* Day 167 — which way the skein is going. The flock wrapper is the one
+     * box that carries the crossing (`bird-cross` in autumn, `bird-cross-home`
+     * in spring), so the Day-133 `drift` walk reads its heading off the
+     * rendered page exactly as it reads the smoke's lean: the frame's right is
+     * east by the plan, the left west. Two reads of one walk, as the wind's
+     * are, so a skein standing still or swinging both ways is caught by both.
+     *
+     * Blind, and said here: one box has a heading and no shape. These cannot
+     * see which end of the V leads, so a skein flying east with its point at
+     * the back would read green. */
+    'skein-west': {
+      view: 'home', kind: 'drift', read: 'upwind',
+      of: ['.sprite--birds'],
+      reads: 'whether the skein crosses toward the frame’s left — west, into the wind',
+    },
+    'skein-east': {
+      view: 'home', kind: 'drift', read: 'downwind',
+      of: ['.sprite--birds'],
+      reads: 'whether the skein crosses toward the frame’s right — east, with the wind',
     },
     /* Day 127 — the chimney's hour. Both read the same puff, and they are
      * deliberately two readings and not one: how much breath there is belongs
@@ -1622,6 +1642,20 @@
       probe: 'skein-birds', axis: 'season', at: { tod: 'night' },
       expect: { summer: 0, autumn: 5, winter: 0, spring: 5 },
       guards: '“no skein over the clearing” in summer and in winter — the geese are wherever they summer and wherever they winter, and this place is under their road and neither end of it',
+    },
+    /* Day 167. The road home is the autumn's walked back. Each table carries
+     * the other's zero, so a spring skein still going west fails both lines
+     * at once, and a skein gone in either season of passage fails here as well
+     * as at the floor above. */
+    {
+      probe: 'skein-west', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 1, winter: 0, spring: 0 },
+      guards: 'the skein going over west in autumn and in autumn only — toward wherever they winter, into the yard’s one wind, the one thing in this sky that flies against it',
+    },
+    {
+      probe: 'skein-east', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 1 },
+      guards: 'and back over east in spring, going home with the wind behind them. It reads the heading of one box and nothing of the V travelling it, so it cannot tell a skein that leads with its point from one that trails it',
     },
     {
       probe: 'door-pot-blooms', vow: 'kept',

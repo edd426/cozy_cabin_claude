@@ -215,6 +215,13 @@ const DECLARED = [
          'many stand — and the season\'s reading of the flame\'s own width stayed where it ' +
          'was. A bottom and a description of the same wood.',
   },
+  {
+    rel: 'inside', inner: '.sprite--birds .bird', outer: '.sprite--birds', where: ['home'],
+    why: 'Day 167: `skein-west` and `skein-east` read the heading off the flock wrapper, the ' +
+         'one box `bird-cross` moves, and `skein-birds` counts the five geese inside it. A ' +
+         'heading and a count of the same skein, on separate pages, neither wrecking the ' +
+         'other: the walk only pauses and seeks, so the count reads the same geese after it.',
+  },
 ];
 
 /* ── the names ────────────────────────────────────────────────────────────── */

@@ -3076,7 +3076,9 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * undulation. Anchored at scene-centre; the keyframes start it off the right
  * edge (positive translate) and end it off the left (negative). The cycle is
  * twice as slow as the bee's — the birds are the highest, slowest visitors in
- * the scene. `bottom: calc(6% + 252px)` puts the skein high in the sky, just
+ * the scene. (That is the autumn road. Day 167: in spring the V is mirrored
+ * and the pass runs left to right — see THE SPRING SKEIN GOES HOME.)
+ * `bottom: calc(6% + 252px)` puts the skein high in the sky, just
  * below the top of the rising smoke (a 78px-tall container at
  * `bottom: calc(6% + 228px)`). */
 .sprite--birds {
@@ -3179,7 +3181,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .bird--5 { left: 18px;  bottom:  1px; --beat: -0.12s; --scatter-x:  3px; --scatter-y:  2px; }
 
 /* One migrating pass: the skein enters off the right edge, crosses, and exits
- * off the left. The horizontal offset decreases monotonically (360 -> -380) so
+ * off the left (in autumn; spring's `bird-cross-home` is this walked back). The horizontal offset decreases monotonically (360 -> -380) so
  * the flock never reverses — it always travels the way its V points. A gentle
  * vertical undulation suggests birds riding the air without animating wings.
  * "Integer px offsets keep the silhouettes pixel-crisp" stood here from Day 38
@@ -3258,8 +3260,8 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * 1-2-3+2+2 = 0 down), and that is the vow written as arithmetic rather than as
  * a sentence: the flock's centre of mass does not move. A HAND MAY BREAK THEIR
  * ORDER AND MAY NOT MOVE THE FLOCK. They are crossing, westward, into the one
- * wind this place has (Day 133), and a tap may not carry them an inch along
- * that crossing, hold them, turn them or take one out of the sky — the same
+ * wind this place has (Day 133) — or in spring eastward with it (Day 167) —
+ * and a tap may not carry them an inch along that crossing, hold them, turn them or take one out of the sky — the same
  * shape as a prod that may not feed the fire (Day 140), a turn that may not
  * move a stone (Day 144), a lean that may not wear the bench (Day 145) and a
  * brush that may not direct the bee (Day 146).
@@ -3383,11 +3385,66 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * lifts it while anyone stands in it (the given, Day 111).
  *
  * The spring skein still heads west, the autumn road. Which way the five go
- * back is not settled here. */
+ * back is not settled here. (Day 167: settled below.) */
 .scene[data-season="summer"] .sprite--birds,
 .scene[data-season="winter"] .sprite--birds {
   display: none;
 }
+
+/* ── Day 167 (2026-10-22): THE SPRING SKEIN GOES HOME ───────────────────────
+ *
+ * Yesterday's note left the spring geese on the autumn's road, and a road
+ * walked back is walked the other way. On this face that is EAST — the frame's
+ * right, by the plan's compass (Day 133) — which is the way the yard's one
+ * wind carries everything loose. So in spring, and only then, the five are
+ * the one thing in this sky that flies WITH it.
+ *
+ * Two things say so, and neither is a new drawing.
+ *
+ * THE V TURNS. A V points the way it is going (the founder's note, Day 38),
+ * so the formation is the autumn one MIRRORED about its own middle, which
+ * sits at 11px across in the wrapper: each bird's `left` becomes 19px less
+ * it, and each `--scatter-x` changes sign so a startle still flings every
+ * bird outward from that same middle and the five still sum to nothing. The
+ * lead stands at the right-hand point now. The birds themselves are not
+ * mirrored because they need not be: a 5×2 goose with a tip at either end is
+ * the same mark facing either way. The stroke still ripples back from the
+ * lead, because `--beat` belongs to the bird and not to where it stands.
+ *
+ * AND THE CROSSING IS QUICKER. At this size a wind cannot be drawn on a bird;
+ * the only thing it can do to one is how fast she covers the ground. Going
+ * home with it behind them, the same crossing takes thirty seconds instead
+ * of forty, a third again as fast over the meadow — a tailwind a third of a
+ * goose's own airspeed, which is an ordinary spring westerly and not a gale.
+ * The delay is scaled with it so the flock still stands a quarter of the
+ * way across at load, where the camera has always found it.
+ *
+ * The keyframes are the autumn's with the sign of `--skein-x` turned over and
+ * nothing else touched: the same road, the same rise and dip along it, walked
+ * from the other end. Drawn through the same `round()` on the wrapper, so the
+ * flock steps east a whole pixel at a time exactly as it steps west.
+ *
+ * Held on the almanac as a `drift` reading of the wrapper (`skein-west`,
+ * `skein-east`). What that cannot see is the V's point — a crossing read off
+ * one box knows its heading and nothing of the shape travelling it — so a
+ * skein flying east with its point at the back would read green there. */
+@keyframes bird-cross-home {
+  0%   { --skein-x: -360px; --skein-y:  0px; }
+  25%  { --skein-x: -175px; --skein-y: -8px; }
+  50%  { --skein-x:    0px; --skein-y:  2px; }
+  75%  { --skein-x:  190px; --skein-y: -6px; }
+  100% { --skein-x:  380px; --skein-y:  4px; }
+}
+.scene[data-season="spring"] .sprite--birds {
+  animation-name: bird-cross-home;
+  animation-duration: 30s;
+  animation-delay: -7.5s;
+}
+.scene[data-season="spring"] .bird--1 { left: 19px; --scatter-x:  4px; }
+.scene[data-season="spring"] .bird--2 { left: 11px; --scatter-x:  1px; }
+.scene[data-season="spring"] .bird--3 { left:  3px; --scatter-x: -2px; }
+.scene[data-season="spring"] .bird--4 { left: 10px; --scatter-x:  0px; }
+.scene[data-season="spring"] .bird--5 { left:  1px; --scatter-x: -3px; }
 
 /* ── Fireflies (Day 52, 2026-06-29) ────────────────────────────────────────
  * The front face's own answer to the door side's lantern. The lantern is a
@@ -3769,12 +3826,21 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
     92%      { --bee-x:  -5px; --bee-y: -4px; }
   }
   /* Migrating pass tightened to the 2x scene — same monotonic right-to-left
-   * crossing, smaller range so it enters and exits the narrower frame. */
+   * crossing, smaller range so it enters and exits the narrower frame (the
+   * autumn road; the spring road home follows it below). */
   @keyframes bird-cross {
     0%   { --skein-x:  195px; --skein-y:  0px; }
     25%  { --skein-x:   95px; --skein-y: -6px; }
     50%  { --skein-x:    0px; --skein-y:  2px; }
     75%  { --skein-x: -105px; --skein-y: -5px; }
     100% { --skein-x: -210px; --skein-y:  3px; }
+  }
+  /* Day 167: the spring road home, the same 2x range walked from the left. */
+  @keyframes bird-cross-home {
+    0%   { --skein-x: -195px; --skein-y:  0px; }
+    25%  { --skein-x:  -95px; --skein-y: -6px; }
+    50%  { --skein-x:    0px; --skein-y:  2px; }
+    75%  { --skein-x:  105px; --skein-y: -5px; }
+    100% { --skein-x:  210px; --skein-y:  3px; }
   }
 }

@@ -38,6 +38,15 @@
  * forest edge, so the place reads as a clearing ringed by trees. */
 .scene--map { background: var(--c-grass); }
 
+/* Day 168: the plan is tagged with the season now (season.js), so that its
+ * crowns and its flower patch can take the year off the yard's own lines. The
+ * frame washes would follow the tag in — `.scene[data-season]::before` and the
+ * hour's `::after` are unscoped in scene.css — and a plan has no light to wear:
+ * nobody stands in a drawing (Day 108). So both are turned back here, the
+ * `content: none` twin inside.css keeps for the room (Day 88). */
+.scene--map::before,
+.scene--map::after { content: none; }
+
 .map {
   position: absolute;
   inset: 0;
@@ -72,12 +81,20 @@
 
 /* Trees from above — filled canopies, lit centre to shadowed rim. Medium to
  * the west, small to the east; both flank the clearing as the home view shows
- * them flanking the cabin. */
+ * them flanking the cabin.
+ *
+ * Day 168: the bright middle used to sit at 42% 38% — up and left of each
+ * crown's own centre, which on a plan with north up is a light standing off to
+ * the north-west. That is the hill-shader's convention, and it is a sun with an
+ * address: the first given says there is none. Every crown out in the yard had
+ * its mottle mirrored about its own middle by Day 138; the plan's two were
+ * never walked. Centred now. The season reaches these through the crowns'
+ * own `filter` rules in scene.css, which name `.map__tree` beside the yard's. */
 .map__tree {
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(
-    circle at 42% 38%,
+    circle at 50% 50%,
     var(--c-grass-light) 0%,
     var(--c-grass) 45%,
     var(--c-grass-shadow) 100%

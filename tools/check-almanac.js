@@ -205,7 +205,9 @@ const DEFAULT_BASE = 'https://edd426.github.io/cozy_cabin_claude/';
 
 /* The three views a probe can name. Kept here rather than on the page because
  * these are URLs — where the clearing is served — not claims about it. */
-const VIEW_PATH = { home: '', around: 'around/', inside: 'inside/' };
+// `map` since Day 168: the plan's crowns take the year, and only a witness
+// standing on the plan can say so.
+const VIEW_PATH = { home: '', around: 'around/', inside: 'inside/', map: 'map/' };
 
 /* Long enough for the hour/season washes and the sprig's and lantern's own
  * transitions (all 1.6s) to have finished moving. Same figure the gallery uses. */

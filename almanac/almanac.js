@@ -141,7 +141,7 @@
     autumn: {
       lead: 'Autumn leans furthest of the four. It is the season the year shows most, and the one anyone who winters by a fire spends getting the wood up.',
       does: [
-        'a gold over the whole frame, and the tree crowns gold with it',
+        'a gold over the whole frame, and the tree crowns gold with it — on the plan as well, where the two crowns drawn from overhead turn off the yard’s own line and the frame takes no gold at all, a plan having no light to wear',
         'the woodpile laid in full — nine logs, a crown course of two nested in the middle row’s valleys, standing two proud of the sill above it',
         'the chimney a touch fuller than the summer thread — the first fires',
         'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
@@ -158,7 +158,7 @@
     winter: {
       lead: 'Winter is a hush, not a death. Nothing here goes bare and nothing goes black; the whole clearing draws in, and the one thing that gets bigger is the sign that somebody in it is warm.',
       does: [
-        'a pale blue-grey quiet over the frame, and the crowns cooled to a muted sage — never a bare branch',
+        'a pale blue-grey quiet over the frame, and the crowns cooled to a muted sage — never a bare branch — the plan’s two crowns and its flower patch quieted with them',
         'the woodpile being spent: six logs, the middle row’s right-hand end gone first, picked from the side the door is on',
         'the whole fall lying under the crowns, gone over to the russet every spent bloom here goes — seven under the big tree, four under the small one, five round the near tree by the door. Nothing comes down now; the ground keeps what came down',
         'the chimney at its deepest — a fourth puff where three climb all year, each brighter and spreading wider by the top',
@@ -174,7 +174,7 @@
     spring: {
       lead: 'Spring is the thin end of the store and the fresh end of everything else — most of a cold season gone through the pile, and new growth on the bough.',
       does: [
-        'a fresh pistachio over the frame with a breath of blossom high in it, and the crowns lifted bright with new growth',
+        'a fresh pistachio over the frame with a breath of blossom high in it, and the crowns lifted bright with new growth, on the plan as in the yard',
         'the woodpile at its thinnest — four logs, the bottom course only',
         'the last of the fallen leaves, darkened toward the earth — three under the big tree, one under the small one, two by the door — the rest already taken back into the ground the fresh green comes up out of',
         'the chimney a touch fuller than the summer thread — the last fires',
@@ -816,6 +816,16 @@
       of: '.door-plant__foliage',
       channel: 'warmth',
       reads: 'the same reading taken of the plant in the pot by the door',
+    },
+    /* Day 168. The plan's two crowns, read the same way. The year reaches them
+     * through the yard crowns' own `filter` rules (scene.css names `.map__tree`
+     * beside `.sprite--tree`), and a filter is invisible to computed style, so
+     * only the picture can say they turned. The plan wears no wash to lift —
+     * map.css turns both back at its door — but lifting nothing is harmless. */
+    'plan-crown-tone': {
+      view: 'map', kind: 'sprite-tone', selector: '.scene', of: '.map__tree',
+      channel: 'warmth',
+      reads: 'how warm the two crowns on the plan are, drawn from straight overhead',
     },
     /* Day 118 — the weighing turned a second time, and pointed at the last
      * thing neither of the first two could see: a body brighter down one of its
@@ -1473,6 +1483,11 @@
       probe: 'door-plant-tone', axis: 'season', at: { tod: 'day' },
       rising: ['winter', 'summer', 'autumn'],
       guards: 'the pot by the door taking the same year as the patch on the front — one season leans both faces of the clearing, or it is two seasons',
+    },
+    {
+      probe: 'plan-crown-tone', axis: 'season', at: { tod: 'day' },
+      rising: ['winter', 'summer', 'autumn'],
+      guards: 'the plan’s crowns taking the year the yard’s crowns take — cooled in winter, gold in autumn. A plan is excused the light and not the leaf; a map still green over a gold yard is drawn in a month the yard has left',
     },
     {
       probe: 'door-pot-pace',

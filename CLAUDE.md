@@ -497,6 +497,15 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `inside.css` — `inside/index.html` loads `scene.css` and its scene element
   carries both classes, so unscoped `.scene[...]` rules leak indoors whatever the
   comment says. The season wash leaked for nineteen days. *(Day 88)*
+- **A plan is excused the light and not the leaf.** `/map/` loads
+  `season.js` (not `sky.js`), so its `.scene` carries `data-season`; the
+  crowns' and flowers' season `filter` rules in `scene.css` name `.map__tree`
+  and `.map__flowers` beside the yard's, and `map.css` turns both frame washes
+  back with `content: none`. Its crown highlight is centred — the old
+  `42% 38%` was a north-west sun. `check-nesting.js` and `check-gallery.js`
+  are scoped to home/around/inside and never open the map; only
+  `plan-crown-tone` (with `map` in check-almanac's `VIEW_PATH`) stands there.
+  *(Day 168)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

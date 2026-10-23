@@ -1016,9 +1016,16 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * — the same reason the leaf reads `--crown-gild` instead of copying it. It is
  * deliberately absent from the sway rules above: that face looks straight up the
  * wind's throat, where a wind leans nothing sideways. */
+/* `.map__tree` (map/map.css, Day 168) is the same two crowns drawn a third
+ * time, from straight overhead on the plan. A plan is excused the hour and the
+ * washes — nobody stands in a drawing, so no light falls on it (Day 108) — but
+ * the year here lives in two places, the light and the leaf, and the leaf is
+ * the tree's own. So the plan's crowns are named in these same rules and turn
+ * off the same lines; they cannot fall a season behind the ones they map. */
 .sprite--tree,
 .sprite--tree-small,
-.sprite--tree-near {
+.sprite--tree-near,
+.map__tree {
   transition: filter 1.6s ease;
 }
 /* The autumn gild lives in ONE place, on the scene, because two things wear it:
@@ -1034,17 +1041,20 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 }
 .scene[data-season="autumn"] .sprite--tree,
 .scene[data-season="autumn"] .sprite--tree-small,
-.scene[data-season="autumn"] .sprite--tree-near {
+.scene[data-season="autumn"] .sprite--tree-near,
+.scene[data-season="autumn"] .map__tree {
   filter: var(--crown-gild);
 }
 .scene[data-season="winter"] .sprite--tree,
 .scene[data-season="winter"] .sprite--tree-small,
-.scene[data-season="winter"] .sprite--tree-near {
+.scene[data-season="winter"] .sprite--tree-near,
+.scene[data-season="winter"] .map__tree {
   filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
 }
 .scene[data-season="spring"] .sprite--tree,
 .scene[data-season="spring"] .sprite--tree-small,
-.scene[data-season="spring"] .sprite--tree-near {
+.scene[data-season="spring"] .sprite--tree-near,
+.scene[data-season="spring"] .map__tree {
   filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
 }
 /* summer — no rule on purpose: the identity, the green the trees were born in. */
@@ -2217,13 +2227,18 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * `filter` composes freely with the bloom-breathe animation (which drives
  * box-shadow) — independent channels, the same way the trees' filter composes
  * with their wind-sway transform. */
-.scene[data-season="autumn"] .flower {
+/* `.map__flowers` is this patch on the plan (Day 168), turning off these same
+ * lines for the reason the plan's crowns do — see the note above `.map__tree`. */
+.scene[data-season="autumn"] .flower,
+.scene[data-season="autumn"] .map__flowers {
   filter: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
 }
-.scene[data-season="winter"] .flower {
+.scene[data-season="winter"] .flower,
+.scene[data-season="winter"] .map__flowers {
   filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
 }
-.scene[data-season="spring"] .flower {
+.scene[data-season="spring"] .flower,
+.scene[data-season="spring"] .map__flowers {
   filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
 }
 

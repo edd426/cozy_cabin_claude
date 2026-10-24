@@ -200,10 +200,25 @@
  * same hour lights both faces; RULES Art XIII).
  *
  * A single ambient overlay, not a repaint of the sky: a `::after` laid over the
- * whole frame at z-index 5 — above the world (sprites are z-index 0–4) but below
- * the map card (z-index 6, a UI affordance that shouldn't take the light). Light
- * falls on a whole place at once, so the cabin, hills, clouds, and grass all
- * take the hour's colour together. `pointer-events: none` keeps it inert.
+ * whole frame at z-index 7 — above the world (sprites are z-index 0–4), above
+ * the tap pads (z 5), and above the map card (z 6). Light falls on a whole place
+ * at once, so the cabin, hills, clouds, and grass all take the hour's colour
+ * together. `pointer-events: none` keeps it inert, so a press still reaches the
+ * card and every pad through it.
+ *
+ * Day 169 (2026-10-24): this used to say z-index 5, BELOW the card, because the
+ * card was "a UI affordance that shouldn't take the light". That was the Day-43
+ * reason and it went stale on Day 137, when the card was first seen as a thing
+ * standing in the clearing's own weather (the birds clip it). A sheet of paper
+ * held up in this sky is lit like the sky. So the card is under both washes
+ * now, drawing and paper alike: the PLAN on it still keeps no hour and no year
+ * (Day 108, Day 168: it depicts the clearing, not this moment of it), but the
+ * card it is drawn on is an object out here and takes the light where it hangs.
+ * Where it hangs is high, and the dawn and dusk washes are weighted low, so at
+ * the day's two edges the card is barely touched; it takes the night and the
+ * year. Indoors the room turns both washes back at its door (inside.css), so
+ * the same card pinned to the wall takes none — witnessed by the `card-light`
+ * probes in almanac/almanac.js.
  *
  * Deliberately soft. The default (no `data-tod`, or day) is NO wash — the plain
  * cream morning the place has always had, so JS-off loses nothing. Only the two
@@ -219,7 +234,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: 7;
   pointer-events: none;
   opacity: 0;
   background: transparent;
@@ -262,10 +277,11 @@
  * faces at once; RULES Art XIII).
  *
  * Same layering logic as the hour wash: a `::before` over the whole frame at
- * z-index 5 — above the world (sprites z 0–4) but below the map card (z 6). It
- * sits *under* the hour wash's `::after` (equal z-index, but ::before paints
- * first), so the momentary light of the hour always lays over the standing tint
- * of the season. `pointer-events: none` keeps it inert.
+ * z-index 7 — above the world (sprites z 0–4) and, since Day 169, above the map
+ * card (z 6) too, for the reason given at the hour wash. It sits *under* the
+ * hour wash's `::after` (equal z-index, but ::before paints first), so the
+ * momentary light of the hour always lays over the standing tint of the season.
+ * `pointer-events: none` keeps it inert.
  *
  * Deliberately gentle, sky.js's vow kept for the slower hand: a lean, not a
  * calendar. The default (no `data-season`, or JS off) is NO wash — the plain
@@ -281,7 +297,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 5;
+  z-index: 7;
   pointer-events: none;
   opacity: 0;
   background: transparent;
@@ -399,7 +415,7 @@
  * once (RULES Art XIII), the way the shared cloud rule does.
  *
  * A ::before clipped to the dome (border-radius: inherit) sits over the hill's own
- * sage, at z-index 0 with the range — BELOW the ambient wash (.scene::after, z 5),
+ * sage, at z-index 0 with the range — BELOW the ambient wash (.scene::after, z 7),
  * exactly like the clouds and fog: a hill is no light source, so the wash still
  * lays its even tint over the whole scene and this only reads a touch warmer on the
  * crest than the flat-washed foot. Default (no data-tod / day / JS off) is opacity
@@ -1136,7 +1152,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   position: absolute;
   inset: 0;
   z-index: 1;                 /* the trees' own plane: behind the cabin (z 2),  */
-  pointer-events: none;       /* and under the two washes (z 5) — not a light.  */
+  pointer-events: none;       /* and under the two washes (z 7) — not a light.  */
   display: none;
 }
 .scene[data-season="autumn"] .sprite--leaffall { display: block; }
@@ -2699,7 +2715,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * Fixed native px, z-index 3: in front of the cabin (z 2) so the pile overlaps
  * the wall's lower planks and reads as stacked AGAINST the house, behind the
  * bench (z 4) in the nearer foreground. A still, used object — no hour clock,
- * no light — that takes the ambient hour-wash (.scene::after, z 5) and the
+ * no light — that takes the ambient hour-wash (.scene::after, z 7) and the
  * season-wash (::before) like the grass and the bench it stands among. Since
  * Day 85 its LEVEL keeps the year's clock (see the season block below the log
  * placements): full by autumn, spent through winter, thinnest in spring. */
@@ -2797,7 +2813,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * bench/bee/flowers — the pixel parts stay one size at both breakpoints; only
  * the container's position rebases for mobile-narrow (below). z-index 4 puts it
  * in the near foreground with the bench; the ambient hour-wash (.scene::after,
- * z 5) washes it like the grass it stands on — it is no light source itself. */
+ * z 7) washes it like the grass it stands on — it is no light source itself. */
 .sprite--mailbox {
   width: 42px;
   height: 46px;
@@ -3341,8 +3357,9 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * NO z-index, and that is a finding rather than an omission. `.sprite--birds`
  * is positioned with `z-index: 3`, so it opens a stacking context, and nothing
  * inside it can be lifted above anything outside it — the pad sits in the
- * flock's own plane whatever number it is given. The one thing out here above
- * that plane is the map card (z-index 6) in the top-right corner, and Day 137
+ * flock's own plane whatever number it is given. The one thing a hand can
+ * reach above that plane is the map card (z-index 6) in the top-right corner
+ * (the washes lie over it since Day 169, but take no press), and Day 137
  * noticed the birds cross close enough to clip its edge. So for the stretch of
  * the crossing that passes behind the card, the card takes the tap and the
  * skein cannot be reached. That is the honest answer: the geese are behind it.
@@ -3477,7 +3494,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  *
  * A full-bleed layer (inset:0) at z-index 4 — in front of the cabin (z 2) and
  * the yard sprites (z 3), reading as the nearest thing, like the bench. It sits
- * BELOW the ambient hour-wash (.scene::after, z 5), same as the lantern: a
+ * BELOW the ambient hour-wash (.scene::after, z 7), same as the lantern: a
  * spark's bright core + glow halo overpower the soft translucent wash, so it
  * still reads as a light source rather than getting tinted out. Each firefly is
  * %-positioned inside the layer, so — like the clouds — it needs no mobile px
@@ -3577,7 +3594,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * z-index 0 like the clouds, but the layer sits BEFORE the clouds in the DOM,
  * so a drifting cloud passes IN FRONT of the stars — the one thing in the sky
  * farther away than the far weather. Sits below the ambient night wash
- * (.scene::after, z 5) and punches through it the fireflies' way: a bright
+ * (.scene::after, z 7) and punches through it the fireflies' way: a bright
  * core + halo reads as a light source through the translucent blue. Cool
  * blue-white, not the fireflies' green-gold or the lantern's flame — a cold
  * light for the cold's welcome. Each star twinkles on its own duration/delay
@@ -3677,7 +3694,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * hour on the same 1.6s the wash uses.
  *
  * z-index 1: behind the cabin (z 2) and BELOW the ambient hour-wash (::after,
- * z 5) — the deliberate opposite of the fireflies, which sit at z 4 above the
+ * z 7) — the deliberate opposite of the fireflies, which sit at z 4 above the
  * cabin and punch bright through the wash. A firefly is a light source and must
  * overpower the tint; a fog is NOT a light — it's the low cool air, so it lies
  * under the wash and takes the dawn's rose the same way the grass does. Sitting

@@ -456,6 +456,10 @@ function measureInPage({ probes, forDate }) {
     // instant it comes down, so it is taken on a page of its own the same way.
     if (probe.kind === 'landing') continue;
 
+    // Day 169. `takes-light` lifts both washes to see how much of them lay
+    // over one thing, so it too is taken Node-side on a page of its own.
+    if (probe.kind === 'takes-light') continue;
+
     // Day 111. An `attr` probe belongs to a hold check, which visits the page
     // itself on a stepped clock rather than in a forced state — so there is
     // nothing here for it, and reading it in a forced state would be a reading
@@ -1437,6 +1441,86 @@ async function measureDrift(page, probe) {
  * top of it (which would be invisible too, and would also be a lie about the
  * count — `leaf-litter` holds that). Handed nothing at all — no element
  * matching `selector` — it answers null rather than nought (Day 130). */
+/* Day 169. How much of the frame's light lies over one thing.
+ *
+ * Every other reading here that lifts the washes does it to get the light OUT
+ * of the way — sprite-tone and paint-lean want a body's own paint, and the
+ * weighing wants the light alone on bare ground. This one wants the light
+ * itself, measured where it lands on one thing: shoot the thing with both
+ * washes standing, lift them, shoot it again, and return the mean difference
+ * per pixel per channel (0–255). Nought means no light lies over it at all —
+ * either because nothing lies over the frame there, or because the thing paints
+ * above the light, which is what the corner card did from Day 35 to Day 168.
+ *
+ * It was written for that card. On Day 43 the washes were laid at z 5 and the
+ * card at z 6, "a UI affordance that shouldn't take the light"; on Day 137 the
+ * card was seen as a thing hanging in the clearing's own weather, and on Day
+ * 169 the washes went over it. The reading is taken off the PLAN on the card
+ * (`.map-button__plan`) rather than the card, because the card's parchment is
+ * 92% opaque and lets an eighth of a wash through even while lying on top of
+ * it. The plan is opaque everywhere but its two-pixel rounded corners, which
+ * is why the reading with the card back above the light was 0.02 at midnight
+ * and not nought (the Day-169 break test) — and why the checks over it carry a
+ * floor of one and do not trust a strict order alone.
+ *
+ * Blind to which way the light falls (a mean has no side) and to what colour
+ * it is; it says how much. And handed two identical pictures it says nought,
+ * which here is a CLAIM and not a refusal — the room's card is held to exactly
+ * that — so the outdoor lines are what stop a lift that silently did nothing
+ * from reading as a room: they must come back more than nought. */
+async function measureTakesLight(page, probe) {
+  const thing = page.locator(probe.of).first();
+  if ((await thing.count()) === 0) return null;
+  const box = await thing.boundingBox();
+  if (!box || box.width === 0 || box.height === 0) return null;
+
+  await page.addStyleTag({
+    content: '*, *::before, *::after { animation: none !important; transition: none !important; }',
+  });
+  await page.waitForTimeout(150);
+  const lit = (await thing.screenshot()).toString('base64');
+
+  const sceneSel = probe.selector || '.scene';
+  await page.addStyleTag({
+    content: sceneSel + '::before, ' + sceneSel + '::after { opacity: 0 !important; }',
+  });
+  await page.waitForTimeout(150);
+  const bare = (await thing.screenshot()).toString('base64');
+
+  return await page.evaluate(analyzeTakesLight, { lit, bare });
+}
+
+async function analyzeTakesLight({ lit, bare }) {
+  const decode = async (b64) => {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const bmp = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
+    const canvas = document.createElement('canvas');
+    canvas.width = bmp.width;
+    canvas.height = bmp.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bmp, 0, 0);
+    return ctx.getImageData(0, 0, bmp.width, bmp.height);
+  };
+  const A = await decode(lit);
+  const B = await decode(bare);
+  const w = Math.min(A.width, B.width);
+  const h = Math.min(A.height, B.height);
+  if (w === 0 || h === 0) return null;
+  let sum = 0;
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const ia = (y * A.width + x) * 4;
+      const ib = (y * B.width + x) * 4;
+      sum += Math.abs(A.data[ia] - B.data[ib]) +
+             Math.abs(A.data[ia + 1] - B.data[ib + 1]) +
+             Math.abs(A.data[ia + 2] - B.data[ib + 2]);
+    }
+  }
+  return Math.round((sum / (w * h * 3)) * 100) / 100;
+}
+
 async function measureLanding(page, probe) {
   return await page.evaluate(({ sel, onto }) => {
     const all = document.querySelectorAll(sel);
@@ -2031,6 +2115,23 @@ async function readState(browser, base, view, state, probes) {
       }
     }
 
+    // Day 169. `takes-light` lifts both washes, so each probe takes a page of
+    // its own like the three that lift them for the opposite reason.
+    for (const [name, probe] of Object.entries(probes)) {
+      if (probe.kind !== 'takes-light') continue;
+      const lightPage = await openForced();
+      try {
+        const taken = await takenOn(lightPage, name, () => measureTakesLight(lightPage, probe));
+        readings[name] = taken.value === undefined ? null : taken.value;
+        if (taken.value !== undefined) {
+          console.log(`check-almanac:   ${name} ${keyOf(state)} = ` +
+                      `${taken.value === null ? 'nothing there' : taken.value}`);
+        }
+      } finally {
+        await lightPage.close();
+      }
+    }
+
     // Day 104. The pixel witness (frame-balance) can't run inside the one
     // evaluate above — it needs Node-side screenshots between page states — so
     // it is measured here and merged on top. It goes last so its wash-off style
@@ -2374,9 +2475,10 @@ async function main() {
     );
     for (const refused of REFUSALS) console.error(`        ✗ ${refused}`);
     console.error(
-      'Three of the readings here wreck the page they read: frame-balance empties\n' +
+      'Four of the readings here wreck the page they read: frame-balance empties\n' +
       'the frame and lifts the washes, sprite-tone lifts the washes and hides one\n' +
-      'body, paint-lean lifts them and hides a list in turn. None puts the page\n' +
+      'body, paint-lean lifts them and hides a list in turn, takes-light lifts\n' +
+      'them to see how much lay over one thing. None puts the page\n' +
       'back, so each needs one nothing else has touched. Give the refused reading\n' +
       'a page of its own in readState (openForced), or move it ahead of whatever\n' +
       'spent this one. The numbers above it are not to be trusted either way.'

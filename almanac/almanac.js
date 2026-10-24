@@ -239,6 +239,7 @@
         'the lantern by the door burning with its soft halo — the one warm point on a blue-washed wall',
         'the candle down to three, a low stub with its flame guttering close to the mantle, and the glow it lays on the brick sunk with it',
         'the sprig standing straight and resting, with nothing left in the glass to reach for',
+        'the little plan in the corner of the yard taking the dark like the paper it is drawn on — it depicts no hour, but it hangs in this sky and is lit like it, year and night together; the same card pinned up indoors takes none, the room having turned the light back at its door',
         'the hearth banked — one low sheet of flame where three tiers stand by day, whatever the season has made of it, and the whole ember bed alight beneath because that is where the fire went. Banking is not spending: the heat is held down in the coals rather than let up the chimney, so the room keeps the warmth it keeps at every other hour and only the light of it is less. The pool on the boards, the glow on the breast and both cast shadows dim with the flame, and not one of them moves — a banked fire lights no shorter a way, only less',
         'and the same banking read from outside the wall, where it comes out the other way about: a damped fire burns slow and cool and therefore INCOMPLETELY, so the column is at its thickest and laziest of the whole day — already broad as it leaves the cap instead of a thin thread, and taking half again as long to climb. Still the same number of puffs the season sets, because the night takes no extra wood off the rick. At midnight this one fire is at its dimmest inside the wall and its thickest outside it',
         season === 'summer'
@@ -826,6 +827,25 @@
       view: 'map', kind: 'sprite-tone', selector: '.scene', of: '.map__tree',
       channel: 'warmth',
       reads: 'how warm the two crowns on the plan are, drawn from straight overhead',
+    },
+    /* Day 169 — the corner card, asked how much of the clearing's light lies
+     * over it. Taken off the plan drawn on the card rather than the card's
+     * parchment, which is not quite opaque; the reading and its blind spots are
+     * set out beside `measureTakesLight` in tools/check-almanac.js. One probe
+     * per face because the card is one element per page, and the room's is the
+     * one that must come back nought: the room turns both washes back at its
+     * door, and the card pinned to its wall is inside that door. */
+    'card-light': {
+      view: 'home', kind: 'takes-light', selector: '.scene', of: '.map-button__plan',
+      reads: 'how much of the frame’s light lies over the plan on the corner card, out front',
+    },
+    'door-card-light': {
+      view: 'around', kind: 'takes-light', selector: '.scene', of: '.map-button__plan',
+      reads: 'how much of the frame’s light lies over the plan on the corner card, at the door side',
+    },
+    'room-card-light': {
+      view: 'inside', kind: 'takes-light', selector: '.scene', of: '.map-button__plan',
+      reads: 'how much of the frame’s light lies over the plan on the card pinned up indoors',
     },
     /* Day 118 — the weighing turned a second time, and pointed at the last
      * thing neither of the first two could see: a body brighter down one of its
@@ -1488,6 +1508,51 @@
       probe: 'plan-crown-tone', axis: 'season', at: { tod: 'day' },
       rising: ['winter', 'summer', 'autumn'],
       guards: 'the plan’s crowns taking the year the yard’s crowns take — cooled in winter, gold in autumn. A plan is excused the light and not the leaf; a map still green over a gold yard is drawn in a month the yard has left',
+    },
+    /* Day 169. The card hangs in the clearing's own sky, so it is lit like
+     * the sky; it is pinned to the room's wall, so it is lit like the room,
+     * which is to say by nothing that comes through the door. Rising and not
+     * stated: the reading is a mean over a drawing whose size follows the
+     * breakpoint. The two outdoor lines are also what keep the room's nought
+     * honest — a lift that silently did nothing would read nought out here
+     * too, and fail. */
+    {
+      probe: 'card-light', axis: 'tod', at: { season: 'summer' },
+      rising: ['day', 'night'],
+      guards: 'the card in the corner of the front yard taking the dark like everything round it — a sheet of paper held up in this sky is lit like the sky. The plan drawn on it keeps no hour; the card it is drawn on is out here and does. Dawn and dusk are left out because their washes lie low over the grass and barely reach the corner, which is true of the paper as of the sky behind it',
+    },
+    /* The floor below is the break test's finding, not a guess. With the
+     * washes put back UNDER the card, the night reading was 0.02 and not
+     * nought — the plan's two-pixel rounded corners let a sliver of the
+     * parchment through, and the parchment lets an eighth of the wash through
+     * — so `rising` above stayed green, day 0 against night 0.02. A strict
+     * order is satisfied by a sliver. A floor of one is a mean of one part in
+     * 255 over the whole plan, fourteen times below the honest midnight and
+     * fifty times above the sliver. */
+    {
+      probe: 'card-light', axis: 'tod', at: { season: 'summer' },
+      floor: 1, over: ['night'],
+      guards: 'the card out front lying UNDER the night, not merely beside it — more than a rounded corner’s worth of the dark over the plan',
+    },
+    {
+      probe: 'door-card-light', axis: 'tod', at: { season: 'summer' },
+      floor: 1, over: ['night'],
+      guards: 'the door side’s card lying under the night the same way',
+    },
+    {
+      probe: 'card-light', axis: 'season', at: { tod: 'day' },
+      rising: ['summer', 'winter'],
+      guards: 'the year lying over the card as well as the hour — more of the winter’s cool veil at noon than of the summer’s haze',
+    },
+    {
+      probe: 'door-card-light', axis: 'tod', at: { season: 'summer' },
+      rising: ['day', 'night'],
+      guards: 'the same card at the door side taking the same dark — one sky over both faces, and one card in it',
+    },
+    {
+      probe: 'room-card-light', axis: 'tod', at: { season: 'winter' },
+      expect: { dawn: 0, day: 0, dusk: 0, night: 0 },
+      guards: 'the card pinned to the room’s wall taking none of it, at any hour of the coldest season — the room turns both washes back at its door, and the plan on its wall is indoors',
     },
     {
       probe: 'door-pot-pace',

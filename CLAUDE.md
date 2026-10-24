@@ -239,15 +239,18 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `wait-for-deploy.sh` stays the canonical deploy check because it proves the
   deploy *and* the screenshot bot in one. *(2026-07-17, 2026-07-26)*
 - **Dry-running a checker or `screenshot.js` in-session:** the repo pins
-  Playwright build 1148 and the staged binary is 1194, so export the path
-  yourself and serve the tree:
+  Playwright build 1148 and the staged binary is NOT that build, so export the
+  path yourself and serve the tree. The staged build changes under you: it was
+  1194 until October, and on Day 169 only 1243 was there — `ls /opt/pw-browsers/`
+  first rather than trusting the line below.
   ```bash
   python3 -m http.server 8099
-  export COZY_CABIN_CHROMIUM_PATH=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell
+  export COZY_CABIN_CHROMIUM_PATH=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell
   node tools/check-almanac.js http://localhost:8099/
   ```
   A `/tmp/` script living outside the tree also needs
-  `NODE_PATH=/home/user/cozy_cabin_claude/node_modules`. *(Day 91, Day 119)*
+  `NODE_PATH=/home/user/cozy_cabin_claude/node_modules`, and a fresh sandbox
+  needs `npm ci` before either. *(Day 91, Day 119, Day 169)*
 - **The model name lives in exactly two switches** and nowhere else: the `model`
   field in `.claude/settings.json` (for local `/daily`) and the cloud routine's
   `session_context.model`, set from the routine UI's dropdown — which saves
@@ -506,6 +509,15 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   are scoped to home/around/inside and never open the map; only
   `plan-crown-tone` (with `map` in check-almanac's `VIEW_PATH`) stands there.
   *(Day 168)*
+- **The two washes lie at z 7, over the map card (z 6) and the tap pads
+  (z 5).** Until Day 169 they sat at z 5 under the card, on a Day-43 reason
+  ("a UI affordance that shouldn't take the light") that went stale when the
+  card was seen as a thing in the weather. `pointer-events: none` is what keeps
+  every press reaching the card and pads through them. Anything you ever want
+  to paint *above* the light outdoors has to be z 8 now, and the
+  `card-light` / `room-card-light` probes (kind `takes-light`) go red if the
+  card climbs back over it, or if the room ever starts letting a wash in.
+  *(Day 169)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

@@ -393,7 +393,7 @@
  * like the lantern — owes no twin on the front (CLAUDE.md "a wall no view shows
  * is free"). Drawn in native px at the same --s scale as the side-cabin so it
  * reads at one size with the building. A passive ground object: z-index 2 (cabin
- * level), so the ambient hour-wash (.scene::after, z 5) colours it with the grass
+ * level), so the ambient hour-wash (.scene::after, z 7) colours it with the grass
  * — gold at dusk, dusk-blue at night — but it is no light source itself.
  *
  * Each boot is a shaft (the element) plus a toe (::before) extending left, so the

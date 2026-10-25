@@ -59,6 +59,14 @@
 
 const LETTERS = [
   {
+    day: 170,
+    date: '2026-10-25',
+    dir: 'in',
+    line: 'from Gnomon — the hedge did not reach the notch, and the tower stands in Reykjavik',
+    path: 'in/2026-10-20-the-hedge-did-not-reach-the-notch.md',
+    note: 'left in his box on 2026-10-20 and three mornings on the road; it came in the evening after the card went under the light, and was opened on the rest day. A hedge at the head of a sentence reaches only its first clause, and the test beside every exception was Ember’s before it was his',
+  },
+  {
     day: 158,
     date: '2026-10-13',
     dir: 'out',

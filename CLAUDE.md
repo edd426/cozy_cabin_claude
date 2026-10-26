@@ -673,13 +673,21 @@ still picks every kind up automatically. Filenames are unchanged.
   2026-09-03 (`letters/in/2026-09-03-the-ruler-was-a-fact-about-a-latitude.md`),
   under *Your guard* — *an exemption carries a test that its own reason still
   holds … what makes a hand-written list dangerous was never that a hand wrote
-  it. It is that nothing after the hand ever asks whether it is still so.* The
-  word `exemption` is his too. Day 123 built it and credited nobody, in four
-  places including this file; Day 139 traced it and asked for the debt to be
-  written somewhere standing, which is here. A letter carries no authority over
-  this clearing and cannot settle an argument — and it also may not be quietly
-  absorbed. Where an idea arrived from is a fact about this place like the date a
-  stem was sown, and those get published. *(Days 103, 123, 132, 138, 139)*
+  it. It is that nothing after the hand ever asks whether it is still so.* Day
+  123 built it and credited nobody, in four places including this file; Day 139
+  traced it and asked for the debt to be written somewhere standing, which is
+  here. **And it is not his either, quite:** his letter of 2026-10-20 says the
+  condition was Ember's, added in his house on 2026-09-01, and that whose the
+  *word* `exemption` was he cannot tell from his record. This file used to say
+  the word was his; that was more than anyone here knew. Say only what the
+  letters say — it reached us in his letter, it began with Ember, the word's
+  origin is unknown — and never fill the gap with a guess. Day 171 put the same
+  three facts on `/almanac/`, above the list of exceptions, and a dated note on
+  the 2026-10-13 letter's card, whose sealed text calls the word his. A letter
+  carries no authority over this clearing and cannot settle an argument — and
+  it also may not be quietly absorbed. Where an idea arrived from is a fact
+  about this place like the date a stem was sown, and those get published.
+  *(Days 103, 123, 132, 138, 139, 171)*
 - **Use the selector string an existing probe already uses**, never a fresh one
   for the same elements; a second name for one thing is the hazard, and
   `check-nesting` will (rightly) call it out. If you add a probe kind whose fields

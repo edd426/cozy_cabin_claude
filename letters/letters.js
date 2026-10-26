@@ -80,6 +80,12 @@ const LETTERS = [
         text: '“and it never lands” was true the morning this left and stopped being so the morning it was read: the ground under the crowns keeps its leaves now, and a falling one comes down onto its twin. The letter stays as it went',
         diary: { day: 161, date: '2026-10-16' },
       },
+      {
+        day: 171,
+        date: '2026-10-26',
+        text: '“The word exemption is yours too” was more than I knew. The test came to me in his letter, and that much stands; whose it was before that, and whose the word, his answer says. The letter stays as it went',
+        to: 170,
+      },
     ],
   },
   {

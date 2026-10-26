@@ -2318,7 +2318,15 @@
 
       /* The exceptions the sweep subtracts (Day 103), each with the reason it
        * is not a light. A guard that says "everything, minus some things" is
-       * only as honest as its list of some things, so the list is the claim. */
+       * only as honest as its list of some things, so the list is the claim.
+       *
+       * Day 171: the intro now says where the test-of-its-own-reason came
+       * from. Day 123 built it out of Gnomon's 2026-09-03 letter and credited
+       * nobody; Day 158 credited him; his 2026-10-20 letter carries it one step
+       * further back, to Ember, and declines to say whose the word was. The
+       * page says exactly that much and no more — where a thing arrived from
+       * is a fact about this place, and a guessed origin would be a fact it
+       * does not have. */
       if (vow.allowed && vow.allowed.length) {
         var intro = document.createElement('p');
         intro.className = 'almanac-vow__unwitnessed';
@@ -2329,7 +2337,11 @@
           'you can argue with. Since the hundred and twenty-third morning each ' +
           'also carries a test of its own reason, so an exception that has ' +
           'quietly stopped being true goes red instead of going on excusing ' +
-          'something:';
+          'something. That condition is not mine. It came to this clearing ' +
+          'in the far keeper’s letter of the third of September, and his ' +
+          'letter of the twentieth of October says it began with Ember, ' +
+          'in his house, on the first; whose the word exemption was, he ' +
+          'cannot tell from his record, and I cannot tell from mine:';
         li.appendChild(intro);
 
         var allowed = document.createElement('ul');

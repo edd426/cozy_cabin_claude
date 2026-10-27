@@ -292,7 +292,10 @@
  *   - summer — a faint warm green rising off the meadow at its fullest.
  *   - autumn — the whole frame gone gently gold, the most visibly a season.
  *   - winter — a thin cool blue-grey veil, top-weighted: the year gone quiet.
- *   - spring — fresh pistachio low (new growth), a breath of blossom-rose high. */
+ *   - spring — fresh pistachio low (new growth), thinning to nothing up high.
+ *     Until Day 172 its top stop was "a breath of blossom-rose": blossom laid in
+ *     the sky, with nothing in the clearing blossoming. It is on the crowns now
+ *     (`.sprite--blossom`), where a spring puts it; the air keeps only the green. */
 .scene::before {
   content: "";
   position: absolute;
@@ -336,7 +339,7 @@
     to top,
     rgba(185, 214, 133, 0.16) 0%,   /* pistachio (--c-grass-light), low — fresh new growth */
     rgba(185, 214, 133, 0.06) 44%,
-    rgba(215, 122, 118, 0.04) 100%  /* a breath of blossom-rose (--c-rose) up high */
+    rgba(185, 214, 133, 0.02) 100%  /* thinning to nothing up high — the blossom is on the bough (Day 172) */
   );
 }
 
@@ -1070,10 +1073,121 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .scene[data-season="spring"] .sprite--tree,
 .scene[data-season="spring"] .sprite--tree-small,
 .scene[data-season="spring"] .sprite--tree-near,
-.scene[data-season="spring"] .map__tree {
+.scene[data-season="spring"] .map__tree,
+.scene[data-season="spring"] .sprite--blossom {
   filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
 }
+/* `.sprite--blossom` (Day 172) is the front crowns' spring blossom, laid on
+ * their boxes as a sibling because an <img> holds no child. It is named here so
+ * it passes through the very lens the leaf it sits on wears — the door side's
+ * blossom lives inside its crown and gets that lens for free, and the two faces
+ * must not show one bough in two pinks. */
 /* summer — no rule on purpose: the identity, the green the trees were born in. */
+
+/* ── Blossom on the bough (Day 172, 2026-10-27) ────────────────────────────
+ * Since Day 69 the spring wash carried "a breath of blossom-rose high": a rose
+ * stop at the top of the frame, which is to say in the sky. Blossom is not a
+ * colour the air takes. It is a thing on a branch, and the year here lives in
+ * the leaf as well as the light (Day 168) — so the rose came out of the wash
+ * and onto the crowns, where a spring would actually put it.
+ *
+ * ON THE CROWN'S OWN BOX. A front crown is an <img>, which cannot hold a child
+ * or a pseudo-element, so each blossom is a sibling span laid on exactly the
+ * box its tree stands in (same left/right, bottom, width and height) and given
+ * the tree's own `tree-sway`, duration and delay. Both start in the same style
+ * pass, so the flecks bend with the leaf they sit on and can never be left
+ * behind by a gust. A hand shakes both: the pads' `data-shake` names the crown
+ * and its blossom, and touch.js shakes everything it names.
+ *
+ * THE CELLS are painted by the `::before`'s box-shadows, stood on cell (0,0),
+ * which is empty in both PNGs (an outer shadow is never painted under its own
+ * element — Day 157). Every fleck sits on a crown pixel, never on the outline,
+ * and every one has its twin mirrored about the crown's own centre line
+ * (x ↔ 25−x on the big tree, x ↔ 13−x on the small one): a blossom brighter
+ * down one flank would be a sun with an address, and there is none. Weighted
+ * toward the lit top and thinning into the shade, which names no side.
+ *
+ * COLOUR is its own, not the crown's filter: a pale rose between the bed's
+ * blossom (--c-rose) and the cream, so it reads against the light green by hue
+ * where a value gap at this size would be nothing. The hour's wash lies over
+ * it like any leaf.
+ *
+ * GATED BY `visibility`, NOT `display` — the one layer here that is. An
+ * animation starts when its element is first laid out, so a span kept
+ * `display: none` until season.js names the spring begins its sway a beat
+ * after the crown it sits on and stays that beat behind all day: measured,
+ * a third of a degree apart, half a pixel at the crown's top. Hidden but laid
+ * out, it starts swaying in the same style pass as its tree and keeps the
+ * tree's time exactly. The count is no worse for it: `crown-blossom` is a
+ * `visible-count`, which asks for a box AND for visibility (Day 98), so a
+ * hidden bough reads nought just as an absent one does.
+ * Never bare, never lost: in the other three seasons the bough simply has no
+ * blossom on it, and the spring brings it back — the litter's wheel, one tree up. */
+.sprite--blossom {
+  position: absolute;
+  inset: 0;
+  z-index: 1;                 /* the trees' own plane; after them in DOM order */
+  pointer-events: none;
+  visibility: hidden;
+  --u: 3px;
+  --bloom: #ecaa9f;
+}
+.scene[data-season="spring"] .sprite--blossom { visibility: visible; }
+.blossom {
+  position: absolute;
+  transform-origin: bottom center;
+  animation: tree-sway 9s ease-in-out infinite;
+}
+.blossom--l { left: 4%;  bottom: 14%; width: calc(28 * var(--u)); height: calc(33 * var(--u)); }
+.blossom--r { right: 6%; bottom: 18%; width: calc(15 * var(--u)); height: calc(33 * var(--u));
+              animation-duration: 7.5s; animation-delay: -3s; }
+.blossom.is-shaken { animation: crown-shake 0.85s ease-out 1; }
+.blossom::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--u);
+  height: var(--u);
+}
+.blossom--l::before {
+  box-shadow:
+    calc( 8 * var(--u)) calc( 3 * var(--u)) 0 var(--bloom),
+    calc( 9 * var(--u)) calc( 3 * var(--u)) 0 var(--bloom),
+    calc(16 * var(--u)) calc( 3 * var(--u)) 0 var(--bloom),
+    calc(17 * var(--u)) calc( 3 * var(--u)) 0 var(--bloom),
+    calc( 5 * var(--u)) calc( 6 * var(--u)) 0 var(--bloom),
+    calc(20 * var(--u)) calc( 6 * var(--u)) 0 var(--bloom),
+    calc(11 * var(--u)) calc( 8 * var(--u)) 0 var(--bloom),
+    calc(14 * var(--u)) calc( 8 * var(--u)) 0 var(--bloom),
+    calc( 3 * var(--u)) calc(10 * var(--u)) 0 var(--bloom),
+    calc( 4 * var(--u)) calc(10 * var(--u)) 0 var(--bloom),
+    calc(21 * var(--u)) calc(10 * var(--u)) 0 var(--bloom),
+    calc(22 * var(--u)) calc(10 * var(--u)) 0 var(--bloom),
+    calc( 8 * var(--u)) calc(12 * var(--u)) 0 var(--bloom),
+    calc(17 * var(--u)) calc(12 * var(--u)) 0 var(--bloom),
+    calc( 5 * var(--u)) calc(15 * var(--u)) 0 var(--bloom),
+    calc(20 * var(--u)) calc(15 * var(--u)) 0 var(--bloom),
+    calc(10 * var(--u)) calc(17 * var(--u)) 0 var(--bloom),
+    calc(15 * var(--u)) calc(17 * var(--u)) 0 var(--bloom),
+    calc( 3 * var(--u)) calc(19 * var(--u)) 0 var(--bloom),
+    calc(22 * var(--u)) calc(19 * var(--u)) 0 var(--bloom);
+}
+.blossom--r::before {
+  box-shadow:
+    calc( 4 * var(--u)) calc( 3 * var(--u)) 0 var(--bloom),
+    calc( 9 * var(--u)) calc( 3 * var(--u)) 0 var(--bloom),
+    calc( 2 * var(--u)) calc( 6 * var(--u)) 0 var(--bloom),
+    calc(11 * var(--u)) calc( 6 * var(--u)) 0 var(--bloom),
+    calc( 6 * var(--u)) calc( 8 * var(--u)) 0 var(--bloom),
+    calc( 7 * var(--u)) calc( 8 * var(--u)) 0 var(--bloom),
+    calc( 3 * var(--u)) calc(11 * var(--u)) 0 var(--bloom),
+    calc(10 * var(--u)) calc(11 * var(--u)) 0 var(--bloom),
+    calc( 2 * var(--u)) calc(14 * var(--u)) 0 var(--bloom),
+    calc(11 * var(--u)) calc(14 * var(--u)) 0 var(--bloom),
+    calc( 5 * var(--u)) calc(16 * var(--u)) 0 var(--bloom),
+    calc( 8 * var(--u)) calc(16 * var(--u)) 0 var(--bloom);
+}
 
 /* ── Leaf-fall (Day 116, 2026-09-01) ───────────────────────────────────────
  * The first autumn this clearing has ever actually stood in. The year had
@@ -3875,4 +3989,11 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
     75%  { --skein-x:  105px; --skein-y: -5px; }
     100% { --skein-x:  210px; --skein-y:  3px; }
   }
+}
+
+/* Day 172: the blossom at the 2x scale. At the foot of the file, after the rule
+ * it rebases, because a media query adds no specificity and an earlier one
+ * loses (Day 141). Both crowns stand at 2 css px a native cell here. */
+@media (max-width: 599px) {
+  .sprite--blossom { --u: 2px; }
 }

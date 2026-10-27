@@ -1082,6 +1082,39 @@
     calc(16px * var(--s)) calc( 8px * var(--s)) 0 var(--crown-body);
 }
 
+/* Blossom (Day 172). The front crowns carry it in spring, and this is the
+ * small one of those two met from close by, so it carries the small crown's
+ * twelve flecks at twice the size: each one 2×2 native here, placed at
+ * x' = 2x + 1 and y' = 2y off tree-small.png's own cells, so the two faces
+ * show the same blossom on the same branches. Mirrored about this crown's
+ * centre line exactly as the mottle above is (a block at x mirrors to 28 − x),
+ * because a blossom heavier down one flank would name a sun. Inside the crown
+ * wrapper, so it bends with the crown under a hand and takes the season's
+ * filter with it; the front's layer is named in the same spring filter line in
+ * scene.css, so the flecks are one colour on both faces. Spring only, by
+ * `display`, so `door-crown-blossom` counts layout. */
+.tree-near__blossom {
+  position: absolute;
+  display: none;
+  --bloom: #ecaa9f;
+  left: calc( 9px * var(--s)); top: calc( 6px * var(--s));
+  width: calc( 2px * var(--s)); height: calc( 2px * var(--s));
+  background: var(--bloom);
+  box-shadow:
+    calc( 10px * var(--s)) calc(  0px * var(--s)) 0 var(--bloom),
+    calc( -4px * var(--s)) calc(  6px * var(--s)) 0 var(--bloom),
+    calc( 14px * var(--s)) calc(  6px * var(--s)) 0 var(--bloom),
+    calc(  4px * var(--s)) calc( 10px * var(--s)) 0 var(--bloom),
+    calc(  6px * var(--s)) calc( 10px * var(--s)) 0 var(--bloom),
+    calc( -2px * var(--s)) calc( 16px * var(--s)) 0 var(--bloom),
+    calc( 12px * var(--s)) calc( 16px * var(--s)) 0 var(--bloom),
+    calc( -4px * var(--s)) calc( 22px * var(--s)) 0 var(--bloom),
+    calc( 14px * var(--s)) calc( 22px * var(--s)) 0 var(--bloom),
+    calc(  2px * var(--s)) calc( 26px * var(--s)) 0 var(--bloom),
+    calc(  8px * var(--s)) calc( 26px * var(--s)) 0 var(--bloom);
+}
+.scene[data-season="spring"] .tree-near__blossom { display: block; }
+
 /* Bark: the source sprite's own trunk at twice the size and the same third of
  * the crown's height — a mid band at the top where the crown's shade sits on it,
  * plain bark below, and a 1-native dark column inset at each side (in the PNG

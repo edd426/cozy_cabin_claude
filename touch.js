@@ -456,15 +456,24 @@
     var scene = pad.closest('.scene');
     if (!scene) return;
 
-    var crown = pad.dataset.shake ? scene.querySelector(pad.dataset.shake) : null;
-    if (crown && !crown.classList.contains('is-shaken')) {
+    /* Day 172: a pad may name more than one thing — a front crown and the
+     * blossom laid on its box — and every one of them swings together. The
+     * blossom is hidden by `visibility` outside spring, not `display`, so it
+     * keeps its box and shakes unseen in step with its crown. Anything named
+     * here with no box at all is skipped: a class on an element that cannot
+     * run its animation never gets its `animationend` back and would stick
+     * there (Day 139's leaf rule, asked of layout and not of the month). */
+    var crowns = pad.dataset.shake ? scene.querySelectorAll(pad.dataset.shake) : [];
+    Array.prototype.forEach.call(crowns, function (crown) {
+      if (crown.classList.contains('is-shaken')) return;
+      if (crown.getClientRects().length === 0) return;
       crown.classList.add('is-shaken');
       crown.addEventListener('animationend', function once(e) {
         if (e.animationName !== 'crown-shake') return;
         crown.classList.remove('is-shaken');
         crown.removeEventListener('animationend', once);
       });
-    }
+    });
 
     /* The leaf is the season's half of the answer, and the question asked here
      * is not "what month is it" — season.js owns the year and one place should

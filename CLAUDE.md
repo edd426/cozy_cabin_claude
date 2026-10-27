@@ -406,6 +406,15 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   with `imageSmoothingEnabled = false` is the tool. *(Days 112, 127, 136, 140)*
 - **Gate a countable layer with `display`, never `opacity`** — the almanac's
   counts read layout, so an opacity gate is invisible to them. *(Days 98, 116)*
+  **Except a layer that must keep another element's animation time:** a CSS
+  animation starts when its element is first laid out, so a `display: none`
+  layer revealed by season.js starts its sway late and stays behind all day
+  (the blossom measured ~0.3° behind its crown). Gate that one with
+  `visibility` — `visible-count`'s `shows` checks visibility too, so the count
+  still reads nought when hidden. And `paint-lean` cannot guard a body painted
+  in one flat colour (it read 0.000 with three flecks taken off one side), so
+  a single-colour layer's mirror is held by nothing but its own written pairs.
+  *(Day 172)*
 - **Two clocks on one layer must sit on two different properties.** The season
   owns the fire's tier *sizes*, so the hour owns how many tiers *stand*; the
   season owns `--ember-glow`, the hour owns `--ember-lit`. If you find yourself

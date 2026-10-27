@@ -174,7 +174,7 @@
     spring: {
       lead: 'Spring is the thin end of the store and the fresh end of everything else — most of a cold season gone through the pile, and new growth on the bough.',
       does: [
-        'a fresh pistachio over the frame with a breath of blossom high in it, and the crowns lifted bright with new growth, on the plan as in the yard',
+        'a fresh pistachio over the frame, and the crowns lifted bright with new growth and pale rose blossom on the bough — both crowns out front, the near one by the door and the two on the plan; the blossom is the spring’s alone, and the other three seasons’ boughs carry none',
         'the woodpile at its thinnest — four logs, the bottom course only',
         'the last of the fallen leaves, darkened toward the earth — three under the big tree, one under the small one, two by the door — the rest already taken back into the ground the fresh green comes up out of',
         'the chimney a touch fuller than the summer thread — the last fires',
@@ -633,6 +633,27 @@
       view: 'around', kind: 'visible-count',
       selector: '.sprite--tree-near',
       reads: 'whether the near tree is still standing on the door side',
+    },
+    /* Day 172. The spring's blossom, which until this morning was a rose stop in
+     * the top of the wash — blossom in the sky with nothing blossoming. It is
+     * on the boughs now, one layer per crown, and each is a thing a count can
+     * find: `display`-gated by season, so a bough with no blossom on it has no
+     * box. Three faces, three probes, because one crown seen from three places
+     * is owed the same spring from each. */
+    'crown-blossom': {
+      view: 'home', kind: 'visible-count',
+      selector: '.blossom',
+      reads: 'how many of the crowns carry blossom',
+    },
+    'door-crown-blossom': {
+      view: 'around', kind: 'visible-count',
+      selector: '.tree-near__blossom',
+      reads: 'whether the near tree carries blossom',
+    },
+    'plan-crown-blossom': {
+      view: 'map', kind: 'visible-count',
+      selector: '.map__blossom',
+      reads: 'how many of the crowns on the plan carry blossom',
     },
     'candle-wax': {
       view: 'inside', kind: 'height',
@@ -1503,6 +1524,37 @@
       probe: 'door-plant-tone', axis: 'season', at: { tod: 'day' },
       rising: ['winter', 'summer', 'autumn'],
       guards: 'the pot by the door taking the same year as the patch on the front — one season leans both faces of the clearing, or it is two seasons',
+    },
+    /* Day 172. The blossom is the spring's alone, and on every crown it can be
+     * seen on. Each table carries the other three seasons' nought, so blossom
+     * left standing into the summer fails as surely as a spring with bare
+     * boughs. What a count cannot see is where on the crown it lies or what
+     * colour it is: a fleck moved off the leaf onto the sky, or the twins
+     * taken off one flank, still counts as one body.
+     *
+     * The flank half was meant to be the paint-lean witness's, and the break
+     * said no. A spring-only lean probe over the front layer read 0.000 with
+     * the flecks mirrored, and 0.000 again with three of them taken off one
+     * side, because that witness reads how a body's brightness runs with its
+     * width, and a body painted in one flat colour reads nought however
+     * lopsided its shape is (Day 118, by design). Every fleck of blossom is the
+     * same pink. So the probe was taken back out rather than left standing
+     * green over a thing it cannot see, and the mirror is held by nothing but
+     * the pairs written beside it in scene.css and around.css. */
+    {
+      probe: 'crown-blossom', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 2 },
+      guards: '“pale rose blossom on the bough” of both crowns out front in spring, and on neither in the other three seasons',
+    },
+    {
+      probe: 'door-crown-blossom', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 1 },
+      guards: 'and on the near tree by the door, which is the small crown out front met from close by — one tree does not blossom on one face and not the other',
+    },
+    {
+      probe: 'plan-crown-blossom', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 2 },
+      guards: 'and on the plan’s two crowns, since a plan is excused the light and not the leaf',
     },
     {
       probe: 'plan-crown-tone', axis: 'season', at: { tod: 'day' },

@@ -115,6 +115,16 @@ const FRAMES = ['.scene'];
  * argue with. */
 const DECLARED = [
   {
+    rel: 'inside', inner: '.tree-near__blossom', outer: '.sprite--tree-near', where: ['around'],
+    why: 'Day 172: the spring blossom is drawn on the near crown, inside the wrapper that ' +
+         'carries its edge, so it bends with the crown under a hand and takes the crown\'s ' +
+         'season filter. `door-crown-blossom` only counts it by layout and hides nothing, so ' +
+         'it cannot leave another reading a damaged page; and to `door-paint-lean` and the ' +
+         'wind and leaf readings the blossom is simply part of the tree they name — which is ' +
+         'what it is. Every fleck is one flat pink, so the weighing reads it as nought ' +
+         'whatever its shape (Day 118); that blind spot is written beside the count.',
+  },
+  {
     rel: 'inside', inner: '.brick-course', outer: '.front-cabin', where: ['home'],
     why: 'the running bond is drawn on the cabin, so the exemption that permits its ' +
          'upright joints sits inside a body `home-paint-lean` weighs. They never ask the ' +

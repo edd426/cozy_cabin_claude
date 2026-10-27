@@ -105,6 +105,39 @@
 .map__tree--nw { left: 8%;  top: 20%; width: 15%; height: 20%; }
 .map__tree--ne { left: 82%; top: 7%;  width: 10%; height: 13%; }
 
+/* Blossom from above (Day 172). The yard's crowns carry pale rose flecks in
+ * spring, and a plan is excused the light and not the leaf (Day 168), so the
+ * plan's two do too: a few dots of the same pale rose scattered over each
+ * canopy, every one mirrored about the canopy's own centre (the element stands
+ * on that centre, transparent, and paints only its shadows), because flecks
+ * gathered to one side of a crown seen from overhead are a light off to that
+ * side. Inside `.map__tree`, so the crowns' spring filter lies over them as it
+ * lies over the yard's. Spring only, by `display`, so `plan-crown-blossom`
+ * counts layout. */
+.map__blossom {
+  position: absolute;
+  display: none;
+  left: calc(50% - 1px);
+  top: calc(50% - 1px);
+  width: 2px;
+  height: 2px;
+  --bloom: #ecaa9f;
+}
+.scene[data-season="spring"] .map__blossom { display: block; }
+.map__tree--nw .map__blossom {
+  box-shadow:
+    -6px -6px 0 var(--bloom),  6px -6px 0 var(--bloom),
+    -10px 0   0 var(--bloom), 10px  0   0 var(--bloom),
+     0   -10px 0 var(--bloom),
+    -4px  6px 0 var(--bloom),  4px  6px 0 var(--bloom);
+}
+.map__tree--ne .map__blossom {
+  box-shadow:
+    -4px -4px 0 var(--bloom),  4px -4px 0 var(--bloom),
+    -6px  2px 0 var(--bloom),  6px  2px 0 var(--bloom),
+     0    6px 0 var(--bloom);
+}
+
 /* Wildflower patch — a few rose dots at the south-west, by the front-left
  * (west) wall foot, matching the home view's clump. */
 .map__flowers {

@@ -354,6 +354,20 @@
        width="15" height="33"
        alt="">
 
+  <!-- Blossom (Day 172, 2026-10-27). Since July the spring wash said "a breath
+       of blossom-rose high" — a rose tint laid in the top of the sky, blossom
+       with nothing blossoming. The year lives in the leaf as well as the light
+       (Day 168), and blossom is a thing on a bough, not a colour in the air. So
+       the rose came out of the wash and onto the two crowns. One span per crown,
+       laid over it on the crown's own box and riding the crown's own sway and
+       shake, so a fleck can never come loose of the leaf it sits on. Season-gated
+       by `display` (spring only) so the almanac can count it; JS off means no
+       data-season and no blossom, the plain crowns the place always had. -->
+  <div class="sprite sprite--blossom" aria-hidden="true">
+    <span class="blossom blossom--l"></span>
+    <span class="blossom blossom--r"></span>
+  </div>
+
   <!-- The crowns answer a hand (Day 139, 2026-09-24): the first thing in this
        clearing that moves because somebody touched it. Two invisible pads, one
        over each crown, carrying the button semantics and the 44px reach that
@@ -370,10 +384,10 @@
        leaves to give. See touch.js for why a shaken crown may ring back upwind
        where the wind-sway may not. -->
   <span class="crown-touch crown-touch--left" role="button" tabindex="0"
-        data-shake=".sprite--tree-left" data-leaf=".leaf--shake-l"
+        data-shake=".sprite--tree-left, .blossom--l" data-leaf=".leaf--shake-l"
         aria-label="shake the big tree"></span>
   <span class="crown-touch crown-touch--right" role="button" tabindex="0"
-        data-shake=".sprite--tree-right" data-leaf=".leaf--shake-r"
+        data-shake=".sprite--tree-right, .blossom--r" data-leaf=".leaf--shake-r"
         aria-label="shake the small tree"></span>
 
   <!-- The litter (Day 161, 2026-10-16): what the autumn owes the ground. For

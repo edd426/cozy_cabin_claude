@@ -175,6 +175,7 @@
       lead: 'Spring is the thin end of the store and the fresh end of everything else — most of a cold season gone through the pile, and new growth on the bough.',
       does: [
         'a fresh pistachio over the frame, and the crowns lifted bright with new growth and pale rose blossom on the bough — both crowns out front, the near one by the door and the two on the plan; the blossom is the spring’s alone, and the other three seasons’ boughs carry none',
+        'the first of the blossom already lying under the boughs, the same pale rose on the grass — five petals under the big tree and three under the small one, a little right of each trunk where the wind sets them down, and four round the near tree by the door. A blossom keeps a bough a week or two, which is finer than this year’s four seasons can say, so the spring holds the letting-go as one moment: the rose still up and the first of it down, all season',
         'the woodpile at its thinnest — four logs, the bottom course only',
         'the last of the fallen leaves, darkened toward the earth — three under the big tree, one under the small one, two by the door — the rest already taken back into the ground the fresh green comes up out of',
         'the chimney a touch fuller than the summer thread — the last fires',
@@ -523,6 +524,19 @@
       view: 'around', kind: 'visible-count',
       selector: '.sprite--litter--e .litter',
       reads: 'how many fallen leaves are lying round the foot of the near tree on the door side',
+    },
+    /* Day 173. What the blossom owes the grass: its petals, lying under the
+     * crowns that carry it, for the one season that carries it. Display-gated
+     * by season like the litter, so it reads layout. */
+    'blossom-petals': {
+      view: 'home', kind: 'visible-count',
+      selector: '.sprite--petals .petal',
+      reads: 'how many fallen petals are lying in the grass under the two crowns out front',
+    },
+    'door-blossom-petals': {
+      view: 'around', kind: 'visible-count',
+      selector: '.sprite--petals--e .petal',
+      reads: 'how many fallen petals are lying round the foot of the near tree on the door side',
     },
     /* Day 162. Where a falling leaf comes down. Each is seeked to the last
      * frame it is opaque in and the page is asked whether a showing leaf of
@@ -1389,6 +1403,16 @@
       probe: 'door-leaf-litter', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 3, winter: 5, spring: 2 },
       guards: 'the litter round the near tree on the door side, on the same four steps as the front’s — three, five, two and none. The tiers are shared from one set of lines in scene.css, so this mostly holds that this face’s five spans are still wearing the right tier classes',
+    },
+    {
+      probe: 'blossom-petals', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 8 },
+      guards: '“the first of the blossom already lying under the boughs” — five petals under the big tree out front and three under the small one in spring, and none in the other three seasons, which have no blossom to let go of. Beside `crown-blossom` it holds that the grass and the bough agree about the season. It counts; it cannot see that each petal lies right of its trunk, where the westerly sets down whatever comes off a crown on this face',
+    },
+    {
+      probe: 'door-blossom-petals', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 0, spring: 4 },
+      guards: 'and four round the foot of the near tree on the door side, the small crown met from close by, spread evenly because nothing on that face drifts',
     },
     /* Day 133. The wind's direction, held to the picture rather than to a
      * sentence. The four counted layers are the smoke, the clouds, the falling

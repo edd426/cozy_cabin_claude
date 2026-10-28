@@ -1472,6 +1472,56 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .litter--r3 { left: 95.2%; top: 83.0%; }
 .litter--r4 { left: 93.4%; top: 85.4%; }
 
+/* ── Fallen petals (Day 173, 2026-10-28) ───────────────────────────────────
+ * What the blossom owes the grass. Day 172 put the rose on the boughs; a real
+ * blossom keeps them a week or two and lets go, and the leaf has the tree to
+ * itself till autumn. This year is four coarse blocks (season.js: a lean, not
+ * a thermometer), so a fortnight is finer than it can say, and stretching the
+ * spring into a calendar to make room for one would be a second year inside
+ * the first. What a block CAN hold is the letting-go as a single moment, the
+ * way the boots hold one step of story (Day 51): blossom still on the bough
+ * and the first of it already lying under it, all spring.
+ *
+ * WHAT IT IS: the blossom, landed — the bough's own `--bloom`, not the crown's
+ * filter, because it never was the leaf's colour. A 2×2 block where a leaf
+ * lies 3×2: a petal is the smaller thing. Flat colour, no lit side. It reads
+ * against the spring green by hue, the same reason the bough's flecks do.
+ *
+ * WHERE: in the litter's own band and below each tree's foot (the ground plane
+ * is sacred), and RIGHT of each trunk like the leaves — whatever comes off a
+ * crown on this face is carried by the one westerly. Five under the big tree,
+ * three under the small one: the bough's twenty flecks and twelve, near
+ * enough in proportion. None overlaps a spring remnant of the litter (l1, l2,
+ * l3, r1), so the two read as two things on the ground and not one smudge.
+ *
+ * Not taken in and not gone over: in summer the grass is clean because the
+ * blossom is over, which is the spring's far half of the turn and not a loss.
+ * Counted by `blossom-petals` / `door-blossom-petals` in almanac/almanac.js.
+ * Gated by `display`, never opacity (Day 98). Default (JS off) is none. */
+.sprite--petals {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  display: none;
+  --bloom: #ecaa9f;          /* the bough's own rose (.sprite--blossom) */
+}
+.scene[data-season="spring"] .sprite--petals { display: block; }
+.petal {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--bloom);
+}
+.petal--l1 { left: 11.4%; top: 90.4%; }
+.petal--l2 { left: 16.6%; top: 88.4%; }
+.petal--l3 { left: 21.4%; top: 90.2%; }
+.petal--l4 { left: 13.8%; top: 93.6%; }
+.petal--l5 { left: 18.6%; top: 86.0%; }
+.petal--r1 { left: 91.4%; top: 87.4%; }
+.petal--r2 { left: 96.6%; top: 86.0%; }
+.petal--r3 { left: 97.0%; top: 91.2%; }
+
 /* ── The crowns answer a hand (Day 139, 2026-09-24) ────────────────────────
  * The first response in this clearing that is not the year's, the hour's, or a
  * clock's — the first thing here that moves because somebody touched it

@@ -1359,6 +1359,27 @@
 .litter--e4 { left: 87.6%; top: 97.4%; }
 .litter--e5 { left: 80.2%; top: 97.0%; }
 
+/* ── Fallen petals under the near tree (Day 173, 2026-10-28) ───────────────
+ * The front's layer (scene.css: `.sprite--petals`, its spring gate, the bough's
+ * own rose) reused whole. Like the litter it lies among: spread evenly round the
+ * trunk with no skew, since the wind comes straight on at this face; below the
+ * tree's foot; and in this view's own pixels, the front's 2×2 at the near
+ * tree's scale. Four, against the twelve flecks this crown carries — the front's
+ * small tree drops three of its twelve, met from close enough here to see one
+ * more. None lies on either spring remnant (e1, e2). */
+.sprite--petals--e {
+  --s: 3;                  /* rebased in the breakpoint block at the foot */
+  z-index: 3;              /* the near tree's plane, after it in DOM order */
+}
+.petal--e1, .petal--e2, .petal--e3, .petal--e4 {
+  width:  calc(2px * var(--s));
+  height: calc(2px * var(--s));
+}
+.petal--e1 { left: 82.6%; top: 96.4%; }
+.petal--e2 { left: 87.4%; top: 96.4%; }
+.petal--e3 { left: 92.6%; top: 97.4%; }
+.petal--e4 { left: 84.4%; top: 97.6%; }
+
 /* ── Breakpoint, for the two components declared below the tree's own line ──
  * (Day 141, 2026-09-26.) `.sprite--leaffall--e` and `.crown-touch--e` both set
  * `--s: 3` in rules that stand further down this file than the tree's 3x->2x
@@ -1369,5 +1390,6 @@
 @media (max-width: 599px) {
   .sprite--leaffall--e,
   .sprite--litter--e,
+  .sprite--petals--e,
   .crown-touch--e { --s: 2; }
 }

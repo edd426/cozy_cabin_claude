@@ -1522,6 +1522,120 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .petal--r2 { left: 96.6%; top: 86.0%; }
 .petal--r3 { left: 97.0%; top: 91.2%; }
 
+/* ── The petals a shake lets go (Day 174, 2026-10-29) ─────────────────────
+ * In autumn a hand that shakes a crown gets a leaf for it (Day 139). In
+ * spring the same shake brought nothing down off a bough in full blossom,
+ * which is the one thing a blossoming bough does when it is shaken. So each
+ * pad names its petals beside its leaf, and the season decides which, if
+ * either, there are: these live inside `.sprite--petals` (display:none but in
+ * spring), the leaf inside `.sprite--leaffall` (display:none but in autumn).
+ * Summer and winter shakes bring nothing down, and say so by doing it.
+ *
+ * THREE off the big crown, TWO off the small: the bough's twenty flecks and
+ * twelve, and the ground's five and three, in the same rough proportion.
+ *
+ * HOW A PETAL FALLS against how a leaf does. Lighter and flatter, so slower —
+ * twelve to fourteen seconds for the drop a leaf makes in eleven — and with
+ * more turns on the way: it rocks back past its line oftener, as anything in
+ * free fall may (Day 116). The longer it is in the air the further the one
+ * westerly carries it, so each finishes seven to eight and a half points
+ * right of where it let go, a little past the leaf's seven and a half.
+ *
+ * WHERE IT ENDS: on a petal that is already lying there, in exactly its box
+ * and its colour, and is taken out under a single paint at 97% — the leaves'
+ * landing (Day 162), at petal size. l1 → `.petal--l2`, l2 → `.petal--l5`,
+ * l3 → `.petal--l3`, r1 → `.petal--r2`, r2 → `.petal--r3`. So a shake is
+ * seen to land and the grass still holds eight; the count is the season's,
+ * not the hand's.
+ *
+ * Fill-mode `both`, unlike the leaf's `forwards`, because these are staggered
+ * by a delay and a span showing during its delay must stand at its 0% frame —
+ * up in the crown, the bough's own rose on the bough's own blossom — and not
+ * at the container's corner. touch.js takes `is-falling` off at the end, and
+ * the span goes back to display:none. A class of its own, not `.petal`, so
+ * the almanac's `blossom-petals` count never sees one. */
+.petal-fall {
+  position: absolute;
+  display: none;
+  width: 2px;
+  height: 2px;
+  background: var(--bloom);
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: both;
+}
+.petal-fall.is-falling { display: block; }
+.petal-fall--l1.is-falling { animation-name: petal-shaken-l1; animation-duration: 13s;   animation-delay: 0s;    }
+.petal-fall--l2.is-falling { animation-name: petal-shaken-l2; animation-duration: 14s;   animation-delay: 0.35s; }
+.petal-fall--l3.is-falling { animation-name: petal-shaken-l3; animation-duration: 12.5s; animation-delay: 0.7s;  }
+.petal-fall--r1.is-falling { animation-name: petal-shaken-r1; animation-duration: 13.5s; animation-delay: 0.2s;  }
+.petal-fall--r2.is-falling { animation-name: petal-shaken-r2; animation-duration: 12s;   animation-delay: 0.55s; }
+
+@keyframes petal-shaken-l1 {           /* 8.6 → 16.6, onto .petal--l2 */
+  0%    { top: 66.5%; left: 8.6%;  opacity: 1; }
+  12%   { top: 69.5%; left: 10.8%; }
+  24%   { top: 72.5%; left: 9.6%;  }
+  36%   { top: 75.5%; left: 12.4%; }
+  48%   { top: 78.5%; left: 11.0%; }
+  60%   { top: 81.0%; left: 14.0%; }
+  72%   { top: 83.5%; left: 13.0%; }
+  86%   { top: 86.6%; left: 15.8%; }
+  97%   { top: 88.4%; left: 16.6%; opacity: 1; }
+  97.1% { top: 88.4%; left: 16.6%; opacity: 0; }
+  100%  { top: 88.4%; left: 16.6%; opacity: 0; }
+}
+@keyframes petal-shaken-l2 {           /* 11.0 → 18.6, onto .petal--l5 */
+  0%    { top: 68.0%; left: 11.0%; opacity: 1; }
+  13%   { top: 70.5%; left: 12.6%; }
+  27%   { top: 73.0%; left: 11.8%; }
+  40%   { top: 75.5%; left: 14.6%; }
+  53%   { top: 78.0%; left: 13.4%; }
+  67%   { top: 80.5%; left: 16.4%; }
+  80%   { top: 83.0%; left: 15.8%; }
+  90%   { top: 84.8%; left: 18.0%; }
+  97%   { top: 86.0%; left: 18.6%; opacity: 1; }
+  97.1% { top: 86.0%; left: 18.6%; opacity: 0; }
+  100%  { top: 86.0%; left: 18.6%; opacity: 0; }
+}
+@keyframes petal-shaken-l3 {           /* 13.2 → 21.4, onto .petal--l3 */
+  0%    { top: 65.5%; left: 13.2%; opacity: 1; }
+  12%   { top: 69.0%; left: 15.6%; }
+  25%   { top: 72.5%; left: 14.2%; }
+  38%   { top: 76.0%; left: 17.2%; }
+  51%   { top: 79.5%; left: 16.0%; }
+  64%   { top: 82.5%; left: 19.2%; }
+  77%   { top: 85.5%; left: 18.4%; }
+  89%   { top: 88.4%; left: 21.0%; }
+  97%   { top: 90.2%; left: 21.4%; opacity: 1; }
+  97.1% { top: 90.2%; left: 21.4%; opacity: 0; }
+  100%  { top: 90.2%; left: 21.4%; opacity: 0; }
+}
+@keyframes petal-shaken-r1 {           /* 88.2 → 96.6, onto .petal--r2 */
+  0%    { top: 64.0%; left: 88.2%; opacity: 1; }
+  13%   { top: 67.0%; left: 90.4%; }
+  26%   { top: 70.0%; left: 89.2%; }
+  39%   { top: 73.0%; left: 92.2%; }
+  52%   { top: 76.0%; left: 91.0%; }
+  65%   { top: 79.0%; left: 94.0%; }
+  78%   { top: 82.0%; left: 93.4%; }
+  89%   { top: 84.4%; left: 96.0%; }
+  97%   { top: 86.0%; left: 96.6%; opacity: 1; }
+  97.1% { top: 86.0%; left: 96.6%; opacity: 0; }
+  100%  { top: 86.0%; left: 96.6%; opacity: 0; }
+}
+@keyframes petal-shaken-r2 {           /* 90.4 → 97.0, onto .petal--r3 */
+  0%    { top: 66.0%; left: 90.4%; opacity: 1; }
+  14%   { top: 70.0%; left: 92.0%; }
+  28%   { top: 74.0%; left: 91.0%; }
+  42%   { top: 78.0%; left: 93.8%; }
+  56%   { top: 81.5%; left: 92.8%; }
+  70%   { top: 85.0%; left: 95.4%; }
+  84%   { top: 88.4%; left: 94.8%; }
+  97%   { top: 91.2%; left: 97.0%; opacity: 1; }
+  97.1% { top: 91.2%; left: 97.0%; opacity: 0; }
+  100%  { top: 91.2%; left: 97.0%; opacity: 0; }
+}
+
 /* ── The crowns answer a hand (Day 139, 2026-09-24) ────────────────────────
  * The first response in this clearing that is not the year's, the hour's, or a
  * clock's — the first thing here that moves because somebody touched it

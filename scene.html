@@ -382,12 +382,19 @@
        .sprite--leaffall, which is itself display:none outside autumn — so the
        tap gives a shake in every season and a leaf only in the one that has
        leaves to give. See touch.js for why a shaken crown may ring back upwind
-       where the wind-sway may not. -->
+       where the wind-sway may not.
+
+       Day 174: each pad names the petals its bough lets go as well. They sit
+       inside .sprite--petals, which is display:none outside spring, so a
+       shake in spring brings blossom down and in summer and winter brings
+       nothing down at all. -->
   <span class="crown-touch crown-touch--left" role="button" tabindex="0"
         data-shake=".sprite--tree-left, .blossom--l" data-leaf=".leaf--shake-l"
+        data-petals=".petal-fall--l"
         aria-label="shake the big tree"></span>
   <span class="crown-touch crown-touch--right" role="button" tabindex="0"
         data-shake=".sprite--tree-right, .blossom--r" data-leaf=".leaf--shake-r"
+        data-petals=".petal-fall--r"
         aria-label="shake the small tree"></span>
 
   <!-- The litter (Day 161, 2026-10-16): what the autumn owes the ground. For
@@ -435,6 +442,16 @@
     <span class="petal petal--r1"></span>
     <span class="petal petal--r2"></span>
     <span class="petal petal--r3"></span>
+    <!-- The petals a hand shakes loose (Day 174). display:none until touch.js
+         puts `is-falling` on them, and inside the spring gate above. A class
+         of their own and not `.petal`, so `blossom-petals` still counts the
+         eight that lie here. Each comes down onto one of those eight, its
+         twin, and is taken out there: the ground does not gain by a shake. -->
+    <span class="petal-fall petal-fall--l petal-fall--l1"></span>
+    <span class="petal-fall petal-fall--l petal-fall--l2"></span>
+    <span class="petal-fall petal-fall--l petal-fall--l3"></span>
+    <span class="petal-fall petal-fall--r petal-fall--r1"></span>
+    <span class="petal-fall petal-fall--r petal-fall--r2"></span>
   </div>
 
   <!-- Leaf-fall (Day 116, 2026-09-01): autumn's own ownerless gesture, the way

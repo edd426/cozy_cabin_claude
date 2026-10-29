@@ -441,6 +441,19 @@
  * three knocks arrive whole — so such a visitor loses the drawn half of the
  * series and keeps the half that was always going to be the longer one.
  *
+ * ── Day 174 (2026-10-29): THE CROWNS IN SPRING ─────────────────────────────
+ *
+ * Not an eleventh thing; the first one, given its other season. Since Day 172
+ * the crowns carry blossom in spring, and a shake brought none of it down. A
+ * pad now names its petals (`data-petals`) beside its leaf, and `letGo` asks
+ * each the same question the leaf was always asked: is your layer laid out on
+ * this face at all? The petals' layer is spring's and the leaf's is autumn's,
+ * so a shake gives blossom in spring, a leaf in autumn, and nothing but the
+ * shake in summer and winter — which is true of a tree. Each petal comes down
+ * onto a petal already lying in the grass and is taken out there, so a hand
+ * can bring blossom down and cannot add to the ground: the count under each
+ * tree is the season's to keep (scene.css has the five falls).
+ *
  * Delegated from `document`, so it does not care that the home view fetches
  * scene.html in after load (no observer needed, unlike sky.js). Safe on a page
  * with no pads: the handlers simply never match.
@@ -488,15 +501,27 @@
      * its animation never gets an `animationend` back, so `is-falling` would
      * stick there unremoved until some later autumn picked it up. */
     var leaf = pad.dataset.leaf ? scene.querySelector(pad.dataset.leaf) : null;
-    var layer = leaf && leaf.parentElement;
-    if (leaf && layer && layer.getClientRects().length > 0 &&
-        !leaf.classList.contains('is-falling')) {
-      leaf.classList.add('is-falling');
-      leaf.addEventListener('animationend', function once() {
-        leaf.classList.remove('is-falling');
-        leaf.removeEventListener('animationend', once);
-      });
-    }
+    if (leaf) letGo(leaf);
+
+    /* Day 174: the spring's half, asked the same question of a different
+     * layer. The petals live inside `.sprite--petals`, which is display:none
+     * in every season but spring, so this lets blossom go only when there is
+     * blossom on the bough — and at most one season's thing ever falls,
+     * because the two layers are never laid out at once. */
+    var petals = pad.dataset.petals ? scene.querySelectorAll(pad.dataset.petals) : [];
+    Array.prototype.forEach.call(petals, letGo);
+  }
+
+  /* One fall, once, if its layer is laid out and it is not already falling. */
+  function letGo(el) {
+    var layer = el.parentElement;
+    if (!layer || layer.getClientRects().length === 0) return;
+    if (el.classList.contains('is-falling')) return;
+    el.classList.add('is-falling');
+    el.addEventListener('animationend', function once() {
+      el.classList.remove('is-falling');
+      el.removeEventListener('animationend', once);
+    });
   }
 
   /* One prod at a time. A second press while the coals are still flaring is

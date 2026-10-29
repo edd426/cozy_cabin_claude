@@ -472,6 +472,11 @@
         <span class="petal petal--e2"></span>
         <span class="petal petal--e3"></span>
         <span class="petal petal--e4"></span>
+        <!-- The two a shake lets go (Day 174), display:none until touch.js
+             puts `is-falling` on them. Each lets go and lands in one column,
+             on its twin, for this face's reason. -->
+        <span class="petal-fall petal-fall--e petal-fall--e1"></span>
+        <span class="petal-fall petal-fall--e petal-fall--e2"></span>
       </div>
       <div class="sprite sprite--leaffall sprite--leaffall--e" aria-hidden="true">
         <span class="leaf leaf--e-1"></span>
@@ -499,6 +504,7 @@
            can. -->
       <span class="crown-touch crown-touch--e" role="button" tabindex="0"
             data-shake=".sprite--tree-near" data-leaf=".leaf--shake-e"
+            data-petals=".petal-fall--e"
             aria-label="shake the tree by the door"></span>
     </div>
   </main>

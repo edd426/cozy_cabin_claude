@@ -1380,6 +1380,47 @@
 .petal--e3 { left: 92.6%; top: 97.4%; }
 .petal--e4 { left: 84.4%; top: 97.6%; }
 
+/* The two petals a shake lets go (Day 174). The front's `.petal-fall` (its
+ * display:none at rest, its fill and its colour) at this face's size, and
+ * falling this face's way: no drift, because the wind comes straight on here,
+ * so each finishes in the column it let go from — the swing is the petal's
+ * own, and it crosses its line oftener than the leaf beside it does. Each
+ * lands on its twin and is taken out there: e1 → `.petal--e2` (87.4%),
+ * e2 → `.petal--e3` (92.6%). A shorter drop than the front's, so shorter
+ * clocks; the same ratio to this face's leaf (11.5s for a similar drop). */
+.petal-fall--e {
+  width:  calc(2px * var(--s));
+  height: calc(2px * var(--s));
+}
+.petal-fall--e1.is-falling { animation-name: petal-shaken-e1; animation-duration: 13s;   animation-delay: 0s;   }
+.petal-fall--e2.is-falling { animation-name: petal-shaken-e2; animation-duration: 13.5s; animation-delay: 0.4s; }
+
+@keyframes petal-shaken-e1 {
+  0%    { top: 77.0%; left: 87.4%; opacity: 1; }
+  13%   { top: 79.6%; left: 89.6%; }
+  26%   { top: 82.2%; left: 85.6%; }
+  39%   { top: 84.8%; left: 89.2%; }
+  52%   { top: 87.4%; left: 85.8%; }
+  65%   { top: 90.0%; left: 88.8%; }
+  78%   { top: 92.4%; left: 86.2%; }
+  89%   { top: 94.6%; left: 88.2%; }
+  97%   { top: 96.4%; left: 87.4%; opacity: 1; }
+  97.1% { top: 96.4%; left: 87.4%; opacity: 0; }
+  100%  { top: 96.4%; left: 87.4%; opacity: 0; }
+}
+@keyframes petal-shaken-e2 {
+  0%    { top: 79.0%; left: 92.6%; opacity: 1; }
+  14%   { top: 81.6%; left: 90.6%; }
+  28%   { top: 84.2%; left: 94.4%; }
+  42%   { top: 86.8%; left: 90.8%; }
+  56%   { top: 89.4%; left: 94.2%; }
+  70%   { top: 92.0%; left: 91.2%; }
+  84%   { top: 94.6%; left: 93.6%; }
+  97%   { top: 97.4%; left: 92.6%; opacity: 1; }
+  97.1% { top: 97.4%; left: 92.6%; opacity: 0; }
+  100%  { top: 97.4%; left: 92.6%; opacity: 0; }
+}
+
 /* ── Breakpoint, for the two components declared below the tree's own line ──
  * (Day 141, 2026-09-26.) `.sprite--leaffall--e` and `.crown-touch--e` both set
  * `--s: 3` in rules that stand further down this file than the tree's 3x->2x

@@ -387,14 +387,18 @@
        Day 174: each pad names the petals its bough lets go as well. They sit
        inside .sprite--petals, which is display:none outside spring, so a
        shake in spring brings blossom down and in summer and winter brings
-       nothing down at all. -->
+       nothing down at all.
+
+       Day 175: and the bird sitting in it. `data-flush` names the wren in
+       .sprite--flush, which is display:none outside summer, so a shake in July
+       sends her off and in winter still brings nothing. -->
   <span class="crown-touch crown-touch--left" role="button" tabindex="0"
         data-shake=".sprite--tree-left, .blossom--l" data-leaf=".leaf--shake-l"
-        data-petals=".petal-fall--l"
+        data-petals=".petal-fall--l" data-flush=".wren--l"
         aria-label="shake the big tree"></span>
   <span class="crown-touch crown-touch--right" role="button" tabindex="0"
         data-shake=".sprite--tree-right, .blossom--r" data-leaf=".leaf--shake-r"
-        data-petals=".petal-fall--r"
+        data-petals=".petal-fall--r" data-flush=".wren--r"
         aria-label="shake the small tree"></span>
 
   <!-- The litter (Day 161, 2026-10-16): what the autumn owes the ground. For
@@ -493,5 +497,20 @@
          broadside like everything else on it. -->
     <span class="leaf leaf--shake leaf--shake-l"></span>
     <span class="leaf leaf--shake leaf--shake-r"></span>
+  </div>
+
+  <!-- What a summer crown has in it (Day 175, 2026-10-30). Shaken in autumn a
+       crown gives a leaf, in spring its blossom, and until today in July the
+       swing and nothing more. Out of a real summer crown something nearly
+       always comes: here it is a wren, sitting in the leaves where nobody can
+       see her, who goes off like a shot when the bough moves, whirrs round
+       once and drops back into the same crown. One per crown, display:none
+       until touch.js puts `is-flushed` on her, inside a layer that is itself
+       display:none outside summer — so a shake in summer flushes a bird, and
+       in the other three seasons the year has something else to give or
+       nothing. Never drawn at rest, so no picture and no count sees her. -->
+  <div class="sprite sprite--flush" aria-hidden="true">
+    <span class="wren wren--l"></span>
+    <span class="wren wren--r"></span>
   </div>
 </div>

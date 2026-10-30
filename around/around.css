@@ -1331,6 +1331,43 @@
   100%  { top: 97.4%; left: 87.6%; opacity: 0; }
 }
 
+/* ── The wren in the near crown (Day 175, 2026-10-30) ──────────────────────
+ * The front's layer and the front's bird (scene.css: `.sprite--flush`, `.wren`,
+ * the wing-beat and the stepped turn), reused whole so the two faces cannot
+ * flush a bird differently; only her size, her plane and her loop are here.
+ *
+ * Two pixels a cell, twice the front wren, because this tree is the small one
+ * met from about twice as close (Day 120) and everything that comes off it is
+ * drawn twice as large — its leaves, its litter, its petals. The layer stands
+ * in that tree's plane (z 3, in front of the cabin), after it in DOM order.
+ *
+ * Her loop goes UP, where the front wrens' go out sideways. This crown stands
+ * at the frame's right edge with the cabin a stride to its left, so the open
+ * air nearest the leaves is above them: she comes out of the crown's upper-left
+ * edge, climbs left of it, turns at the top and drops back in over the crown's
+ * own top. Nothing in it is the wind's — this face looks up the westerly's
+ * throat and nothing on it drifts — and nothing needs to be: a bird under her
+ * own power goes where she likes. */
+.sprite--flush--e {
+  z-index: 3;
+}
+.wren--e {
+  --wc: 2px;
+}
+.wren--e.is-flushed {
+  animation-name: wren-flight-e, wren-face-out-left, wren-whirr;
+  animation-duration: 1.7s, 1.7s, 0.12s;
+}
+@keyframes wren-flight-e {
+  0%   { top: 57%;   left: 80%;   }
+  15%  { top: 48.5%; left: 77%;   }
+  30%  { top: 42%;   left: 77.5%; }
+  45%  { top: 38.5%; left: 81%;   }
+  62%  { top: 39.5%; left: 85.5%; }
+  80%  { top: 45%;   left: 88.5%; }
+  100% { top: 54.5%; left: 88%;   }
+}
+
 /* ── The litter under the near tree (Day 161, 2026-10-16) ──────────────────
  * The front's layer (scene.css: `.sprite--litter`, `.litter`, the four-step
  * season table and the colours) reused whole; only where it lies and how big

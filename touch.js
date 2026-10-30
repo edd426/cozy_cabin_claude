@@ -510,6 +510,43 @@
      * because the two layers are never laid out at once. */
     var petals = pad.dataset.petals ? scene.querySelectorAll(pad.dataset.petals) : [];
     Array.prototype.forEach.call(petals, letGo);
+
+    /* Day 175: the summer's half, and the first of the three that is alive. A
+     * wren sits in each crown inside `.sprite--flush`, display:none in every
+     * season but summer, so this is the same question asked of a third layer
+     * and still at most one season's thing answers. She is asked of her layer
+     * for the leaf's reason — she is display:none herself until the class goes
+     * on — and skipped if she is already out, which is the bee's rule (Day
+     * 146): restarting would let a fast presser hold her in the air, and a
+     * hand may disturb her and may not keep her.
+     *
+     * The chip is asked for only when she actually goes, and second, after the
+     * crown is already swinging — so a shaken crown is still silent in the
+     * three seasons it was silent in, and a sound here always has a bird under
+     * it (rule 4 in sound.js). */
+    var wren = pad.dataset.flush ? scene.querySelector(pad.dataset.flush) : null;
+    if (wren && flush(wren) && window.CabinSound &&
+        typeof window.CabinSound.chip === 'function') {
+      try { window.CabinSound.chip(); } catch (err) {}
+    }
+  }
+
+  /* Out of the crown and back into it, once, if her layer is laid out and she
+   * is not already out. Three animations run on her — the flight, the stepped
+   * turn and the wing-beat — and the wing-beat never ends, so the class comes
+   * off on the flight's own `animationend` and no other. Returns whether she
+   * went. */
+  function flush(wren) {
+    var layer = wren.parentElement;
+    if (!layer || layer.getClientRects().length === 0) return false;
+    if (wren.classList.contains('is-flushed')) return false;
+    wren.classList.add('is-flushed');
+    wren.addEventListener('animationend', function once(e) {
+      if (e.animationName.indexOf('wren-flight') !== 0) return;
+      wren.classList.remove('is-flushed');
+      wren.removeEventListener('animationend', once);
+    });
+    return true;
   }
 
   /* One fall, once, if its layer is laid out and it is not already falling. */

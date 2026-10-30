@@ -830,6 +830,51 @@
     return 7;
   }
 
+  /* ── the wren's alarm (Day 175, 2026-10-30) ──────────────────────────────
+   *
+   * A wren flushed out of a summer crown by a hand. The tenth sound here and
+   * the second voice after the geese — and the opposite of theirs in every
+   * number that matters. The geese call from a long way off, low, through the
+   * `far` lowpass that says *distance*; a wren is a few feet away, tiny, and
+   * high, and what she says when something moves her bough is not a call at all
+   * but an alarm: a run of hard dry ticks, *tic-tic-tic*, quick and level.
+   *
+   * So each tick is `call()` made very short — a throat, not a release, which is
+   * why it is not cut from the noise the way the fire's cracks are, though at
+   * this length the two are cousins — pitched near four kilohertz with the
+   * formant above it and the air left open, because she is near. Four of them,
+   * a little uneven, each a touch quieter than the last as she gets further
+   * from the hand, and the last one late: she is already round the loop by
+   * then.
+   *
+   * Peak 0.07 on the first tick, under the geese's 0.135 although she is far
+   * nearer, because a wren is a small thing and a sawtooth at four kilohertz is
+   * a sharp one. Done inside 0.4s (rule 2). Rule 4 is kept by the bird: she
+   * visibly goes out of the crown and back, and the crown itself swings, which
+   * a silent visitor gets in full — and `touch.js` asks for this only when she
+   * has actually gone.
+   *
+   * Returns the number of sources started — always 4, or 0 with no context. */
+  function chip() {
+    var c = context();
+    if (!c) return 0;
+
+    var TICKS = [
+      /* at     gain    */
+      [0.000,   0.070],
+      [0.075,   0.060],
+      [0.145,   0.050],
+      [0.300,   0.038]
+    ];
+    var f = 3900 + Math.random() * 400;
+    for (var i = 0; i < TICKS.length; i++) {
+      var at = TICKS[i][0] + Math.random() * 0.012;
+      call(c, at, 0.032, TICKS[i][1], f, f * 1.08, f * 1.25, f * 1.45, 9000);
+    }
+
+    return 4;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -844,6 +889,7 @@
     honk: honk,
     ring: ring,
     clack: clack,
+    chip: chip,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

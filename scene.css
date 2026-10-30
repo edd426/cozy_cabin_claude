@@ -1779,6 +1779,160 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   100%  { top: 90.0%; left: 94.2%; opacity: 0; }
 }
 
+/* ── What a summer crown has in it (Day 175, 2026-10-30) ───────────────────
+ * Shaken in autumn a crown lets a leaf go (Day 139), in spring its blossom
+ * (Day 174), and until today in summer and winter it gave back its swing and
+ * nothing more. Out of a real summer crown something nearly always comes. Of
+ * the three things that might — a seed, a twig, a bird — only the bird is
+ * honest here: a twig that came down would have to lie in clean summer grass
+ * or be taken away, and no tree drawn here sets seed in July. A bird sitting
+ * in the leaves is the one thing a shake can disturb without spending anything.
+ *
+ * So one sits in each crown, and it is a wren — the small brown bird that keeps
+ * to low cover and goes off like a shot when the branch it is in moves. She is
+ * never drawn at rest: nobody sees a wren in a summer crown until it goes. A
+ * hand sends her out, she whirrs round once, and drops back into the same
+ * crown she left. A hand may disturb a living thing here and may not take it
+ * away (the bee's rule, Day 146): she is never held, never sent off the frame,
+ * and the crown has her again a second and a half later.
+ *
+ * THE GATE is the year's and only the year's, the arrangement the leaf and the
+ * petals keep: `.sprite--flush` is display:none in every season but summer, and
+ * touch.js asks the LAYER whether it is laid out before flushing anything. So
+ * at most one season's thing ever answers a shake. No hour gate — a wren in a
+ * crown at midnight is roosting there, and a roosting bird flushes too.
+ *
+ * THE DRAWING is eight cells of one colour and a wing of two, one css pixel a
+ * cell out front (the skein's and the bee's size) and two at the door. It faces
+ * right: a cocked tail up behind, a back four cells long over a belly of three,
+ * the head a cell forward of the back. One colour, so there is no lit side to
+ * answer for. A first try put a single wing cell in the top row between the
+ * tail and the head, and the raised frame read as a crenellation; a second left
+ * the back open under a two-cell wing, and it read as an eye. A solid back with
+ * the wing standing on it reads as a small round bird. The wings snap between up and down,
+ * the geese's two-frame beat at four times their rate, because a wren's wings
+ * whirr. Where she faces is a third animation on `scale`, stepped, so she turns
+ * round in one frame at the top of her loop instead of being squeezed through
+ * nothing on the way.
+ *
+ * ON THE GRID for free: she moves by `top`/`left` in `%`, which is a layout
+ * offset and always paints a whole pixel (the leaves' reason, Day 154). Her
+ * path keeps clear of the cabin (z 2) on the front, where this layer sits in
+ * the trees' plane behind it; on the door side the layer stands in the near
+ * tree's plane, in front. */
+.sprite--flush {
+  position: absolute;
+  inset: 0;
+  z-index: 1;                 /* the trees' plane, after them in DOM order */
+  pointer-events: none;
+  display: none;
+}
+.scene[data-season="summer"] .sprite--flush { display: block; }
+
+.wren {
+  --wc: 1px;                  /* one cell; the door side's is two */
+  position: absolute;
+  display: none;
+  width: var(--wc);
+  height: var(--wc);
+  background: var(--c-wood-dark);
+  box-shadow:
+    calc(1 * var(--wc))   0                     0 var(--c-wood-dark),  /* body */
+    calc(2 * var(--wc))   0                     0 var(--c-wood-dark),  /* body */
+    0                     calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+    calc(1 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+    calc(2 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+    calc(3 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* head */
+    calc(-1 * var(--wc))  calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* tail, cocked */
+    0                     calc(-2 * var(--wc))  0 var(--c-wood-dark),  /* wing up */
+    calc(1 * var(--wc))   calc(-2 * var(--wc))  0 var(--c-wood-dark);  /* wing up */
+  animation-iteration-count: 1, 1, infinite;
+  animation-timing-function: linear, step-end, linear;
+  animation-fill-mode: forwards, forwards, none;
+}
+.wren.is-flushed { display: block; }
+.wren--l.is-flushed {
+  animation-name: wren-flight-l, wren-face-out-right, wren-whirr;
+  animation-duration: 1.6s, 1.6s, 0.12s;
+}
+.wren--r.is-flushed {
+  animation-name: wren-flight-r, wren-face-out-left, wren-whirr;
+  animation-duration: 1.5s, 1.5s, 0.12s;
+}
+
+/* Up and down, the way a wing that fast is ever seen at all: two drawings and
+ * nothing between them. The body, head and tail are the same eight cells in
+ * both; only the wing's two move. */
+@keyframes wren-whirr {
+  0%, 49% {
+    box-shadow:
+      calc(1 * var(--wc))   0                     0 var(--c-wood-dark),  /* body */
+      calc(2 * var(--wc))   0                     0 var(--c-wood-dark),  /* body */
+      0                     calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+      calc(1 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+      calc(2 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+      calc(3 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* head */
+      calc(-1 * var(--wc))  calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* tail, cocked */
+      0                     calc(-2 * var(--wc))  0 var(--c-wood-dark),  /* wing up */
+      calc(1 * var(--wc))   calc(-2 * var(--wc))  0 var(--c-wood-dark);  /* wing up */
+  }
+  50%, 100% {
+    box-shadow:
+      calc(1 * var(--wc))   0                     0 var(--c-wood-dark),  /* body */
+      calc(2 * var(--wc))   0                     0 var(--c-wood-dark),  /* body */
+      0                     calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+      calc(1 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+      calc(2 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* back */
+      calc(3 * var(--wc))   calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* head */
+      calc(-1 * var(--wc))  calc(-1 * var(--wc))  0 var(--c-wood-dark),  /* tail, cocked */
+      calc(1 * var(--wc))   calc(1 * var(--wc))   0 var(--c-wood-dark),  /* wing down */
+      0                     calc(2 * var(--wc))   0 var(--c-wood-dark);  /* wing down */
+  }
+}
+
+/* Which way she faces. Stepped (`step-end` above), so each value holds until
+ * the next keyframe and the turn is one frame. Out of the big tree she goes
+ * right, toward the open meadow and away from the frame's edge; out of the
+ * small one left, for the same reason. Each turns at the top of the loop. */
+@keyframes wren-face-out-right {
+  0%   { scale: 1 1; }
+  45%  { scale: -1 1; }
+  100% { scale: -1 1; }
+}
+@keyframes wren-face-out-left {
+  0%   { scale: -1 1; }
+  45%  { scale: 1 1; }
+  100% { scale: 1 1; }
+}
+
+/* The big crown spans about 5–21% of the frame and 60–78% of its height at
+ * every width; the small one 84–93% and 56–75%. Each wren comes out of her
+ * crown's upper edge on the meadow side, climbs, loops at the top and comes
+ * back in a stride from where she left, and the 100% frame is inside the crown
+ * so she goes in rather than vanishing in the open. Both loops stay well clear
+ * of the cabin (36–64%) and above the box (67–80%, from 77% down). She goes no
+ * higher than the top of the small crown's own height would let a startled
+ * wren bother to climb — a wren flushed goes low and fast and dives for the
+ * nearest cover, which here is the tree she came out of. */
+@keyframes wren-flight-l {
+  0%   { top: 64.5%; left: 18.5%; }
+  12%  { top: 58%;   left: 23%;   }
+  30%  { top: 52.5%; left: 27.5%; }
+  45%  { top: 51%;   left: 30.5%; }
+  62%  { top: 54.5%; left: 28%;   }
+  80%  { top: 60%;   left: 23%;   }
+  100% { top: 65.5%; left: 17%;   }
+}
+@keyframes wren-flight-r {
+  0%   { top: 60%;   left: 85%;   }
+  12%  { top: 54%;   left: 80.5%; }
+  30%  { top: 49.5%; left: 76.5%; }
+  45%  { top: 48.5%; left: 73.5%; }
+  62%  { top: 51.5%; left: 76%;   }
+  80%  { top: 56.5%; left: 81%;   }
+  100% { top: 61%;   left: 86%;   }
+}
+
 /* Bush — 32×28 native, scaled 2.5x. Front-right corner. */
 .sprite--bush {
   width: calc(32px * 2.5);

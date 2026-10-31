@@ -3237,6 +3237,134 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .scene[data-season="spring"] .woodpile-log--6,
 .scene[data-season="spring"] .woodpile-log--7 { display: none; }
 
+/* ── The mouse in the rick (Day 176, 2026-10-31) ───────────────────────────
+ * Day 175 drew the first thing here that is never shown at rest: a wren in a
+ * summer crown, seen only when a shake sends her out. The question it left was
+ * whether anything else ought to keep itself that way, and the honest answer
+ * is one more thing: whoever lives in a stack of wood. A rick against a warm
+ * wall is where a mouse winters and summers both, and the only time anybody
+ * sees one is when the wood is knocked.
+ *
+ * NO GATE. The wren keeps a season because a crown is only full of leaf in one
+ * of them; a rick is a rick in every month, and its level never reaches none
+ * (the vow the almanac holds it to). Nor an hour: a mouse is in the wood by day
+ * and about it by night, and a knock at either sends her out. So a knock is
+ * always answered by her, and rule 4 in sound.js is kept by her and not by a
+ * swing — there is no month in which the squeak arrives alone.
+ *
+ * WHERE SHE GOES, read off the ground and not the frame. She comes out from
+ * under the end billet at the rick's right, the end nearer the corner, and
+ * runs forward and right onto the grass — forward, because lower here is
+ * nearer (the ground plane is the founder's oldest note), and right, because
+ * left is the bench's foot. A stride out she stops dead, which is what a mouse
+ * does in the open and what says *stopped* at this size, the bee's lesson (Day
+ * 108). Then she turns in one frame and darts back under the same log. A hand
+ * may send her out and may not keep her out: she is never held, never sent off
+ * the frame, and the rick has her again a second and a half later.
+ *
+ * THE DRAWING is sixteen cells of one colour at one css pixel a cell, the
+ * size the bee and the wren are drawn at out front, which makes her body a
+ * little shorter than one log end is wide. The rick's own 2px unit was tried
+ * first and would not hold a mouse: at seven cells she read as a lump with a
+ * sail on it, and the sixteen below at that unit works out half again as long
+ * as a log (worked, not drawn). She faces
+ * right: a back of two over a body of five and a belly of four, the head
+ * lifted so the belly ends a cell short of it, a pointed snout one cell past,
+ * an ear standing on the head with a notch between it and the back, and a
+ * tail of three running out behind along the ground and turning up at the
+ * tip. One colour, so no lit side. She is painted from the element's own
+ * cell, the bottom-left of the belly, and every other cell is a shadow.
+ *
+ * ON THE GRID for free: `left`/`bottom` in whole px inside a fixed-native box
+ * are layout offsets, so every frame she is in paints whole pixels at both
+ * widths, and she needs no breakpoint block because the rick has none. She is
+ * the rick's first child, so every log paints over her and she comes out from
+ * BEHIND the end billet, not across it. */
+.mouse {
+  --mc: 1px;
+  position: absolute;
+  display: none;
+  left: 22px;
+  bottom: 0;
+  width: var(--mc);
+  height: var(--mc);
+  background: var(--c-wood-dark);
+  box-shadow:
+    calc(1 * var(--mc))   0                     0 var(--c-wood-dark),  /* belly */
+    calc(2 * var(--mc))   0                     0 var(--c-wood-dark),  /* belly */
+    calc(3 * var(--mc))   0                     0 var(--c-wood-dark),  /* belly */
+    0                     calc(-1 * var(--mc))  0 var(--c-wood-dark),  /* body */
+    calc(1 * var(--mc))   calc(-1 * var(--mc))  0 var(--c-wood-dark),  /* body */
+    calc(2 * var(--mc))   calc(-1 * var(--mc))  0 var(--c-wood-dark),  /* body */
+    calc(3 * var(--mc))   calc(-1 * var(--mc))  0 var(--c-wood-dark),  /* body */
+    calc(4 * var(--mc))   calc(-1 * var(--mc))  0 var(--c-wood-dark),  /* head */
+    calc(5 * var(--mc))   calc(-1 * var(--mc))  0 var(--c-wood-dark),  /* snout */
+    calc(1 * var(--mc))   calc(-2 * var(--mc))  0 var(--c-wood-dark),  /* back */
+    calc(2 * var(--mc))   calc(-2 * var(--mc))  0 var(--c-wood-dark),  /* back */
+    calc(4 * var(--mc))   calc(-2 * var(--mc))  0 var(--c-wood-dark),  /* ear */
+    calc(-1 * var(--mc))  0                     0 var(--c-wood-dark),  /* tail */
+    calc(-2 * var(--mc))  0                     0 var(--c-wood-dark),  /* tail */
+    calc(-3 * var(--mc))  calc(-1 * var(--mc))  0 var(--c-wood-dark);  /* tail, up */
+}
+.mouse.is-bolting {
+  display: block;
+  animation-name: mouse-bolt, mouse-face;
+  animation-duration: 1.5s, 1.5s;
+  animation-timing-function: linear, step-end;
+  animation-iteration-count: 1, 1;
+  animation-fill-mode: forwards, forwards;
+}
+
+/* Out from under log 4 (its ring spans 24–32px of the rick, the rick's right
+ * end is at 34), forward and right onto the grass, stopped dead for over a
+ * third of the round, and back under. `bottom` below nought is the grass in
+ * front of the rick's foot. The out-run is quicker than the way back is long
+ * because a bolting thing has somewhere to get to; the return is a dart too,
+ * only shorter, since the cover is near. */
+@keyframes mouse-bolt {
+  0%   { left: 22px; bottom:  0;    }
+  12%  { left: 32px; bottom:  0;    }
+  22%  { left: 40px; bottom: -4px;  }
+  28%  { left: 44px; bottom: -6px;  }
+  70%  { left: 44px; bottom: -6px;  }
+  84%  { left: 36px; bottom: -2px;  }
+  100% { left: 24px; bottom:  0;    }
+}
+/* Which way she faces, stepped, so she turns in one frame at the end of the
+ * hold. Flipped about her own cell, so the drawing swings round its body. */
+@keyframes mouse-face {
+  0%   { scale: 1 1;  }
+  70%  { scale: -1 1; }
+  100% { scale: -1 1; }
+}
+
+/* THE REACH. The rick is 34×20 and fixed-native, under the 44px minimum at
+ * every width (Article VIII), so a transparent sibling carries the press, the
+ * button semantics and the focus ring — the bench's arrangement. It begins
+ * exactly where the bench's reach ends (`50% + 22px`) so the two never share a
+ * pixel, which puts it over the rick's right end, where she comes out, and the
+ * grass she runs onto. `bottom` is the rick's own, so it grows upward over the
+ * wall. z 5, with every other pad; under the map card. */
+.rick-touch {
+  position: absolute;
+  display: block;
+  z-index: 5;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  left: calc(50% + 22px);
+  bottom: 6%;
+  width: 30px;
+  height: 20px;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  -webkit-tap-highlight-color: rgba(215, 122, 118, 0.3);
+}
+.rick-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+
 /* ── Mailbox at the path's mouth (Day 59, 2026-07-06) ──────────────────────
  * The clearing's first outward-facing object — a name at the yard's edge, so
  * the place stays findable with no one home (see the note in scene.html). Drawn
@@ -4314,4 +4442,19 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * loses (Day 141). Both crowns stand at 2 css px a native cell here. */
 @media (max-width: 599px) {
   .sprite--blossom { --u: 2px; }
+}
+
+/* Day 176: room for the rick's reach on a phone. At the 2x layout the rick
+ * stands at 50% + 8px … 42px, the bench's centred reach runs to 50% + 22px and
+ * the mailbox's ::before began at 50% + 52px, which left the rick 30px of its
+ * own — under the minimum. So the bench's reach moves 7px left (it still covers
+ * the whole bench, 50% − 10px … 10px, and still clears the bed's reach, which
+ * ends at 50% − 38px), the mailbox's narrows to the 44px minimum on the box's
+ * own 42 (it was 58), and the rick's starts at 50% + 15px. Three pads, edge to
+ * edge, sharing no pixel. At the foot of the file, after every rule it
+ * rebases (Day 141). */
+@media (max-width: 599px) {
+  .bench-touch             { margin-left: -29px; }
+  .rick-touch              { left: calc(50% + 15px); bottom: 8%; }
+  .sprite--mailbox::before { inset: -6px -1px; }
 }

@@ -875,6 +875,39 @@
     return 4;
   }
 
+  /* ── the mouse's squeak (Day 176, 2026-10-31) ─────────────────────────────
+   *
+   * A mouse sent out of the rick by a knock. The third voice here, after the
+   * geese and the wren, and the smallest and nearest of the three: two thin
+   * squeaks, high, each sliding up and falling off the way a squeak does,
+   * the second softer and a touch lower as she gets away from the hand.
+   *
+   * `call()` again, because a squeak is a throat and not a release, but set
+   * high — five and a half kilohertz, over the wren's four — with the formant
+   * riding above it and the air left open, since she is a foot from the
+   * knock. At that pitch the lowpass at nine kilohertz leaves the sawtooth
+   * barely more than its fundamental, which is what a squeak is: nearly a
+   * pure tone. Short, 55 and 45 milliseconds, because a mouse does not hold a
+   * note.
+   *
+   * Peak 0.05, under the wren's 0.07: a smaller animal, and a sharper pitch.
+   * Done inside a quarter second (rule 2). Rule 4 is kept by the mouse herself,
+   * who goes out onto the grass and back in every season and every hour, so
+   * there is no knock that gets this without her.
+   *
+   * Returns the number of sources started — always 2, or 0 with no context. */
+  function squeak() {
+    var c = context();
+    if (!c) return 0;
+
+    var f = 5300 + Math.random() * 500;
+    call(c, 0.000, 0.055, 0.050, f, f * 1.12, f * 1.3, f * 1.6, 9000);
+    call(c, 0.110 + Math.random() * 0.03, 0.045, 0.034,
+         f * 0.94, f * 1.04, f * 1.2, f * 1.5, 9000);
+
+    return 2;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -890,6 +923,7 @@
     ring: ring,
     clack: clack,
     chip: chip,
+    squeak: squeak,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

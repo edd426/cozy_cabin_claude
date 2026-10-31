@@ -252,6 +252,11 @@
        out). No data-season / JS off keeps all-year 4+3. See scene.css. -->
   <span class="sprite sprite--woodpile" role="img"
         aria-label="A low pile of cut firewood stacked against the cabin's front wall — split logs seen end-on, their pale sawn faces ringed in dark bark. The store the chimney's smoke comes from: laid in full by autumn, burned low through winter, at its thinnest in spring, restacked by summer.">
+    <!-- Day 176: the mouse who lives in the rick. First child, so every log
+         paints over her and she comes out from BEHIND the end billet rather
+         than being laid on top of it. display:none until touch.js puts
+         `is-bolting` on her; never drawn at rest. See scene.css. -->
+    <span class="mouse" aria-hidden="true"></span>
     <span class="woodpile-log woodpile-log--1"></span>
     <span class="woodpile-log woodpile-log--2"></span>
     <span class="woodpile-log woodpile-log--3"></span>
@@ -262,6 +267,17 @@
     <span class="woodpile-log woodpile-log--8"></span>
     <span class="woodpile-log woodpile-log--9"></span>
   </span>
+
+  <!-- THE REACH over the rick (Day 176, 2026-10-31). Knock on the stacked wood
+       and the mouse who lives in it bolts out from under the end billet onto
+       the grass, freezes, and darts back in. The pad says the rick takes a
+       hand; nothing says there is anyone in it, the bed's arrangement with the
+       bee (Day 146). Transparent; not a pixel of the rick moves. It starts
+       where the bench's reach ends, so it covers the rick's right end, which
+       is where she comes out. See scene.css for her, and touch.js for why a
+       knock may send her out and may not keep her there. -->
+  <span class="rick-touch" role="button" tabindex="0"
+        aria-label="knock on the woodpile"></span>
 
   <!-- Mailbox at the head of the path (Day 59, 2026-07-06): the first thing out
        here that faces OUT toward the world rather than in toward whoever's

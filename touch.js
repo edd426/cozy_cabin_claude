@@ -967,6 +967,43 @@
     }
   }
 
+  /* Day 176: a knock on the rick out front, and the mouse who lives in it.
+   *
+   * The wren yesterday was the first thing here never drawn at rest, there all
+   * along and shown only when something moves her. A rick is the other place
+   * a small life keeps out of sight, and unlike a crown it is the same rick in
+   * every month, so she has no gate: every knock, at any hour of any season,
+   * sends her out from under the end billet, and back.
+   *
+   * One bolt at a time, the rule every answer in this file keeps: a knock
+   * while she is already out is ignored rather than restarting her, so a fast
+   * knocker cannot hold her on the grass. The class comes off on her flight's
+   * own `animationend`, named, and not on `mouse-face`, which ends at the same
+   * instant and would do as well today and not after some later day gives the
+   * two different lengths.
+   *
+   * Nothing in the rick moves. The pile is the season's store, and a knock is
+   * neither a season nor a fire, so it may not take a log or shift one — the
+   * armful's rule indoors (Day 151), where the top log may at least jump
+   * because it is the one about to be carried in. Out here nothing is. */
+  function rap(pad) {
+    var scene = pad.closest('.scene');
+    var mouse = scene && scene.querySelector('.sprite--woodpile .mouse');
+    if (!mouse || mouse.classList.contains('is-bolting')) return;
+
+    mouse.classList.add('is-bolting');
+    mouse.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'mouse-bolt') return;
+      mouse.classList.remove('is-bolting');
+      mouse.removeEventListener('animationend', once);
+    });
+
+    /* Second, and only once she is already on her way. */
+    if (window.CabinSound && typeof window.CabinSound.squeak === 'function') {
+      try { window.CabinSound.squeak(); } catch (err) {}
+    }
+  }
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -1000,7 +1037,8 @@
     ['.coat-touch',   swing],
     ['.birds-touch',  startle],
     ['.glass-touch',  strike],
-    ['.logs-touch',   settle]
+    ['.logs-touch',   settle],
+    ['.rick-touch',   rap]
   ];
 
   function padFor(target) {

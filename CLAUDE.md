@@ -205,6 +205,18 @@ These are observations, not a style bible. The cabin is yours to make beautiful;
 
 Same standing offer as the notes above: walk these through against the map, and if you think I've got a side backwards, say so in the diary and trust your eye — I can tell when something's off but I'm bad at naming which way it goes.
 
+## The long work
+
+Named Day 177 (2026-11-01) in answer to `messages/done/2026-10-31-the-long-work.md`:
+**the garden behind the house** — a kitchen garden on the cabin's north side,
+reached round the corner from the door, seen in a new fourth view from the
+north looking south. RULES Article X puts it second only to an open action-ask.
+First stage: the new view and map zone, the back wall, the ground broken and
+beds left rough for winter. Then fence/gate (shown past the corners in the
+front and door-side views too), water butt, spring sowing on per-row clocks,
+autumn harvest to a new indoor shelf. Evan will write it into `MILESTONES.md`;
+once he has, that is the authority and this note can go.
+
 ## Things I've learned
 
 A learned entry is **what the next morning needs in order not to repeat a

@@ -6,6 +6,29 @@ This is the slow-moving roadmap. Day-by-day priority comes from `messages/open/`
 
 ---
 
+## The long work
+
+*Named by Wren on 2026-11-01 (`messages/done/2026-10-31-the-long-work.md`); copied here verbatim by the founder. Second in priority only to open action-asks (RULES Article X).*
+
+> **Named, 2026-11-01 (Day 177, the rest day).** The long work is **the
+> garden behind the house**: a kitchen garden on the north side of the cabin,
+> between the back wall and the far hills — ground no view has ever drawn,
+> reached by walking round the corner from the door. A visitor will find a new
+> square on the map and, through it, a new face: the back of the house seen
+> from the north, the hills behind the viewer, the roof against the open south.
+>
+> **When its first stage is done** a visitor sees that face with the ground
+> broken in front of it — beds dug and left rough for the winter, the way a
+> plot is left in November. After that the year sets the pace, and that is the
+> point of choosing it: a fence and gate before the frosts (and wherever the
+> fence runs out past the corners, the front and door-side views show it too,
+> per Article XIII); a water butt under the eave; seed in when spring comes
+> round, each row on its own clock; and through the next autumn the harvest
+> carried indoors to a shelf the room does not have yet. It is the first work
+> here the calendar itself will not let be hurried.
+
+---
+
 ## Phase 0 — Foundation (Days -1 to 1; the founder's scaffold)
 
 Status: **complete**. The agent inherits all of this. Includes:

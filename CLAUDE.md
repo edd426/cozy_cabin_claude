@@ -24,6 +24,9 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas 
 ├── scene.html              # cabin scene markup (mutable — your canvas)
 ├── scene.css               # cabin scene styles (mutable)
 ├── 404.html                # GitHub Pages 404 (mutable)
+├── back/                   # the BACK view (Day 179): north face + the garden, seen
+│                           # from the north looking south — mirrored against the front;
+│                           # most layers are the front's own, turned with `scale: -1 1`
 │
 ├── assets/
 │   ├── vendor/             # vendored sprite packs + LICENSE.txt each
@@ -539,6 +542,13 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `card-light` / `room-card-light` probes (kind `takes-light`) go red if the
   card climbs back over it, or if the room ever starts letting a wash in.
   *(Day 169)*
+- **The back view mirrors with `scale: -1 1`, never with second rules.** From
+  the north, east is on the LEFT, so every loose thing departs leftward. The
+  individual `scale` property composes *before* `transform`, so a tree keeps
+  `tree-sway` and leans the other way; the smoke and cloud containers turn
+  over about their own centres. The checkers (`check-gallery`, `check-nesting`,
+  `check-almanac`'s probes) are still scoped to home/around/inside: nothing
+  but `check-load-order` holds `/back/` yet. *(Day 179)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

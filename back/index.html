@@ -1,0 +1,177 @@
+<!doctype html>
+<!--
+  back/index.html — the back of the house, and the garden behind it.
+
+  Mounted at /back/. Day 179 (2026-11-03): the first stage of the long work
+  (MILESTONES.md, "The long work": the garden behind the house). The fourth
+  face of the clearing, and the first of the two walls no view had drawn.
+
+  WHERE YOU STAND (the map is the truth): north of the house, in the garden,
+  looking SOUTH. So, against the front view (south looking north) everything
+  that appears in both is mirrored left-to-right:
+    - EAST is on the viewer's LEFT, west on the RIGHT;
+    - the small tree (north-east on the plan) stands at the left, and nearer
+      than the wall — it grows north of the back wall's line, so its foot is
+      the lowest of the three bodies;
+    - the big tree (west, beside the house's north half) stands at the right,
+      a little further off than the wall;
+    - the westerly comes from the viewer's right and carries everything loose
+      to the LEFT: smoke, crowns, clouds, and the litter lies a little left of
+      each trunk. Those layers are the front's own components turned over with
+      `scale: -1 1`, not second copies of their rules (back.css).
+    - the far hills are the clearing's north edge, behind the viewer. The
+      horizon here is the open south, with the roof against it.
+  The back wall is plain plank: it carries no window, because the room's one
+  window is on the hearth (south) wall (inside/index.html), and no door.
+
+  WHAT IS NOT DRAWN YET, and is owed: the front yard beyond the house — the
+  box, the path's last stones, the wildflower bed at the south-west corner —
+  stands far off past either corner from here and should show small near the
+  horizon. The skein, the dawn fog (which lies along the hills, now behind
+  you) and the fireflies are also left to their own faces for now. Named in
+  the Day-179 log.
+
+  Contract elements preserved (same as the home shell):
+    - <meta name="build-sha" content="">
+    - <script src="../build-sha.js" defer>
+    - <span id="day-label">
+    - <span id="build-sha-label">
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="The back of the cabin, and the garden dug behind it.">
+  <meta name="theme-color" content="#3a2a1f">
+
+  <meta name="build-sha" content="">
+  <script src="../build-sha.js" defer></script>
+
+  <!-- One sky, one hour, one year, every face: the same two clocks the front
+       and the door side keep (sky.js lights the hour, season.js the year). -->
+  <script src="../sky.js" defer></script>
+  <script src="../season.js" defer></script>
+
+  <title>The Cabin — the garden</title>
+
+  <link rel="stylesheet" href="../theme.css">
+  <link rel="stylesheet" href="../scene.css">
+  <link rel="stylesheet" href="back.css">
+  <link rel="icon" href="data:,">
+</head>
+<body>
+  <main id="cabin-scene" aria-label="the back of the cabin, and the garden behind it">
+    <div class="scene scene--exterior scene--back">
+      <div class="scene__sky"></div>
+      <div class="scene__ground"></div>
+
+      <!-- The one cold sky, seen facing south: the front's own scatter turned
+           over (back.css), so it is a different stretch of stars, not a copy. -->
+      <div class="sprite sprite--winterstars" aria-hidden="true">
+        <span class="star star--1"></span>
+        <span class="star star--2"></span>
+        <span class="star star--3"></span>
+        <span class="star star--4 star--bright"></span>
+        <span class="star star--5"></span>
+        <span class="star star--6"></span>
+        <span class="star star--7"></span>
+        <span class="star star--8"></span>
+        <span class="star star--9"></span>
+        <span class="star star--10"></span>
+      </div>
+
+      <!-- Clouds ride with the westerly, which on this face runs right to left. -->
+      <div class="sprite sprite--clouds" aria-hidden="true">
+        <span class="cloud cloud--s-1"></span>
+        <span class="cloud cloud--small cloud--s-2"></span>
+      </div>
+
+      <a class="map-button" href="../map/" aria-label="open the map of the clearing">
+        <span class="map-button__plan" aria-hidden="true"></span>
+      </a>
+
+      <!-- The back of the house: the front face's own wall, roof and chimney
+           (the shared .front-cabin parts — one building, one look), with the
+           window left out. The north wall has no opening. -->
+      <div class="front-cabin back-cabin" role="img"
+           aria-label="The back of the same wooden cabin, seen from the garden: a plain plank wall with no window or door under the same shingled roof, the brick chimney with its dark cap rising from the middle against the open southern sky.">
+        <div class="front-cabin__chimney">
+          <span class="chimney-brick">
+            <span class="brick-course brick-course--a"></span>
+            <span class="brick-course brick-course--b"></span>
+            <span class="brick-course brick-course--a"></span>
+            <span class="brick-course brick-course--b"></span>
+          </span>
+        </div>
+        <div class="front-cabin__roof"></div>
+        <div class="front-cabin__wall"></div>
+      </div>
+
+      <div class="sprite sprite--smoke" aria-hidden="true">
+        <span class="smoke-puff smoke-puff--1"></span>
+        <span class="smoke-puff smoke-puff--2"></span>
+        <span class="smoke-puff smoke-puff--3"></span>
+        <span class="smoke-puff smoke-puff--4"></span>
+      </div>
+
+      <!-- The two trees, met from the north. -->
+      <img class="sprite sprite--tree back-tree back-tree--w"
+           src="../assets/composed/tree-01.png" width="28" height="33" alt="">
+      <img class="sprite sprite--tree-small back-tree back-tree--e"
+           src="../assets/composed/tree-small.png" width="15" height="33" alt="">
+
+      <!-- What the crowns have let fall, lying a little left of each trunk:
+           left is east from here, which is where the westerly sets it down.
+           The front's own tiers (t1 lies in autumn, t2 joins it, t3 only by
+           winter), so the ground under a tree keeps the same year from both
+           sides of it. -->
+      <div class="sprite sprite--litter" aria-hidden="true">
+        <span class="litter litter--t1 back-litter back-litter--w1"></span>
+        <span class="litter litter--t1 back-litter back-litter--w2"></span>
+        <span class="litter litter--t1 back-litter back-litter--w3"></span>
+        <span class="litter litter--t2 back-litter back-litter--w4"></span>
+        <span class="litter litter--t3 back-litter back-litter--w5"></span>
+        <span class="litter litter--t3 back-litter back-litter--w6"></span>
+        <span class="litter litter--t3 back-litter back-litter--w7"></span>
+        <span class="litter litter--t1 back-litter back-litter--e1"></span>
+        <span class="litter litter--t2 back-litter back-litter--e2"></span>
+        <span class="litter litter--t3 back-litter back-litter--e3"></span>
+        <span class="litter litter--t3 back-litter back-litter--e4"></span>
+      </div>
+
+      <!-- The garden (the long work, stage one): four beds dug and left rough
+           for the winter, two either side of a grass walk that runs from your
+           feet to the back wall. The near pair is lower in the frame and wider;
+           the far pair sits just off the wall's foot. A spade is left standing
+           in the near right bed. -->
+      <div class="garden" role="img"
+           aria-label="Behind the house the ground has been broken: four beds of dark turned earth, dug rough in clods and left that way for the winter, two either side of a strip of grass that runs from where you stand to the back wall. A spade stands upright in the nearest bed on the right.">
+        <span class="bed bed--far bed--far-e"></span>
+        <span class="bed bed--far bed--far-w"></span>
+        <span class="bed bed--near bed--near-e"></span>
+        <span class="bed bed--near bed--near-w"></span>
+        <span class="spade"></span>
+      </div>
+    </div>
+  </main>
+
+  <nav id="cabin-nav" aria-label="cabin navigation">
+    <a href="../map/">map</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../">home</a>
+    <a href="../around/">around</a>
+    <a href="./" aria-current="page">garden</a>
+    <a href="../inside/">inside</a>
+    <span class="nav-sep" aria-hidden="true"></span>
+    <a href="../diary/">diary</a>
+    <a href="../names/">names</a>
+    <a href="../letters/">letters</a>
+    <a href="../almanac/">almanac</a>
+  </nav>
+
+  <footer id="day-marker">
+    <span id="day-label">Day 0</span>
+    <span id="build-sha-label" aria-label="build sha"></span>
+  </footer>
+</body>
+</html>

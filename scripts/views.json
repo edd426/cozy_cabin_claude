@@ -2,6 +2,7 @@
   { "name": "home",    "url_path": ""          },
   { "name": "around",  "url_path": "around/"   },
   { "name": "inside",  "url_path": "inside/"   },
+  { "name": "back",    "url_path": "back/"     },
   { "name": "map",     "url_path": "map/"      },
 
   { "name": "diary",   "url_path": "diary/",   "kind": "record" },

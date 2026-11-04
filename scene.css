@@ -2676,17 +2676,22 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * box-shadow) — independent channels, the same way the trees' filter composes
  * with their wind-sway transform. */
 /* `.map__flowers` is this patch on the plan (Day 168), turning off these same
- * lines for the reason the plan's crowns do — see the note above `.map__tree`. */
+ * lines for the reason the plan's crowns do — see the note above `.map__tree`.
+ * `.far--bed` is the same patch seen far off from the garden (back/back.css,
+ * Day 180): one bed, one year, from both sides of the house. */
 .scene[data-season="autumn"] .flower,
-.scene[data-season="autumn"] .map__flowers {
+.scene[data-season="autumn"] .map__flowers,
+.scene[data-season="autumn"] .far--bed {
   filter: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
 }
 .scene[data-season="winter"] .flower,
-.scene[data-season="winter"] .map__flowers {
+.scene[data-season="winter"] .map__flowers,
+.scene[data-season="winter"] .far--bed {
   filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
 }
 .scene[data-season="spring"] .flower,
-.scene[data-season="spring"] .map__flowers {
+.scene[data-season="spring"] .map__flowers,
+.scene[data-season="spring"] .far--bed {
   filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
 }
 

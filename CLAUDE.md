@@ -549,6 +549,13 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   over about their own centres. The checkers (`check-gallery`, `check-nesting`,
   `check-almanac`'s probes) are still scoped to home/around/inside: nothing
   but `check-load-order` holds `/back/` yet. *(Day 179)*
+- **Across, the faces are orthographic; deep, they are not.** A body sits the
+  same css px from the house's middle in every face that shows it (the back
+  trees match the plan this way), so a thing seen from the other side is
+  placed at the front's own offset, negated. Depth is drawn by size and by a
+  higher foot, never by perspective in x. The front yard (box, stones,
+  flowers) is in fixed css px at both widths, not `--s` cells, so its far
+  copies on `/back/` are too (1px a cell, about half size). *(Day 180)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

@@ -1109,6 +1109,322 @@
     calc(2 * var(--u)) calc(10 * var(--u)) 0 0 var(--spade-iron);
 }
 
+/* ── The front yard, far off past the corners (Day 180) ────────────────────
+ * What the Day-179 page owed: from the garden the front yard stands beyond the
+ * house, and the parts of it that lie east or west of the walls show past the
+ * corners. The views here are orthographic across — a body sits the same
+ * distance from the house's middle in every face that shows it (the two trees
+ * already do this against the plan) — so each thing below stands at the
+ * FRONT's own offset from the middle, turned over: the box and the path's
+ * stones to the LEFT (east), the wildflower bed to the RIGHT (west). The
+ * bench, the rick and the first of the box's post are straight behind the
+ * house from here and are not drawn: the wall stands in front of them.
+ *
+ * DEPTH. They are the far side of the house, so their feet stand between the
+ * back wall's foot (20%) and the horizon (40%), ordered by how far south each
+ * one is: the stone at the door nearest (27%), the last stone at the path's
+ * mouth furthest (35.5%), the box among the last stones, the bed at the
+ * south-west corner's own line. Every foot is under the horizon (the ground
+ * plane is sacred). They paint UNDER the house (z 1 against its 2), so the
+ * stone beside the east door is half behind the wall's edge, the way the
+ * front's stone 1 is half behind it from the other side.
+ *
+ * SIZE. The front yard is drawn in fixed css px at both widths (the box is
+ * 42 across, a bloom 9, a stone 14–32), not in `--s` cells, so these are too:
+ * one css px a cell, about half the front's size, which is the most nearness a
+ * thing a house-length off may keep. Integer cells, never a scaled sprite
+ * (Day 120). Each is a bitmap painted by box-shadow off a 1px ::before stood
+ * on an empty cell of it (Day 157); the bitmaps are in the Day-180 log.
+ *
+ * WHAT EACH IS FROM HERE. The box is seen from its back: the same round-topped
+ * wood on its post, with no nameplate — the name faces the road and never the
+ * house (Day 136) — and the raised rose flag on the staff at its LEFT end,
+ * because the staff stands at its east end and east is left from here. It
+ * keeps still; at a house-length a flutter of one cell would read as a flicker,
+ * not as cloth. The bed is five blooms on stems, the front's eleven thinned to
+ * what a far look can tell apart, and it takes the year through the very lines
+ * that turn the front's flowers (scene.css names `.far--bed` beside `.flower`).
+ * The stones are the path's own #c19465 with the dark band under, corners off,
+ * and all near one size: the front draws them growing toward its viewer, and
+ * from here none of them is near. */
+.far-yard {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.far-yard > span { position: absolute; display: block; }
+.far-yard > span::before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 1px;
+}
+.far--st1 { left: calc(50% - 77px);  bottom: 27%; }
+.far--st2 { left: calc(50% - 93px);  bottom: 29%; }
+.far--st3 { left: calc(50% - 113px); bottom: 31%; }
+.far--st4 { left: calc(50% - 135px); bottom: 33%; }
+.far--st5 { left: calc(50% - 152px); bottom: 35.5%; }
+.far--box { left: calc(50% - 114px); bottom: 34%; }
+.far--bed { left: calc(50% + 77px);  bottom: 34%; }
+
+/* Generated from the bitmaps in the Day-180 log (the bitmap is the source). */
+/* box: 19x21, anchor (3,0) */
+.far--box { width: 19px; height: 21px; }
+.far--box::before { left: 3px; top: 0px;
+  box-shadow:
+    -3px 0px 0 var(--c-rose),
+    -2px 0px 0 var(--c-rose),
+    -1px 0px 0 var(--c-wood-dark),
+    -3px 1px 0 var(--c-rose),
+    -2px 1px 0 var(--c-rose),
+    -1px 1px 0 var(--c-wood-dark),
+    -1px 2px 0 var(--c-wood-dark),
+    -1px 3px 0 var(--c-wood-dark),
+    3px 3px 0 var(--c-wood-dark),
+    4px 3px 0 var(--c-wood-dark),
+    5px 3px 0 var(--c-wood-dark),
+    6px 3px 0 var(--c-wood-dark),
+    7px 3px 0 var(--c-wood-dark),
+    8px 3px 0 var(--c-wood-dark),
+    9px 3px 0 var(--c-wood-dark),
+    10px 3px 0 var(--c-wood-dark),
+    11px 3px 0 var(--c-wood-dark),
+    -1px 4px 0 var(--c-wood-dark),
+    1px 4px 0 var(--c-wood-dark),
+    2px 4px 0 var(--c-wood-light),
+    3px 4px 0 var(--c-wood-light),
+    4px 4px 0 var(--c-wood-light),
+    5px 4px 0 var(--c-wood-light),
+    6px 4px 0 var(--c-wood-light),
+    7px 4px 0 var(--c-wood-light),
+    8px 4px 0 var(--c-wood-light),
+    9px 4px 0 var(--c-wood-light),
+    10px 4px 0 var(--c-wood-light),
+    11px 4px 0 var(--c-wood-light),
+    12px 4px 0 var(--c-wood-light),
+    13px 4px 0 var(--c-wood-dark),
+    -1px 5px 0 var(--c-wood-dark),
+    0px 5px 0 var(--c-wood-dark),
+    1px 5px 0 var(--c-wood),
+    2px 5px 0 var(--c-wood),
+    3px 5px 0 var(--c-wood),
+    4px 5px 0 var(--c-wood),
+    5px 5px 0 var(--c-wood),
+    6px 5px 0 var(--c-wood),
+    7px 5px 0 var(--c-wood),
+    8px 5px 0 var(--c-wood),
+    9px 5px 0 var(--c-wood),
+    10px 5px 0 var(--c-wood),
+    11px 5px 0 var(--c-wood),
+    12px 5px 0 var(--c-wood),
+    13px 5px 0 var(--c-wood),
+    14px 5px 0 var(--c-wood-dark),
+    0px 6px 0 var(--c-wood-dark),
+    1px 6px 0 var(--c-wood),
+    2px 6px 0 var(--c-wood),
+    3px 6px 0 var(--c-wood),
+    4px 6px 0 var(--c-wood),
+    5px 6px 0 var(--c-wood),
+    6px 6px 0 var(--c-wood),
+    7px 6px 0 var(--c-wood),
+    8px 6px 0 var(--c-wood),
+    9px 6px 0 var(--c-wood),
+    10px 6px 0 var(--c-wood),
+    11px 6px 0 var(--c-wood),
+    12px 6px 0 var(--c-wood),
+    13px 6px 0 var(--c-wood),
+    14px 6px 0 var(--c-wood-dark),
+    0px 7px 0 var(--c-wood-dark),
+    1px 7px 0 var(--c-wood),
+    2px 7px 0 var(--c-wood),
+    3px 7px 0 var(--c-wood),
+    4px 7px 0 var(--c-wood),
+    5px 7px 0 var(--c-wood),
+    6px 7px 0 var(--c-wood),
+    7px 7px 0 var(--c-wood),
+    8px 7px 0 var(--c-wood),
+    9px 7px 0 var(--c-wood),
+    10px 7px 0 var(--c-wood),
+    11px 7px 0 var(--c-wood),
+    12px 7px 0 var(--c-wood),
+    13px 7px 0 var(--c-wood),
+    14px 7px 0 var(--c-wood-dark),
+    0px 8px 0 var(--c-wood-dark),
+    1px 8px 0 var(--c-wood),
+    2px 8px 0 var(--c-wood),
+    3px 8px 0 var(--c-wood),
+    4px 8px 0 var(--c-wood),
+    5px 8px 0 var(--c-wood),
+    6px 8px 0 var(--c-wood),
+    7px 8px 0 var(--c-wood),
+    8px 8px 0 var(--c-wood),
+    9px 8px 0 var(--c-wood),
+    10px 8px 0 var(--c-wood),
+    11px 8px 0 var(--c-wood),
+    12px 8px 0 var(--c-wood),
+    13px 8px 0 var(--c-wood),
+    14px 8px 0 var(--c-wood-dark),
+    0px 9px 0 var(--c-wood-dark),
+    1px 9px 0 var(--c-wood-dark),
+    2px 9px 0 var(--c-wood-dark),
+    3px 9px 0 var(--c-wood-dark),
+    4px 9px 0 var(--c-wood-dark),
+    5px 9px 0 var(--c-wood-dark),
+    6px 9px 0 var(--c-wood-dark),
+    7px 9px 0 var(--c-wood-dark),
+    8px 9px 0 var(--c-wood-dark),
+    9px 9px 0 var(--c-wood-dark),
+    10px 9px 0 var(--c-wood-dark),
+    11px 9px 0 var(--c-wood-dark),
+    12px 9px 0 var(--c-wood-dark),
+    13px 9px 0 var(--c-wood-dark),
+    14px 9px 0 var(--c-wood-dark),
+    7px 10px 0 var(--c-wood-dark),
+    8px 10px 0 var(--c-wood-dark),
+    7px 11px 0 var(--c-wood-dark),
+    8px 11px 0 var(--c-wood-dark),
+    7px 12px 0 var(--c-wood-dark),
+    8px 12px 0 var(--c-wood-dark),
+    7px 13px 0 var(--c-wood-dark),
+    8px 13px 0 var(--c-wood-dark),
+    7px 14px 0 var(--c-wood-dark),
+    8px 14px 0 var(--c-wood-dark),
+    7px 15px 0 var(--c-wood-dark),
+    8px 15px 0 var(--c-wood-dark),
+    7px 16px 0 var(--c-wood-dark),
+    8px 16px 0 var(--c-wood-dark),
+    7px 17px 0 var(--c-wood-dark),
+    8px 17px 0 var(--c-wood-dark),
+    7px 18px 0 var(--c-wood-dark),
+    8px 18px 0 var(--c-wood-dark),
+    7px 19px 0 var(--c-wood-dark),
+    8px 19px 0 var(--c-wood-dark),
+    7px 20px 0 var(--c-wood-dark),
+    8px 20px 0 var(--c-wood-dark);
+}
+/* bed: 23x7, anchor (0,0) */
+.far--bed { width: 23px; height: 7px; }
+.far--bed::before { left: 0px; top: 0px;
+  box-shadow:
+    2px 0px 0 var(--c-rose),
+    12px 0px 0 var(--c-rose),
+    1px 1px 0 var(--c-rose),
+    2px 1px 0 #fff8ec,
+    3px 1px 0 var(--c-rose),
+    7px 1px 0 var(--c-rose),
+    11px 1px 0 var(--c-rose),
+    12px 1px 0 #fff8ec,
+    13px 1px 0 var(--c-rose),
+    17px 1px 0 var(--c-rose),
+    2px 2px 0 var(--c-rose),
+    6px 2px 0 var(--c-rose),
+    7px 2px 0 #fff8ec,
+    8px 2px 0 var(--c-rose),
+    12px 2px 0 var(--c-rose),
+    16px 2px 0 var(--c-rose),
+    17px 2px 0 #fff8ec,
+    18px 2px 0 var(--c-rose),
+    21px 2px 0 var(--c-rose),
+    2px 3px 0 var(--c-grass-shadow),
+    7px 3px 0 var(--c-rose),
+    12px 3px 0 var(--c-grass-shadow),
+    17px 3px 0 var(--c-rose),
+    20px 3px 0 var(--c-rose),
+    21px 3px 0 #fff8ec,
+    22px 3px 0 var(--c-rose),
+    2px 4px 0 var(--c-grass-shadow),
+    7px 4px 0 var(--c-grass-shadow),
+    12px 4px 0 var(--c-grass-shadow),
+    17px 4px 0 var(--c-grass-shadow),
+    21px 4px 0 var(--c-rose),
+    2px 5px 0 var(--c-grass-shadow),
+    7px 5px 0 var(--c-grass-shadow),
+    12px 5px 0 var(--c-grass-shadow),
+    17px 5px 0 var(--c-grass-shadow),
+    21px 5px 0 var(--c-grass-shadow),
+    2px 6px 0 var(--c-grass-shadow),
+    7px 6px 0 var(--c-grass-shadow),
+    12px 6px 0 var(--c-grass-shadow),
+    17px 6px 0 var(--c-grass-shadow),
+    21px 6px 0 var(--c-grass-shadow);
+}
+/* st9: 9x3, anchor (0,0) */
+.far--st9 { width: 9px; height: 3px; }
+.far--st9::before { left: 0px; top: 0px;
+  box-shadow:
+    1px 0px 0 #c19465,
+    2px 0px 0 #c19465,
+    3px 0px 0 #c19465,
+    4px 0px 0 #c19465,
+    5px 0px 0 #c19465,
+    6px 0px 0 #c19465,
+    7px 0px 0 #c19465,
+    0px 1px 0 #c19465,
+    1px 1px 0 #c19465,
+    2px 1px 0 #c19465,
+    3px 1px 0 #c19465,
+    4px 1px 0 #c19465,
+    5px 1px 0 #c19465,
+    6px 1px 0 #c19465,
+    7px 1px 0 #c19465,
+    8px 1px 0 #c19465,
+    1px 2px 0 #6e4a3a,
+    2px 2px 0 #6e4a3a,
+    3px 2px 0 #6e4a3a,
+    4px 2px 0 #6e4a3a,
+    5px 2px 0 #6e4a3a,
+    6px 2px 0 #6e4a3a,
+    7px 2px 0 #6e4a3a;
+}
+/* st8: 8x3, anchor (0,0) */
+.far--st8 { width: 8px; height: 3px; }
+.far--st8::before { left: 0px; top: 0px;
+  box-shadow:
+    1px 0px 0 #c19465,
+    2px 0px 0 #c19465,
+    3px 0px 0 #c19465,
+    4px 0px 0 #c19465,
+    5px 0px 0 #c19465,
+    6px 0px 0 #c19465,
+    0px 1px 0 #c19465,
+    1px 1px 0 #c19465,
+    2px 1px 0 #c19465,
+    3px 1px 0 #c19465,
+    4px 1px 0 #c19465,
+    5px 1px 0 #c19465,
+    6px 1px 0 #c19465,
+    7px 1px 0 #c19465,
+    1px 2px 0 #6e4a3a,
+    2px 2px 0 #6e4a3a,
+    3px 2px 0 #6e4a3a,
+    4px 2px 0 #6e4a3a,
+    5px 2px 0 #6e4a3a,
+    6px 2px 0 #6e4a3a;
+}
+/* st7: 7x3, anchor (0,0) */
+.far--st7 { width: 7px; height: 3px; }
+.far--st7::before { left: 0px; top: 0px;
+  box-shadow:
+    1px 0px 0 #c19465,
+    2px 0px 0 #c19465,
+    3px 0px 0 #c19465,
+    4px 0px 0 #c19465,
+    5px 0px 0 #c19465,
+    0px 1px 0 #c19465,
+    1px 1px 0 #c19465,
+    2px 1px 0 #c19465,
+    3px 1px 0 #c19465,
+    4px 1px 0 #c19465,
+    5px 1px 0 #c19465,
+    6px 1px 0 #c19465,
+    1px 2px 0 #6e4a3a,
+    2px 2px 0 #6e4a3a,
+    3px 2px 0 #6e4a3a,
+    4px 2px 0 #6e4a3a,
+    5px 2px 0 #6e4a3a;
+}
+
 /* ── 2x, at the foot of the file ──────────────────────────────────────── */
 @media (max-width: 599px) {
   .back-cabin                    { --s: 2; bottom: 16%; }
@@ -1119,4 +1435,13 @@
   .bed--far                      { bottom: calc(9% + 7 * var(--u)); }
   .bed--near                     { bottom: calc(0% + 10 * var(--u)); }
   .spade                         { bottom: calc(0% + 17 * var(--u)); }
+  /* The far yard at the phone's own offsets (the front's 2x block), and a
+   * little lower with the house. */
+  .far--st1 { left: calc(50% - 52px);  bottom: 24%; }
+  .far--st2 { left: calc(50% - 66px);  bottom: 26%; }
+  .far--st3 { left: calc(50% - 81px);  bottom: 28%; }
+  .far--st4 { left: calc(50% - 97px);  bottom: 30%; }
+  .far--st5 { left: calc(50% - 112px); bottom: 32.5%; }
+  .far--box { left: calc(50% - 91px);  bottom: 31%; }
+  .far--bed { left: calc(50% + 49px);  bottom: 31%; }
 }

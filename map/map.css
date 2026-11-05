@@ -358,6 +358,35 @@
 .map__bed--1 { left: 39.2%; width: 9.2%; top: 15.6%; }
 .map__bed--2 { left: 51.6%; width: 9.2%; top: 15.6%; }
 
+/* The fence (Day 181), from above: the back wall is the garden's south side,
+ * and the fence meets the wall's line a stride past each corner — 30 native
+ * from the middle in the garden's own cells, the roof here being 24 of them
+ * (11.7%), so 14.6% either side. West, north and east sides as one outline
+ * under the roof (z 1 against its 2), so of the south edge only the two
+ * returns show past the corners; the east return is the gate, drawn in the
+ * lighter wood. The north side stands at four tenths of the house's length
+ * behind it, which is where the door side ends its run (around.css). */
+.map__fence {
+  position: absolute;
+  left: 35.4%;
+  width: 29.2%;
+  top: 5%;
+  height: 19%;
+  border: 2px solid var(--c-wood-dark);
+  box-sizing: border-box;
+  z-index: 1;
+  pointer-events: none;
+}
+.map__fence::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  width: calc(10% + 2px);
+  height: 2px;
+  background: var(--c-wood);
+}
+
 /* diary = the record, not a place: a small journal resting on the map's
  * south-west margin, past the flowers, like a book left on the corner of the
  * drawing. Added Day 35 (2026-06-12) when the bottom strip retired and the

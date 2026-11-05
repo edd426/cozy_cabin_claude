@@ -1425,6 +1425,331 @@
     5px 2px 0 #6e4a3a;
 }
 
+/* ── The fence (the long work, stage two: Day 181) ────────────────────────
+ * Where a fence round a kitchen garden begins: the back wall is its south
+ * side, and the fence meets the wall's line a stride past each corner. Not at
+ * the corners themselves, because the beds were dug first, and the far pair
+ * are wider than the wall (27 native either side of the middle against the
+ * wall's 22). So each corner post stands 30 out, on the wall's foot line, and
+ * the short return between it and the house is the only fence a face to the
+ * south can see (scene.css draws the two returns past the front's corners).
+ *
+ * THE RETURNS. West (right, from here): two rails nailed into the corner. East
+ * (left): the GATE, because east is where the door is, and the walk from the
+ * door comes north along the east wall and meets the gate across its way at
+ * the corner. A framed gate, hung on a post at the wall's corner: two stiles,
+ * two rails, a brace from the low hinge side to the high latch side — the
+ * same brace the front sees from the other side, low at the house both times.
+ *
+ * THE RUNS. From each corner post the side of the garden comes straight
+ * toward you, past the beds and out of the frame under your feet, where the
+ * north side closes it behind you. Drawn the way the beds are drawn — a near
+ * thing is a larger thing, and the near beds are wider than the far ones — so
+ * the two runs open out as they come: each post a little taller, a little
+ * further out, and further apart, 30 native out at the wall to 61 at the post
+ * past the frame's foot, clearing the near beds' 38 at every width. Two rails,
+ * the low one at a little under half a post. The west run is the east run's
+ * bitmap turned over with `scale: -1 1`, cell for cell; the gate is not
+ * mirrored, because there is one gate. Every cell is a flat wood colour, so
+ * neither run has a lit side to answer for.
+ *
+ * Painted like the beds: a 1-cell element standing on an empty cell, the
+ * bitmap in its box-shadow (CLAUDE.md, Day 157). The bitmaps are in the
+ * Day-181 log, and the generator's numbers are the source. z 2, the beds'
+ * own plane: nothing here overlaps the house, so nothing needs to be over it. */
+.fence {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.fence > span {
+  position: absolute;
+  width: var(--u);
+  height: var(--u);
+  --foot: 20%;                       /* the back wall's foot line */
+}
+.fence__run--e { left: calc(50% - 64 * var(--u)); bottom: calc(var(--foot) + 10 * var(--u)); }
+/* The same cells turned over about the element's own centre: a cell k to the
+ * right of an element at 50% + 63u lands k to the left of it, which is the
+ * east run's cell at -64u + k reflected about the middle. */
+.fence__run--w { left: calc(50% + 63 * var(--u)); bottom: calc(var(--foot) + 10 * var(--u)); scale: -1 1; }
+.fence__gate   { left: calc(50% - 31 * var(--u)); bottom: calc(var(--foot) + 10 * var(--u)); }
+.fence__ret    { left: calc(50% + 21 * var(--u)); bottom: calc(var(--foot) + 8 * var(--u)); }
+
+.fence__run--e,
+.fence__run--w {
+  box-shadow:
+    calc(32 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(32 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(31 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(30 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(30 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(29 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(26 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(29 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood),
+    calc(31 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(26 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(28 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(30 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(25 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(28 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood),
+    calc(30 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(24 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(29 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood),
+    calc(32 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(33 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(24 * var(--u)) calc(11 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(11 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(11 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(29 * var(--u)) calc(11 * var(--u)) 0 0 var(--c-wood),
+    calc(23 * var(--u)) calc(12 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(12 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(12 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(28 * var(--u)) calc(12 * var(--u)) 0 0 var(--c-wood),
+    calc(23 * var(--u)) calc(13 * var(--u)) 0 0 var(--c-wood),
+    calc(25 * var(--u)) calc(13 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(13 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(13 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(28 * var(--u)) calc(13 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(14 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(14 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(22 * var(--u)) calc(14 * var(--u)) 0 0 var(--c-wood),
+    calc(24 * var(--u)) calc(14 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(14 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(14 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(19 * var(--u)) calc(15 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(15 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(22 * var(--u)) calc(15 * var(--u)) 0 0 var(--c-wood),
+    calc(24 * var(--u)) calc(15 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(15 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(15 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(18 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(21 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood),
+    calc(23 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(16 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(17 * var(--u)) calc(17 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(17 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(17 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(23 * var(--u)) calc(17 * var(--u)) 0 0 var(--c-wood),
+    calc(26 * var(--u)) calc(17 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(27 * var(--u)) calc(17 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(17 * var(--u)) calc(18 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(18 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(18 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(22 * var(--u)) calc(18 * var(--u)) 0 0 var(--c-wood),
+    calc(16 * var(--u)) calc(19 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(19 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(19 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(22 * var(--u)) calc(19 * var(--u)) 0 0 var(--c-wood),
+    calc(16 * var(--u)) calc(20 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(20 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(20 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(21 * var(--u)) calc(20 * var(--u)) 0 0 var(--c-wood),
+    calc(15 * var(--u)) calc(21 * var(--u)) 0 0 var(--c-wood),
+    calc(18 * var(--u)) calc(21 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(21 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(21 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(21 * var(--u)) calc(21 * var(--u)) 0 0 var(--c-wood),
+    calc(15 * var(--u)) calc(22 * var(--u)) 0 0 var(--c-wood),
+    calc(17 * var(--u)) calc(22 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(22 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(22 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(11 * var(--u)) calc(23 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(23 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(14 * var(--u)) calc(23 * var(--u)) 0 0 var(--c-wood),
+    calc(17 * var(--u)) calc(23 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(23 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(23 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(11 * var(--u)) calc(24 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(24 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(14 * var(--u)) calc(24 * var(--u)) 0 0 var(--c-wood),
+    calc(16 * var(--u)) calc(24 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(24 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(24 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(10 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(13 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood),
+    calc(16 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood),
+    calc(19 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(20 * var(--u)) calc(25 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(9 * var(--u)) calc(26 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(26 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(26 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(15 * var(--u)) calc(26 * var(--u)) 0 0 var(--c-wood),
+    calc(9 * var(--u)) calc(27 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(27 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(27 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(15 * var(--u)) calc(27 * var(--u)) 0 0 var(--c-wood),
+    calc(8 * var(--u)) calc(28 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(28 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(28 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(14 * var(--u)) calc(28 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(29 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(29 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(29 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(14 * var(--u)) calc(29 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(30 * var(--u)) 0 0 var(--c-wood),
+    calc(10 * var(--u)) calc(30 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(30 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(30 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(13 * var(--u)) calc(30 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(31 * var(--u)) 0 0 var(--c-wood),
+    calc(9 * var(--u)) calc(31 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(31 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(31 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(6 * var(--u)) calc(32 * var(--u)) 0 0 var(--c-wood),
+    calc(9 * var(--u)) calc(32 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(32 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(32 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(5 * var(--u)) calc(33 * var(--u)) 0 0 var(--c-wood),
+    calc(8 * var(--u)) calc(33 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(33 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(33 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(34 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(34 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(4 * var(--u)) calc(34 * var(--u)) 0 0 var(--c-wood),
+    calc(8 * var(--u)) calc(34 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(34 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(34 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(35 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(35 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(4 * var(--u)) calc(35 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(35 * var(--u)) 0 0 var(--c-wood),
+    calc(11 * var(--u)) calc(35 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(12 * var(--u)) calc(35 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(36 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(36 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(3 * var(--u)) calc(36 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(36 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(37 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(37 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(6 * var(--u)) calc(37 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(38 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(38 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(5 * var(--u)) calc(38 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(39 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(39 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(5 * var(--u)) calc(39 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(40 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(40 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(4 * var(--u)) calc(40 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(41 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(41 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(4 * var(--u)) calc(41 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(42 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(42 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(3 * var(--u)) calc(42 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(43 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(43 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(44 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(44 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(45 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(45 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(46 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(46 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(47 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(47 * var(--u)) 0 0 var(--c-wood-dark);
+}
+.fence__gate {
+  box-shadow:
+    calc(7 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(2 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(2 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(2 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(7 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(8 * var(--u)) calc(10 * var(--u)) 0 0 var(--c-wood-dark);
+}
+.fence__ret {
+  box-shadow:
+    calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(2 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(8 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
+    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(2 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(6 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(7 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
+    calc(8 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood);
+}
+
 /* ── 2x, at the foot of the file ──────────────────────────────────────── */
 @media (max-width: 599px) {
   .back-cabin                    { --s: 2; bottom: 16%; }
@@ -1435,6 +1760,8 @@
   .bed--far                      { bottom: calc(9% + 7 * var(--u)); }
   .bed--near                     { bottom: calc(0% + 10 * var(--u)); }
   .spade                         { bottom: calc(0% + 17 * var(--u)); }
+  .fence                         { --s: 2; }
+  .fence > span                  { --foot: 16%; }
   /* The far yard at the phone's own offsets (the front's 2x block), and a
    * little lower with the house. */
   .far--st1 { left: calc(50% - 52px);  bottom: 24%; }

@@ -556,6 +556,14 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   higher foot, never by perspective in x. The front yard (box, stones,
   flowers) is in fixed css px at both widths, not `--s` cells, so its far
   copies on `/back/` are too (1px a cell, about half size). *(Day 180)*
+- **To mirror a box-shadow bitmap, `scale: -1 1` its 1-cell element and move
+  the element one cell in.** The flip is about the element's own centre, so an
+  east copy at `left: calc(50% - M * u)` has its west twin at
+  `calc(50% + (M - 1) * u)`; the garden fence's two runs are one list this way.
+  And **the front view's depth disagrees with itself**: the trees put the back
+  wall's line near 16% (big tree 14%, small 18%), while the path's stones climb
+  past the east corner to ~25% at the door. The fence's front returns follow
+  the trees; nothing has reconciled the stones. *(Day 181)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

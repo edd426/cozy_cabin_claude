@@ -31,6 +31,8 @@
 
   THE FENCE (Day 181): the back wall is its south side; the corner posts
   stand a stride past each corner, the gate in the east return (back.css).
+  THE GATE takes a hand (Day 182): it swings out onto the walk from the door
+  and is remembered, so every outdoor face shows it as it was left.
 
   WHAT IS STILL NOT DRAWN, and is owed: the skein, the dawn fog
   (which lies along the hills, now behind you) and the fireflies are left to
@@ -56,6 +58,12 @@
        and the door side keep (sky.js lights the hour, season.js the year). -->
   <script src="../sky.js" defer></script>
   <script src="../season.js" defer></script>
+
+  <!-- A hand at the gate (Day 182): sound.js for its latch, touch.js for the
+       swing and for remembering it — the same two files, in the same order,
+       as the faces that already answer a hand. -->
+  <script src="../sound.js" defer></script>
+  <script src="../touch.js" defer></script>
 
   <title>The Cabin — the garden</title>
 
@@ -184,6 +192,12 @@
         <span class="fence__gate"></span>
         <span class="fence__ret"></span>
       </div>
+      <!-- The gate takes a hand (Day 182): it swings out, south, onto the walk
+           from the door, and lies back flat along the east wall. Held like the
+           lamp, so the door side and the front find it as you left it.
+           back.css "The gate, and a hand on it"; touch.js. -->
+      <span class="gate-touch" role="button" tabindex="0" aria-pressed="false"
+            aria-label="open the garden gate"></span>
     </div>
   </main>
 

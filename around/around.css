@@ -1743,3 +1743,68 @@
 @media (max-width: 599px) {
   .side-fence { --s: 2; --near-foot: 7%; --far-foot: 13%; }
 }
+
+/* ── The gate, opened (Day 182) ───────────────────────────────────────────
+ * Shut, the gate runs east from the house's back corner along the back wall's
+ * line, straight at you, and shows as nothing but its post (above). Opened —
+ * by a hand in the garden; touch.js holds it on <html> as `data-gate` — it
+ * has swung out south about its hinge at that corner and lies back flat along
+ * the east wall, so from here it is the one face that sees it broadside: the
+ * garden's own drawing of the leaf, cell for cell (back/back.css), and the
+ * same side of it, since the face that looked north now looks east. Hinge on
+ * the right, at the corner; brace low there, high at the latch.
+ *
+ * Six cells long against the wall's seventy-two, the leaf ending at the
+ * wall's right edge (36 native from the middle). It hangs a stride's fraction
+ * east of the wall, so its foot is the house's own and it paints over the
+ * planks (z 3, the near tree's plane, before the tree in DOM order, so the
+ * tree stays nearer). In `--c-wood-light`, as on every face (back.css): in
+ * the wall's own wood it could not be told from the planks behind it.
+ * Shut, it is `display: none` and nobody has ever seen
+ * it, which is what a camera arriving new is shown. */
+.side-gate {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  --foot: 6%;
+  position: absolute;
+  display: none;
+  width: var(--u);
+  height: var(--u);
+  left: calc(50% + 29 * var(--u));
+  bottom: calc(var(--foot) + 10 * var(--u));
+  z-index: 3;
+  pointer-events: none;
+  box-shadow:
+    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(2 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(3 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(4 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(5 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-light),
+    calc(2 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-light),
+    calc(3 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-light),
+    calc(4 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-light),
+    calc(5 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(2 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(3 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(4 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(5 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-light);
+}
+[data-gate="open"] .side-gate { display: block; }
+@media (max-width: 599px) {
+  .side-gate { --s: 2; --foot: 8%; }
+}

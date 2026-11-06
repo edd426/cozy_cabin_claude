@@ -564,6 +564,14 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   wall's line near 16% (big tree 14%, small 18%), while the path's stones climb
   past the east corner to ~25% at the door. The fence's front returns follow
   the trees; nothing has reconciled the stones. *(Day 181)*
+- **A held state that more than one face shows goes on `<html>`, not a
+  scene** (`data-gate`, touch.js `restoreGate`): the home view's scene is
+  fetched in after `touch.js` runs, so a scene attribute set at parse time
+  finds nothing. And **a thing laid against a wall must not be the wall's
+  colour** — the gate's leaf in `--c-wood` vanished against the door side's
+  planks, so it is `--c-wood-light` on every face (material truth holds only if
+  you change it everywhere at once, and the front's kept frames go with it).
+  *(Day 182)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

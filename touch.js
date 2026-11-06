@@ -1004,6 +1004,81 @@
     }
   }
 
+  /* ── the gate (Day 182) ───────────────────────────────────────────────────
+   *
+   * The first thing here made to be opened, and the second, after the lamp,
+   * whose answer outlasts the hand. A gate comes with its use implied the way
+   * a lamp does (Day 141): a crown, a stone, a rick do not. So the choice is
+   * written to storage under `cabin.gate`, read back on every arrival, and held
+   * on <html> rather than on a scene, because the home view's scene is fetched
+   * in after this file runs and a gate left open must already be open when it
+   * lands. Absent is shut: every camera and every witness arrives shut.
+   *
+   * Only the garden's face takes the hand. That is where the gate is drawn
+   * whole; from the front it is a pixel-wide thing past a corner, and from the
+   * door side it is edge-on behind its post. Both of those faces read the held
+   * state and show it — the leaf flat against the east wall, broadside from the
+   * door and edge-on from the bench — which is the whole of Article XIII asked
+   * of a thing that moves: three faces, one gate, one position at a time.
+   *
+   * One swing at a time, the rule every answer here keeps. The keyframes are
+   * chosen off the attribute while it still says where the gate WAS, so the
+   * attribute is flipped at `animationend` and not before (Day 144). */
+  var GATE_KEY = 'cabin.gate';
+
+  function gateStored() {
+    try {
+      return window.localStorage.getItem(GATE_KEY) === 'open';
+    } catch (e) { return false; }
+  }
+
+  function gateStore(open) {
+    try { window.localStorage.setItem(GATE_KEY, open ? 'open' : 'shut'); } catch (e) {}
+  }
+
+  function gateIsOpen() {
+    return document.documentElement.getAttribute('data-gate') === 'open';
+  }
+
+  function gatePaint(open) {
+    if (open) document.documentElement.setAttribute('data-gate', 'open');
+    else document.documentElement.removeAttribute('data-gate');
+    var pads = document.querySelectorAll('.gate-touch');
+    for (var i = 0; i < pads.length; i++) {
+      pads[i].setAttribute('aria-pressed', open ? 'true' : 'false');
+      pads[i].setAttribute('aria-label', open ? 'shut the garden gate'
+                                              : 'open the garden gate');
+    }
+  }
+
+  function swingGate(pad) {
+    var scene = pad.closest('.scene');
+    var leaf = scene && scene.querySelector('.fence__gate');
+    if (!leaf || leaf.classList.contains('is-swinging')) return;
+
+    var next = !gateIsOpen();
+    leaf.classList.add('is-swinging');
+    leaf.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'gate-open' && e.animationName !== 'gate-shut') return;
+      gatePaint(next);
+      leaf.classList.remove('is-swinging');
+      leaf.removeEventListener('animationend', once);
+    });
+    gateStore(next);
+
+    /* Second, and only once the leaf is already moving: the same click the
+     * lamp's glass makes, because a gate's latch is a latch. */
+    if (window.CabinSound && typeof window.CabinSound.latch === 'function') {
+      try { window.CabinSound.latch(); } catch (err) {}
+    }
+  }
+
+  /* Read the held choice back at parse time, before the first paint of a page
+   * that shows the gate, so nobody watches it swing at them on arrival. */
+  (function restoreGate() {
+    gatePaint(gateStored());
+  })();
+
   /* Read the held choice back at parse time, in the body of this deferred file,
    * so the lamp is right on arrival rather than correcting itself a moment
    * later — and with `instant`, so it does not fade there. Both halves matter:
@@ -1038,7 +1113,8 @@
     ['.birds-touch',  startle],
     ['.glass-touch',  strike],
     ['.logs-touch',   settle],
-    ['.rick-touch',   rap]
+    ['.rick-touch',   rap],
+    ['.gate-touch',   swingGate]
   ];
 
   function padFor(target) {

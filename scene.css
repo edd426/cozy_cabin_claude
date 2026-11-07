@@ -4938,3 +4938,105 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
       18px 12px 0 0 var(--c-wood-dark);
   }
 }
+
+/* ── The water butt, past the front-left corner (Day 183) ──────────────────
+ * The ridge runs north-south (map.css), so the eaves are the east and west
+ * walls, and a gutter hangs under the west one: the east wall's north end is
+ * where the gate lies back when it is open (Day 182), so the downpipe comes
+ * down the WEST wall at its north end, into a butt standing against that wall
+ * just south of the fence's west return — outside the garden, a reach over
+ * the rails from the far west bed. Its rain is the roof's and its use is the
+ * garden's.
+ *
+ * From here, the south, the west wall is edge-on at the house's left edge, so
+ * the butt stands just past the left corner at the back wall's depth: one css
+ * px a cell like the fence it stands in front of (its foot a pixel nearer than
+ * the fence line, so it covers the low rail and stops under the high one). The
+ * downpipe is one pixel down from the gutter's end, which shows as a nub under
+ * the roof's lower-left corner; the roof paints over everything above it.
+ * Every cell is flat: staves --c-wood between dark edges, three iron hoops in
+ * --c-ink (the chimney cap's iron), the rim --c-wood-dark — no lit side.
+ * Seen again from the garden (back.css "The water butt"). Not on the door
+ * side: from the east it stands behind the house. */
+.yard-butt {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.yard-butt > span { position: absolute; }
+.yard-butt__cask { left: calc(50% - 74px); bottom: calc(16% + 8px); width: 1px; height: 1px;
+  box-shadow:
+1px 1px 0 0 var(--c-wood-dark),
+    2px 1px 0 0 var(--c-wood-dark),
+    3px 1px 0 0 var(--c-wood-dark),
+    4px 1px 0 0 var(--c-wood-dark),
+    5px 1px 0 0 var(--c-wood-dark),
+    6px 1px 0 0 var(--c-wood-dark),
+    7px 1px 0 0 var(--c-wood-dark),
+    1px 2px 0 0 var(--c-ink),
+    2px 2px 0 0 var(--c-ink),
+    3px 2px 0 0 var(--c-ink),
+    4px 2px 0 0 var(--c-ink),
+    5px 2px 0 0 var(--c-ink),
+    6px 2px 0 0 var(--c-ink),
+    7px 2px 0 0 var(--c-ink),
+    1px 3px 0 0 var(--c-wood-dark),
+    2px 3px 0 0 var(--c-wood),
+    3px 3px 0 0 var(--c-wood),
+    4px 3px 0 0 var(--c-wood),
+    5px 3px 0 0 var(--c-wood),
+    6px 3px 0 0 var(--c-wood),
+    7px 3px 0 0 var(--c-wood-dark),
+    1px 4px 0 0 var(--c-wood-dark),
+    2px 4px 0 0 var(--c-wood),
+    3px 4px 0 0 var(--c-wood),
+    4px 4px 0 0 var(--c-wood),
+    5px 4px 0 0 var(--c-wood),
+    6px 4px 0 0 var(--c-wood),
+    7px 4px 0 0 var(--c-wood-dark),
+    1px 5px 0 0 var(--c-ink),
+    2px 5px 0 0 var(--c-ink),
+    3px 5px 0 0 var(--c-ink),
+    4px 5px 0 0 var(--c-ink),
+    5px 5px 0 0 var(--c-ink),
+    6px 5px 0 0 var(--c-ink),
+    7px 5px 0 0 var(--c-ink),
+    1px 6px 0 0 var(--c-wood-dark),
+    2px 6px 0 0 var(--c-wood),
+    3px 6px 0 0 var(--c-wood),
+    4px 6px 0 0 var(--c-wood),
+    5px 6px 0 0 var(--c-wood),
+    6px 6px 0 0 var(--c-wood),
+    7px 6px 0 0 var(--c-wood-dark),
+    1px 7px 0 0 var(--c-wood-dark),
+    2px 7px 0 0 var(--c-wood),
+    3px 7px 0 0 var(--c-wood),
+    4px 7px 0 0 var(--c-wood),
+    5px 7px 0 0 var(--c-wood),
+    6px 7px 0 0 var(--c-wood),
+    7px 7px 0 0 var(--c-wood-dark),
+    1px 8px 0 0 var(--c-ink),
+    2px 8px 0 0 var(--c-ink),
+    3px 8px 0 0 var(--c-ink),
+    4px 8px 0 0 var(--c-ink),
+    5px 8px 0 0 var(--c-ink),
+    6px 8px 0 0 var(--c-ink),
+    7px 8px 0 0 var(--c-ink),
+    1px 9px 0 0 var(--c-wood-dark),
+    2px 9px 0 0 var(--c-wood),
+    3px 9px 0 0 var(--c-wood),
+    4px 9px 0 0 var(--c-wood),
+    5px 9px 0 0 var(--c-wood),
+    6px 9px 0 0 var(--c-wood),
+    7px 9px 0 0 var(--c-wood-dark);
+}
+.yard-butt__pipe   { left: calc(50% - 70px); bottom: calc(16% + 8px); width: 1px;
+  height: calc(111px - 10%); background: var(--c-ink); }
+.yard-butt__gutter { left: calc(50% - 71px); bottom: calc(6% + 119px); width: 3px; height: 1px;
+  background: var(--c-ink); }
+@media (max-width: 599px) {
+  .yard-butt__cask   { left: calc(50% - 52px); }
+  .yard-butt__pipe   { left: calc(50% - 48px); height: calc(71px - 8%); }
+  .yard-butt__gutter { left: calc(50% - 49px); bottom: calc(8% + 79px); }
+}

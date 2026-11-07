@@ -2190,3 +2190,66 @@
   .far--box { left: calc(50% - 91px);  bottom: 31%; }
   .far--bed { left: calc(50% + 49px);  bottom: 31%; }
 }
+
+/* ── The water butt (the long work, Day 183) ────────────────────────────────
+ * The roof's west eave carries a gutter; its downpipe comes down the west wall
+ * at the north end and into a butt standing against that wall, just south of
+ * the fence's west return (scene.css "The water butt" has the why: the gate
+ * lies along the east wall's north end when it is open). From the north the
+ * west is on the RIGHT, so it stands just past the right corner, a cell further
+ * off than the wall's foot, behind the return's rails (z 1 under the fence's
+ * 2): outside the garden, a reach over from the far west bed. The gutter's end
+ * is a nub under the roof's lower-right corner and the pipe one cell wide.
+ * Painted like the beds (a 1-cell element on an empty cell, the bitmap in its
+ * shadow); flat colours only, so no lit side. */
+.butt {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  --foot: 20%;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.butt > span { position: absolute; }
+.butt__cask { left: calc(50% + 21 * var(--u)); bottom: calc(var(--foot) + 7 * var(--u));
+  width: var(--u); height: var(--u);
+  box-shadow:
+calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(3 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(4 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(5 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+    calc(2 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+    calc(3 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+    calc(4 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+    calc(5 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-ink),
+    calc(2 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-ink),
+    calc(3 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-ink),
+    calc(4 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-ink),
+    calc(5 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-ink),
+    calc(1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(3 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(4 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
+    calc(5 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-dark);
+}
+.butt__pipe   { left: calc(50% + 23 * var(--u)); bottom: calc(var(--foot) + 7 * var(--u));
+  width: var(--u); height: calc(32 * var(--u)); background: var(--c-ink); }
+.butt__gutter { left: calc(50% + 23 * var(--u)); bottom: calc(var(--foot) + 39 * var(--u));
+  width: calc(2 * var(--u)); height: var(--u); background: var(--c-ink); }
+@media (max-width: 599px) {
+  .butt { --s: 2; --foot: 16%; }
+}

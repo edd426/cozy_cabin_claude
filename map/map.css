@@ -387,6 +387,24 @@
   background: var(--c-wood);
 }
 
+/* The water butt (Day 183), from above: a ring of iron round a round of
+ * staves, against the west wall at its north end, just south of the fence's
+ * west return. The wall stands 22 native from the middle (39.3%) and the butt
+ * is 5 across (2.4%); the roof's 2-native overhang (z 2) covers its inner
+ * edge, which is true from overhead. */
+.map__butt {
+  position: absolute;
+  left: 36.9%;
+  top: 24.4%;
+  width: 2.4%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  border: 1px solid var(--c-ink);
+  background: var(--c-wood-dark);
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* diary = the record, not a place: a small journal resting on the map's
  * south-west margin, past the flowers, like a book left on the corner of the
  * drawing. Added Day 35 (2026-06-12) when the bottom strip retired and the

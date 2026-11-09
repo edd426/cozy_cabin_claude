@@ -2253,3 +2253,20 @@ calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
 @media (max-width: 599px) {
   .butt { --s: 2; --foot: 16%; }
 }
+/* The butt in winter (Day 185; scene.css "The butt in winter" has the why):
+ * let down for the frosts, the downpipe's foot swung off the rim. From the
+ * north west is on the RIGHT, so the elbow kicks out right and runs level, its
+ * mouth two cells past the cask's right-hand staves. It is set higher than
+ * the front's, the run three cells over the rim, because the fence's return
+ * stands between the butt and this face and its top rail would cover a run
+ * laid any lower.
+ * Gated with `display`. */
+.butt__shoe { display: none; left: calc(50% + 23 * var(--u)); bottom: calc(var(--foot) + 12 * var(--u));
+  width: var(--u); height: var(--u);
+  box-shadow: var(--u) var(--u) 0 0 var(--c-ink),
+              calc(2 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+              calc(3 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+              calc(4 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
+              calc(5 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink); }
+.scene[data-season="winter"] .butt__shoe { display: block; }
+.scene[data-season="winter"] .butt__pipe { bottom: calc(var(--foot) + 12 * var(--u)); height: calc(27 * var(--u)); }

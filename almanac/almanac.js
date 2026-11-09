@@ -169,6 +169,7 @@
         'the sprig drawn in a pixel shorter and its leaves settled tighter; outside, a colder clearer dark, and the stars out in it — no fireflies until the warm comes back',
         'no bee on the bed at any hour — she keeps the warm months, and the stems she works stand under the hush with nothing on them until the spring',
         'no skein over the clearing either — the geese are wherever they winter, and the sky over the hush has nothing crossing it',
+        'the water butt let down for the frosts and its downpipe’s foot swung off the rim, so the winter’s rain runs out past the cask onto the grass — past the left corner from the bench, past the right from the garden. The spring swings it back',
       ],
     },
     spring: {

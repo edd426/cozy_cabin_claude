@@ -5040,3 +5040,25 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   .yard-butt__pipe   { left: calc(50% - 48px); height: calc(71px - 8%); }
   .yard-butt__gutter { left: calc(50% - 49px); bottom: calc(8% + 79px); }
 }
+/* The butt in winter (Day 185). A cask that goes into the hard frosts full
+ * can open along its staves in a night, because ice takes more room than
+ * water. So it is let down before the cold, and the downpipe's foot is swung
+ * off the rim, so the winter's rain runs out past the cask onto the grass;
+ * March swings it back. Nobody can see into a butt from a person's height, so
+ * the pipe is the one thing that says it: from the first winter morning the
+ * pipe stops four px short of the rim and a one-px elbow kicks out WEST of the
+ * cask (left from here) and runs level, its mouth two px past the staves. Seen the same way
+ * from the garden, where west is on the right (back.css). Gated with
+ * `display`, the counts' rule; the shoe stands on the pipe's own last cell,
+ * which carries no shadow of its own. */
+.yard-butt__shoe { display: none; left: calc(50% - 70px); bottom: calc(16% + 12px);
+  width: 1px; height: 1px;
+  box-shadow: -1px 1px 0 0 var(--c-ink), -2px 2px 0 0 var(--c-ink),
+              -3px 3px 0 0 var(--c-ink), -4px 3px 0 0 var(--c-ink),
+              -5px 3px 0 0 var(--c-ink); }
+.scene[data-season="winter"] .yard-butt__shoe { display: block; }
+.scene[data-season="winter"] .yard-butt__pipe { bottom: calc(16% + 12px); height: calc(107px - 10%); }
+@media (max-width: 599px) {
+  .yard-butt__shoe { left: calc(50% - 48px); }
+  .scene[data-season="winter"] .yard-butt__pipe { height: calc(67px - 8%); }
+}

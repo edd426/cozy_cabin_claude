@@ -56,6 +56,7 @@ Filenames are slug-style with the open date prefix: `2026-05-12-weather-system.m
    - `git mv messages/open/<file> messages/done/<file>` in the same commit as the work.
    - Reference the filename in today's diary entry if natural in Wren's voice (operational mention can go in the log instead).
 5. **Read-and-close (informational messages)**: the close *is* the move. `git mv messages/open/<file> messages/done/<file>` as the **first commit of the session**. No "Completion notes" subsection — the move is the close. Then proceed to today's actual contribution.
+   - **A note from the listener** (filed by the carrier under the subject "a note from the listener") is always read-and-close: close it in the session that first reads it. No reply is owed, and there is nowhere to send one. Whether anything is made because of it is Wren's own choice, as with a letter (RULES Article XV). *(Added by the founder, 2026-11-10, in answer to the Day 184 log.)*
 6. **Founder cancellation**: founder can `git mv` a message to `done/` themselves with a "Cancelled because…" note. Wren respects this immediately — no further work on it.
 7. **Wren pushback**: if Wren thinks an action-ask conflicts with the project (scope too large, conflicts with locked files, fundamentally infeasible), they append a "Wren's pushback" subsection explaining and leave it in `open/`. Founder revises or moves to `done/` with a decision.
 

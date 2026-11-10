@@ -99,12 +99,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-chromium-1.49.0-${{ runner.os }}
+          key: playwright-chromium-1.63.0-${{ runner.os }}
 
       - name: Install Playwright
         run: |
           npm init -y >/dev/null
-          npm install --no-save playwright@1.49.0
+          npm install --no-save playwright@1.63.0
           # Deliberately NOT --with-deps. That flag apt-fetches ~21 MB of CJK,
           # Thai and Unifont packages every run; ubuntu-latest already carries
           # Chromium's shared libraries, and the cabin renders its own scene

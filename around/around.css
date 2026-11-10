@@ -1808,3 +1808,59 @@
 @media (max-width: 599px) {
   .side-gate { --s: 2; --foot: 8%; }
 }
+
+/* ── The spade, hung for the winter (Day 186) ──────────────────────────────
+ * The spade has stood in the garden's near west bed since the ground was
+ * broken (back.css "The spade"). A tool left in wet ground through the frosts
+ * rusts at the blade and rots at the foot of the handle, and this place puts
+ * things by for the winter (the stack laid in, the butt let down), so from
+ * the first morning of winter it is out of the bed and hung here: on a peg on
+ * the east wall, under the eave — a long wall, so it has an eave and the
+ * gable ends do not — between the south corner and the boots, toward the
+ * path and well clear of the wall's north end, where an open gate lies. The
+ * spring takes it back.
+ *
+ * The same twelve-cell bitmap as the garden's spade, a cell up for the peg:
+ * row 1 the peg (one dark cell, the nail the D-grip hooks over), row 2 the
+ * grip, rows 3-9 the shaft, rows 10-11 the iron blade. The element stands on
+ * the bitmap's empty cell (0,0) (CLAUDE.md, Day 157). Handle in
+ * --c-wood-light, as on the back face: in the planks' own --c-wood it would
+ * be lost against the wall (the gate's lesson, Day 182). The blade's iron is
+ * the garden's own grey. Flat, no lit side. Display-gated, so the almanac can
+ * count it. */
+.door-spade {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  --foot: 6%;
+  --spade-iron: #8b8682;
+  position: absolute;
+  display: none;
+  width: var(--u);
+  height: var(--u);
+  left: calc(50% - 30 * var(--u));
+  bottom: calc(var(--foot) + 19 * var(--u));
+  z-index: 3;
+  pointer-events: none;
+  box-shadow:
+    calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-ink),
+    calc(0 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(2 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-light),
+    calc(0 * var(--u)) calc(10 * var(--u)) 0 0 var(--spade-iron),
+    calc(1 * var(--u)) calc(10 * var(--u)) 0 0 var(--spade-iron),
+    calc(2 * var(--u)) calc(10 * var(--u)) 0 0 var(--spade-iron),
+    calc(0 * var(--u)) calc(11 * var(--u)) 0 0 var(--spade-iron),
+    calc(1 * var(--u)) calc(11 * var(--u)) 0 0 var(--spade-iron),
+    calc(2 * var(--u)) calc(11 * var(--u)) 0 0 var(--spade-iron);
+}
+.scene[data-season="winter"] .door-spade { display: block; }
+@media (max-width: 599px) {
+  .door-spade { --s: 2; --foot: 8%; }
+}

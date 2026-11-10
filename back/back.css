@@ -117,11 +117,16 @@
 .bed--far-e  { left: calc(50% - 27 * var(--u)); }
 .bed--far-w  { left: calc(50% + 3 * var(--u)); }
 /* The spade, left standing in the near west bed, its blade down in the turned
- * earth three rows deep. */
+ * earth three rows deep. Not through the winter (Day 186): from the first
+ * morning of winter it is out of the ground and hung on a peg by the door,
+ * under the east eave (around.css "The spade, hung"), and the spring brings it
+ * back. The handle is --c-wood-light on both faces, since on the wall the
+ * planks' --c-wood would swallow it. */
 .spade {
   bottom: calc(2% + 17 * var(--u));
   left: calc(50% + 28 * var(--u));
 }
+.scene[data-season="winter"] .spade { display: none; }
 
 /* Generated from the bitmaps written out in the Day-179 log; the bitmap is the
  * source and these are its transcription. */
@@ -1091,16 +1096,16 @@
 }
 .spade {
   box-shadow:
-    calc(0 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
-    calc(2 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood),
-    calc(1 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood),
+    calc(0 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(2 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
     calc(0 * var(--u)) calc(9 * var(--u)) 0 0 var(--spade-iron),
     calc(1 * var(--u)) calc(9 * var(--u)) 0 0 var(--spade-iron),
     calc(2 * var(--u)) calc(9 * var(--u)) 0 0 var(--spade-iron),

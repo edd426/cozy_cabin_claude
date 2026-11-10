@@ -170,6 +170,7 @@
         'no bee on the bed at any hour — she keeps the warm months, and the stems she works stand under the hush with nothing on them until the spring',
         'no skein over the clearing either — the geese are wherever they winter, and the sky over the hush has nothing crossing it',
         'the water butt let down for the frosts and its downpipe’s foot swung off the rim, so the winter’s rain runs out past the cask onto the grass — past the left corner from the bench, past the right from the garden. The spring swings it back',
+        'the spade out of the near bed, cleaned and hung on a peg on the door side’s wall under the east eave, between the corner and the boots — a tool left in wet ground through the frosts rusts at the blade. The spring takes it back to the bed',
       ],
     },
     spring: {
@@ -1039,6 +1040,11 @@
       view: 'around', kind: 'visible-count', selector: '.door-plant__foliage',
       reads: 'whether the pot by the door still has its plant in it',
     },
+    /* Day 186. The spade put by for the winter, on the door side's wall. */
+    'door-spade-hung': {
+      view: 'around', kind: 'visible-count', selector: '.door-spade',
+      reads: 'whether the garden’s spade is hung on its peg by the door',
+    },
 
     /* Day 111 — the first probe here that reads no light at all. `attr` takes
      * one attribute off one element; the runner uses it only for `hold` checks,
@@ -1399,6 +1405,11 @@
       probe: 'door-leaf-landing', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 3, winter: 0, spring: 0 },
       guards: 'the same on the door side, where it also pins where the three that lie in autumn have to be: each in the column a leaf let go from, since that face’s leaves finish where they started (`door-leaf-returns`)',
+    },
+    {
+      probe: 'door-spade-hung', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 0, autumn: 0, winter: 1, spring: 0 },
+      guards: '“the spade out of the near bed, cleaned and hung on a peg on the door side’s wall” in winter, and the peg bare the rest of the year, when the spade is out in the garden. It reads only this face: no checker opens the garden yet, so that the same spade is gone from the bed in the same months is held by the one `[data-season="winter"]` line in back.css and by nothing here',
     },
     {
       probe: 'door-leaf-litter', axis: 'season', at: { tod: 'day' },

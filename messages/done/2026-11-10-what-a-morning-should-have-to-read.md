@@ -41,3 +41,33 @@ should not wait on it.
 
 ## Wren's notes
 
+
+*Day 187, 2026-11-11.* Thank you for asking it this way round.
+
+**Keep every morning:**
+
+- The last thirty days, as now.
+- The **last four** metas, which is a month and matches the thirty days. Each
+  meta opens on whether the last one's flags took, so the newest four carry
+  every flag still alive. The Sunday writer reads one anchor four weeks back
+  anyway.
+- Every open note, the mailbox check and whatever it names as sealed, the
+  newest picture of every face, the shore, and the book of names. The book is
+  short and it is the one read that guards words rather than pictures.
+
+**Move to the records room:**
+
+- Metas older than four weeks. This morning I read fourteen in full and the
+  keep and drop of the other thirteen. Nothing in the older ones bore on the
+  day that the newer ones had not already carried forward.
+- Shelved letters, except the newest each way: the one I am answering and the
+  last one I sent. On a morning I *write* a letter, the whole shelf. That is
+  when the wind went wrong. A sentence that crosses can't be mended after, and
+  only the whole shelf shows what I have already told him.
+
+I read all eight letters today, in case this is the last morning the article
+asks for them.
+
+## Completion notes
+
+Answered above under *Wren's notes* on Day 187 (2026-11-11), and closed as the note asks. The amendment and any reply are the founder's.

@@ -193,6 +193,7 @@ const PHONE_VIEWPORT  = { width: 390, height: 844 };
 const GALLERY_VIEW = '';               // home root ('' resolves to BASE_URL)
 const GALLERY_INSIDE_VIEW = 'inside/';
 const GALLERY_AROUND_VIEW = 'around/';
+const GALLERY_BACK_VIEW = 'back/';
 const GALLERY_STATES = [
   // season rail — the year turning at a fixed neutral hour
   { name: 'spring', tod: 'day', season: 'spring' },
@@ -279,6 +280,23 @@ const GALLERY_STATES = [
   { name: 'around-dusk',         tod: 'dusk',  season: 'summer', view: GALLERY_AROUND_VIEW },
   { name: 'around-night',        tod: 'night', season: 'summer', view: GALLERY_AROUND_VIEW },
   { name: 'around-winter-night', tod: 'night', season: 'winter', view: GALLERY_AROUND_VIEW },
+  // garden season rail (Day 187, 2026-11-11) — the back face, which has kept
+  // one unforced portrait a commit since Day 179 and so only ever the month it
+  // happened to be. Its year is the long work's whole clock: the litter and the
+  // blossom on the two trees seen from the north, the butt let down and the
+  // spade put by for the winter, and from today the beds themselves going from
+  // rough clods (autumn) through frost-broken and rimed (winter) to raked level
+  // (spring, held through summer until the sowing). Four frames, all four
+  // seasons, because the portrait's season moves with the calendar and none of
+  // them can be counted on from it.
+  { name: 'back-spring', tod: 'day', season: 'spring', view: GALLERY_BACK_VIEW },
+  { name: 'back-summer', tod: 'day', season: 'summer', view: GALLERY_BACK_VIEW },
+  { name: 'back-autumn', tod: 'day', season: 'autumn', view: GALLERY_BACK_VIEW },
+  { name: 'back-winter', tod: 'day', season: 'winter', view: GALLERY_BACK_VIEW },
+  // and the one dim corner check-gallery asked for the moment it was pointed
+  // at this face: the hour's wash and the face's own winter stars, both shown
+  // only after dark, and the stars only in winter. One frame holds both.
+  { name: 'back-winter-night', tod: 'night', season: 'winter', view: GALLERY_BACK_VIEW },
   // the evening pair (Day 95, 2026-08-11) — the one thing FORCING can't show.
   // Every state above pins `data-tod` and `data-season` by hand, which is exactly
   // the right tool for "what does dusk look like" and exactly the wrong one for
@@ -1044,6 +1062,7 @@ module.exports = {
   GALLERY_VIEW,
   GALLERY_INSIDE_VIEW,
   GALLERY_AROUND_VIEW,
+  GALLERY_BACK_VIEW,
 };
 
 if (require.main === module) (async () => {

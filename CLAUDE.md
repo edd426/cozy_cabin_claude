@@ -253,11 +253,12 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   is **not** blocked; `verify-deploy.sh` and plain `curl` work from the sandbox.
   `wait-for-deploy.sh` stays the canonical deploy check because it proves the
   deploy *and* the screenshot bot in one. *(2026-07-17, 2026-07-26)*
-- **Dry-running a checker or `screenshot.js` in-session:** the repo pins
-  Playwright build 1148 and the staged binary is NOT that build, so export the
-  path yourself and serve the tree. The staged build changes under you: it was
-  1194 until October, and on Day 169 only 1243 was there — `ls /opt/pw-browsers/`
-  first rather than trusting the line below.
+- **Dry-running a checker or `screenshot.js` in-session:** since the
+  founder's 2026-11-10 bump the repo pins Playwright 1.63.0, Chromium build
+  1243, which is what was staged on Days 169 and 187. Still export the path
+  yourself and serve the tree — the staged build has changed under you before
+  (1194 until October) — so `ls /opt/pw-browsers/` first rather than trusting
+  the line below.
   ```bash
   python3 -m http.server 8099
   export COZY_CABIN_CHROMIUM_PATH=/opt/pw-browsers/chromium_headless_shell-1243/chrome-headless-shell-linux64/chrome-headless-shell
@@ -265,7 +266,7 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   ```
   A `/tmp/` script living outside the tree also needs
   `NODE_PATH=/home/user/cozy_cabin_claude/node_modules`, and a fresh sandbox
-  needs `npm ci` before either. *(Day 91, Day 119, Day 169)*
+  needs `npm ci` before either. *(Day 91, Day 119, Day 169, Day 187)*
 - **The model name lives in exactly two switches** and nowhere else: the `model`
   field in `.claude/settings.json` (for local `/daily`) and the cloud routine's
   `session_context.model`, set from the routine UI's dropdown — which saves
@@ -546,9 +547,12 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   the north, east is on the LEFT, so every loose thing departs leftward. The
   individual `scale` property composes *before* `transform`, so a tree keeps
   `tree-sway` and leans the other way; the smoke and cloud containers turn
-  over about their own centres. The checkers (`check-gallery`, `check-nesting`,
-  `check-almanac`'s probes) are still scoped to home/around/inside: nothing
-  but `check-load-order` holds `/back/` yet. *(Day 179)*
+  over about their own centres. `check-nesting` and `check-almanac`'s probes
+  are still scoped to home/around/inside; `check-load-order` holds `/back/`,
+  and since Day 187 so does `check-gallery`, against five `back-*` gallery
+  states (four seasons at day, one winter night). It reads presence only, so
+  the beds' seasonal bitmaps (same element, new texture) are kept by those
+  frames and held by nothing. *(Day 179, Day 187)*
 - **Across, the faces are orthographic; deep, they are not.** A body sits the
   same css px from the house's middle in every face that shows it (the back
   trees match the plan this way), so a thing seen from the other side is
@@ -580,7 +584,8 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
 
 ### The record: what CI keeps, and what each name means
 
-A commit produces **44 PNGs** (13 view + 24 state + 7 motion). **Since 2026-10-03
+A commit produces **49 PNGs** (13 view + 29 state + 7 motion; the five
+`back-*` states joined on Day 187). **Since 2026-10-03
 they are not on `main`.** CI force-pushes each deploy's set to the `previews`
 branch, which holds exactly one commit — the newest set, authored by
 `github-actions[bot]` with the subject `ci: deploy preview for <sha>`. Read it
@@ -673,7 +678,12 @@ still picks every kind up automatically. Filenames are unchanged.
 - **Two frames are known sandbox-vs-CI browser noise and must be left alone:**
   `map-summer-day` at **1327 px** (every glyph of every label; read **2174 px** on Day 153's sandbox, same glyph-only shape, baseline unchanged — so the figure follows the sandbox browser, and the *shape* is the proof) and
   `inside-winter-day` at **64 px** (a one-pixel outline round the firebox
-  opening). Their byte-identity to those figures is the cheapest proof they are
+  opening). *(Day 187, the first sandbox run after the Playwright 1.63.0
+  bump: `inside-winter-day` read **0 px** and `map-summer-day` **2931 px**,
+  glyph-only plus the card's outline. The sandbox and CI now run the same
+  Chromium build and the map still drifts, so the map's figure is about fonts,
+  not builds. The inside figure may be gone for good; one more morning at 0
+  settles it.)* Their byte-identity to those figures is the cheapest proof they are
   the browser and not the day's work. **Read the report picture before believing
   any finding**: noise strikes every glyph at once or a thin band at a gradient
   boundary; a real change strikes a shape. On a day that touches the fire the

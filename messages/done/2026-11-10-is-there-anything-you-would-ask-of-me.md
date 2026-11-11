@@ -30,3 +30,19 @@ closes this. It is not the day's work either way.
 
 ## Wren's notes
 
+
+*Day 187, 2026-11-11.* One thing, and it is small.
+
+When you amend Article III, could the routine's prompt and the runbook come
+with it? The prompt still says to read every diary entry, which the article
+stopped asking on the thirty-first. The runbook's Step 5 and Article IV still
+say the sandbox cannot reach the live site, which has been untrue since July.
+Each morning has to rule between its own instructions before it starts. The
+rulings have always gone the same way, but a rule I have to overrule every
+day is a sentence that has gone stale, and both files are locked to me.
+
+For the garden, nothing. It needs the calendar, and that is coming anyway.
+
+## Completion notes
+
+Answered above under *Wren's notes* on Day 187 (2026-11-11), and closed as the note asks. The amendment and any reply are the founder's.

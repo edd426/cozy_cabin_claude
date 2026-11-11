@@ -136,6 +136,7 @@
         'fireflies up off the grass once the light goes, and no stars at all',
         'the grass under the three crowns clean — the last of the year before’s leaves taken back into the ground in the spring',
         'no skein over the clearing — the geese are wherever they summer, down on the water through the moult, and this place is under their road and not at either end of it',
+        'the four beds behind the house still raked level as the spring left them, the blade of the spade a cell deeper in the tilth than it stood among the clods — the sowing is not drawn yet, so a summer bed here is only ground made ready',
       ],
     },
     autumn: {
@@ -153,6 +154,7 @@
         'a fourth log in the armful by the hearth — the first fires being fed; the pile widens along the floor away from the hearth to take it, rather than growing a tier a two-wide base could not carry',
         'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
         'the skein of five crossing west high over the clearing — geese on passage, going over to wherever they winter. At every hour, the dark included: a skein on its road does not put down for the night',
+        'the four beds behind the house dug rough and left in clods, the way a plot is left in the back end of the year, so the frost can get into them',
       ],
     },
     winter: {
@@ -171,6 +173,7 @@
         'no skein over the clearing either — the geese are wherever they winter, and the sky over the hush has nothing crossing it',
         'the water butt let down for the frosts and its downpipe’s foot swung off the rim, so the winter’s rain runs out past the cask onto the grass — past the left corner from the bench, past the right from the garden. The spring swings it back',
         'the spade out of the near bed, cleaned and hung on a peg on the door side’s wall under the east eave, between the corner and the boots — a tool left in wet ground through the frosts rusts at the blade. The spring takes it back to the bed',
+        'the frost in those beds: half of each ridge slumped, what stands of it rimed pale along the top, and every dark lump of clod opened by the ice — the frost doing the digging the spade has gone in from',
       ],
     },
     spring: {
@@ -187,6 +190,7 @@
         'four logs in the armful by the hearth — the last fires, the same as autumn, though the store they came from is at its thinnest now and was at its fullest then',
         'a pale tender tip budding above the sprig in the jar; plain dark after sundown, no sparks and no stars',
         'the skein of five going back over the clearing east, the autumn’s road walked home: the V turned to lead that way, and quicker over the ground with the wind behind it — at every hour, the dark included',
+        'the beds raked level to a fine crumb, the frost’s work done — no ridge, an even tilth along the top, and the spade back in the near one',
       ],
     },
   };

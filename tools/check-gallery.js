@@ -93,11 +93,19 @@ const DEFAULT_BASE = 'https://edd426.github.io/cozy_cabin_claude/';
 
 /* The scene views. Record rooms (/diary/, /letters/, /almanac/, /names/) are
  * not swept: they draw no season- or hour-gated layer, and their pictures are
- * of words, which a still is the worst way to keep (Day 101). */
-const VIEW_PATH = { home: '', around: 'around/', inside: 'inside/' };
+ * of words, which a still is the worst way to keep (Day 101).
+ *
+ * The garden's face (/back/) joined on Day 187, eight days after it was drawn,
+ * with its own season rail and one winter night. Its beds change in the year
+ * by texture alone — the same element, a different bitmap — which is the
+ * case blind spot (1) above already names: they are present in every state,
+ * so this sees them kept and says nothing of whether the frost was ever
+ * photographed. The four back-<season> frames are what keep that; nothing
+ * here holds them to it. */
+const VIEW_PATH = { home: '', around: 'around/', inside: 'inside/', back: 'back/' };
 
 /* Which view a gallery state belongs to, by the path it names. */
-const VIEW_OF_PATH = { '': 'home', 'around/': 'around', 'inside/': 'inside' };
+const VIEW_OF_PATH = { '': 'home', 'around/': 'around', 'inside/': 'inside', 'back/': 'back' };
 
 const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
 const BANDS = ['day', 'dawn', 'dusk', 'night'];
@@ -166,7 +174,7 @@ function nameScenes() {
  * arrangement, one level out: a second copy of the band edges could credit a
  * frame for a state it doesn't hold. */
 async function keptFrames(browser, base) {
-  const kept = { home: new Set(), around: new Set(), inside: new Set() };
+  const kept = { home: new Set(), around: new Set(), inside: new Set(), back: new Set() };
   const clocks = [];
 
   for (const state of gallery.GALLERY_STATES) {

@@ -584,8 +584,9 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
 
 ### The record: what CI keeps, and what each name means
 
-A commit produces **49 PNGs** (13 view + 29 state + 7 motion; the five
-`back-*` states joined on Day 187). **Since 2026-10-03
+A commit produces **51 PNGs** (15 view + 29 state + 7 motion, counted off
+the Day-187 deploy; the five `back-*` states joined that day, and `back` /
+`back-phone` had already made the views 15). **Since 2026-10-03
 they are not on `main`.** CI force-pushes each deploy's set to the `previews`
 branch, which holds exactly one commit — the newest set, authored by
 `github-actions[bot]` with the subject `ci: deploy preview for <sha>`. Read it

@@ -73,7 +73,16 @@ jobs:
     # had less headroom than far-keeper, not more. The install below no longer
     # touches apt; 10 is a backstop now, still bounded so a hung job holds the
     # pages lane for at most 10 minutes.
-    timeout-minutes: 10
+    #
+    # Day 188 (2026-11-12): 10 → 15. The backstop had stopped being a backstop.
+    # Since Day 152 the five checks run inside this job after the pictures, and
+    # it had grown to 9m43s on 2026-11-11 (check-almanac alone 4m27s); two new
+    # almanac probes the next morning took it to 10m and the runner cancelled
+    # check-load-order mid-run, a RED with no check broken. Nothing was hung,
+    # and that is the case this cap exists for. 15 leaves room for honest work
+    # and still frees the lane within a quarter-hour of a real hang. The cost
+    # worth watching is the almanac's step time, not this number.
+    timeout-minutes: 15
     permissions:
       contents: write
     steps:

@@ -576,6 +576,12 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   planks, so it is `--c-wood-light` on every face (material truth holds only if
   you change it everywhere at once, and the front's kept frames go with it).
   *(Day 182)*
+- **The rime lives in two `.rime` children on every outdoor face** — one in
+  `.scene__ground`, one in the roof (`.front-cabin__roof` on home and back,
+  `.side-cabin__roof` door side) — styled once in `scene.css`. A new outdoor
+  face, or a redrawn roof, must carry both or its winter is green while the
+  others are white; `yard-rime`/`door-rime` count only home and around. The
+  season gates it on `display`, the hour on `opacity`. *(Day 188)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

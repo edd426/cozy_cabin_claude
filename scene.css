@@ -5062,3 +5062,75 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   .yard-butt__shoe { left: calc(50% - 48px); }
   .scene[data-season="winter"] .yard-butt__pipe { height: calc(67px - 8%); }
 }
+
+/* ── The rime (Day 188) ────────────────────────────────────────────────────
+ * Until today the winter here was white in one place only: along the tops of
+ * the garden's beds (Day 187). A frost that reaches turned earth reaches the
+ * grass and the roof as well, so the rime is laid on both, on every face that
+ * shows them — the front, the door side and the garden share `.scene__ground`
+ * and one shingled roof, so one block here frosts all three (RULES Art XIII).
+ *
+ * Two clocks, two properties (the Day-126 rule): the YEAR says whether there
+ * is rime at all — `display`, so the almanac's counts can read it — and the
+ * HOUR says how hard it lies, on `opacity`. A hoar frost builds after dark and
+ * is at its whitest at first light; through the plain middle of a winter day
+ * it thins without going (there is no sun with an address to take it off one
+ * side and not the other — the first given — so it thins everywhere at once),
+ * and it starts to build again at dusk.
+ *
+ * The ground: a stipple of single cells and two-cell ticks — blade tips that
+ * have caught it — tiled evenly, with no lit side and no direction, over a
+ * thin pale veil weighted to the FAR grass, because looking across a frosted
+ * meadow you see more blades edge-on the further it runs. Vertical weighting
+ * is legal outdoors: low is low from everywhere at once.
+ * The roof: every shingle course's lip (the 1-cell lighter line under each
+ * 7-cell course, `#5a3a2e` in the roof's own gradient) goes rime-pale, and the
+ * courses take a breath of it. The ridge edge and the eave line are left
+ * dark, so the roof keeps its silhouette against a pale winter sky.
+ *
+ * The plan (/map/) takes no rime: a plan is excused the light and not the
+ * leaf (Day 168), and a frost is a morning's, not a fact about the roof.
+ * The room has neither ground nor roof, so nothing reaches it. */
+.rime {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  --c-rime: #d9dbd6;
+  opacity: 0.45;             /* the plain middle of the day: thinned, not gone */
+}
+.scene[data-season="winter"] .rime { display: block; }
+.scene[data-tod="dusk"]  .rime { opacity: 0.7; }   /* building again */
+.scene[data-tod="night"] .rime { opacity: 0.9; }
+.scene[data-tod="dawn"]  .rime { opacity: 1; }     /* a hoar frost's whitest hour */
+
+.rime--ground {
+  --s: 3;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 20' shape-rendering='crispEdges'%3E%3Cg fill='%23d9dbd6'%3E%3Crect x='2' y='1' width='2' height='1'/%3E%3Crect x='11' y='0' width='1' height='1'/%3E%3Crect x='19' y='2' width='2' height='1'/%3E%3Crect x='27' y='1' width='1' height='1'/%3E%3Crect x='6' y='5' width='1' height='1'/%3E%3Crect x='15' y='6' width='2' height='1'/%3E%3Crect x='24' y='7' width='1' height='1'/%3E%3Crect x='30' y='5' width='1' height='1'/%3E%3Crect x='1' y='10' width='1' height='1'/%3E%3Crect x='9' y='11' width='2' height='1'/%3E%3Crect x='20' y='12' width='1' height='1'/%3E%3Crect x='27' y='11' width='2' height='1'/%3E%3Crect x='4' y='15' width='2' height='1'/%3E%3Crect x='13' y='16' width='1' height='1'/%3E%3Crect x='22' y='17' width='2' height='1'/%3E%3Crect x='30' y='15' width='1' height='1'/%3E%3Crect x='16' y='19' width='1' height='1'/%3E%3C/g%3E%3C/svg%3E")
+      0 0 / calc(32px * var(--s)) calc(20px * var(--s)) repeat,
+    linear-gradient(
+      to bottom,
+      rgba(217, 219, 214, 0.42) 0%,    /* the far grass, seen edge-on */
+      rgba(217, 219, 214, 0.20) 45%,
+      rgba(217, 219, 214, 0.12) 100%
+    );
+}
+
+.rime--roof {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(217, 219, 214, 0.14) 0,
+    rgba(217, 219, 214, 0.14) calc(7px * var(--s)),
+    var(--c-rime)             calc(7px * var(--s)),
+    var(--c-rime)             calc(8px * var(--s))
+  );
+  /* leave the ridge edge (top cell) and the eave line (bottom cell) dark */
+  top: calc(1px * var(--s));
+  bottom: calc(1px * var(--s));
+  background-position: 0 calc(-1px * var(--s));
+}
+
+@media (max-width: 599px) {
+  .rime--ground { --s: 2; }
+}

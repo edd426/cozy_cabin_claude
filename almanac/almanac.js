@@ -174,6 +174,7 @@
         'the water butt let down for the frosts and its downpipe’s foot swung off the rim, so the winter’s rain runs out past the cask onto the grass — past the left corner from the bench, past the right from the garden. The spring swings it back',
         'the spade out of the near bed, cleaned and hung on a peg on the door side’s wall under the east eave, between the corner and the boots — a tool left in wet ground through the frosts rusts at the blade. The spring takes it back to the bed',
         'the frost in those beds: half of each ridge slumped, what stands of it rimed pale along the top, and every dark lump of clod opened by the ice — the frost doing the digging the spade has gone in from',
+        'and the same frost on everything else it reaches: rime stippled over the grass on every face, thickest to the eye on the far meadow where the blades are seen edge-on, and the lip of every shingle course on the roof gone pale, from the bench, the door and the garden alike. How hard it lies is the hour’s — see the hour, below',
       ],
     },
     spring: {
@@ -211,9 +212,11 @@
           ? 'the sprig beginning to lean toward the window; the stars gone with the dark'
           : 'the sprig beginning to lean toward the window; no sparks — they belong to the falling edge of the day, not the waking one',
         'the moth already down off the candle and flat to the shaded brick above it, wings spread and still — a moth has settled before first light',
-      ];
+      ].concat(season === 'winter'
+        ? ['the rime at its whitest on the grass and along the roof’s courses — a hoar frost builds all night and stands fullest at first light']
+        : []);
     },
-    day: function () {
+    day: function (season) {
       return [
         'no wash at all — the plain cream clearing this place was born in, the long neutral middle of the day',
         'no fog, no lantern, nothing lit; the lamp by the door is only a fixture waiting',
@@ -222,7 +225,9 @@
         'the chimney drawing clean — the column leaving the cap as a thin fast thread and only spreading as it cools, which is the quickest and most tapered it gets all day',
         'the window indoors showing plain pale sky above its crossbar and the season’s own meadow below it',
         'the moth at rest on the brick a hand above the candle’s glow, in the shade the mantle throws — the whole day, without moving',
-      ];
+      ].concat(season === 'winter'
+        ? ['the rime on the grass and the roof thinned to under half what it was at first light, and thinned everywhere at once: there is no sun here with an address to take it off one side first']
+        : []);
     },
     dusk: function (season) {
       return [
@@ -1049,6 +1054,15 @@
       view: 'around', kind: 'visible-count', selector: '.door-spade',
       reads: 'whether the garden’s spade is hung on its peg by the door',
     },
+    /* Day 188. The rime on the grass and on the roof's courses. */
+    'yard-rime': {
+      view: 'home', kind: 'visible-count', selector: '.rime',
+      reads: 'how many of the front’s surfaces carry rime — the grass and the roof',
+    },
+    'door-rime': {
+      view: 'around', kind: 'visible-count', selector: '.rime',
+      reads: 'how many of the door side’s surfaces carry rime — the grass and the roof',
+    },
 
     /* Day 111 — the first probe here that reads no light at all. `attr` takes
      * one attribute off one element; the runner uses it only for `hold` checks,
@@ -1414,6 +1428,16 @@
       probe: 'door-spade-hung', axis: 'season', at: { tod: 'day' },
       expect: { summer: 0, autumn: 0, winter: 1, spring: 0 },
       guards: '“the spade out of the near bed, cleaned and hung on a peg on the door side’s wall” in winter, and the peg bare the rest of the year, when the spade is out in the garden. It reads only this face: no checker opens the garden yet, so that the same spade is gone from the bed in the same months is held by the one `[data-season="winter"]` line in back.css and by nothing here',
+    },
+    {
+      probe: 'yard-rime', axis: 'season', at: { tod: 'dawn' },
+      expect: { summer: 0, autumn: 0, winter: 2, spring: 0 },
+      guards: '“the same frost on everything else it reaches”: the grass and the roof out front rimed in winter and bare in the other three seasons. It counts layout, so it holds whether the rime is there and never how hard it lies; the hour’s thinning is an `opacity` in scene.css that nothing here reads',
+    },
+    {
+      probe: 'door-rime', axis: 'season', at: { tod: 'dawn' },
+      expect: { summer: 0, autumn: 0, winter: 2, spring: 0 },
+      guards: 'the same on the door side, the second face of one roof and one meadow. The garden shares the same two lines and no checker opens it, so its rime is held by the shared `.rime` rules in scene.css and the back’s kept winter frames',
     },
     {
       probe: 'door-leaf-litter', axis: 'season', at: { tod: 'day' },

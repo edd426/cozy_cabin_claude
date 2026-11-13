@@ -581,7 +581,11 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `.side-cabin__roof` door side) — styled once in `scene.css`. A new outdoor
   face, or a redrawn roof, must carry both or its winter is green while the
   others are white; `yard-rime`/`door-rime` count only home and around. The
-  season gates it on `display`, the hour on `opacity`. *(Day 188)*
+  season gates it on `display`, the hour on `opacity`. *(Day 188)* The room
+  sees it through the window: `.rime--pane`, a child of `.window__pane`, so the
+  pane's `::before`/`::after` tints (now `z-index: 1` inside an `isolation:
+  isolate` pane) fall over it and stay under the muntins; `room-rime` counts
+  it. *(Day 189)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

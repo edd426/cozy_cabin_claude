@@ -5090,7 +5090,9 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  *
  * The plan (/map/) takes no rime: a plan is excused the light and not the
  * leaf (Day 168), and a frost is a morning's, not a fact about the roof.
- * The room has neither ground nor roof, so nothing reaches it. */
+ * The room has neither ground nor roof, so nothing reaches its boards; it
+ * sees the frost only through the glass (Day 189: `.rime--pane`, inside.css),
+ * where the window's meadow is the same grass and takes the same two rules. */
 .rime {
   display: none;
   position: absolute;

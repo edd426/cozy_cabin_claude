@@ -2401,6 +2401,40 @@
   );
 }
 
+/* ── The rime through the glass (Day 189) ──────────────────────────────────
+ * The meadow band in the lower panes is the meadow outside, so in winter it
+ * carries the same rime the grass does on every outdoor face (Day 188), gated
+ * by the same shared `.rime` rules in scene.css: `display` by the year,
+ * `opacity` by the hour. Laid as a child of the pane so the pane's season
+ * tint (::before) and hour tint (::after) fall over it, the way the two
+ * whole-frame washes fall over the yard's rime outdoors; `isolation` keeps
+ * those two tints' z-index inside the pane, under the muntins.
+ *
+ * What it carries is the yard's own drawing at the glass's size: a pale veil
+ * weighted to the far meadow just under the crossbar, where a frosted field
+ * is seen most edge-on, and a few single cells of blade tip, two to each
+ * lower pane, spread with no side to them. Twelve native cells across and
+ * seven down, under the horizontal muntin; the cell under the vertical
+ * muntin is left empty since the wood covers it. `--s` is inherited from
+ * `.window`, so the 2x block needs nothing. */
+.window__pane { isolation: isolate; }
+.window__pane::before,
+.window__pane::after { z-index: 1; }
+.rime--pane {
+  top: auto;
+  height: calc(7px * var(--s));
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 7' shape-rendering='crispEdges'%3E%3Cg fill='%23d9dbd6'%3E%3Crect x='1' y='1' width='1' height='1'/%3E%3Crect x='3' y='4' width='1' height='1'/%3E%3Crect x='7' y='1' width='1' height='1'/%3E%3Crect x='10' y='4' width='1' height='1'/%3E%3C/g%3E%3C/svg%3E")
+      0 0 / 100% 100% no-repeat,
+    linear-gradient(
+      to bottom,
+      rgba(217, 219, 214, 0.42) 0,
+      rgba(217, 219, 214, 0.42) calc(1px * var(--s)),   /* the far meadow, edge-on */
+      rgba(217, 219, 214, 0.18) calc(1px * var(--s)),
+      rgba(217, 219, 214, 0.10) 100%
+    );
+}
+
 /* ─── Glass on the sill (Day 47) ────────────────────────────────────
  *
  * A small glass tumbler standing on the window's sill — the first object in

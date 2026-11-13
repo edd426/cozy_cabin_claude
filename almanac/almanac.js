@@ -174,7 +174,7 @@
         'the water butt let down for the frosts and its downpipe’s foot swung off the rim, so the winter’s rain runs out past the cask onto the grass — past the left corner from the bench, past the right from the garden. The spring swings it back',
         'the spade out of the near bed, cleaned and hung on a peg on the door side’s wall under the east eave, between the corner and the boots — a tool left in wet ground through the frosts rusts at the blade. The spring takes it back to the bed',
         'the frost in those beds: half of each ridge slumped, what stands of it rimed pale along the top, and every dark lump of clod opened by the ice — the frost doing the digging the spade has gone in from',
-        'and the same frost on everything else it reaches: rime stippled over the grass on every face, thickest to the eye on the far meadow where the blades are seen edge-on, and the lip of every shingle course on the roof gone pale, from the bench, the door and the garden alike. How hard it lies is the hour’s — see the hour, below',
+        'and the same frost on everything else it reaches: rime stippled over the grass on every face, thickest to the eye on the far meadow where the blades are seen edge-on, and the lip of every shingle course on the roof gone pale, from the bench, the door and the garden alike, and indoors on the band of meadow the window shows under its crossbar, the same grass seen through glass. How hard it lies is the hour’s — see the hour, below',
       ],
     },
     spring: {
@@ -213,7 +213,7 @@
           : 'the sprig beginning to lean toward the window; no sparks — they belong to the falling edge of the day, not the waking one',
         'the moth already down off the candle and flat to the shaded brick above it, wings spread and still — a moth has settled before first light',
       ].concat(season === 'winter'
-        ? ['the rime at its whitest on the grass and along the roof’s courses — a hoar frost builds all night and stands fullest at first light']
+        ? ['the rime at its whitest on the grass and along the roof’s courses, and on the meadow through the window indoors — a hoar frost builds all night and stands fullest at first light']
         : []);
     },
     day: function (season) {
@@ -1059,6 +1059,11 @@
       view: 'home', kind: 'visible-count', selector: '.rime',
       reads: 'how many of the front’s surfaces carry rime — the grass and the roof',
     },
+    /* Day 189. The same rime, seen through the window's lower panes. */
+    'room-rime': {
+      view: 'inside', kind: 'visible-count', selector: '.rime--pane',
+      reads: 'how many of the window’s meadow bands carry rime',
+    },
     'door-rime': {
       view: 'around', kind: 'visible-count', selector: '.rime',
       reads: 'how many of the door side’s surfaces carry rime — the grass and the roof',
@@ -1438,6 +1443,11 @@
       probe: 'door-rime', axis: 'season', at: { tod: 'dawn' },
       expect: { summer: 0, autumn: 0, winter: 2, spring: 0 },
       guards: 'the same on the door side, the second face of one roof and one meadow. The garden shares the same two lines and no checker opens it, so its rime is held by the shared `.rime` rules in scene.css and the back’s kept winter frames',
+    },
+    {
+      probe: 'room-rime', axis: 'season', at: { tod: 'dawn' },
+      expect: { summer: 0, autumn: 0, winter: 1, spring: 0 },
+      guards: '“indoors on the band of meadow the window shows”: the glass’s lower panes rimed in winter and clear of it the other three seasons, on the same two shared `.rime` lines as the yard. It counts layout, so it cannot tell whether the rime sits under the pane’s two tints, as the yard’s sits under the washes; that order is `isolation` and a `z-index` in inside.css and the kept inside winter frame',
     },
     {
       probe: 'door-leaf-litter', axis: 'season', at: { tod: 'day' },

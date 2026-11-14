@@ -180,3 +180,36 @@ bell will not know.
 **Still pending:** your line that the host is live, and the first number on
 the `presses` branch. When I have read one in a morning I will close this.
 
+
+**Founder update, 2026-11-14: the host is live.** A press from the cabin can
+reach it since a little after 08:00 UTC today. Nothing rung before then was
+counted.
+
+You were right about the preflight. On the first deploy the host answered it
+with no permission in it, and a browser would have sent no press. That is
+mended. A preflight from `https://edd426.github.io` asking for `POST` with
+`content-type` is now allowed, and it was checked against the live host with
+the headers a browser sends for your `press.js`.
+
+One sentence of mine above is no longer true. I wrote that a page on
+`http://localhost` or `http://127.0.0.1` is answered but never counted. Its
+preflight is now refused, so a browser on such a page sends no press and gets
+no answer. It is still never counted. Your `/tmp` tests answer the request
+themselves, so nothing changes for them.
+
+**Founder update, 2026-11-14: the first number has been carried.** The
+`presses` branch exists and holds one file. The number is 0, because nobody
+has rung yet, me included:
+
+```json
+{
+  "checked": "2026-11-14",
+  "total": 0,
+  "founder_total": 0,
+  "days": []
+}
+```
+
+The carrier's four looks a day have begun.
+
+— Evan

@@ -908,6 +908,43 @@
     return 2;
   }
 
+  /* ── the bell by the door (Day 190, 2026-11-14) ───────────────────────────
+   *
+   * Brass is the far end of the row the glass started: nearly all of a bell is
+   * free to ring, and it rings longer than glass because it is heavier and
+   * thicker. A bell's notes are not a chord on one fundamental. Its lowest
+   * (the hum) sits about an octave under the strike note, and a minor third
+   * and a fifth stand above that, which is the sound people mean by "bell".
+   * So, like `ring()`, it is a handful of separate `mode()`s, the low ones
+   * living longest.
+   *
+   * The clapper strikes twice: once at the pull, which is the hand and must not
+   * wait, and again, softer, when the bell turns at the far end of its first
+   * swing back. `bell-swing` in around.css reaches that turn at 24% of its
+   * 1.8s round, 0.43s in, which is where the second strike falls. After that
+   * the swings are too small to throw the clapper, and it hums out. The
+   * second strike is cut shorter than the first so the whole is over inside
+   * a second (rule 2); a real bell would go on, and this one stops short.
+   *
+   * Returns the number of sources started — always 12 (two strikes of one
+   * slice of noise and five modes each), or 0 with no context. */
+  function bell() {
+    var c = context();
+    if (!c) return 0;
+    var f = 1320 + Math.random() * 60;
+    function strike(at, k, len) {
+      burst(c, at, 0.010, 0.08 * k, 'highpass', 3600, 0.7);
+      mode(c, at,         0.95 * len, 0.020 * k, f * 0.5);
+      mode(c, at + 0.001, 0.80 * len, 0.040 * k, f);
+      mode(c, at + 0.001, 0.60 * len, 0.020 * k, f * 1.19);
+      mode(c, at + 0.002, 0.40 * len, 0.014 * k, f * 1.5);
+      mode(c, at + 0.002, 0.25 * len, 0.008 * k, f * 2.0);
+    }
+    strike(0, 1, 1);
+    strike(0.43, 0.55, 0.57);
+    return 12;
+  }
+
   /* Read-only, before anything else can want it. `available` is a fact about
    * the browser and not about whether a sound has ever been made; `started` is
    * true only once a context genuinely exists, which is never until a press. */
@@ -924,6 +961,7 @@
     clack: clack,
     chip: chip,
     squeak: squeak,
+    bell: bell,
     available: function () { return !!AC && !broken; },
     started: function () { return !!ctx; }
   };

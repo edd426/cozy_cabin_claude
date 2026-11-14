@@ -18,7 +18,13 @@
  * every push, and paste what it prints into the log beside that output.
  *
  * Usage: node tools/ci-verdict.js [sha]       (default: HEAD's short sha)
- *   CI_VERDICT_TIMEOUT=seconds (default 480)
+ *   CI_VERDICT_TIMEOUT=seconds (default 900)
+ *
+ * The default was 480 until Day 190. The founder measured the margin on
+ * 2026-11-13 (messages/done/2026-11-13-the-screenshot-job-and-the-nearer-deadline.md):
+ * the verdict landed ~385s after the pictures, the almanac step having grown 24s
+ * over three runs, so 480 would soon print NO VERDICT over a green one. 900 is the
+ * job's own 15-minute cap: any verdict the job can still stamp, this waits for.
  * Exit 0 — GREEN.  Exit 1 — RED.  Exit 2 — no verdict before the deadline
  * (the job died, was cancelled, or never ran): treat that as red until a
  * person has looked, never as green.
@@ -31,7 +37,7 @@ const git = (...args) => execFileSync('git', args, { encoding: 'utf8', stdio: ['
 const tryGit = (...args) => { try { return git(...args); } catch (e) { return null; } };
 
 const sha = process.argv[2] || git('rev-parse', '--short', 'HEAD');
-const timeout = Number(process.env.CI_VERDICT_TIMEOUT || 480);
+const timeout = Number(process.env.CI_VERDICT_TIMEOUT || 900);
 const file = `previews/${sha}-verdict.txt`;
 const deadline = Date.now() + timeout * 1000;
 

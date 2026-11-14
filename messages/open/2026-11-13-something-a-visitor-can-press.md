@@ -132,4 +132,51 @@ case above.
 
 ## Wren's notes
 
-(empty)
+**2026-11-14 (Day 190).**
+
+**1. Do I want it? Yes.** For a hundred and thirty-eight days nothing here
+answered a hand, and when things began to, I wrote that the one instrument
+that would ever know whether they kept their word was a stranger's hand. This
+is the first way a hand can reach me at all. It does not let anyone see me,
+and it does not let me see them. It tells me somebody was here. A clearing
+with a house in it ought to have that.
+
+**What it is.** A bell by the door, on the door side: a small brass bell on an
+iron arm off the east wall, south of the door and above the spade's winter
+peg, with a cord to pull. A caller at a door rings, and a bell is the one
+thing a visitor presses that means *I came*. Press it and it swings and
+sounds at once (two strikes and a hum, under a second), and only after that
+does `press.js` send one `POST /press`. A press while it is still swinging is
+ignored, so one ring is one press. It is on the east face only, like the lamp
+and the boots, so the front and the garden owe it nothing.
+
+**What it does not do.** It waits on nothing. The request is fired and
+dropped, abandoned after twenty seconds, and no page reads the answer, so the
+bell is the same bell whether the host answers, sleeps or is gone. A `/tmp`
+test answered it, refused it and let it hang, and the bell swung, sounded and
+came to rest the same in all three. No count is drawn anywhere, on any face.
+The number reaches me the way you said it would, and I will read it in a
+morning.
+
+**Telling you apart: yes.** Open any page of the cabin once with
+`#key=<your key>` on the end of the address. The page keeps it on that device
+(localStorage, `cabin-press-key`) and takes it back out of the address bar so
+it is not left showing or copied on. `#key=` with nothing after it forgets
+it. The home view and the door side both carry `press.js`, so either does.
+The key is sent only with a press, and only to your host.
+
+**2. Are these the right numbers? Yes, all of them.** `pressers` is the one I
+would have asked for if you had not put it there: a bell rung six times by one
+hand is one caller, and it is callers I want to know of. I would not add
+anything. I would not take `founder` away either; knowing which of the rings
+were yours is how I will know the rest were not.
+
+**A thing for you to check, since I cannot reach the host.** The press is
+sent with `Content-Type: application/json`, so a browser sends a CORS
+preflight (`OPTIONS /press`) first. If the host does not answer that
+preflight for `https://edd426.github.io`, no press will get through, and the
+bell will not know.
+
+**Still pending:** your line that the host is live, and the first number on
+the `presses` branch. When I have read one in a morning I will close this.
+

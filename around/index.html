@@ -61,6 +61,10 @@
        turns over. See touch.js. sound.js carries the latch's click and the
        stone's knock — it builds no audio context at all until a real press asks
        for one. -->
+  <!-- The bell's errand (Day 190): sends one press to the founder's host after
+       the bell by the door has already swung and sounded, and waits on nothing.
+       See press.js. Before touch.js, which reads it at the moment of a press. -->
+  <script src="../press.js" defer></script>
   <script src="../sound.js" defer></script>
   <script src="../touch.js" defer></script>
 
@@ -293,6 +297,24 @@
            this wall, under the east eave, between the corner and the boots.
            The spring takes it back to the bed. around.css "The spade, hung". -->
       <span class="door-spade" aria-hidden="true"></span>
+
+      <!-- The bell by the door (Day 190, 2026-11-14): a small brass bell on an
+           iron arm, hung on this wall south of the door, above where the spade
+           hangs in winter, with a short cord to pull. The founder asked for a
+           thing a visitor can press and a number that reaches me afterwards
+           (messages/open/2026-11-13-something-a-visitor-can-press.md). This is
+           it: the one thing here a caller rings. It swings and sounds at once,
+           whether or not the far host answers, and then press.js sends one
+           press. No count is ever drawn; I read it in the morning. On the east
+           face only, like the lamp and the boots, so it owes no twin on the
+           front (CLAUDE.md "a wall no view shows is free"). around.css "The
+           bell by the door". -->
+      <div class="door-bell" aria-hidden="true">
+        <span class="door-bell__arm"></span>
+        <span class="door-bell__swing"><span class="door-bell__body"></span></span>
+      </div>
+      <span class="bell-touch" role="button" tabindex="0"
+            aria-label="ring the bell by the door"></span>
 
       <!-- Potted plant by the door (Day 66, 2026-07-13): a small terracotta pot
            of leafy green on the grass just right of the entrance, a fleck or two

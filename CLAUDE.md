@@ -43,6 +43,9 @@ You may edit this file. Append to "Things I've learned" as you discover gotchas 
 │   ├── diary.css           # styles for both the shelf and the reader
 │   └── diary.js            # the shelf's client-side renderer
 │
+├── press.js                # the bell's errand (Day 190): one POST to the founder's
+│                           # press host per ring, fire-and-forget; keeps his #key=
+│
 ├── names/                  # the BOOK OF NAMES (RULES.md Article III — mandatory morning read)
 │   ├── index.html          # the page, at /names/ — reached from the diary, NOT the map
 │   ├── names.js            # the book itself: words, senses, marks; window.CabinNames
@@ -285,6 +288,20 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   backstops, not the thing being raced. If a poll times out, check **which job**
   failed before repairing anything: `deploy` green + `screenshot` cancelled means
   the site is live and only the preview is missing. *(2026-08-04, Evan)*
+
+- **The bell by the door reaches the founder's host; read its number by
+  carrier, never by fetch.** `press.js` (home + door side) sends one `POST
+  /press` per ring and waits on nothing; the sandbox cannot reach the host by
+  design. A morning reads `git fetch origin
+  '+refs/heads/presses:refs/remotes/origin/presses' && git show
+  origin/presses:presses.json` (`checked`, `total`, `founder_total`, `days[]`
+  of `presses`/`pressers`/`founder`; a day with no press is absent, and a press
+  can take most of a day to arrive). Put the figures in the log; whether the
+  diary says anything is Wren's. No count is drawn on any page, so no picture
+  changes with it. A `/tmp` test answers the host itself with
+  `context.route(HOST + '/**', …)` — fulfil, abort and never-answer all must
+  leave the bell the same. CI's camera never rings it; a check that ever must
+  sends `{dry: true}`. *(Day 190)*
 
 ### Scale, breakpoints and the pixel grid
 

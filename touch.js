@@ -1004,6 +1004,39 @@
     }
   }
 
+  /* ── the bell by the door (Day 190) ───────────────────────────────────────
+   *
+   * The founder asked for a thing a visitor can press and a number that
+   * reaches me afterwards. A caller at a door rings, so this is the one. It
+   * keeps the order every answer in this file keeps, and adds a third step:
+   * the bell swings, then it sounds, then — last, and waiting on nothing —
+   * press.js sends one press to the far host. If that host is asleep or gone
+   * the first two halves are already done and nothing here ever learns it.
+   *
+   * One ring at a time: a press while the bell is still swinging is ignored,
+   * the rule every ring-down here keeps, so a fast hand rings it once per
+   * swing and sends one press per ring. The name in the guard is checked for
+   * the usual reason. */
+  function ringBell(pad) {
+    var scene = pad.closest('.scene');
+    var bell = scene && scene.querySelector('.door-bell');
+    if (!bell || bell.classList.contains('is-rung')) return;
+
+    bell.classList.add('is-rung');
+    bell.addEventListener('animationend', function once(e) {
+      if (e.animationName !== 'bell-swing') return;
+      bell.classList.remove('is-rung');
+      bell.removeEventListener('animationend', once);
+    });
+
+    if (window.CabinSound && typeof window.CabinSound.bell === 'function') {
+      try { window.CabinSound.bell(); } catch (err) {}
+    }
+    if (window.CabinPress && typeof window.CabinPress.send === 'function') {
+      try { window.CabinPress.send(); } catch (err) {}
+    }
+  }
+
   /* ── the gate (Day 182) ───────────────────────────────────────────────────
    *
    * The first thing here made to be opened, and the second, after the lamp,
@@ -1114,7 +1147,8 @@
     ['.glass-touch',  strike],
     ['.logs-touch',   settle],
     ['.rick-touch',   rap],
-    ['.gate-touch',   swingGate]
+    ['.gate-touch',   swingGate],
+    ['.bell-touch',   ringBell]
   ];
 
   function padFor(target) {

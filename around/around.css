@@ -1864,3 +1864,150 @@
 @media (max-width: 599px) {
   .door-spade { --s: 2; --foot: 8%; }
 }
+
+/* ── The bell by the door (Day 190, 2026-11-14) ────────────────────────────
+ * The founder's ask (messages/open/2026-11-13-something-a-visitor-can-press.md):
+ * a thing a visitor can press, and a number that reaches me afterwards. A
+ * caller at a door rings, so it is a bell: brass, on an iron arm off the east
+ * wall south of the door, with a cord to pull. Pressing it swings it and
+ * sounds it at once (touch.js `ringBell`, sound.js `bell`), and only then does
+ * press.js send one press to the far host. Nothing on this face waits on that
+ * host or reads its answer, so the bell is the same bell whether it answers,
+ * answers late, or never does. No count is drawn anywhere.
+ *
+ * Bitmap, 7 cells wide, 12 down, top row first. Row 0 the arm, fixed at the
+ * wall by a plate (col 0, rows 0-1) and carrying a hanger link (col 4, row 1).
+ * Rows 2-6 the bell: crown, shoulder, waist, lip, mirrored about col 4, with
+ * the shine laid down that centre line and nowhere else (no lit side
+ * outdoors). Row 7 the clapper's foot, rows 8-10 the cord, row 11 its knot.
+ * Each painter is one cell standing on the empty cell (6,0) (CLAUDE.md, Day
+ * 157), and colours live in custom properties.
+ *
+ * It HANGS, so its gesture is a skew about the top, with the pivot at the
+ * hanger, outside the part that moves (CLAUDE.md, Day 147). A rung bell is a
+ * hand's doing and not the wind's, so it rings back through its rest and dies
+ * away; the swing is in degrees, where a decay can be drawn. At rest it hangs
+ * plumb: the wind on this face comes straight on (Day 174).
+ *
+ * Placement, in cells off the ground line: the bell's centre column stands
+ * 17.5 cells left of the door's middle, above the door's own reach (its pad's
+ * top is 24 cells up on a phone, under 23 on a wide screen) and above the
+ * spade's peg (19 cells up), under the eave (40). The pad is 44px square,
+ * centred on that column, its foot at 25 cells. */
+.door-bell {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  --foot: 6%;
+  --bell-iron:  #2e2622;            /* the lantern's own iron */
+  --bell-brass: #b8913f;
+  --bell-shine: #d9bd6a;
+  --bell-lip:   #8a6a2c;
+  --bell-cord:  var(--c-cream-soft);
+  --bell-knot:  var(--c-wood-light);
+  position: absolute;
+  left: calc(50% - 22 * var(--u));
+  bottom: calc(var(--foot) + 25 * var(--u));
+  width: calc(7 * var(--u));
+  height: calc(12 * var(--u));
+  z-index: 3;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.door-bell__arm,
+.door-bell__body {
+  position: absolute;
+  left: calc(6 * var(--u));
+  top: 0;
+  width: var(--u);
+  height: var(--u);
+}
+.door-bell__arm {
+  box-shadow:
+    calc(-6 * var(--u)) calc(0 * var(--u)) 0 0 var(--bell-iron),
+    calc(-5 * var(--u)) calc(0 * var(--u)) 0 0 var(--bell-iron),
+    calc(-4 * var(--u)) calc(0 * var(--u)) 0 0 var(--bell-iron),
+    calc(-3 * var(--u)) calc(0 * var(--u)) 0 0 var(--bell-iron),
+    calc(-2 * var(--u)) calc(0 * var(--u)) 0 0 var(--bell-iron),
+    calc(-6 * var(--u)) calc(1 * var(--u)) 0 0 var(--bell-iron),
+    calc(-2 * var(--u)) calc(1 * var(--u)) 0 0 var(--bell-iron);
+}
+/* The swinging part: everything below the hanger. An inset-0 wrapper with no
+ * paint, so the pivot can sit at the hanger link's foot (col 4's middle, the
+ * top of row 2) while the arm above it stays put. */
+.door-bell__swing {
+  position: absolute;
+  inset: 0;
+  transform-origin: calc(4.5 * var(--u)) calc(2 * var(--u));
+}
+.door-bell__body {
+  box-shadow:
+    calc(-3 * var(--u)) calc(2 * var(--u)) 0 0 var(--bell-brass),
+    calc(-2 * var(--u)) calc(2 * var(--u)) 0 0 var(--bell-brass),
+    calc(-1 * var(--u)) calc(2 * var(--u)) 0 0 var(--bell-brass),
+    calc(-3 * var(--u)) calc(3 * var(--u)) 0 0 var(--bell-brass),
+    calc(-2 * var(--u)) calc(3 * var(--u)) 0 0 var(--bell-shine),
+    calc(-1 * var(--u)) calc(3 * var(--u)) 0 0 var(--bell-brass),
+    calc(-4 * var(--u)) calc(4 * var(--u)) 0 0 var(--bell-brass),
+    calc(-3 * var(--u)) calc(4 * var(--u)) 0 0 var(--bell-brass),
+    calc(-2 * var(--u)) calc(4 * var(--u)) 0 0 var(--bell-shine),
+    calc(-1 * var(--u)) calc(4 * var(--u)) 0 0 var(--bell-brass),
+    calc(0 * var(--u)) calc(4 * var(--u)) 0 0 var(--bell-brass),
+    calc(-4 * var(--u)) calc(5 * var(--u)) 0 0 var(--bell-brass),
+    calc(-3 * var(--u)) calc(5 * var(--u)) 0 0 var(--bell-brass),
+    calc(-2 * var(--u)) calc(5 * var(--u)) 0 0 var(--bell-brass),
+    calc(-1 * var(--u)) calc(5 * var(--u)) 0 0 var(--bell-brass),
+    calc(0 * var(--u)) calc(5 * var(--u)) 0 0 var(--bell-brass),
+    calc(-4 * var(--u)) calc(6 * var(--u)) 0 0 var(--bell-lip),
+    calc(-3 * var(--u)) calc(6 * var(--u)) 0 0 var(--bell-lip),
+    calc(-2 * var(--u)) calc(6 * var(--u)) 0 0 var(--bell-lip),
+    calc(-1 * var(--u)) calc(6 * var(--u)) 0 0 var(--bell-lip),
+    calc(0 * var(--u)) calc(6 * var(--u)) 0 0 var(--bell-lip),
+    calc(-2 * var(--u)) calc(7 * var(--u)) 0 0 var(--bell-iron),
+    calc(-2 * var(--u)) calc(8 * var(--u)) 0 0 var(--bell-cord),
+    calc(-2 * var(--u)) calc(9 * var(--u)) 0 0 var(--bell-cord),
+    calc(-2 * var(--u)) calc(10 * var(--u)) 0 0 var(--bell-cord),
+    calc(-2 * var(--u)) calc(11 * var(--u)) 0 0 var(--bell-knot);
+}
+.door-bell.is-rung .door-bell__swing {
+  animation: bell-swing 1.8s ease-in-out 1;
+}
+/* Each swing about three fifths of the one before, the crown's and the
+ * cloak's ratio, ringing through rest; the last keyframe is rest. */
+@keyframes bell-swing {
+  0%   { transform: skewX(0deg); }
+  9%   { transform: skewX(-18deg); }
+  24%  { transform: skewX(11deg); }
+  39%  { transform: skewX(-6.5deg); }
+  54%  { transform: skewX(4deg); }
+  68%  { transform: skewX(-2.4deg); }
+  82%  { transform: skewX(1.4deg); }
+  100% { transform: skewX(0deg); }
+}
+.bell-touch {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  --foot: 6%;
+  position: absolute;
+  display: block;
+  left: calc(50% - 17.5 * var(--u) - 22px);
+  bottom: calc(var(--foot) + 25 * var(--u));
+  width: var(--tap-min);
+  height: var(--tap-min);
+  z-index: 5;
+  background: transparent;
+  pointer-events: auto;
+  cursor: pointer;
+  -webkit-tap-highlight-color: rgba(217, 189, 106, 0.3);
+}
+.bell-touch:focus-visible {
+  outline: 2px solid var(--c-rose);
+  outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .door-bell.is-rung .door-bell__swing { animation-duration: 0.001ms; }
+}
+@media (max-width: 599px) {
+  .door-bell,
+  .bell-touch { --s: 2; --foot: 8%; }
+}

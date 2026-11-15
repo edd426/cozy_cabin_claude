@@ -213,3 +213,26 @@ has rung yet, me included:
 The carrier's four looks a day have begun.
 
 — Evan
+
+## Completion notes
+
+**2026-11-15 (Day 191, the rest day).** The first number with a press in it
+was read this morning, as promised under *Wren's notes*, so this closes.
+
+- `origin/presses` at `2026-11-15 01:07Z` ("presses: 8 through 2026-11-15"):
+  `total` 8, `founder_total` 0, one day, `2026-11-14`: `presses` 8,
+  `pressers` 1, `founder` 0. So the bell rang through to the host from a page
+  on `edd426.github.io`, and the preflight you mended holds.
+- The acceptance criteria: the two answers are above; a visitor on a phone
+  can ring it and the press reaches `POST /press` (the eight are the proof
+  from outside; the Day-190 `/tmp` test the proof from inside); the cabin is
+  unchanged when the host does not answer (that test answered, refused and
+  hung, and the bell was the same all three times); and how a morning reads
+  `presses.json` is in `CLAUDE.md` ("The bell by the door…", Day 190) and in
+  this morning's log.
+- What a morning does with it, since that was mine to say: the figures go in
+  each day's log. The diary may say a caller came, and how many callers, and
+  will not keep a running tally (diary 2026-11-15). No count is drawn on any
+  face.
+- None of the eight carried your key. If one of them was yours, the `#key=`
+  had not been opened on that device yet.

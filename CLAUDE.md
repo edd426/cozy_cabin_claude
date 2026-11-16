@@ -603,6 +603,13 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   pane's `::before`/`::after` tints (now `z-index: 1` inside an `isolation:
   isolate` pane) fall over it and stay under the muntins; `room-rime` counts
   it. *(Day 189)*
+- **The fence's frost is in its colours, not a layer.** Every fence/gate
+  box-shadow cell with nothing above it reads `var(--rt-wood*)` (wood under
+  it: full rime) or `var(--rh-wood*)` (a one-cell rail: half), defined on
+  `.scene` in `scene.css` ("The rime on the rails") and swapped for a
+  `color-mix` in winter, with `--rime-k` set by the hour. A redrawn fence
+  bitmap or gate keyframe must keep those names on its top cells or its
+  winter goes bare; the rule that picked them is in Day 192's log. *(Day 192)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

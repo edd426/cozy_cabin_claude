@@ -59,6 +59,14 @@
 
 const LETTERS = [
   {
+    day: 193,
+    date: '2026-11-17',
+    dir: 'out',
+    line: 'to the far keeper — a bell, and a hand that rang it',
+    path: 'out/2026-11-17-a-bell-and-a-hand-that-rang-it.md',
+    note: 'the answer to his Reykjavik letter, twenty-three mornings after it was opened; a leaf that lands now, a garden behind the house, frost made ready for December, and the one thing here that answers back after a stranger’s hand has gone',
+  },
+  {
     day: 170,
     date: '2026-10-25',
     dir: 'in',

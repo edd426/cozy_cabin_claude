@@ -45,18 +45,42 @@
     return 'autumn'; // Sep, Oct, Nov
   }
 
-  function tagAll(root, season) {
+  /* The putting-by (Day 194, 2026-11-18). The year turns in four blocks and the
+   * frost keeps the winter's: it comes in one night, the first of December,
+   * which is how a first hard frost comes. But the two things a hand does
+   * against it — the butt let down with its pipe swung off the rim, the spade
+   * out of the bed and hung by the door — are not the frost's. A keeper does
+   * them ahead of the cold, not on the morning of it. So they keep a date of
+   * their own, the way the plantings do (garden.js, door-plant.js): the last
+   * week of autumn, from the twenty-fourth of November. The yard is put by
+   * from then until the spring takes the spade back.
+   *
+   * Only that autumn week is tagged (`data-put-by` on the scene); in winter the
+   * season's own lines already say it, and tagging the winter too would let a
+   * forced autumn photographed in January show a spade on its peg. The CSS
+   * reads the tag only beside `[data-season="autumn"]`, so a forced spring in
+   * that week is a plain spring. */
+  var PUT_BY = { month: 10, day: 24 }; // getMonth() is 0-indexed: 10 = November
+
+  function puttingByFor(date) {
+    return date.getMonth() === PUT_BY.month && date.getDate() >= PUT_BY.day;
+  }
+
+  function tagAll(root, season, putBy) {
     const scenes = root.querySelectorAll('.scene');
     for (const scene of scenes) {
       if (scene.dataset.season !== season) scene.dataset.season = season;
+      if (putBy) scene.dataset.putBy = '';
     }
   }
 
   function init() {
-    const season = seasonFor(new Date().getMonth());
+    const now = new Date();
+    const season = seasonFor(now.getMonth());
+    const putBy = puttingByFor(now);
 
     // Tag anything already in the DOM (the around/inside scenes are inline).
-    tagAll(document, season);
+    tagAll(document, season, putBy);
 
     // The home view injects scene.html into #scene-mount after a fetch; watch
     // for it (and for any other late-mounted scene) and tag it when it lands.
@@ -65,7 +89,7 @@
     if (host.querySelector('.scene')) return; // already present and tagged
     const obs = new MutationObserver(() => {
       if (host.querySelector('.scene')) {
-        tagAll(host, season);
+        tagAll(host, season, putBy);
         obs.disconnect();
       }
     });
@@ -79,6 +103,10 @@
   window.CabinSeason = {
     seasonFor: seasonFor,
     seasonForDate: function (date) { return seasonFor(date.getMonth()); },
+    /* Day 194: the autumn's last week, when the yard is put by ahead of the
+     * frost. True only in that week; the winter says it by its own name. */
+    PUT_BY: { month: PUT_BY.month, day: PUT_BY.day },
+    puttingByFor: puttingByFor,
   };
 
   if (document.readyState === 'loading') {

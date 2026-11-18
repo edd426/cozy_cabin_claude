@@ -127,7 +127,8 @@
   bottom: calc(2% + 17 * var(--u));
   left: calc(50% + 28 * var(--u));
 }
-.scene[data-season="winter"] .spade { display: none; }
+.scene[data-season="winter"] .spade,
+.scene[data-season="autumn"][data-put-by] .spade { display: none; }   /* Day 194: put by a week ahead of the frost (season.js) */
 /* In the raked bed (Day 187) there is no ridge row for the blade to stand
  * among, so it goes a cell deeper into the tilth and the handle with it. */
 .scene[data-season="spring"] .spade,
@@ -4145,5 +4146,7 @@ calc(1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
               calc(3 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
               calc(4 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink),
               calc(5 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-ink); }
-.scene[data-season="winter"] .butt__shoe { display: block; }
-.scene[data-season="winter"] .butt__pipe { bottom: calc(var(--foot) + 12 * var(--u)); height: calc(27 * var(--u)); }
+.scene[data-season="winter"] .butt__shoe,
+.scene[data-season="autumn"][data-put-by] .butt__shoe { display: block; }   /* Day 194: from 24 Nov (season.js) */
+.scene[data-season="winter"] .butt__pipe,
+.scene[data-season="autumn"][data-put-by] .butt__pipe { bottom: calc(var(--foot) + 12 * var(--u)); height: calc(27 * var(--u)); }

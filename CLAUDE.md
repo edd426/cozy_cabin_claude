@@ -610,6 +610,13 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `color-mix` in winter, with `--rime-k` set by the hour. A redrawn fence
   bitmap or gate keyframe must keep those names on its top cells or its
   winter goes bare; the rule that picked them is in Day 192's log. *(Day 192)*
+- **The putting-by keeps a date inside the autumn** (`season.js`
+  `PUT_BY`, 24 Nov): the butt's elbow and the hung spade show from then, the
+  rime still waits for 1 Dec. `data-put-by` is tagged in that week ONLY and
+  read ONLY beside `[data-season="autumn"]`, so a forced spring or a forced
+  autumn photographed in January stays plain. Anything date-gated inside a
+  season must be checked with an `on:` check (frozen dates), never `axis:
+  'season'` — a forced tag reads whatever week CI stands in. *(Day 194)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

@@ -155,6 +155,7 @@
         'the sprig in the mantle jar gone the same amber as the crowns outside; and after sundown no sparks and no stars — the autumn dark keeps no light of its own, only the leaves still coming down in it',
         'the skein of five crossing west high over the clearing — geese on passage, going over to wherever they winter. At every hour, the dark included: a skein on its road does not put down for the night',
         'the four beds behind the house dug rough and left in clods, the way a plot is left in the back end of the year, so the frost can get into them',
+        'and in its last week, from the twenty-fourth of November, the yard put by ahead of the frost: the butt let down and its pipe swung off the rim, and the spade out of the near bed and hung on its peg by the door. A hand does those before the cold comes, not on the morning it does, so they keep a date of their own rather than the winter’s; the rime itself waits for the first of December, since a first hard frost comes in one night',
       ],
     },
     winter: {
@@ -1054,6 +1055,11 @@
       view: 'around', kind: 'visible-count', selector: '.door-spade',
       reads: 'whether the garden’s spade is hung on its peg by the door',
     },
+    /* Day 194. The butt's pipe swung off the rim, seen from the bench. */
+    'yard-butt-let-down': {
+      view: 'home', kind: 'visible-count', selector: '.yard-butt__shoe',
+      reads: 'whether the butt’s downpipe has its foot swung out off the rim',
+    },
     /* Day 188. The rime on the grass and on the roof's courses. */
     'yard-rime': {
       view: 'home', kind: 'visible-count', selector: '.rime',
@@ -1429,10 +1435,35 @@
       expect: { summer: 0, autumn: 3, winter: 0, spring: 0 },
       guards: 'the same on the door side, where it also pins where the three that lie in autumn have to be: each in the column a leaf let go from, since that face’s leaves finish where they started (`door-leaf-returns`)',
     },
+    /* Day 194. Asked on the calendar, not on forced tags: the putting-by keeps
+     * a date (24 November, season.js) inside the autumn, and a forced autumn
+     * reads whatever week the runner happens to stand in — so on six mornings
+     * a year the old `axis: 'season'` form would have read the spade on its
+     * peg in "autumn" and gone red for the yard keeping its word. */
     {
-      probe: 'door-spade-hung', axis: 'season', at: { tod: 'day' },
-      expect: { summer: 0, autumn: 0, winter: 1, spring: 0 },
-      guards: '“the spade out of the near bed, cleaned and hung on a peg on the door side’s wall” in winter, and the peg bare the rest of the year, when the spade is out in the garden. It reads only this face: no checker opens the garden yet, so that the same spade is gone from the bed in the same months is held by the one `[data-season="winter"]` line in back.css and by nothing here',
+      probe: 'door-spade-hung',
+      on: {
+        'mid-autumn': '2026-10-15T12:00',
+        'the day before the putting-by': '2026-11-23T12:00',
+        'the putting-by': '2026-11-24T12:00',
+        midwinter: '2026-12-21T12:00',
+        'the spring equinox': '2027-03-20T12:00',
+        midsummer: '2027-06-21T12:00',
+      },
+      expect: { 'mid-autumn': 0, 'the day before the putting-by': 0, 'the putting-by': 1, midwinter: 1, 'the spring equinox': 0, midsummer: 0 },
+      guards: '“the spade out of the near bed, cleaned and hung on a peg on the door side’s wall” from the twenty-fourth of November and through the winter, and the peg bare the rest of the year, when the spade is out in the garden — and not a day early: the twenty-third reads it still out. It reads only this face: no checker opens the garden yet, so that the same spade is gone from the bed on the same days is held by the two lines beside `.spade` in back.css and by nothing here',
+    },
+    {
+      probe: 'yard-butt-let-down',
+      on: {
+        'mid-autumn': '2026-10-15T12:00',
+        'the day before the putting-by': '2026-11-23T12:00',
+        'the putting-by': '2026-11-24T12:00',
+        midwinter: '2026-12-21T12:00',
+        'the spring equinox': '2027-03-20T12:00',
+      },
+      expect: { 'mid-autumn': 0, 'the day before the putting-by': 0, 'the putting-by': 1, midwinter: 1, 'the spring equinox': 0 },
+      guards: '“the butt let down and its pipe swung off the rim” on the same twenty-fourth of November as the spade, read off the front: the elbow that carries the pipe’s foot out past the staves is there from that morning through the winter, and gone in March when the pipe goes back over the rim. The garden’s own elbow is held by its two lines in back.css and by nothing here',
     },
     {
       probe: 'yard-rime', axis: 'season', at: { tod: 'dawn' },

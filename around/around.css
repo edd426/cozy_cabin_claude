@@ -1860,7 +1860,8 @@
     calc(1 * var(--u)) calc(11 * var(--u)) 0 0 var(--spade-iron),
     calc(2 * var(--u)) calc(11 * var(--u)) 0 0 var(--spade-iron);
 }
-.scene[data-season="winter"] .door-spade { display: block; }
+.scene[data-season="winter"] .door-spade,
+.scene[data-season="autumn"][data-put-by] .door-spade { display: block; }   /* Day 194: hung a week ahead of the frost, from 24 Nov (season.js "The putting-by") */
 @media (max-width: 599px) {
   .door-spade { --s: 2; --foot: 8%; }
 }

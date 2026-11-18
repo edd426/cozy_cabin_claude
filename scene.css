@@ -5056,11 +5056,18 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   box-shadow: -1px 1px 0 0 var(--c-ink), -2px 2px 0 0 var(--c-ink),
               -3px 3px 0 0 var(--c-ink), -4px 3px 0 0 var(--c-ink),
               -5px 3px 0 0 var(--c-ink); }
-.scene[data-season="winter"] .yard-butt__shoe { display: block; }
-.scene[data-season="winter"] .yard-butt__pipe { bottom: calc(16% + 12px); height: calc(107px - 10%); }
+/* Day 194: and the autumn's last week as well. The frost keeps the season's
+ * block, but letting a butt down is a hand's act, done ahead of the cold, so
+ * it keeps a date of its own: from 24 November (season.js "The putting-by",
+ * which tags `data-put-by` on the scene in that week and no other). */
+.scene[data-season="winter"] .yard-butt__shoe,
+.scene[data-season="autumn"][data-put-by] .yard-butt__shoe { display: block; }
+.scene[data-season="winter"] .yard-butt__pipe,
+.scene[data-season="autumn"][data-put-by] .yard-butt__pipe { bottom: calc(16% + 12px); height: calc(107px - 10%); }
 @media (max-width: 599px) {
   .yard-butt__shoe { left: calc(50% - 48px); }
-  .scene[data-season="winter"] .yard-butt__pipe { height: calc(67px - 8%); }
+  .scene[data-season="winter"] .yard-butt__pipe,
+  .scene[data-season="autumn"][data-put-by] .yard-butt__pipe { height: calc(67px - 8%); }
 }
 
 /* ── The rime (Day 188) ────────────────────────────────────────────────────

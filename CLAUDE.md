@@ -617,6 +617,11 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   autumn photographed in January stays plain. Anything date-gated inside a
   season must be checked with an `on:` check (frozen dates), never `axis:
   'season'` — a forced tag reads whatever week CI stands in. *(Day 194)*
+- **`lean-sweep` reads a sideways gradient by its syntax, not its stops.**
+  Any `90deg` / `to right` gradient on a body counts as a lean however
+  evenly it is stopped (a symmetric two-end gradient on the bench seat went
+  red at all eight readings). Paint paired cells as a box with a box-shadow
+  copy instead of adding to `LEAN_ALLOWED`. *(Day 195)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

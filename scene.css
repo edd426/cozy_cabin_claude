@@ -3132,6 +3132,37 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   outline-offset: 2px;
 }
 
+/* ── The bench stays out (Day 195, 2026-11-19) ─────────────────────────────
+ * The butt is let down and the spade hung from 24 November (season.js "The
+ * putting-by"), and the bench is not carried in: a plank on two legs takes no
+ * harm from a winter that a spring will not dry out of it, the house has one
+ * room and no shed, and the front wall is a gable end with no eave to stand it
+ * under. So it keeps its place in every month, and in winter it takes the
+ * frost the way the rails do (Day 192): on every cell with nothing drawn
+ * directly above it. Here that is two runs — the crest of the slatted back,
+ * the whole of its top row, and the two ends of the seat that overhang the
+ * back, two cells each side. (The seat's middle has the back standing over
+ * it, and the seat is painted over the back's foot in DOM order, so its top
+ * row there is not a top.) Both have wood under them, so both take the full
+ * share, `--rt-*`, and the hour's `--rime-k` says how hard. The back's crest
+ * was already the pale wood: it goes whiter, not a new colour. Nothing here
+ * moves the frost off the board when it is leant on — the give carries the
+ * seat and back down a pixel with their colours on them. */
+.bench__back { box-shadow: inset 0 1px 0 var(--rt-wood-light); }
+/* The seat's two ends are one 2x1 box at the left end and its box-shadow
+ * copy 18px over — cells, not a sideways gradient, which `home-lean-sweep`
+ * would rightly read as a side however evenly it was stopped. */
+.bench__seat::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 1px;
+  background: var(--rt-wood);
+  box-shadow: 18px 0 0 0 var(--rt-wood);
+}
+
 /* ── Woodpile against the front wall (Day 76, 2026-07-23) ──────────────────
  * The first link of the fire the whole clearing has been about: the chimney
  * has smoked every hour I've drawn and the inside shows a fire with a little

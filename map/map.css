@@ -292,11 +292,14 @@
 }
 
 /* front = the viewpoint south of the cabin → home view. Eye points north (up). */
+/* Day 196: the zone's top moved down from 73% to 75.5% (and its height from
+ * 20% to 19%, still ≥44 px at 375) to clear the bench, which stands between
+ * the wall and wherever you stand to look at the front. */
 .map__zone--front {
   left: 31%;
-  top: 73%;
+  top: 75.5%;
   width: 38%;
-  height: 20%;
+  height: 19%;
   flex-direction: column;
 }
 .map__zone--front .map__eye {
@@ -403,6 +406,45 @@
   background: var(--c-wood-dark);
   z-index: 1;
   pointer-events: none;
+}
+
+/* The bench (Day 196), from above. It was never on the plan: the plan drew
+ * what stands on the ground, the trees, the stones, the box, the beds, and
+ * left off the one place in the clearing made for sitting. It stands on its
+ * own in the grass, nothing leaning on it and it on nothing, which is what a
+ * plan is for, so it is here now.
+ *
+ * Where, by the front's own numbers: centred on the house's middle (the yard
+ * puts it at `left: 50%`), and 20 css px against the front wall's 96 at the
+ * phone scale, so 20/96 of the roof's 23.4% here, 4.8%. Its foot stands a
+ * stride nearer the bench's viewer than the wall's foot, so it is set a
+ * stride south of the wall line (70.8%), clear of the window tick. From
+ * overhead you see the seat, a full-width plank, and north of it the crest of
+ * the back, narrower by the seat's overhang at each end (2 of 20 px, 10%) and
+ * in the pale wood the crest is drawn in out front. The back is to the house
+ * and the seat to the hills, the way the bench faces. Fixed px deep, like the
+ * stones: a plank is a plank thick at any width. No frost: a plan is excused
+ * the light and a morning's rime with it (Day 188). */
+.map__bench {
+  position: absolute;
+  left: 47.6%;
+  top: 72.6%;
+  width: 4.8%;
+  height: 3px;
+  margin-top: 1px;
+  background: var(--c-wood);
+  box-shadow: 0 1px 0 var(--c-wood-dark);
+  z-index: 1;
+  pointer-events: none;
+}
+.map__bench::before {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: -1px;
+  height: 1px;
+  background: var(--c-wood-light);
 }
 
 /* diary = the record, not a place: a small journal resting on the map's

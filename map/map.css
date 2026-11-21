@@ -447,6 +447,44 @@
   background: var(--c-wood-light);
 }
 
+/* The rick (Day 197), from above. The plan leaves off what leans on a wall
+ * (the boots, the pot, the bell, the lamp), because from overhead a thing
+ * flat to a wall is part of the wall's line. The rick is against a wall and
+ * is not flat to it: out front every log shows its sawn end, so the logs lie
+ * north-south, square to the wall, and the stack stands out of it by a log's
+ * length. That is ground you would walk round, so it is on the plan.
+ *
+ * Where, by the front's own numbers (phone scale, where the front wall is 96
+ * css px and the roof here is 23.4%, so 0.244% a px): the rick runs from 8 to
+ * 42 px east of the house's middle, 51.95% to 60.25%, which puts its west end
+ * under the window tick's east end, as it stands under the window out front.
+ * How far it stands out is a log, about half the bench's stride, so a few px
+ * deep and fixed, like the bench; the roof's eave (z 2) covers its inner
+ * edge, the butt's arrangement. From overhead you see the top logs' lengths,
+ * four of them side by side, with bark between; its level through the year
+ * never takes the bottom course, so the footprint is the same in every month.
+ * Colour, not light: no frost and no lit side (Day 188). */
+.map__rick {
+  position: absolute;
+  left: 51.95%;
+  top: calc(70.8% - 2px);              /* the eave's line, less what it covers */
+  width: 8.3%;
+  height: 6px;                         /* 4 px out from under the eave */
+  box-sizing: border-box;
+  border: 1px solid #3a2418;
+  background:
+    linear-gradient(to right,
+      transparent calc(25% - 0.5px), #3a2418 calc(25% - 0.5px),
+      #3a2418 calc(25% + 0.5px), transparent calc(25% + 0.5px),
+      transparent calc(50% - 0.5px), #3a2418 calc(50% - 0.5px),
+      #3a2418 calc(50% + 0.5px), transparent calc(50% + 0.5px),
+      transparent calc(75% - 0.5px), #3a2418 calc(75% - 0.5px),
+      #3a2418 calc(75% + 0.5px), transparent calc(75% + 0.5px)),
+    var(--c-wood);
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* diary = the record, not a place: a small journal resting on the map's
  * south-west margin, past the flowers, like a book left on the corner of the
  * drawing. Added Day 35 (2026-06-12) when the bottom strip retired and the

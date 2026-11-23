@@ -2012,3 +2012,104 @@
   .door-bell,
   .bell-touch { --s: 2; --foot: 8%; }
 }
+
+/* ── The rick, from the door (Day 199, 2026-11-23) ─────────────────────────
+ * The front's rick (scene.css .sprite--woodpile) stands at the EAST end of
+ * the front wall and out from it by a billet's length (the plan, Day 197).
+ * From the door you face west, so the south wall is this face's left edge and
+ * the rick stands just past it, on the grass. Orthographic across: its north
+ * end meets the south wall's line, and it runs a billet's length south of it.
+ * Deep, its near end is a few px west of this wall's plane, so its foot is
+ * one cell higher than the wall's.
+ *
+ * The logs lie north-south (they show their sawn ends to the bench), so from
+ * here each course is ONE long side of bark: the nearest log of that course,
+ * seen in profile, 8 cells long and 4 high, its corners left open so it reads
+ * round. No cut face, no pale ring. Bark is the front's own #3a2418 for the
+ * outline and two darker browns inside, the belly a shade lower (vertical
+ * weighting only — the bitmap is its own mirror, no lit end).
+ *
+ * Fixed 2px cells at both widths, as the front's rick is (only the anchor
+ * rebases, in the block below). Courses stack 6px apart, the front's own
+ * nesting rise, and each upper log lies behind the one under it.
+ *
+ * Its courses ride the front's season table: the bottom course is never
+ * taken; the middle course stands whenever any of the front's logs 5–7 do
+ * (summer, autumn, winter — winter spends log 7 first, but 5 and 6 remain);
+ * the crown course is autumn's logs 8–9. Gated on `display` so a count reads
+ * it (almanac `door-rick-courses`). No frost: the front's rick takes none. */
+.side-rick {
+  position: absolute;
+  /* side-cabin wall's left edge = 50% − 36 native × s (wall inset 2, half-width 38) */
+  left: calc(50% - 108px - 16px);
+  bottom: calc(6% + 2px);
+  width: 16px;
+  height: 20px;
+  z-index: 2;
+  pointer-events: none;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.side-rick::after {                       /* contact shadow, as the front's */
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 16px;
+  height: 2px;
+  background: var(--c-grass-shadow);
+  opacity: 0.5;
+  border-radius: 50%;
+}
+/* One log's long side. The element is cell (1, row 3) of an 8×4 bitmap:
+ *   row 0  . D D D D D D .
+ *   row 1  D B B B B B B D
+ *   row 2  D B b b b b B D
+ *   row 3  . D D D D D D .      (D #3a2418, B #5c3a28, b #4a2e1f)
+ * Eight cells, 16px: two of the log's own diameters. At six, the plan's
+ * few px, a log seen side-on was as long as it was thick and the stack read
+ * as three barrels; this is a few px longer than the plan's footprint. */
+.side-rick__log {
+  position: absolute;
+  left: 2px;
+  width: 2px;
+  height: 2px;
+  background: #3a2418;
+  box-shadow:
+    0px -6px 0 #3a2418,
+    2px -6px 0 #3a2418,
+    4px -6px 0 #3a2418,
+    6px -6px 0 #3a2418,
+    8px -6px 0 #3a2418,
+    10px -6px 0 #3a2418,
+    -2px -4px 0 #3a2418,
+    0px -4px 0 #5c3a28,
+    2px -4px 0 #5c3a28,
+    4px -4px 0 #5c3a28,
+    6px -4px 0 #5c3a28,
+    8px -4px 0 #5c3a28,
+    10px -4px 0 #5c3a28,
+    12px -4px 0 #3a2418,
+    -2px -2px 0 #3a2418,
+    0px -2px 0 #5c3a28,
+    2px -2px 0 #4a2e1f,
+    4px -2px 0 #4a2e1f,
+    6px -2px 0 #4a2e1f,
+    8px -2px 0 #4a2e1f,
+    10px -2px 0 #5c3a28,
+    12px -2px 0 #3a2418,
+    2px 0px 0 #3a2418,
+    4px 0px 0 #3a2418,
+    6px 0px 0 #3a2418,
+    8px 0px 0 #3a2418,
+    10px 0px 0 #3a2418;
+}
+.side-rick__log--1 { bottom: 0; }
+.side-rick__log--2 { bottom: 6px; }
+.side-rick__log--3 { bottom: 12px; display: none; }
+.scene[data-season="autumn"] .side-rick__log--3 { display: block; }
+.scene[data-season="spring"] .side-rick__log--2 { display: none; }
+
+@media (max-width: 599px) {
+  .side-rick { left: calc(50% - 72px - 16px); bottom: calc(8% + 2px); }
+}

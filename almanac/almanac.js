@@ -127,7 +127,7 @@
       lead: 'Summer is the home season — the green this place has always worn, and the lightest lean of the four. It asks almost nothing of anything.',
       does: [
         'the meadow at its fullest warm green, and the tree crowns exactly the green they were drawn in',
-        'the woodpile at the wall restacked to seven logs, four along the bottom and three nested above',
+        'the woodpile at the wall restacked to seven logs, four along the bottom and three nested above; from the door, two courses of bark past the near corner',
         'the chimney at its thin easy thread — three puffs off a fire nobody needs the heat of',
         'the wildflowers at the wall’s foot in their sown rose, and the pot by the door in the green it was potted in',
         'the pot’s bloom wheel at its fastest of the year — half again the pace it keeps at the equinoxes, a bloom’s whole round from bud to bare in about a fortnight and a half',
@@ -143,7 +143,7 @@
       lead: 'Autumn leans furthest of the four. It is the season the year shows most, and the one anyone who winters by a fire spends getting the wood up.',
       does: [
         'a gold over the whole frame, and the tree crowns gold with it — on the plan as well, where the two crowns drawn from overhead turn off the yard’s own line and the frame takes no gold at all, a plan having no light to wear',
-        'the woodpile laid in full — nine logs, a crown course of two nested in the middle row’s valleys, standing two proud of the sill above it',
+        'the woodpile laid in full — nine logs, a crown course of two nested in the middle row’s valleys, standing two proud of the sill above it; from the door, three courses of bark, the logs seen along their length',
         'the chimney a touch fuller than the summer thread — the first fires',
         'the wildflowers gone over to a spent russet on gilded stems, and the door pot warmed with them — the same going-over the crowns take',
         'the pot’s bloom wheel slowing out of the summer toward its middling pace, each bloom holding every state a little longer than it did in August',
@@ -162,7 +162,7 @@
       lead: 'Winter is a hush, not a death. Nothing here goes bare and nothing goes black; the whole clearing draws in, and the one thing that gets bigger is the sign that somebody in it is warm.',
       does: [
         'a pale blue-grey quiet over the frame, and the crowns cooled to a muted sage — never a bare branch — the plan’s two crowns and its flower patch quieted with them',
-        'the woodpile being spent: six logs, the middle row’s right-hand end gone first, picked from the side the door is on',
+        'the woodpile being spent: six logs, the middle row’s right-hand end gone first, picked from the side the door is on; from the door the row still stands, two courses',
         'the whole fall lying under the crowns, gone over to the russet every spent bloom here goes — seven under the big tree, four under the small one, five round the near tree by the door. Nothing comes down now; the ground keeps what came down',
         'the chimney at its deepest — a fourth puff where three climb all year, each brighter and spreading wider by the top',
         'the wildflowers drained to a dusty pink on grey-sage stems and the door pot quieted with them — every stem still standing, none of them taken',
@@ -183,7 +183,7 @@
       does: [
         'a fresh pistachio over the frame, and the crowns lifted bright with new growth and pale rose blossom on the bough — both crowns out front, the near one by the door and the two on the plan; the blossom is the spring’s alone, and the other three seasons’ boughs carry none',
         'the first of the blossom already lying under the boughs, the same pale rose on the grass — five petals under the big tree and three under the small one, a little right of each trunk where the wind sets them down, and four round the near tree by the door. A blossom keeps a bough a week or two, which is finer than this year’s four seasons can say, so the spring holds the letting-go as one moment: the rose still up and the first of it down, all season',
-        'the woodpile at its thinnest — four logs, the bottom course only',
+        'the woodpile at its thinnest — four logs, the bottom course only, and from the door one long log of bark on the grass',
         'the last of the fallen leaves, darkened toward the earth — three under the big tree, one under the small one, two by the door — the rest already taken back into the ground the fresh green comes up out of',
         'the chimney a touch fuller than the summer thread — the last fires',
         'the wildflowers at their brightest and freshest rose of the year, and the door pot lifted with them — new bloom on new growth',
@@ -1050,6 +1050,12 @@
       view: 'around', kind: 'visible-count', selector: '.door-plant__foliage',
       reads: 'whether the pot by the door still has its plant in it',
     },
+    /* Day 199. The same rick seen from the door: one long side of bark per
+     * course, so it counts courses where the front counts logs. */
+    'door-rick-courses': {
+      view: 'around', kind: 'visible-count', selector: '.side-rick__log',
+      reads: 'how many courses of the rick show past the near corner, seen from the door',
+    },
     /* Day 186. The spade put by for the winter, on the door side's wall. */
     'door-spade-hung': {
       view: 'around', kind: 'visible-count', selector: '.door-spade',
@@ -1384,6 +1390,11 @@
       probe: 'woodpile-logs', axis: 'season', at: { tod: 'day' },
       expect: { summer: 7, autumn: 9, winter: 6, spring: 4 },
       guards: 'the pile’s count in all four seasons — seven restacked by summer, nine laid in full by autumn, six being spent through winter, four at the spring thinnest',
+    },
+    {
+      probe: 'door-rick-courses', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 2, autumn: 3, winter: 2, spring: 1 },
+      guards: 'the same rick from the door, where each course is one long side of bark: two courses in summer, three laid in full by autumn, two still in winter because the front spends its middle row’s near end first and the rest of that row stands, one in spring. Read beside the line above, the two faces’ tables are written one against the other, course for row. That it is the same stack, at the same corner, is held by where it is drawn and by nothing here'
     },
     {
       probe: 'hearth-armful', axis: 'season', at: { tod: 'day' },

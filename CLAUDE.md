@@ -610,6 +610,12 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   `color-mix` in winter, with `--rime-k` set by the hour. A redrawn fence
   bitmap or gate keyframe must keep those names on its top cells or its
   winter goes bare; the rule that picked them is in Day 192's log. *(Day 192)*
+  The rick does the same through per-log variables (`--lt-a/-b/-w/-e` out
+  front, `--sr-top/-sh` from the door) set to `--rt-bark` in winter only for
+  the logs whose cells are tops **in the winter stack** — tops change with the
+  level, so a redrawn rick or a new winter level means re-picking them.
+  Computed `box-shadow` colours from `color-mix` read back as `color(srgb …)`,
+  not `rgb()` — a probe matching only `rgb()` sees no frost at all. *(Day 200)*
 - **The putting-by keeps a date inside the autumn** (`season.js`
   `PUT_BY`, 24 Nov): the butt's elbow and the hung spade show from then, the
   rime still waits for 1 Dec. `data-put-by` is tagged in that week ONLY and

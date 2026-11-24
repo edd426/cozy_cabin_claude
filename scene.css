@@ -3226,12 +3226,15 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
      2px  0   0 var(--c-cream-soft),
      0   -2px 0 var(--c-cream-soft),
      2px -2px 0 var(--c-cream-soft),
-    /* bark ring (octagon — corners open) */
-     0   -4px 0 #3a2418,
-     2px -4px 0 #3a2418,
-    -2px -2px 0 #3a2418,
+    /* bark ring (octagon — corners open). The four cells along the top —
+     * the two of the crown and the two shoulders — are the cells a frost
+     * can reach, so each wears a variable that stays bark until winter
+     * names it a top (see "The rime on the rick", below). */
+     0   -4px 0 var(--lt-a, #3a2418),
+     2px -4px 0 var(--lt-b, #3a2418),
+    -2px -2px 0 var(--lt-w, #3a2418),
     -2px  0   0 #3a2418,
-     4px -2px 0 #3a2418,
+     4px -2px 0 var(--lt-e, #3a2418),
      4px  0   0 #3a2418,
      0    2px 0 #3a2418,
      2px  2px 0 #3a2418;
@@ -3272,6 +3275,29 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .scene[data-season="spring"] .woodpile-log--5,
 .scene[data-season="spring"] .woodpile-log--6,
 .scene[data-season="spring"] .woodpile-log--7 { display: none; }
+
+/* ── The rime on the rick (Day 200, 2026-11-24) ────────────────────────────
+ * The bench, the rails and the grass all take the frost from December, and
+ * the stack of wood between them stood bare. A rick under no eave goes white
+ * along whatever faces the sky, like anything else out in a clear night, so
+ * it takes it now by the Day-192 rule and no other: a cell is a top when
+ * nothing is drawn directly above it. Read off the winter stack (logs 1–6,
+ * the season the rime is in), that is the crown and both shoulders of the
+ * middle row's two logs, the whole crown of log 4 and the east half of log
+ * 3's — the gap the spent log 7 left, so the frost lies where the burning
+ * has been — and the west shoulder and crown cell of log 1 at the left end.
+ * Nothing on a cut face: every face has bark over it. Every top has wood
+ * under it (cut face below the crown, bark below each shoulder), so all take
+ * the full share, `--rt-bark`, and the hour's `--rime-k` says how hard.
+ * Outside winter `--rt-bark` IS the bark, so nothing here shows until then. */
+.scene[data-season="winter"] .woodpile-log--1 { --lt-w: var(--rt-bark); --lt-a: var(--rt-bark); }
+.scene[data-season="winter"] .woodpile-log--3 { --lt-b: var(--rt-bark); --lt-e: var(--rt-bark); }
+.scene[data-season="winter"] .woodpile-log--4,
+.scene[data-season="winter"] .woodpile-log--5,
+.scene[data-season="winter"] .woodpile-log--6 {
+  --lt-w: var(--rt-bark); --lt-a: var(--rt-bark);
+  --lt-b: var(--rt-bark); --lt-e: var(--rt-bark);
+}
 
 /* ── The mouse in the rick (Day 176, 2026-10-31) ───────────────────────────
  * Day 175 drew the first thing here that is never shown at rest: a wren in a
@@ -5204,6 +5230,7 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   --rh-wood: var(--c-wood);
   --rh-wood-dark: var(--c-wood-dark);
   --rh-wood-light: var(--c-wood-light);
+  --rt-bark: #3a2418;                              /* the rick's bark (Day 200) */
   --rime-k: 40%;                                   /* the plain middle of the day */
 }
 .scene[data-tod="dusk"]  { --rime-k: 55%; }
@@ -5216,4 +5243,5 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   --rh-wood:       color-mix(in srgb, #d9dbd6 calc(var(--rime-k) / 2), var(--c-wood));
   --rh-wood-dark:  color-mix(in srgb, #d9dbd6 calc(var(--rime-k) / 2), var(--c-wood-dark));
   --rh-wood-light: color-mix(in srgb, #d9dbd6 calc(var(--rime-k) / 2), var(--c-wood-light));
+  --rt-bark:       color-mix(in srgb, #d9dbd6 var(--rime-k), #3a2418);
 }

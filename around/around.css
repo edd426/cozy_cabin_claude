@@ -200,7 +200,10 @@
  * the dark turns ON — a lamp left burning by the door for whoever comes up the
  * path at a late hour. It lives on the east/door face only, beside the entrance,
  * and owes no twin on the front (the front never shows this lamp's wall —
- * CLAUDE.md "a wall no view shows is free"). Drawn in native px at the same --s
+ * CLAUDE.md "a wall no view shows is free"). [Day 201: wrong. This wall is
+ * shown, here, and the front sees it edge-on: the lamp, standing out from it,
+ * is drawn past the front's right corner — scene.css `.yard-east`.]
+ * Drawn in native px at the same --s
  * scale as the side-cabin so it reads at one size with the building; decorative
  * (aria-hidden, pointer-events:none), clear of the door's tap pad.
  *
@@ -391,7 +394,8 @@
  * the honest sign of a resident the cabin can hold without drawing a figure is a
  * thing left *empty* in the shape of the person who'd fill it. Door-face only,
  * like the lantern — owes no twin on the front (CLAUDE.md "a wall no view shows
- * is free"). Drawn in native px at the same --s scale as the side-cabin so it
+ * is free"). [Day 201: not so — the front sees this wall edge-on, and the boot
+ * is drawn past its right corner too, scene.css `.yard-east`.] Drawn in native px at the same --s scale as the side-cabin so it
  * reads at one size with the building. A passive ground object: z-index 2 (cabin
  * level), so the ambient hour-wash (.scene::after, z 7) colours it with the grass
  * — gold at dusk, dusk-blue at night — but it is no light source itself.
@@ -454,7 +458,8 @@
  * stones' and the inside jar's earth; the greens are the front flowerbed's
  * sage tokens; the rose flecks are the front blooms' / mailbox flag's --c-rose.
  * Door-face only, owes no twin on the front (CLAUDE.md "a wall no view shows is
- * free"). Passive ground object at z-index 2 — the ambient hour-wash
+ * free"). [Day 201: not so — the pot stands out from a wall the front sees
+ * edge-on, and is drawn past its right corner too, scene.css `.yard-east`.] Passive ground object at z-index 2 — the ambient hour-wash
  * (.scene::after, z5) colours it with the grass, gold at dusk and dusk-blue at
  * night, but it is no light source itself (that's the lantern's job). Drawn in
  * native px at the same --s scale as the boots/lantern/cabin so it reads at one

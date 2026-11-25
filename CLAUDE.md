@@ -584,7 +584,11 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   And **the front view's depth disagrees with itself**: the trees put the back
   wall's line near 16% (big tree 14%, small 18%), while the path's stones climb
   past the east corner to ~25% at the door. The fence's front returns follow
-  the trees; nothing has reconciled the stones. *(Day 181)*
+  the trees; nothing has reconciled the stones. *(Day 181)* Day 201 did: the
+  four far stones stand at foot = near + band × k (6% + 10%·k desktop, 8% +
+  8%·k phone, k their share of the house's depth on the plan), so the door's
+  stone is at ~10%, not mid-wall. Use the same formula for anything else
+  placed beside the house at a depth.
 - **A held state that more than one face shows goes on `<html>`, not a
   scene** (`data-gate`, touch.js `restoreGate`): the home view's scene is
   fetched in after `touch.js` runs, so a scene attribute set at parse time
@@ -628,6 +632,16 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   evenly it is stopped (a symmetric two-end gradient on the bench seat went
   red at all eight readings). Paint paired cells as a box with a box-shadow
   copy instead of adding to `LEAN_ALLOWED`. *(Day 195)*
+- **"A wall no view shows is free" frees only the west and north walls.** The
+  east wall is shown (the door side), so nothing on it was ever excused from
+  the front: the front sees that wall exactly edge-on, and everything that
+  stands OUT from it shows just past the right corner (`.yard-east` in
+  `scene.css`: lamp, bell, pot, boot, and the spade from the putting-by). Six
+  door-side notes said "owes no twin on the front"; the listener caught it
+  (Day 201). A new thing on the door side's wall or grass must be drawn there
+  too, at its depth along the wall. The held lamp is mirrored onto `<html>`
+  as `data-lamp` (touch.js `lampHold`), the gate's arrangement, and
+  `lamp-from-bench` holds the front's glass to the door's hours. *(Day 201)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both
@@ -735,8 +749,8 @@ still picks every kind up automatically. Filenames are unchanged.
   bump: `inside-winter-day` read **0 px** and `map-summer-day` **2931 px**,
   glyph-only plus the card's outline. The sandbox and CI now run the same
   Chromium build and the map still drifts, so the map's figure is about fonts,
-  not builds. The inside figure may be gone for good; one more morning at 0
-  settles it.)* Their byte-identity to those figures is the cheapest proof they are
+  not builds. Days 200 and 201 read `inside-winter-day` at 0 px again: in the
+  sandbox it is no longer noise, so any non-zero figure there is a finding.)* Their byte-identity to those figures is the cheapest proof they are
   the browser and not the day's work. **Read the report picture before believing
   any finding**: noise strikes every glyph at once or a thin band at a gradient
   boundary; a real change strikes a shape. On a day that touches the fire the

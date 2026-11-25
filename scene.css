@@ -2316,21 +2316,33 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
 .path-stone--4,
 .path-stone--5,
 .around-path__stone--front { --cut: 4px; }
+/* Day 201 (2026-11-25): the four far stones came down to the ground. They
+ * climbed past the corner to nearly half the wall's height (the door's stone
+ * at 6% + 100px), which put the door further back than the back wall stands
+ * by the trees and the fence (16%) — Day 181 named the disagreement and left
+ * it. Evan's own example of a floating thing (CLAUDE.md, 2026-05-30) was this
+ * stone. Each foot now stands at its place on the plan between the front
+ * wall's foot and the back wall's line, foot = near + band × k, k the share
+ * of the house's depth north of the front wall (stone 1 0.40, 2 0.25, 3 0.08,
+ * 4 a stride south of it, -0.05): 6% + 10%·k here, 8% + 8%·k on a phone. In %
+ * so one rule crosses the breakpoint. Their across places are untouched.
+ *
+ * The notes below are the stones' first placement and describe the old heights. */
 /* Stone 1 (back) — pressed against cabin's right edge at mid-cabin-
  * height, mostly hidden behind the cabin (cabin is at left: 50%, width
  * 144px at 3x, so its right edge is at 50% + 72px). Stone spans
  * 50%+65 to 50%+79, so ~7px of it sticks out past the cabin's
  * silhouette. */
-.path-stone--1 { width: 14px; height: 4px; bottom: calc(6% + 100px); left: calc(50% + 65px); }
+.path-stone--1 { width: 14px; height: 4px; bottom: 10%;               left: calc(50% + 65px); }
 /* Stone 2 (between back and mid) — fully visible just past the
  * cabin's right edge, stepping down and slightly right. */
-.path-stone--2 { width: 18px; height: 4px; bottom: calc(6% + 72px);  left: calc(50% + 80px); }
+.path-stone--2 { width: 18px; height: 4px; bottom: 8.5%;              left: calc(50% + 80px); }
 /* Stone 3 (mid) — well right of the cabin, mid-air between cabin's
  * foot and the bottom of the scene. */
-.path-stone--3 { width: 22px; height: 4px; bottom: calc(6% + 42px);  left: calc(50% + 98px); }
+.path-stone--3 { width: 22px; height: 4px; bottom: 6.8%;              left: calc(50% + 98px); }
 /* Stone 4 (between mid and front) — closer to viewer, still on the
  * grass strip below the cabin. */
-.path-stone--4 { width: 27px; height: 5px; bottom: calc(6% + 10px);  left: calc(50% + 118px); }
+.path-stone--4 { width: 27px; height: 5px; bottom: 5.5%;              left: calc(50% + 118px); }
 /* Stone 5 (front) — at the scene's bottom edge, exiting right partly
  * off-frame. */
 .path-stone--5 { width: 32px; height: 5px; bottom: 0;                left: calc(50% + 132px); }
@@ -4106,6 +4118,9 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
  * are a WILD light the clearing makes for no one. So the front keeps being the
  * still, unattended face — it gets no lamp and no second pair of boots — and is
  * only given the life a summer evening already has out over the grass.
+ * [Day 201: it still has no lamp of its own. The door's lamp and boots show
+ *  past its right corner, side-on, because they stand out from a wall this
+ *  face sees edge-on — `.yard-east`.]
  *
  * Hour-gated on the same data-tod the lantern and the wash use (sky.js). The
  * default — no data-tod, or `day` — is NOTHING: the layer is fully transparent,
@@ -4396,10 +4411,10 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   /* Path stones rebased to the 2x cabin (96×160, foot at 8%, right edge
    * at 50% + 48px). Stone widths/heights stay constant — pixel art needs
    * its minimum-feature-width to stay legible at the smaller scale. */
-  .path-stone--1       { bottom: calc(8% + 70px); left: calc(50% + 41px); height: 3px; }
-  .path-stone--2       { bottom: calc(8% + 50px); left: calc(50% + 53px); height: 3px; }
-  .path-stone--3       { bottom: calc(8% + 28px); left: calc(50% + 66px); }
-  .path-stone--4       { bottom: calc(8% + 8px);  left: calc(50% + 80px); }
+  .path-stone--1       { bottom: 11.2%;           left: calc(50% + 41px); height: 3px; }
+  .path-stone--2       { bottom: 10%;             left: calc(50% + 53px); height: 3px; }
+  .path-stone--3       { bottom: 8.6%;            left: calc(50% + 66px); }
+  .path-stone--4       { bottom: 7.6%;            left: calc(50% + 80px); }
   .path-stone--5       { bottom: 0;               left: calc(50% + 92px); }
   /* The reach follows its stone (Day 144). Only `left` rebases — the pad's
    * own 32×5 box and the 44px minimum that widens it are the same at both
@@ -5244,4 +5259,356 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   --rh-wood-dark:  color-mix(in srgb, #d9dbd6 calc(var(--rime-k) / 2), var(--c-wood-dark));
   --rh-wood-light: color-mix(in srgb, #d9dbd6 calc(var(--rime-k) / 2), var(--c-wood-light));
   --rt-bark:       color-mix(in srgb, #d9dbd6 var(--rime-k), #3a2418);
+}
+
+/* ── The door's wall, edge-on from the bench (Day 201, 2026-11-25) ──────────
+ * A note from the listener's window (messages/done/2026-11-24-…) said a few
+ * things were missing from the front and the door side. Walking the front
+ * against the plan found them at once. From the bench the east wall is seen
+ * exactly edge-on, so nothing ON it shows — but everything that stands OUT
+ * from it does, just past the right corner: the lamp on its bracket, the bell
+ * on its arm, the pot and the boots on the grass, and from the putting-by the
+ * spade on its peg. Every note beside them on the door side said they "owe no
+ * twin on the front (a wall no view shows is free)". That reason was never
+ * true of them: the east wall is one of the two the cabin shows, and Evan's
+ * rule (2026-06-24) frees a feature on a wall NO view shows. And no rule frees
+ * a thing that stands out past a corner some view does show.
+ *
+ * Across (orthographic): each stands off the wall's line by its own width,
+ * from `--e`, the wall's east edge (22 cells from the middle).
+ * Deep: each foot stands at its own place along the 144-cell wall, measured
+ * off the door side (spade 0.10 of the way north, bell and boots 0.25, pot
+ * 0.68, lamp 0.72), between the front wall's foot and the back wall's line
+ * at 16% (the trees' and the fence's depth): foot = near + band × k.
+ * Up: the same cells above that foot the door side hangs them at (lamp 25–39,
+ * bell 25–37, spade 8–19), and drawn at the same --s cell as the house beside
+ * them, so the lamp is the size against the wall it is from the door.
+ * Seen along the wall they eclipse one another where they do, nearer over
+ * farther (DOM order, far first). Each bitmap paints from a 1-cell element
+ * standing on one of its own empty cells (CLAUDE.md, Day 157).
+ *
+ * What a far look leaves off: the pot's blooms (door-plant.js opens them by
+ * date, one cell each) and the second boot, which stands straight behind the
+ * first. The bell's swing runs in the wall's own plane, toward and away from
+ * the bench, so nothing of a ring shows here. */
+.yard-east {
+  --s: 3;
+  --u: calc(1px * var(--s));
+  --e: calc(50% + 22 * var(--u));
+  --near: 6%;
+  --band: 10%;
+  --fe-iron:  #2e2622;            /* the lantern's iron, and the bell's */
+  --fe-brass: #b8913f;
+  --fe-shine: #d9bd6a;
+  --fe-lip:   #8a6a2c;
+  --fe-cord:  var(--c-cream-soft);
+  --fe-knot:  var(--c-wood-light);
+  --fe-spade: #8b8682;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.yard-east > span {
+  --foot: calc(var(--near) + var(--band) * var(--k));
+  position: absolute;
+  width: var(--u);
+  height: var(--u);
+}
+/* The lamp (far, 0.72): iron and glass. The glass is its own box under the
+ * iron, so the hour and a held hand can light it exactly as they light the
+ * door's (around.css), halo and all — no offset, no side. */
+.yard-east > .yard-east__glass {
+  --k: 0.72;
+  left: calc(var(--e) + 6 * var(--u));
+  bottom: calc(var(--foot) + 28 * var(--u));
+  width: calc(5 * var(--u));
+  height: calc(6 * var(--u));
+  background: #46413a;
+  transition: background 1.6s ease, box-shadow 1.6s ease;
+}
+.yard-east__lamp { --k: 0.72; left: calc(var(--e) + 12 * var(--u)); bottom: calc(var(--foot) + 38 * var(--u));
+  box-shadow:
+    calc(-12 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-11 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-10 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-9 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-8 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(1 * var(--u)) 0 0 var(--fe-iron),
+    calc(-8 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-3 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-2 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(0 * var(--u)) calc(2 * var(--u)) 0 0 var(--fe-iron),
+    calc(-8 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-3 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-2 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(0 * var(--u)) calc(3 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-3 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-2 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(4 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(5 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(5 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(5 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(6 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(6 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(6 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(7 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(7 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(7 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(8 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(8 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(8 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(9 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(9 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(9 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(10 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(10 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(10 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-3 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-2 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-iron),
+    calc(-8 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-3 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-2 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(0 * var(--u)) calc(12 * var(--u)) 0 0 var(--fe-iron),
+    calc(-8 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-7 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-6 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-5 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-4 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-3 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-2 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(-1 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron),
+    calc(0 * var(--u)) calc(13 * var(--u)) 0 0 var(--fe-iron);
+}
+/* The pot (0.68): leaves and clay, the leaves on their own element so the
+ * season's filter can turn them with the door's (around.css). */
+.yard-east__leaf { --k: 0.68; left: var(--e); bottom: calc(var(--foot) + 6 * var(--u)); transition: filter 1.6s ease;
+  box-shadow:
+    calc(2 * var(--u)) calc(-4 * var(--u)) 0 0 var(--c-grass-light),
+    calc(3 * var(--u)) calc(-4 * var(--u)) 0 0 var(--c-grass-light),
+    calc(4 * var(--u)) calc(-4 * var(--u)) 0 0 var(--c-grass-light),
+    calc(5 * var(--u)) calc(-4 * var(--u)) 0 0 var(--c-grass-light),
+    calc(6 * var(--u)) calc(-4 * var(--u)) 0 0 var(--c-grass-light),
+    calc(2 * var(--u)) calc(-3 * var(--u)) 0 0 var(--c-grass-light),
+    calc(3 * var(--u)) calc(-3 * var(--u)) 0 0 var(--c-grass-light),
+    calc(4 * var(--u)) calc(-3 * var(--u)) 0 0 var(--c-grass-light),
+    calc(5 * var(--u)) calc(-3 * var(--u)) 0 0 var(--c-grass-light),
+    calc(6 * var(--u)) calc(-3 * var(--u)) 0 0 var(--c-grass-light),
+    calc(1 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(2 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(3 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(4 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(5 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(6 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(7 * var(--u)) calc(-2 * var(--u)) 0 0 var(--c-grass),
+    calc(1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(2 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(3 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(4 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(5 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(6 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(7 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-grass),
+    calc(1 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass),
+    calc(2 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass),
+    calc(3 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass),
+    calc(4 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass),
+    calc(5 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass),
+    calc(6 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass),
+    calc(7 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-grass);
+}
+.yard-east__pot { --k: 0.68; left: var(--e); bottom: calc(var(--foot) + 4 * var(--u));
+  box-shadow:
+    calc(0 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(2 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(3 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(4 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(5 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(6 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(7 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(8 * var(--u)) calc(-1 * var(--u)) 0 0 var(--c-wood-light),
+    calc(1 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(2 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(3 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(4 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(5 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(6 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(7 * var(--u)) calc(0 * var(--u)) 0 0 #c19465,
+    calc(1 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(2 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(3 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(4 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(5 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(6 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(7 * var(--u)) calc(1 * var(--u)) 0 0 #c19465,
+    calc(1 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(2 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(3 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(4 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(5 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(6 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(7 * var(--u)) calc(2 * var(--u)) 0 0 #c19465,
+    calc(1 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(2 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(3 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(4 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(5 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(6 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(7 * var(--u)) calc(3 * var(--u)) 0 0 #c19465,
+    calc(1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(2 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(3 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(4 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(5 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(6 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(7 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark);
+}
+/* The bell (0.25), hung plumb. */
+.yard-east__bell { --k: 0.25; left: var(--e); bottom: calc(var(--foot) + 25 * var(--u));
+  box-shadow:
+    calc(0 * var(--u)) calc(-11 * var(--u)) 0 0 var(--fe-iron),
+    calc(1 * var(--u)) calc(-11 * var(--u)) 0 0 var(--fe-iron),
+    calc(2 * var(--u)) calc(-11 * var(--u)) 0 0 var(--fe-iron),
+    calc(2 * var(--u)) calc(-10 * var(--u)) 0 0 var(--fe-iron),
+    calc(1 * var(--u)) calc(-9 * var(--u)) 0 0 var(--fe-brass),
+    calc(2 * var(--u)) calc(-9 * var(--u)) 0 0 var(--fe-brass),
+    calc(3 * var(--u)) calc(-9 * var(--u)) 0 0 var(--fe-brass),
+    calc(1 * var(--u)) calc(-8 * var(--u)) 0 0 var(--fe-brass),
+    calc(2 * var(--u)) calc(-8 * var(--u)) 0 0 var(--fe-shine),
+    calc(3 * var(--u)) calc(-8 * var(--u)) 0 0 var(--fe-brass),
+    calc(0 * var(--u)) calc(-7 * var(--u)) 0 0 var(--fe-brass),
+    calc(1 * var(--u)) calc(-7 * var(--u)) 0 0 var(--fe-brass),
+    calc(2 * var(--u)) calc(-7 * var(--u)) 0 0 var(--fe-shine),
+    calc(3 * var(--u)) calc(-7 * var(--u)) 0 0 var(--fe-brass),
+    calc(4 * var(--u)) calc(-7 * var(--u)) 0 0 var(--fe-brass),
+    calc(0 * var(--u)) calc(-6 * var(--u)) 0 0 var(--fe-brass),
+    calc(1 * var(--u)) calc(-6 * var(--u)) 0 0 var(--fe-brass),
+    calc(2 * var(--u)) calc(-6 * var(--u)) 0 0 var(--fe-brass),
+    calc(3 * var(--u)) calc(-6 * var(--u)) 0 0 var(--fe-brass),
+    calc(4 * var(--u)) calc(-6 * var(--u)) 0 0 var(--fe-brass),
+    calc(0 * var(--u)) calc(-5 * var(--u)) 0 0 var(--fe-lip),
+    calc(1 * var(--u)) calc(-5 * var(--u)) 0 0 var(--fe-lip),
+    calc(2 * var(--u)) calc(-5 * var(--u)) 0 0 var(--fe-lip),
+    calc(3 * var(--u)) calc(-5 * var(--u)) 0 0 var(--fe-lip),
+    calc(4 * var(--u)) calc(-5 * var(--u)) 0 0 var(--fe-lip),
+    calc(2 * var(--u)) calc(-4 * var(--u)) 0 0 var(--fe-iron),
+    calc(2 * var(--u)) calc(-3 * var(--u)) 0 0 var(--fe-cord),
+    calc(2 * var(--u)) calc(-2 * var(--u)) 0 0 var(--fe-cord),
+    calc(2 * var(--u)) calc(-1 * var(--u)) 0 0 var(--fe-cord),
+    calc(2 * var(--u)) calc(0 * var(--u)) 0 0 var(--fe-knot);
+}
+/* The boot (0.27), heel to the wall and toe out east, in profile. */
+.yard-east__boot { --k: 0.27; left: calc(var(--e) + 4 * var(--u)); bottom: calc(var(--foot) + 6 * var(--u));
+  box-shadow:
+    calc(-4 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-wood),
+    calc(-3 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-wood),
+    calc(-2 * var(--u)) calc(0 * var(--u)) 0 0 var(--c-wood),
+    calc(-4 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-3 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-2 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-4 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-3 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-2 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-4 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-3 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-2 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-4 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-3 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-2 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-4 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-3 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-2 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(0 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-dark),
+    calc(-4 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-ink),
+    calc(-3 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-ink),
+    calc(-2 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-ink),
+    calc(-1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-ink),
+    calc(0 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-ink);
+}
+/* The spade (0.10), hung flat to the planks: from here only its edge, peg,
+ * handle and blade in one column. Gated as the door's is (Day 194). */
+.yard-east__spade { --k: 0.10; display: none; left: calc(var(--e) + 1 * var(--u)); bottom: calc(var(--foot) + 19 * var(--u));
+  box-shadow:
+    calc(-1 * var(--u)) calc(1 * var(--u)) 0 0 var(--c-ink),
+    calc(-1 * var(--u)) calc(2 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(3 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(4 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(5 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(6 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(7 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(8 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(9 * var(--u)) 0 0 var(--c-wood-light),
+    calc(-1 * var(--u)) calc(10 * var(--u)) 0 0 var(--fe-spade),
+    calc(-1 * var(--u)) calc(11 * var(--u)) 0 0 var(--fe-spade);
+}
+.scene[data-season="winter"] .yard-east__spade,
+.scene[data-season="autumn"][data-put-by] .yard-east__spade { display: block; }
+
+/* The glass, lit: the door's own three strengths by the hour, and a held hand
+ * over the hour either way (touch.js mirrors `cabin.lamp` onto <html>, since
+ * this scene is fetched in after touch.js has run — the gate's arrangement). */
+.scene[data-tod="dawn"] .yard-east__glass {
+  background: #f3c079;
+  box-shadow:
+    0 0 calc(3px * var(--s)) calc(1px * var(--s)) rgba(255, 198, 112, 0.34),
+    0 0 calc(6px * var(--s)) calc(2px * var(--s)) rgba(255, 190, 100, 0.14);
+}
+.scene[data-tod="dusk"] .yard-east__glass {
+  background: #ffc266;
+  box-shadow:
+    0 0 calc(3px * var(--s)) calc(1px * var(--s)) rgba(255, 198, 108, 0.50),
+    0 0 calc(7px * var(--s)) calc(3px * var(--s)) rgba(255, 188,  92, 0.22);
+}
+.scene[data-tod="night"] .yard-east__glass,
+:root[data-lamp="lit"] .scene .yard-east__glass {
+  background: #ffca6e;
+  box-shadow:
+    0 0 calc(4px * var(--s)) calc(1px * var(--s)) rgba(255, 200, 110, 0.70),
+    0 0 calc(9px * var(--s)) calc(4px * var(--s)) rgba(255, 190,  92, 0.36);
+}
+:root[data-lamp="out"] .scene .yard-east__glass {
+  background: #46413a;
+  box-shadow: none;
+}
+
+.scene[data-season="autumn"] .yard-east__leaf {
+  filter: sepia(0.42) saturate(1.35) hue-rotate(-12deg) brightness(1.02);
+}
+.scene[data-season="winter"] .yard-east__leaf {
+  filter: saturate(0.55) brightness(0.97) hue-rotate(10deg);
+}
+.scene[data-season="spring"] .yard-east__leaf {
+  filter: brightness(1.08) saturate(1.14) hue-rotate(-6deg);
+}
+@media (max-width: 599px) {
+  .yard-east { --s: 2; --near: 8%; --band: 8%; }
 }

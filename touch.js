@@ -615,6 +615,17 @@
    * by the time this file runs — both are deferred and it is first in document
    * order — and an untagged scene reads as unlit, which is the day's own
    * middle and the safest thing to be wrong about. */
+  /* The held choice also goes on <html> (Day 201), where the front's view of
+   * the same lamp, edge-on past its right corner (scene.css "The door's wall,
+   * edge-on from the bench"), can read it. The front's scene is fetched in
+   * after this file has run, so a scene attribute set at parse time would
+   * find nothing there — the gate's arrangement (restoreGate). */
+  function lampHold(state) {
+    var root = document.documentElement;
+    if (state) root.setAttribute('data-lamp', state);
+    else root.removeAttribute('data-lamp');
+  }
+
   function lampLitByHour(scene) {
     return !!LIT_BANDS[scene.getAttribute('data-tod')];
   }
@@ -641,6 +652,7 @@
     if (instant) scene.setAttribute('data-lamp-init', '');
     if (state) scene.setAttribute('data-lamp', state);
     else scene.removeAttribute('data-lamp');
+    lampHold(state);
 
     var lit = lampIsLit(scene);
     pad.setAttribute('aria-pressed', lit ? 'true' : 'false');
@@ -1118,8 +1130,9 @@
    * the ordering puts the attribute on before the first paint, and the
    * suppression covers the case where something earlier in the page has already
    * flushed a style off this view. A page with no pad — every view but the door
-   * side — falls straight through. */
+   * side — only takes the held choice onto <html> (Day 201) and falls through. */
   (function restoreLamp() {
+    lampHold(lampStored());
     var pad = document.querySelector('.lamp-touch');
     var scene = pad && pad.closest('.scene');
     if (!scene) return;

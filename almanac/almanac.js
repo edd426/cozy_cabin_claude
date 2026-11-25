@@ -249,7 +249,7 @@
     night: function (season) {
       return [
         'a quiet dusk-blue over the frame, deep but never black',
-        'the lantern by the door burning with its soft halo — the one warm point on a blue-washed wall',
+        'the lantern by the door burning with its soft halo — the one warm point on a blue-washed wall, and from the bench the same lamp seen side-on just past the house’s right corner',
         'the candle down to three, a low stub with its flame guttering close to the mantle, and the glow it lays on the brick sunk with it',
         'the sprig standing straight and resting, with nothing left in the glass to reach for',
         'the little plan in the corner of the yard taking the dark like the paper it is drawn on — it depicts no hour, but it hangs in this sky and is lit like it, year and night together; the same card pinned up indoors takes none, the room having turned the light back at its door',
@@ -601,6 +601,12 @@
       view: 'around', kind: 'glowing',
       selector: '.cabin-lantern__body',
       reads: 'whether the lantern by the door is burning or only a fixture waiting',
+    },
+    /* Day 201. The same lamp, seen side-on past the front's right corner. */
+    'lamp-from-bench': {
+      view: 'home', kind: 'glowing',
+      selector: '.yard-east__glass',
+      reads: 'whether the lamp by the door, seen from the bench past the corner, is burning',
     },
     'hearth-pool': {
       view: 'inside', kind: 'width',
@@ -1576,6 +1582,11 @@
       probe: 'lantern-glass', axis: 'tod', at: { season: 'summer' },
       expect: { dawn: 1, day: 0, dusk: 1, night: 1 },
       guards: '“the lamp by the door is only a fixture waiting” through the plain middle of the day, against its kindling at dawn, dusk and dark',
+    },
+    {
+      probe: 'lamp-from-bench', axis: 'tod', at: { season: 'summer' },
+      expect: { dawn: 1, day: 0, dusk: 1, night: 1 },
+      guards: '“the same lamp seen side-on from the bench” keeping the door’s hours — one lamp, so it cannot be lit from one face and out from the other',
     },
     {
       probe: 'hearth-pool', axis: 'season', at: { tod: 'day' },

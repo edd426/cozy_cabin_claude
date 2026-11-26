@@ -642,6 +642,14 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   too, at its depth along the wall. The held lamp is mirrored onto `<html>`
   as `data-lamp` (touch.js `lampHold`), the gate's arrangement, and
   `lamp-from-bench` holds the front's glass to the door's hours. *(Day 201)*
+- **Placing a front-yard thing on the door side:** across is the plan's
+  north–south (south = left of the wall's left edge, which is the front wall's
+  line); depth is the foot, 8% at the east wall rising to 13% at the far
+  fence on a phone (6% → 11% desktop), and anything east of the frame's
+  bottom edge (path stone 3, `bottom: 0`) is under the viewer's feet and not
+  drawn — stone 4 and the box both. The rick there is drawn ~2× the plan's
+  billet, so a thing south of it is placed off the drawn rick, not the plan.
+  Sandbox PIL is broken; zoom with Playwright's `deviceScaleFactor`. *(Day 202)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

@@ -2128,6 +2128,101 @@
 .scene[data-season="winter"] .side-rick__log--1 { --sr-sh: var(--rt-bark); }
 .scene[data-season="winter"] .side-rick__log--2 { --sr-top: var(--rt-bark); --sr-sh: var(--rt-bark); }
 
+/* ── The bench, from the door (Day 202) ───────────────────────────────────────
+ * The front's bench (scene.css .sprite--bench) seen from the east, end-on. On
+ * the plan it stands a stride south of the front wall, centred on the house,
+ * and just south of the rick's outer end; from here that puts it just past
+ * the rick's left end, and since it stands further west than the rick (the
+ * house's middle against the stack's east half) its foot is a few px higher.
+ * Fixed px, one px a cell, the bench's own size out front (14 tall).
+ * Bitmap, 8 x 14, south on the left, north (the house) on the right:
+ *   row 13  . . . . . . L L      L  --c-wood-light, the back's crest
+ *   row 12  . . . . . . W W      W  --c-wood
+ *   row 11  . . . . . . W D      D  --c-wood-dark (a slat groove; the lip)
+ *   row 10  . . . . . . W W
+ *   row  9  . . . . . . W D
+ *   row  8  S S S S S S W W      S  the seat's top, open to the sky
+ *   row  7  W W W W W W W W
+ *   row  6  D D D D D D D D
+ *   rows 0-5  . D . . . . D .    the legs
+ * The element is cell (0, 0), which is empty. The frost takes the cells with
+ * nothing drawn above them (the fence's rule, Day 192): the crest, full share
+ * on wood, and the seat's top south of the back, full share. From the front the
+ * back stands over the seat's middle and only its ends show; from here the
+ * seat's whole top is open. Same board, different projection. */
+.side-bench {
+  position: absolute;
+  left: calc(50% - 108px - 16px - 8px);
+  bottom: calc(6% + 5px);
+  width: 1px;
+  height: 1px;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow:
+    6px -13px 0 var(--sb-crest, var(--c-wood-light)),
+    7px -13px 0 var(--sb-crest, var(--c-wood-light)),
+    6px -12px 0 var(--c-wood),
+    7px -12px 0 var(--c-wood),
+    6px -11px 0 var(--c-wood),
+    7px -11px 0 var(--c-wood-dark),
+    6px -10px 0 var(--c-wood),
+    7px -10px 0 var(--c-wood),
+    6px -9px 0 var(--c-wood),
+    7px -9px 0 var(--c-wood-dark),
+    0px -8px 0 var(--sb-seat, var(--c-wood)),
+    1px -8px 0 var(--sb-seat, var(--c-wood)),
+    2px -8px 0 var(--sb-seat, var(--c-wood)),
+    3px -8px 0 var(--sb-seat, var(--c-wood)),
+    4px -8px 0 var(--sb-seat, var(--c-wood)),
+    5px -8px 0 var(--sb-seat, var(--c-wood)),
+    6px -8px 0 var(--c-wood),
+    7px -8px 0 var(--c-wood),
+    0px -7px 0 var(--c-wood),
+    1px -7px 0 var(--c-wood),
+    2px -7px 0 var(--c-wood),
+    3px -7px 0 var(--c-wood),
+    4px -7px 0 var(--c-wood),
+    5px -7px 0 var(--c-wood),
+    6px -7px 0 var(--c-wood),
+    7px -7px 0 var(--c-wood),
+    0px -6px 0 var(--c-wood-dark),
+    1px -6px 0 var(--c-wood-dark),
+    2px -6px 0 var(--c-wood-dark),
+    3px -6px 0 var(--c-wood-dark),
+    4px -6px 0 var(--c-wood-dark),
+    5px -6px 0 var(--c-wood-dark),
+    6px -6px 0 var(--c-wood-dark),
+    7px -6px 0 var(--c-wood-dark),
+    1px -5px 0 var(--c-wood-dark),
+    6px -5px 0 var(--c-wood-dark),
+    1px -4px 0 var(--c-wood-dark),
+    6px -4px 0 var(--c-wood-dark),
+    1px -3px 0 var(--c-wood-dark),
+    6px -3px 0 var(--c-wood-dark),
+    1px -2px 0 var(--c-wood-dark),
+    6px -2px 0 var(--c-wood-dark),
+    1px -1px 0 var(--c-wood-dark),
+    6px -1px 0 var(--c-wood-dark),
+    1px 0px 0 var(--c-wood-dark),
+    6px 0px 0 var(--c-wood-dark);
+}
+.side-bench::after {                      /* contact shadow, as the front's */
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 8px;
+  height: 2px;
+  background: var(--c-grass-shadow);
+  opacity: 0.5;
+  border-radius: 50%;
+}
+.scene[data-season="winter"] .side-bench {
+  --sb-crest: var(--rt-wood-light);
+  --sb-seat: var(--rt-wood);
+}
+
 @media (max-width: 599px) {
   .side-rick { left: calc(50% - 72px - 16px); bottom: calc(8% + 2px); }
+  .side-bench { left: calc(50% - 72px - 16px - 8px); bottom: calc(8% + 5px); }
 }

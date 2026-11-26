@@ -175,7 +175,7 @@
         'the water butt let down for the frosts and its downpipe’s foot swung off the rim, so the winter’s rain runs out past the cask onto the grass — past the left corner from the bench, past the right from the garden. The spring swings it back',
         'the spade out of the near bed, cleaned and hung on a peg on the door side’s wall under the east eave, between the corner and the boots — a tool left in wet ground through the frosts rusts at the blade. The spring takes it back to the bed',
         'the frost in those beds: half of each ridge slumped, what stands of it rimed pale along the top, and every dark lump of clod opened by the ice — the frost doing the digging the spade has gone in from',
-        'and the same frost on everything else it reaches: rime stippled over the grass on every face, thickest to the eye on the far meadow where the blades are seen edge-on, and the lip of every shingle course on the roof gone pale, from the bench, the door and the garden alike, and indoors on the band of meadow the window shows under its crossbar, the same grass seen through glass; and along the top of everything wooden that stands out in it — the cap of every fence post, the upper edge of every rail and the gate’s, and the crest of the bench’s back, which is not carried in: a plank on two legs takes no harm a spring will not dry out of it, and the house has one room and no shed; and the bark along the top of the stack of wood, crown and shoulders of every log nothing lies on, from the bench and from the door, thickest in the gap the spent log left. How hard it lies is the hour’s — see the hour, below',
+        'and the same frost on everything else it reaches: rime stippled over the grass on every face, thickest to the eye on the far meadow where the blades are seen edge-on, and the lip of every shingle course on the roof gone pale, from the bench, the door and the garden alike, and indoors on the band of meadow the window shows under its crossbar, the same grass seen through glass; and along the top of everything wooden that stands out in it — the cap of every fence post, the upper edge of every rail and the gate’s, and the crest of the bench’s back, and from the door the top of its seat as well, open to the sky south of the back, which the front sees only past the back’s ends; the bench is not carried in: a plank on two legs takes no harm a spring will not dry out of it, and the house has one room and no shed; and the bark along the top of the stack of wood, crown and shoulders of every log nothing lies on, from the bench and from the door, thickest in the gap the spent log left. How hard it lies is the hour’s — see the hour, below',
       ],
     },
     spring: {
@@ -1062,6 +1062,11 @@
       view: 'around', kind: 'visible-count', selector: '.side-rick__log',
       reads: 'how many courses of the rick show past the near corner, seen from the door',
     },
+    /* Day 202. The bench seen from the door, end-on, just past the rick. */
+    'door-bench': {
+      view: 'around', kind: 'visible-count', selector: '.side-bench',
+      reads: 'whether the bench out front shows from the door, end-on past the rick',
+    },
     /* Day 186. The spade put by for the winter, on the door side's wall. */
     'door-spade-hung': {
       view: 'around', kind: 'visible-count', selector: '.door-spade',
@@ -1401,6 +1406,11 @@
       probe: 'door-rick-courses', axis: 'season', at: { tod: 'day' },
       expect: { summer: 2, autumn: 3, winter: 2, spring: 1 },
       guards: 'the same rick from the door, where each course is one long side of bark: two courses in summer, three laid in full by autumn, two still in winter because the front spends its middle row’s near end first and the rest of that row stands, one in spring. Read beside the line above, the two faces’ tables are written one against the other, course for row. That it is the same stack, at the same corner, is held by where it is drawn and by nothing here'
+    },
+    {
+      probe: 'door-bench', axis: 'season', at: { tod: 'day' },
+      expect: { summer: 1, autumn: 1, winter: 1, spring: 1 },
+      guards: 'the bench out on the grass, which is not carried in, standing in the door’s picture in every season as it stands in the bench’s own. That it is the same bench, a stride south of the front wall and just past the rick’s end, is held by where it is drawn and by nothing here',
     },
     {
       probe: 'hearth-armful', axis: 'season', at: { tod: 'day' },

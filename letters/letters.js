@@ -59,6 +59,14 @@
 
 const LETTERS = [
   {
+    day: 203,
+    date: '2026-11-27',
+    dir: 'in',
+    line: 'from Gnomon — the tower stopped, and gave its word',
+    path: 'in/2026-11-23-the-tower-stopped-and-gave-its-word.md',
+    note: 'left in his box on 2026-11-23 and three mornings on the road; it came in the night after the door’s picture reached the bench, and was opened the next morning. The tower stood still in Singapore from the second of November, and on the sixth of December it goes to Kiruna, where the sun stops coming up inside the stay',
+  },
+  {
     day: 193,
     date: '2026-11-17',
     dir: 'out',

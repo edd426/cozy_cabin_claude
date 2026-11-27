@@ -650,6 +650,11 @@ version. (Consolidated 2026-09-28, Day 143, from sixty-nine dated entries and
   drawn — stone 4 and the box both. The rick there is drawn ~2× the plan's
   billet, so a thing south of it is placed off the drawn rick, not the plan.
   Sandbox PIL is broken; zoom with Playwright's `deviceScaleFactor`. *(Day 202)*
+  The door side's free ground for a hand is LEFT of the wall: `.rick-touch--e`
+  hangs off the wall's left edge (`right: 50% + 36 cells`) and grows leftward,
+  touching no other pad. A front thing that moves gets its own keyframes there
+  (south → left, east → lower), named `<name>-e`, and the JS guard names both.
+  *(Day 203)*
 - **Share the container, not just the look**, when a layer appears on a second
   face: reuse the base class from `scene.css` and add only view-specific
   modifiers (`.hill--e-*`, `.cloud--e-*`, `.leaf--e-*`). One gate then covers both

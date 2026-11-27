@@ -2128,6 +2128,53 @@
 .scene[data-season="winter"] .side-rick__log--1 { --sr-sh: var(--rt-bark); }
 .scene[data-season="winter"] .side-rick__log--2 { --sr-top: var(--rt-bark); --sr-sh: var(--rt-bark); }
 
+/* ── The mouse, from the door (Day 203) ──────────────────────────────────────
+ * The front's mouse (scene.css "The mouse in the rick") lives under the end
+ * billet at the stack's EAST end and, knocked, runs out SOUTH and EAST onto
+ * the grass, stops dead, turns, and darts back. From the door south is left
+ * and east is nearer, which here is lower. So she comes out from under the
+ * stack's left end, the end that faces the bench, and runs left and down:
+ * past the bench's feet on the near side of them, since she is nearer than
+ * it is, and stops a stride out before the way back.
+ *
+ * Same drawing, same colour, same cell (1px), same round and the same
+ * turn-in-one-frame; only the direction is this face's. She faces left on
+ * the way out, so `scale` starts at −1 and turns to 1 for the dart home.
+ * She starts with every cell behind the bottom log (its foot row spans
+ * 2–14px of the rick, the rows above 0–16), so nothing of her shows until
+ * she moves. The rick is fixed px at both widths and so is she; no
+ * breakpoint twin. */
+.mouse--e { left: 7px; bottom: 1px; }
+.mouse--e.is-bolting { animation-name: mouse-bolt-e, mouse-face-e; }
+@keyframes mouse-bolt-e {
+  0%   { left: 7px;   bottom: 1px;  }
+  12%  { left: 0;     bottom: 0;    }
+  22%  { left: -5px;  bottom: -2px; }
+  28%  { left: -8px;  bottom: -4px; }
+  70%  { left: -8px;  bottom: -4px; }
+  84%  { left: -2px;  bottom: -1px; }
+  100% { left: 6px;   bottom: 1px;  }
+}
+@keyframes mouse-face-e {
+  0%   { scale: -1 1; }
+  70%  { scale: 1 1;  }
+  100% { scale: 1 1;  }
+}
+
+/* THE REACH, from the door. The rick is 16x20, under the 44px minimum, so a
+ * transparent sibling carries the press, as out front. It is anchored by its
+ * RIGHT edge on the wall's left edge (`right: 50% + 36 cells`), so the 44px
+ * minimum widens it leftward over the rick, the bench and the grass she runs
+ * onto, and never onto the wall's lamp, bell or the near stone's reach. Its
+ * foot sits a little under the rick's, over that grass. */
+.rick-touch.rick-touch--e {
+  left: auto;
+  right: calc(50% + 108px);
+  bottom: calc(6% - 6px);
+  width: 30px;
+  height: 30px;
+}
+
 /* ── The bench, from the door (Day 202) ───────────────────────────────────────
  * The front's bench (scene.css .sprite--bench) seen from the east, end-on. On
  * the plan it stands a stride south of the front wall, centred on the house,
@@ -2225,4 +2272,5 @@
 @media (max-width: 599px) {
   .side-rick { left: calc(50% - 72px - 16px); bottom: calc(8% + 2px); }
   .side-bench { left: calc(50% - 72px - 16px - 8px); bottom: calc(8% + 5px); }
+  .rick-touch.rick-touch--e { right: calc(50% + 72px); bottom: calc(8% - 6px); }
 }

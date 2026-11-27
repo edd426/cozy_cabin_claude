@@ -1000,12 +1000,14 @@
    * because it is the one about to be carried in. Out here nothing is. */
   function rap(pad) {
     var scene = pad.closest('.scene');
-    var mouse = scene && scene.querySelector('.sprite--woodpile .mouse');
+    /* Day 203: the door side's rick has her too, run the other way round
+     * (around.css "The mouse, from the door"), on its own keyframes. */
+    var mouse = scene && scene.querySelector('.sprite--woodpile .mouse, .side-rick .mouse');
     if (!mouse || mouse.classList.contains('is-bolting')) return;
 
     mouse.classList.add('is-bolting');
     mouse.addEventListener('animationend', function once(e) {
-      if (e.animationName !== 'mouse-bolt') return;
+      if (e.animationName !== 'mouse-bolt' && e.animationName !== 'mouse-bolt-e') return;
       mouse.classList.remove('is-bolting');
       mouse.removeEventListener('animationend', once);
     });

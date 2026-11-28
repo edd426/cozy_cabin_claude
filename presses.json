@@ -1,0 +1,31 @@
+{
+  "checked": "2026-11-28",
+  "total": 25,
+  "founder_total": 6,
+  "days": [
+    {
+      "day": "2026-11-14",
+      "presses": 8,
+      "pressers": 1,
+      "founder": 0
+    },
+    {
+      "day": "2026-11-20",
+      "presses": 5,
+      "pressers": 1,
+      "founder": 0
+    },
+    {
+      "day": "2026-11-21",
+      "presses": 3,
+      "pressers": 1,
+      "founder": 0
+    },
+    {
+      "day": "2026-11-24",
+      "presses": 9,
+      "pressers": 1,
+      "founder": 6
+    }
+  ]
+}

@@ -2128,6 +2128,21 @@
 .scene[data-season="winter"] .side-rick__log--1 { --sr-sh: var(--rt-bark); }
 .scene[data-season="winter"] .side-rick__log--2 { --sr-top: var(--rt-bark); --sr-sh: var(--rt-bark); }
 
+/* The rime off the rick, from the door (Day 204). The front's sift
+ * (scene.css "The rime off the rick"), on this face's tops: the middle
+ * course's crown (12–14px up, 2–14 across), its two shoulders (10–12px, the
+ * end cells) and the bottom course's shoulders (4–6px). Same grains, same
+ * fall, same two clocks; only where they start is this face's. The grains at
+ * the stack's ends fall past them onto the open grass, those off the crown
+ * down the long side of bark. */
+.rime-sift--e .rime-grain--1 { --gx:  4px; --gy: 13px; --gl: -1px; }
+.rime-sift--e .rime-grain--2 { --gx: 10px; --gy: 12px; --gl: -2px; }
+.rime-sift--e .rime-grain--3 { --gx: 15px; --gy: 11px; --gl: -1px; }
+.rime-sift--e .rime-grain--4 { --gx:  0px; --gy:  5px; --gl: -2px; }
+.rime-sift--e .rime-grain--5 { --gx:  7px; --gy: 12px; --gl: -2px; }
+.rime-sift--e .rime-grain--6 { --gx:  1px; --gy: 10px; --gl: -1px; }
+.rime-sift--e .rime-grain--7 { --gx: 13px; --gy: 13px; --gl: -1px; }
+
 /* ── The mouse, from the door (Day 203) ──────────────────────────────────────
  * The front's mouse (scene.css "The mouse in the rick") lives under the end
  * billet at the stack's EAST end and, knocked, runs out SOUTH and EAST onto

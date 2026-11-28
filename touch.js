@@ -1005,10 +1005,21 @@
     var mouse = scene && scene.querySelector('.sprite--woodpile .mouse, .side-rick .mouse');
     if (!mouse || mouse.classList.contains('is-bolting')) return;
 
+    /* Day 204: in winter the tops are white, and a knock brings a sift of
+     * the loose rime down off them (scene.css "The rime off the rick"). The
+     * season is asked HERE, so the class is never set on a layer the season
+     * keeps hidden, where its grains would never run. It rides the mouse's
+     * gate — one knock at a time — and comes off on her `animationend`,
+     * since the sift's round ends inside hers. */
+    var sift = mouse.parentNode && mouse.parentNode.querySelector('.rime-sift');
+    if (sift && scene.getAttribute('data-season') !== 'winter') sift = null;
+
     mouse.classList.add('is-bolting');
+    if (sift) sift.classList.add('is-sifting');
     mouse.addEventListener('animationend', function once(e) {
       if (e.animationName !== 'mouse-bolt' && e.animationName !== 'mouse-bolt-e') return;
       mouse.classList.remove('is-bolting');
+      if (sift) sift.classList.remove('is-sifting');
       mouse.removeEventListener('animationend', once);
     });
 

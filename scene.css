@@ -3412,6 +3412,72 @@ calc(var(--u) * 7) calc(var(--u) * 1) 0 calc(var(--u) * 1) var(--cl-crown),
   100% { scale: -1 1; }
 }
 
+/* ── The rime off the rick (Day 204, 2026-11-28) ────────────────────────────
+ * From December the rick's tops are white (Day 200, "The rime on the rick"),
+ * and a knock is a jolt through the whole stack. What lies loose on a top
+ * comes down: a sift of single grains off the crowns, falling in front of the
+ * cut ends and onto the grass at the rick's foot, where they are lost among
+ * the rime already lying there. The frosted cells themselves stay white. A
+ * top at this size is one cell, a grain is a quarter of one, and a knock
+ * shakes off the loose hoar and not what has frozen fast; the next knock
+ * finds the same tops and brings down another sift.
+ *
+ * Two clocks, as everywhere the frost is (Day 188): the YEAR says whether —
+ * `display`, winter only, and touch.js asks the season before it sets the
+ * class, so no class is ever left waiting on a hidden layer — and the HOUR
+ * says how much: seven grains at dawn, dusk and night, when the tops are
+ * whitest, four through the plain middle of the day, when they are thinned.
+ *
+ * Each grain starts on a top cell named in Day 200's list and falls straight
+ * down: the air in the clearing is still enough to let a quarter-cell of ice
+ * drop plumb over a stride's height, and a westerly that carried them would
+ * have to carry the smoke the same morning. Falling is gravity, so each
+ * segment is `ease-in` (Day 151), then a short lie on the grass, then gone.
+ * 1px a grain, the mouse's cell; `bottom` is a layout offset inside the
+ * fixed-native rick, so every frame paints whole pixels at both widths and
+ * there is no breakpoint twin. Last child of the rick, so the grains fall IN
+ * FRONT of the logs. The rime's own colour, not a frosted bark: a grain in
+ * the air is all ice. Its round ends inside the mouse's, and touch.js takes
+ * the class off on her `animationend`. */
+.rime-sift {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+.scene[data-season="winter"] .rime-sift.is-sifting { display: block; }
+.rime-grain {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  background: #d9dbd6;
+  left: var(--gx);
+  bottom: var(--gy);
+  opacity: 0;
+}
+.is-sifting > .rime-grain {
+  animation: rime-fall var(--gd, 0.7s) linear var(--gw, 0s) 1 both;
+}
+.scene[data-tod="day"] .rime-grain--5,
+.scene[data-tod="day"] .rime-grain--6,
+.scene[data-tod="day"] .rime-grain--7 { display: none; }
+@keyframes rime-fall {
+  0%   { bottom: var(--gy); opacity: 1; animation-timing-function: ease-in; }
+  80%  { bottom: var(--gl, -1px); opacity: 1; animation-timing-function: step-end; }
+  100% { bottom: var(--gl, -1px); opacity: 0; }
+}
+/* Out front (rick coordinates, 1px; Day 200's tops): the two middle-row
+ * crowns (logs 5 and 6, 12–14px up), the end billet's crown under the gap
+ * the winter left (log 4, 6–8px), log 3's open shoulder and log 1's outer
+ * one. Lands a pixel or two in front of the rick's foot. */
+.rime-grain--1 { --gx:  7px; --gy: 13px; --gl: -1px; --gd: 0.80s; --gw: 0.00s; }
+.rime-grain--2 { --gx: 16px; --gy: 12px; --gl: -2px; --gd: 0.75s; --gw: 0.12s; }
+.rime-grain--3 { --gx: 27px; --gy:  7px; --gl: -1px; --gd: 0.55s; --gw: 0.05s; }
+.rime-grain--4 { --gx:  3px; --gy:  6px; --gl: -2px; --gd: 0.55s; --gw: 0.25s; }
+.rime-grain--5 { --gx:  9px; --gy: 12px; --gl: -2px; --gd: 0.80s; --gw: 0.30s; }
+.rime-grain--6 { --gx: 23px; --gy:  5px; --gl: -1px; --gd: 0.50s; --gw: 0.18s; }
+.rime-grain--7 { --gx: 15px; --gy: 13px; --gl: -1px; --gd: 0.80s; --gw: 0.40s; }
+
 /* THE REACH. The rick is 34×20 and fixed-native, under the 44px minimum at
  * every width (Article VIII), so a transparent sibling carries the press, the
  * button semantics and the focus ring — the bench's arrangement. It begins
